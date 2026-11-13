@@ -9,8 +9,8 @@ import { searchCatalog, listVideos, showToast } from '../store.js';
 import { createThumbArtwork } from '../cards.js';
 import { initPageChrome } from '../user-menu.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const session = initPageChrome();
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await initPageChrome();
   if (!session) return; // guard already redirected
 
   const input = document.getElementById('searchInput');

@@ -2,17 +2,18 @@
  * Continuum Academy - shared page chrome.
  *
  * One module for everything that appears in every top bar:
- *   initPageChrome()       - session gate + fills in the signed-in details
+ *   initPageChrome()       - server-verified session gate + fills in the account details
  *   initUserMenu()         - avatar dropdown (Account, My Library, Admin, Sign out)
  *   initNotificationBell() - bell button + drawer, fed by store.js
  *
- * Everything reads from store.js, so there is no network traffic and the UI
- * still renders (from the static mock data) when localStorage is unavailable.
+ * The session is verified against GET /api/auth/session; the local cache in
+ * store.js is only a mirror used to paint the chrome. The catalogue and the
+ * bell still read from the static mock data.
  */
 
 import {
   getSession,
-  requireSession,
+  cacheSession,
   signOut,
   siteUrl,
   isAdmin,
@@ -20,29 +21,62 @@ import {
   markAllRead,
   formatWhen
 } from './store.js';
+import { api } from './api.js';
 
 /* ------------------------------ page chrome ------------------------------ */
 
 /**
- * Call once per page, after DOMContentLoaded.
- * Enforces `data-requires-auth` / `data-requires-admin` on <html>, then fills
- * every [data-session-*] placeholder and wires [data-logout] controls.
+ * Call once per page, after DOMContentLoaded, and await the result.
+ * Enforces `data-requires-auth` / `data-requires-admin` on <html> against the
+ * server, then fills every [data-session-*] placeholder and wires [data-logout].
+ * @returns {Promise<object|null>} the session when the page may render
  */
-export function initPageChrome() {
+export async function initPageChrome() {
   const root = document.documentElement;
   const gated = root.hasAttribute('data-requires-auth');
   const adminOnly = root.hasAttribute('data-requires-admin');
 
-  let session = getSession();
-  if (gated || adminOnly) {
-    session = requireSession({ admin: adminOnly });
-    if (!session) return null;
+  const session = await resolveServerSession();
+
+  if (gated) {
+    if (!session) {
+      redirectToLogin();
+      return null;
+    }
+    if (adminOnly && session.role !== 'admin') {
+      window.location.replace(siteUrl('home/'));
+      return null;
+    }
   }
 
   paintSession(session);
   wireLogoutButtons();
   initUserMenu(session);
   return session;
+}
+
+/**
+ * Ask the server who is signed in, mirroring the answer into the local cache.
+ * A 401 is definitive (signed out). Any other failure (offline, cold start)
+ * falls back to the cached mirror so a transient blip does not sign the user
+ * out - the Edge middleware remains the authoritative gate in production.
+ */
+async function resolveServerSession() {
+  try {
+    const data = await api.getSession();
+    return cacheSession(data?.user || null);
+  } catch (error) {
+    if (error?.status === 401) {
+      cacheSession(null);
+      return null;
+    }
+    return getSession();
+  }
+}
+
+function redirectToLogin() {
+  const next = encodeURIComponent(window.location.pathname + window.location.search);
+  window.location.replace(siteUrl(`login/?redirect=${next}`));
 }
 
 /** Paint the signed-in name / email / initial / role into the page. */
@@ -83,9 +117,13 @@ function wireLogoutButtons() {
     .forEach((btn) => {
       if (btn.dataset.logoutWired === 'true') return;
       btn.dataset.logoutWired = 'true';
-      btn.addEventListener('click', (event) => {
+      btn.addEventListener('click', async (event) => {
         event.preventDefault();
-        signOut();
+        if (btn.dataset.busy === 'true') return;
+        // Lock the control so a double-tap cannot fire two sign-out round-trips.
+        btn.dataset.busy = 'true';
+        btn.disabled = true;
+        await signOut();
       });
     });
 }

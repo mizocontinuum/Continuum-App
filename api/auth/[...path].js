@@ -4,8 +4,9 @@
  * Vercel Hobby limits each deployment to 12 serverless functions. Keep the
  * existing /api/auth/* URLs while routing them through this single function.
  *
- * Sign-in methods: email + password, Google, Facebook. Password recovery is
- * included because it is part of the email/password flow.
+ * Sign-in methods: email + password and OAuth (Google, Microsoft and the other
+ * providers enabled in the Supabase project). Password recovery is included
+ * because it is part of the email/password flow.
  */
 import { fail, apiHandler } from '../../server/lib/http.js';
 import adoptSession from '../../server/auth/adopt-session.js';

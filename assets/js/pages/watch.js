@@ -34,8 +34,8 @@ let saveTimer = null;
 let lastSaved = -1;
 let resumeAt = 0;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const session = initPageChrome();
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await initPageChrome();
   if (!session) return; // guard already redirected
 
   player = document.getElementById('watchVideo');

@@ -1,12 +1,13 @@
 /**
  * Continuum Academy service worker.
  *
- * Static assets only: there is no backend, no API and no user-specific data,
- * so every same-origin GET is safe to serve from the cache. Cache-first with a
- * network fallback keeps the app usable offline and still picks up new builds
- * thanks to the versioned cache name.
+ * Static assets only. The backend lives under /api/* and is never touched by
+ * this worker: those responses are private (a session, a member's progress) and
+ * must always come straight from the network. Everything else is
+ * cache-first with a network fallback, so the shell stays usable offline and
+ * new builds arrive thanks to the versioned cache name.
  */
-const CACHE_NAME = 'continuum-cache-v7';
+const CACHE_NAME = 'continuum-cache-v8';
 const PRECACHE_URLS = [
   './',
   './index.html',
@@ -53,6 +54,10 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
+
+  // Never cache the API. A cached /api/auth/session would paint a stale
+  // identity, and a cached 401 would lock a signed-in member out.
+  if (url.pathname.startsWith('/api/')) return;
 
   event.respondWith(
     caches.match(event.request).then((cached) => {

@@ -17,8 +17,8 @@ import { initPageChrome } from '../user-menu.js';
 
 const state = { view: 'list', query: '', disciplineId: '' };
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!initPageChrome()) return;
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!(await initPageChrome())) return;
 
   const els = {
     statGrid: document.getElementById('statGrid'),

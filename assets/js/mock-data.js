@@ -703,12 +703,6 @@ export const PROFILE = {
   joined: '2026-01-15'
 };
 
-/** Demo accounts offered as one-tap choices on the sign-in page. */
-export const DEMO_ACCOUNTS = [
-  { label: 'Member demo', email: 'member@continuum.com.ph', role: 'member' },
-  { label: 'Admin demo', email: 'admin@continuum.com.ph', role: 'admin' }
-];
-
 /** Notification bell feed. */
 export const NOTIFICATIONS = [
   {

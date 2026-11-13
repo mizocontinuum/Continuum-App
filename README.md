@@ -1,11 +1,13 @@
 # Continuum Academy
 
-Executive-learning cockpit: a mobile-first **static** website (no build step, no
-bundler, no backend) built with plain HTML, CSS and native ES modules.
+Executive-learning cockpit: a mobile-first website built with plain HTML, CSS
+and native ES modules, backed by a small set of Vercel serverless functions that
+handle authentication and user data on Supabase.
 
-Open `index.html` directly in a browser, or drop the folder on any static host
-(GitHub Pages, Netlify, Cloudflare Pages, S3, …). There is nothing to install
-and nothing to configure.
+There is no build step and no bundler — `assets/js/*.js` reach the browser
+exactly as they are written. The pages themselves are static, so they render on
+any host; the `/api/*` routes need a host that runs the Node functions (Vercel,
+or `vercel dev` for local work).
 
 ```
 /                 landing
@@ -18,57 +20,72 @@ and nothing to configure.
 
 ## Architecture
 
-There is no server and no database. Every page renders complete, realistic
-content from a local data module the moment it loads.
-
 | Layer     | Location                                                              |
 | --------- | --------------------------------------------------------------------- |
 | Pages     | `/<page>/index.html`                                                  |
 | Styles    | `assets/css/base/*` (tokens, reset, auth), `assets/css/pages/*.css`, `assets/css/components/*` |
 | Frontend  | `assets/js/pages/<page>.js` (ES modules, `createElement` + `replaceChildren`) |
-| Data      | `assets/js/mock-data.js` — disciplines, masterclasses, profile, notifications |
-| State     | `assets/js/store.js` — a synchronous `localStorage` wrapper          |
+| API client| `assets/js/api.js` — every `/api/*` call, with `credentials: 'same-origin'` |
+| Catalogue | `assets/js/mock-data.js` — disciplines, masterclasses, notifications  |
+| State     | `assets/js/store.js` — the session mirror + a `localStorage` catalogue wrapper |
+| Backend   | `api/**` (routers) + `server/**` (handlers), hosted on Vercel         |
+| Guard     | `middleware.js` (Edge) + `assets/js/user-menu.js` (client)            |
 | PWA       | `manifest.json`, `sw.js` (asset-only cache), `assets/js/pwa.js`       |
 
-**Data model.** `mock-data.js` holds the catalogue (`disciplines`, `videos`),
-the seed favourites/progress and the notification feed. `store.js` is the only
-module that touches `localStorage`: it exposes favourites, playback progress,
-the local session, the profile and admin edits as synchronous functions, and
-falls back to the mock seed whenever nothing has been stored yet.
+**Authentication.** `login/`, `signup/`, `forgot-password/` and
+`reset-password/` are backed by `assets/js/pages/auth.js`, which talks to the
+real endpoints: `POST /api/auth/{login,signup,forgot,logout,update-password,
+oauth,adopt-session}` and `GET /api/auth/session`. Tokens are held by the server
+in `HttpOnly`, `__Host-`-prefixed cookies and never reach client JavaScript.
+`store.js` keeps only a public mirror of the user (name, email, role) so the
+chrome can paint before the network answers.
 
-**Sign-in.** `login/`, `signup/`, `forgot-password/` and `reset-password/` are
-all backed by `assets/js/pages/auth.js`. Signing in simply records which demo
-account is active in this browser — there is no network request, no cookie, no
-CAPTCHA and no second factor. One-tap demo buttons sign in as a member or an
-administrator; the page guard in `assets/js/user-menu.js` reads
-`data-requires-auth` / `data-requires-admin` on `<html>`.
+**The guard.** `middleware.js` protects `/home`, `/library`, `/explore`,
+`/search`, `/discipline(s)`, `/clips`, `/profile` and `/admin` at the edge by
+verifying the session JWT. Pages are belt-and-braces: each gated page awaits
+`initPageChrome()`, which re-checks `GET /api/auth/session` and enforces
+`data-requires-auth` / `data-requires-admin` on `<html>`. Signing out calls
+`POST /api/auth/logout`, which revokes the refresh token and clears the cookies,
+so the next account starts clean.
 
-## Content security
+**Data model.** The catalogue, favourites, playback progress and notifications
+still render from `mock-data.js`/`store.js`; the matching `/api/catalog` and
+`/api/user/*` endpoints exist but the pages are not wired to them yet.
 
-| Variable                    | Required | Purpose                                              |
-| --------------------------- | -------- | ---------------------------------------------------- |
-| `SUPABASE_URL`              | yes      | Supabase project URL                                 |
-| `SUPABASE_ANON_KEY`         | yes      | Public anon key, used as the server-side `apikey`    |
-| `TURNSTILE_SECRET_KEY`      | yes      | Cloudflare Turnstile secret for login/signup CAPTCHA |
-| `UPSTASH_REDIS_REST_URL`    | yes      | Upstash REST URL for rate limiting                   |
-| `UPSTASH_REDIS_REST_TOKEN`  | yes      | Upstash REST token                                   |
-| `SUPABASE_JWT_SECRET`       | legacy   | Only if the project still uses HS256 signing keys    |
-| `SUPABASE_SERVICE_ROLE_KEY` | optional | Privileged admin ops only. Never expose to client    |
+## Environment variables
 
-The three Supabase auth URLs (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) and the
-Turnstile site key that the browser needs are read from `assets/js/config.js`
-(non-secret) — never from the environment.
+| Variable                    | Required    | Purpose                                              |
+| --------------------------- | ----------- | ---------------------------------------------------- |
+| `SUPABASE_URL`              | yes         | Supabase project URL                                 |
+| `SUPABASE_ANON_KEY`         | yes         | Public anon key, used as the server-side `apikey`    |
+| `TURNSTILE_SECRET_KEY`      | recommended | Cloudflare Turnstile secret for login/signup CAPTCHA |
+| `UPSTASH_REDIS_REST_URL`    | recommended | Upstash REST URL for rate limiting                   |
+| `UPSTASH_REDIS_REST_TOKEN`  | recommended | Upstash REST token                                   |
+| `SUPABASE_JWT_SECRET`       | legacy      | Only if the project still uses HS256 signing keys    |
+| `SUPABASE_SERVICE_ROLE_KEY` | optional    | Privileged admin ops only. Never expose to client    |
+
+Turnstile and Upstash are optional: without them the CAPTCHA is skipped and
+rate limiting is disabled, so sign-in still works (which keeps local and preview
+environments usable). Enable both before going to production.
+
+The only browser-side value is the Turnstile **site** key, which lives in
+`assets/js/config.js` (non-secret, public by design). Leave it empty to disable
+the CAPTCHA. Every Supabase credential stays server-side in the environment.
 
 ## Supabase setup
 
 1. **Run the SQL, in this order, in the SQL Editor (Dashboard → SQL → New query):**
-   1. [supabase/rls-policies.sql](supabase/rls-policies.sql) — catalogue tables,
-      `public.is_admin()`, and their policies.
-   2. [supabase/user-schema.sql](supabase/user-schema.sql) — `profiles`,
-      `progress`, `favorites`, `notifications`, their RLS, the
-      `videos.video_url` column, and the `on_auth_user_created` trigger that
-      inserts a `profiles` row on signup.
-   Both scripts are idempotent — running them again changes nothing.
+   1. [supabase/01-catalog.sql](supabase/01-catalog.sql) — `disciplines`,
+      `speakers`, `videos`, `public.is_admin()` and their read/admin policies.
+   2. [supabase/02-user-data.sql](supabase/02-user-data.sql) — `profiles`,
+      `progress`, `favorites`, `notifications`, their owner-scoped RLS, and the
+      `on_auth_user_created` trigger that inserts a `profiles` row on signup.
+   3. [supabase/03-seed-catalog.sql](supabase/03-seed-catalog.sql) — the 7
+      disciplines, 10 speakers and 28 videos the catalogue pages expect.
+   Every script is idempotent — running it again changes nothing.
+   [supabase/00-reset-catalog.sql](supabase/00-reset-catalog.sql) is a
+   **destructive** one-off, needed only when an older uuid-keyed catalogue is
+   still present and `01-catalog.sql` refuses to run.
 
 2. **Redirect URLs** (Dashboard → Authentication → URL Configuration). Add the
    production and preview origins plus localhost for development:
@@ -110,7 +127,7 @@ sign-in. Session cookies remain `Strict`.
 
 Admin is `app_metadata.role`, which only an admin/service role can write.
 Uncomment and run the block at the bottom of
-[supabase/rls-policies.sql](supabase/rls-policies.sql):
+[supabase/01-catalog.sql](supabase/01-catalog.sql):
 
 ```sql
 update auth.users
@@ -148,8 +165,12 @@ vercel --prod        # deploy
 ```
 
 There is no build step and no bundler: `assets/js/*.js` are served as native ES
-modules. The service worker (`sw.js`) precaches the app shell with a
-network-first strategy and explicitly never caches `/api/*`.
+modules. The service worker (`sw.js`) serves non-API traffic cache-first with a
+network fallback, and never caches `/api/*` — a cached session or a cached `401`
+would be worse than a slow load. Bump `CACHE_NAME` whenever the shell changes.
+
+`npm install` is only needed for the serverless dependencies; the static pages
+themselves have no dependencies at all.
 
 ## Smoke test
 
@@ -161,25 +182,20 @@ BASE_URL=https://<your-domain> scripts/smoke.sh
 ```
 
 It asserts that `/api/auth/session`, `/api/catalog`, and `/api/user/progress`
-return `401` without a session, and that `/login/` returns `200`. The same
-script runs after every deploy via
-[.github/workflows/smoke.yml](.github/workflows/smoke.yml) (set the
-`PRODUCTION_URL` repository variable to enable it).
+return `401` without a session, and that `/login/` returns `200`. Run it after
+every deploy.
 
 ## Security headers
 
-`vercel.json` sets a strict Content-Security-Policy. In particular,
-`script-src 'self'` **forbids inline `<script>` bodies and inline event
-handlers** — every listener is wired inside the page's ES module. `style-src`
-allows `'unsafe-inline'` so the markup can carry one-off style attributes.
+`vercel.json` sets a strict Content-Security-Policy, and `_headers` mirrors the
+same policy for non-Vercel static hosts. In particular, `script-src` allows only
+`'self'` plus the Cloudflare Turnstile origin, which **forbids inline
+`<script>` bodies and inline event handlers** — every listener is wired inside
+the page's ES module. `style-src` allows `'unsafe-inline'` so the markup can
+carry one-off style attributes.
 
-## Local development
+## Browsing without a backend
 
-No install, no build. Serve the folder with any static server so that ES
-module imports and the service worker work (opening `file://` also works for
-browsing, but the service worker is skipped outside a secure context):
-
-```bash
-python3 -m http.server 8080
-# then open http://localhost:8080/
-```
+The pages are plain files, so the landing page and the static catalogue render
+over `file://` or any static server. Sign-in, however, needs the `/api/*`
+functions, so use `vercel dev` for anything past the landing page.

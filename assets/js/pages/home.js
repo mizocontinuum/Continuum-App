@@ -43,8 +43,8 @@ function makeEl(tag, className, text) {
 
 document.addEventListener('DOMContentLoaded', init);
 
-function init() {
-  if (!initPageChrome()) return;
+async function init() {
+  if (!(await initPageChrome())) return;
 
   buildHero();
   renderTop();

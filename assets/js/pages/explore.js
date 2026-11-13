@@ -9,8 +9,8 @@ import { listCatalogue, siteUrl } from '../store.js';
 import { createThumbArtwork, attachCardNavigation } from '../cards.js';
 import { initPageChrome } from '../user-menu.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!initPageChrome()) return;
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!(await initPageChrome())) return;
 
   const filter = document.getElementById('trackFilter');
   const sections = document.getElementById('trackSections');

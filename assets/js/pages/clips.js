@@ -16,8 +16,8 @@ const GRADIENTS = [
   'linear-gradient(160deg, #10202b 0%, #0b1117 72%)'
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
-  const session = initPageChrome();
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await initPageChrome();
   if (!session) return; // guard already redirected
 
   const feed = document.getElementById('feed');

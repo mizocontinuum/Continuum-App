@@ -1,17 +1,20 @@
 /**
  * Continuum Academy - application state.
  *
- * The whole app is static, so this module is the stand-in for the backend that
- * used to live under /api/*. It exposes a small, promise-free API over:
+ * The catalogue, favourites, progress and notifications still render from the
+ * shipped mock data (that data layer is not wired to the API yet). The session,
+ * however, is real: it is minted by the server and only *mirrored* into
+ * localStorage here so the chrome can paint synchronously. The mirror is never
+ * trusted for access control - see initPageChrome() in user-menu.js, which
+ * always re-verifies against GET /api/auth/session.
  *
- *   session       - which demo account is "signed in" (localStorage)
+ * It exposes:
+ *
+ *   session       - a cache of the server session (name/email/role)
  *   catalogue     - disciplines + videos (mock-data.js, overlaid with admin edits)
  *   favorites     - My List
  *   progress      - Continue Watching
  *   notifications - the bell feed
- *
- * Nothing here performs a network request. Every read falls back to the static
- * mock data, so the site renders complete content even with storage disabled.
  */
 
 import {
@@ -19,13 +22,13 @@ import {
   VIDEOS,
   NOTIFICATIONS,
   PROFILE,
-  DEMO_ACCOUNTS,
   SEED_FAVORITES,
   SEED_PROGRESS,
   findDiscipline,
   videosFor,
   bySortOrder
 } from './mock-data.js';
+import { api } from './api.js';
 
 /* ------------------------------- storage -------------------------------- */
 
@@ -68,11 +71,39 @@ const clone = (value) => JSON.parse(JSON.stringify(value));
 
 /* -------------------------------- session ------------------------------- */
 
-/** @returns {{name:string,email:string,role:string}|null} */
+/**
+ * The cached session - a mirror of the server session, used only to paint the
+ * page chrome synchronously. It is never proof of authentication: the page
+ * guard in user-menu.js re-verifies against the server on every load.
+ * @returns {{id:string|null,name:string,email:string,role:string}|null}
+ */
 export function getSession() {
   return read(KEYS.session, null);
 }
 
+/**
+ * Replace the cached session from a server user object
+ * ({ id, email, full_name, role }). Pass null to drop it.
+ */
+export function cacheSession(user) {
+  if (!user) {
+    remove(KEYS.session);
+    return null;
+  }
+  const session = {
+    id: user.id || null,
+    name: String(user.full_name || user.email || 'Member').trim(),
+    email: String(user.email || '').trim(),
+    role: user.role === 'admin' ? 'admin' : 'member'
+  };
+  write(KEYS.session, session);
+  return session;
+}
+
+/**
+ * Local-only mirror update, used by the profile screen's role preview. It never
+ * grants access - the guard checks the server, not this cache.
+ */
 export function setSession({ name, email, role = 'member' } = {}) {
   const session = {
     name: (name || PROFILE.full_name || 'Member').trim(),
@@ -91,39 +122,20 @@ export function isAdmin() {
   return getSession()?.role === 'admin';
 }
 
-/** Role implied by an email address (admin@* signs in as an administrator). */
-export function roleForEmail(email) {
-  return String(email || '').trim().toLowerCase().startsWith('admin') ? 'admin' : 'member';
-}
-
-export function demoAccounts() {
-  return clone(DEMO_ACCOUNTS);
-}
-
-/** Sign out and bounce to the sign-in page. */
-export function signOut() {
+/**
+ * End the session everywhere: revoke it on the server (which clears the
+ * HttpOnly cookies) so a different account can sign in cleanly, then drop the
+ * local mirror and return to the sign-in screen.
+ */
+export async function signOut() {
+  try {
+    await api.logout();
+  } catch {
+    // A network hiccup must never trap the user: the local mirror is dropped
+    // regardless, so another account can still be entered.
+  }
   clearSession();
   window.location.href = siteUrl('login/');
-}
-
-/**
- * Page-level guard, the static replacement for the old Edge middleware.
- * Redirects when there is no session, or when `admin` is required and the
- * signed-in account is not an administrator.
- * @returns {object|null} the session when the page may render
- */
-export function requireSession({ admin = false } = {}) {
-  const session = getSession();
-  if (!session) {
-    const next = encodeURIComponent(window.location.pathname + window.location.search);
-    window.location.replace(siteUrl(`login/?redirect=${next}`));
-    return null;
-  }
-  if (admin && session.role !== 'admin') {
-    window.location.replace(siteUrl('home/'));
-    return null;
-  }
-  return session;
 }
 
 /* ---------------------------- profile details --------------------------- */

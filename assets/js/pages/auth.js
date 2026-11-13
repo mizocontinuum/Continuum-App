@@ -1,12 +1,23 @@
 /**
- * Continuum Academy - static auth screens.
+ * Continuum Academy - authentication screens.
  *
  * One module backs all four auth pages (login, signup, forgot-password and
- * reset-password). It wires whichever form is present to store.js - there is
- * no network request, no cookie, no CAPTCHA and no second factor. Signing in
- * simply records which demo account is active in this browser and moves on.
+ * reset-password). Unlike the old static build, every action here talks to the
+ * real backend:
+ *
+ *   login           -> POST /api/auth/login          (sets HttpOnly cookies)
+ *   signup          -> POST /api/auth/signup
+ *   social sign-in  -> POST /api/auth/oauth          (then the provider URL)
+ *   forgot          -> POST /api/auth/forgot
+ *   reset           -> POST /api/auth/adopt-session  (from the recovery link)
+ *                      POST /api/auth/update-password
+ *
+ * Tokens never reach this code: the server keeps the session in HttpOnly
+ * cookies, and store.js only mirrors the public user for painting the UI.
  */
-import { setSession, roleForEmail, siteUrl, showToast } from '../store.js';
+import { cacheSession, siteUrl, showToast } from '../store.js';
+import { api } from '../api.js';
+import { captchaEnabled, mountCaptcha } from '../captcha.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -31,18 +42,14 @@ function markInvalid(input, invalid) {
   if (input) input.classList.toggle('invalid', Boolean(invalid));
 }
 
-/** A readable display name for any address entered on the demo screens. */
-function displayName(address) {
-  const local = String(address).split('@')[0].toLowerCase();
-  if (local.startsWith('admin')) return 'Continuum Administrator';
-  if (local.startsWith('member')) return 'Continuum Member';
-  return local
-    .replace(/[._-]+/g, ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase())
-    .trim() || 'Member';
+/** Lock a submit control while a request is in flight. */
+function setBusy(button, busy) {
+  if (!button) return;
+  button.disabled = Boolean(busy);
+  button.setAttribute('aria-busy', busy ? 'true' : 'false');
 }
 
-/** Same-origin destination carried in ?redirect=<path>, else a fallback. */
+/** A safe same-origin destination from ?redirect=<path>, else a fallback. */
 function nextPath(fallback) {
   const raw = new URLSearchParams(window.location.search).get('redirect');
   if (raw && raw.startsWith('/') && !raw.startsWith('//')) return raw;
@@ -57,17 +64,51 @@ function initLogin() {
   const password = document.getElementById('password');
   const errorEl = document.getElementById('loginError');
   const submit = form.querySelector('.btn-submit');
+  const captcha = mountCaptcha(document.getElementById('turnstileSlot'));
 
-  // One-tap demo accounts replace the old OAuth / magic-link buttons.
-  document.querySelectorAll('[data-demo-email]').forEach((button) => {
-    button.addEventListener('click', () => {
-      email.value = button.dataset.demoEmail || '';
-      password.value = 'continuum-demo';
-      form.requestSubmit();
+  // Second step, only reached when the account has a verified 2FA factor.
+  const mfaForm = document.getElementById('mfaForm');
+  const mfaCode = document.getElementById('mfaCode');
+  const mfaError = document.getElementById('mfaError');
+  const mfaSubmit = document.getElementById('mfaSubmit');
+  let pendingFactorId = null;
+
+  /** Swap the credential form for the authenticator step. */
+  function startMfa(factorId) {
+    pendingFactorId = factorId || null;
+    form.hidden = true;
+    const alt = document.getElementById('altOptions');
+    if (alt) alt.hidden = true;
+    const signupHint = document.querySelector('.signup-hint');
+    if (signupHint) signupHint.hidden = true;
+    if (mfaForm) {
+      mfaForm.hidden = false;
+      mfaCode?.focus();
+    }
+  }
+
+  // Surface ?error= from the OAuth callback (e.g. "sign-in session expired").
+  const queryError = new URLSearchParams(window.location.search).get('error');
+  if (queryError) setError(errorEl, queryError);
+
+  // Social sign-in: ask the server for the provider URL, then navigate.
+  document.querySelectorAll('[data-provider]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      if (button.dataset.busy === 'true') return;
+      button.dataset.busy = 'true';
+      button.disabled = true;
+      try {
+        const { url } = await api.oauth(button.dataset.provider, nextPath('/home/'));
+        window.location.href = url;
+      } catch (error) {
+        button.dataset.busy = 'false';
+        button.disabled = false;
+        setError(errorEl, error.message);
+      }
     });
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const address = email.value.trim();
@@ -86,14 +127,63 @@ function initLogin() {
       return;
     }
 
-    if (submit) submit.disabled = true;
+    setBusy(submit, true);
+    const widget = await captcha;
 
-    const role = roleForEmail(address);
-    setSession({ name: displayName(address), email: address, role });
-    showToast(role === 'admin' ? 'Signed in as administrator.' : 'Welcome back.');
+    if (captchaEnabled() && !widget?.getToken()) {
+      setError(errorEl, 'Please complete the verification challenge.');
+      setBusy(submit, false);
+      return;
+    }
 
-    window.location.href = nextPath(role === 'admin' ? siteUrl('admin/') : siteUrl('home/'));
+    try {
+      const data = await api.login(address, password.value, widget ? widget.getToken() : '');
+
+      // 2FA: the server held a short-lived aal1 token and wants a code next.
+      if (data?.mfaRequired) {
+        setBusy(submit, false);
+        startMfa(data.factorId);
+        return;
+      }
+
+      cacheSession(data?.user || null);
+      showToast('Welcome back.');
+      window.location.href = nextPath(data?.user?.role === 'admin' ? siteUrl('admin/') : siteUrl('home/'));
+    } catch (error) {
+      widget?.reset();
+      setError(errorEl, error.message);
+      setBusy(submit, false);
+    }
   });
+
+  /* ------------------------- verify the 2FA code -------------------------- */
+
+  if (mfaForm && mfaCode) {
+    mfaForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const code = mfaCode.value.trim();
+      setError(mfaError, '');
+      markInvalid(mfaCode, false);
+
+      if (!/^\d{6}$/.test(code)) {
+        markInvalid(mfaCode, true);
+        setError(mfaError, 'Enter the 6-digit code from your authenticator app.');
+        return;
+      }
+
+      setBusy(mfaSubmit, true);
+      try {
+        const data = await api.mfaVerify(code, pendingFactorId);
+        cacheSession(data?.user || null);
+        showToast('Welcome back.');
+        window.location.href = nextPath(data?.user?.role === 'admin' ? siteUrl('admin/') : siteUrl('home/'));
+      } catch (error) {
+        setError(mfaError, error.message);
+        setBusy(mfaSubmit, false);
+      }
+    });
+  }
 }
 
 /* -------------------------------- signup -------------------------------- */
@@ -105,8 +195,11 @@ function initSignup() {
   const password = document.getElementById('password');
   const confirm = document.getElementById('confirm');
   const errorEl = document.getElementById('signupError');
+  const sent = document.getElementById('signupSent');
+  const submit = document.getElementById('signupSubmit') || form.querySelector('.btn-submit');
+  const captcha = mountCaptcha(document.getElementById('turnstileSlot'));
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const fullName = name.value.trim();
@@ -135,9 +228,33 @@ function initSignup() {
       return;
     }
 
-    setSession({ name: fullName, email: address, role: roleForEmail(address) });
-    showToast('Welcome to Continuum Academy.');
-    window.location.href = siteUrl('home/');
+    setBusy(submit, true);
+    const widget = await captcha;
+
+    if (captchaEnabled() && !widget?.getToken()) {
+      setError(errorEl, 'Please complete the verification challenge.');
+      setBusy(submit, false);
+      return;
+    }
+
+    try {
+      const data = await api.signup(address, password.value, fullName, widget ? widget.getToken() : '');
+
+      // Email confirmation on: no session yet, so point at the inbox instead.
+      if (data?.needsEmailConfirmation) {
+        form.hidden = true;
+        if (sent) sent.hidden = false;
+        return;
+      }
+
+      cacheSession(data?.user || null);
+      showToast('Welcome to Continuum Academy.');
+      window.location.href = siteUrl('home/');
+    } catch (error) {
+      widget?.reset();
+      setError(errorEl, error.message);
+      setBusy(submit, false);
+    }
   });
 }
 
@@ -148,9 +265,9 @@ function initForgot() {
   const email = document.getElementById('email');
   const errorEl = document.getElementById('forgotError');
   const sent = document.getElementById('forgotSent');
-  const demoWrap = document.getElementById('demoResetWrap');
+  const submit = document.getElementById('forgotSubmit') || form.querySelector('.btn-submit');
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const address = email.value.trim();
@@ -163,11 +280,21 @@ function initForgot() {
       return;
     }
 
-    // No mail is sent in the static build: reveal the confirmation and the
-    // direct link into the reset screen so the flow can still be reviewed.
+    setBusy(submit, true);
+    try {
+      await api.forgot(address);
+    } catch (error) {
+      // The API answers 200 for any known/unknown address on purpose. Only a
+      // network failure or a rate limit is worth surfacing.
+      if (error?.status === 0 || error?.status === 429) {
+        setError(errorEl, error.message);
+        setBusy(submit, false);
+        return;
+      }
+    }
+
     form.hidden = true;
     if (sent) sent.hidden = false;
-    if (demoWrap) demoWrap.hidden = false;
   });
 }
 
@@ -178,26 +305,85 @@ function initReset() {
   const password = document.getElementById('password');
   const confirm = document.getElementById('confirm');
   const errorEl = document.getElementById('resetError');
+  const expired = document.getElementById('resetExpired');
+  const submit = document.getElementById('resetSubmit') || form.querySelector('.btn-submit');
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    markInvalid(password, false);
-    markInvalid(confirm, false);
-    setError(errorEl, '');
-
-    if (password.value.length < 8) {
-      markInvalid(password, true);
-      setError(errorEl, 'Use a password of at least 8 characters.');
+  // Only reveal the form once the recovery link has established a session.
+  adoptRecoverySession().then((ready) => {
+    if (!ready) {
+      form.hidden = true;
+      if (expired) expired.hidden = false;
       return;
     }
-    if (password.value !== confirm.value) {
-      markInvalid(confirm, true);
-      setError(errorEl, 'The two passwords do not match.');
-      return;
-    }
-
-    showToast('Password updated. Sign in with your new password.');
-    window.location.href = siteUrl('login/');
+    wireResetForm();
   });
+
+  function wireResetForm() {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      markInvalid(password, false);
+      markInvalid(confirm, false);
+      setError(errorEl, '');
+
+      if (password.value.length < 8) {
+        markInvalid(password, true);
+        setError(errorEl, 'Use a password of at least 8 characters.');
+        return;
+      }
+      if (password.value !== confirm.value) {
+        markInvalid(confirm, true);
+        setError(errorEl, 'The two passwords do not match.');
+        return;
+      }
+
+      setBusy(submit, true);
+      try {
+        await api.updatePassword(password.value);
+        showToast('Password updated. Sign in with your new password.');
+        window.location.href = siteUrl('login/');
+      } catch (error) {
+        setBusy(submit, false);
+        if (error?.status === 401) {
+          // The recovery session lapsed between load and submit.
+          form.hidden = true;
+          setError(errorEl, '');
+          if (expired) expired.hidden = false;
+          return;
+        }
+        setError(errorEl, error.message);
+      }
+    });
+  }
+}
+
+/**
+ * The password-recovery email returns tokens in the URL fragment. Hand them to
+ * the server once (so they become HttpOnly cookies), then strip them from the
+ * address bar. When there is no fragment, fall back to any existing session,
+ * which covers a plain reload or a code-flow callback.
+ * @returns {Promise<boolean>} true when a recovery session is in place
+ */
+async function adoptRecoverySession() {
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const accessToken = hash.get('access_token');
+
+  if (accessToken) {
+    try {
+      const data = await api.adoptSession(accessToken, hash.get('refresh_token') || undefined);
+      cacheSession(data?.user || null);
+      window.history.replaceState(null, '', window.location.pathname);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  try {
+    const data = await api.getSession();
+    cacheSession(data?.user || null);
+    return true;
+  } catch {
+    return false;
+  }
 }

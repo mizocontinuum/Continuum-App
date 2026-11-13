@@ -76,6 +76,9 @@
           >
         </div>
 
+        <!-- Cloudflare Turnstile renders here when a site key is configured -->
+        <div id="turnstileSlot" hidden></div>
+
         <!-- Where a rejected sign-in lands -->
         <p class="form-error" id="loginError" role="alert"></p>
 
@@ -87,18 +90,44 @@
 
       </form>
 
-      <!-- One-tap demo accounts. These replace the old OAuth and magic-link
-           routes: the static build signs in entirely in the browser. -->
+      <!-- Second step, revealed only when the account has two-factor enabled -->
+      <form class="login-form" id="mfaForm" hidden autocomplete="on">
+        <p class="field-hint">Enter the 6-digit code from your authenticator app.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="mfaCode">AUTHENTICATOR CODE</label>
+          <input
+            type="text"
+            id="mfaCode"
+            name="mfaCode"
+            class="input-box"
+            placeholder="123456"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="6"
+            required
+          >
+        </div>
+
+        <p class="form-error" id="mfaError" role="alert"></p>
+
+        <button type="submit" class="btn-submit" id="mfaSubmit">
+          <span>Verify Code</span>
+          <span class="arrow-icon">➔</span>
+        </button>
+      </form>
+
+      <!-- Social sign-in. The server builds the provider URL; the page redirects. -->
       <div id="altOptions">
-        <div class="auth-divider">or use a demo account</div>
+        <div class="auth-divider">or continue with</div>
 
         <div class="oauth-row">
-          <button type="button" class="oauth-btn" data-demo-email="member@continuum.com.ph">
-            <span>Member</span>
+          <button type="button" class="oauth-btn" data-provider="google">
+            <span>Google</span>
           </button>
 
-          <button type="button" class="oauth-btn" data-demo-email="admin@continuum.com.ph">
-            <span>Administrator</span>
+          <button type="button" class="oauth-btn" data-provider="azure">
+            <span>Microsoft</span>
           </button>
         </div>
       </div>

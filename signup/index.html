@@ -100,6 +100,9 @@
           >
         </div>
 
+        <!-- Cloudflare Turnstile renders here when a site key is configured -->
+        <div id="turnstileSlot" hidden></div>
+
         <!-- Where a rejected sign-up lands, e.g. the email is already taken -->
         <p class="form-error" id="signupError" role="alert"></p>
 
@@ -109,6 +112,12 @@
         </button>
 
       </form>
+
+      <!-- Shown when email confirmation is on and no session is issued yet -->
+      <div class="auth-note" id="signupSent" hidden>
+        <strong>Almost there.</strong> We sent a confirmation link to your inbox.
+        Open it to activate your account, then sign in.
+      </div>
 
       <p class="auth-alt">
         Already have an account? <a href="../login/">Sign in</a>

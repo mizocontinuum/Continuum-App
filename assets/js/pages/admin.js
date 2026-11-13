@@ -19,8 +19,8 @@ import {
 } from '../store.js';
 import { initPageChrome } from '../user-menu.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const session = initPageChrome();
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await initPageChrome();
   if (!session) return; // guard already redirected non-admins
 
   /* ------------------------------ elements ------------------------------ */

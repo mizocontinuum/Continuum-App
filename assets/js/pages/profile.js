@@ -32,8 +32,8 @@ const TIMEZONES = [
   'UTC'
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
-  const session = initPageChrome();
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await initPageChrome();
   if (!session) return; // guard already redirected
 
   const form = document.getElementById('profileForm');

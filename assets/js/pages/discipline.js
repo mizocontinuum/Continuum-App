@@ -8,8 +8,8 @@ import { getDiscipline } from '../store.js';
 import { createThumbArtwork, attachCardNavigation, watchUrl } from '../cards.js';
 import { initPageChrome } from '../user-menu.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!initPageChrome()) return;
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!(await initPageChrome())) return;
 
   const body = document.getElementById('disciplineBody');
   const missing = document.getElementById('disciplineMissing');
