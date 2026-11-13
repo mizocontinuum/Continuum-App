@@ -1,0 +1,323 @@
+/* ---------- CONTINUUM ACADEMY — LANDING PAGE ---------- */
+/* Public entry point. Loads after assets/css/base/foundation.css for the
+   palette, reset and the shared poster artwork system. Mobile first: one
+   column, then a wider editorial layout from 860px up. */
+
+.landing-shell {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 20px calc(48px + var(--safe-bottom));
+}
+
+/* ---------- TOP BAR ---------- */
+
+.landing-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: calc(var(--safe-top) + 18px) 0 14px;
+}
+
+.landing-logo {
+  height: 38px;
+  width: auto;
+  display: block;
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.landing-nav a {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-sub);
+  text-decoration: none;
+  padding: 9px 14px;
+  border-radius: 999px;
+}
+
+.landing-nav a:hover {
+  color: var(--text);
+}
+
+.landing-nav .nav-cta {
+  color: var(--ink);
+  background: var(--accent);
+}
+
+.landing-nav .nav-cta:hover {
+  color: var(--ink);
+  background: var(--accent-hover);
+}
+
+/* ---------- HERO ---------- */
+
+.landing-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 38px 24px 34px;
+  background:
+    radial-gradient(120% 90% at 82% 8%, rgba(29, 195, 221, 0.22) 0%, transparent 55%),
+    linear-gradient(160deg, var(--surface-raised) 0%, var(--bg-page) 78%);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+.landing-eyebrow {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(29, 195, 221, 0.4);
+  background: rgba(29, 195, 221, 0.1);
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin-bottom: 18px;
+}
+
+.landing-title {
+  font-size: clamp(28px, 8vw, 52px);
+  line-height: 1.06;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  max-width: 18ch;
+}
+
+.landing-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.landing-lede {
+  margin-top: 16px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-sub);
+  max-width: 46ch;
+}
+
+.landing-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.landing-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 800;
+  text-decoration: none;
+  border-radius: 14px;
+  padding: 14px 22px;
+  border: 1px solid transparent;
+}
+
+.landing-btn.primary {
+  color: var(--ink);
+  background: var(--accent);
+  box-shadow: 0 12px 26px rgba(29, 195, 221, 0.28);
+}
+
+.landing-btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.landing-btn.secondary {
+  color: var(--text);
+  background: var(--surface-raised);
+  border-color: var(--line-strong);
+}
+
+.landing-btn.secondary:hover {
+  border-color: var(--accent);
+}
+
+.landing-session {
+  margin-top: 16px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.landing-session strong {
+  color: var(--text-sub);
+}
+
+/* ---------- PREVIEW CAROUSEL ---------- */
+
+.landing-section {
+  margin-top: 38px;
+}
+
+.landing-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.landing-section-head h2 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.landing-section-head span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.landing-card {
+  width: 224px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.landing-card:active {
+  transform: scale(0.97);
+}
+
+.landing-card .card-caption {
+  font-size: 13.5px;
+}
+
+/* ---------- VALUE PROPS ---------- */
+
+.landing-values {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+.landing-value {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px 18px;
+}
+
+.landing-value b {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.landing-value p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-sub);
+}
+
+.landing-value .value-num {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* ---------- DISCIPLINES ---------- */
+
+.landing-disciplines {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+.landing-discipline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+
+.landing-discipline:hover {
+  border-color: var(--accent);
+}
+
+.landing-discipline .disc-name {
+  font-size: 14.5px;
+  font-weight: 800;
+}
+
+.landing-discipline .disc-goal {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.landing-discipline .disc-count {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--accent);
+  border: 1px solid rgba(29, 195, 221, 0.35);
+  border-radius: 999px;
+  padding: 5px 11px;
+}
+
+/* ---------- FOOTER ---------- */
+
+.landing-footer {
+  margin-top: 46px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.landing-footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.landing-footer a:hover {
+  color: var(--text-sub);
+}
+
+/* ---------- WIDER SCREENS ---------- */
+
+@media (min-width: 860px) {
+  .landing-hero {
+    padding: 64px 56px 58px;
+  }
+
+  .landing-values {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .landing-disciplines {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" data-requires-auth data-requires-admin>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1117">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Continuum Academy - Admin (Beta)</title>
+
+  <!-- Shared foundation styles, then admin form styles -->
+  <link rel="stylesheet" href="../assets/css/base/foundation.css">
+  <link rel="stylesheet" href="../assets/css/base/theme.css">
+  <link rel="stylesheet" href="../assets/css/components/user-menu.css">
+  <link rel="stylesheet" href="../assets/css/pages/admin.css">
+
+  <link rel="apple-touch-icon" href="../assets/images/icon-circle-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+  <link rel="shortcut icon" href="../favicon.ico">
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <a class="icon-btn back-btn" href="../home/" aria-label="Back to Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </a>
+        <div class="admin-title">
+          <span>Admin</span>
+          <em class="badge-beta">beta</em>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <a class="icon-btn" href="../library/" aria-label="My Library">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </a>
+        <button class="avatar-btn" id="profileBtn" aria-label="Account menu">
+          <span class="avatar-letter" data-session-initial></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+
+      <!-- ---------- CATALOGUE TOTALS ---------- -->
+      <section class="admin-stats" id="adminStats" aria-label="Catalogue totals"><!-- rendered by admin.js --></section>
+
+      <!-- ---------- DISCIPLINES ---------- -->
+      <section class="admin-section">
+        <div class="section-title-wrap">
+          <h2 class="admin-heading">Disciplines</h2>
+          <p class="admin-hint">Sections members browse on Explore, Disciplines, and Home.</p>
+        </div>
+
+        <form class="admin-form" id="disciplineForm" autocomplete="off">
+          <div class="field">
+            <span>Title *</span>
+            <input type="text" id="disciplineTitle" placeholder="e.g. Marketing Discipline" required>
+          </div>
+          <div class="field-row two-col">
+            <div class="field">
+              <span>Goal</span>
+              <input type="text" id="disciplineGoal" placeholder="Auto-generated from title">
+            </div>
+            <div class="field">
+              <span>Sort order</span>
+              <input type="number" id="disciplineSort" min="1" placeholder="e.g. 1">
+            </div>
+          </div>
+          <div class="field">
+            <span>Blurb</span>
+            <input type="text" id="disciplineBlurb" placeholder="One line members see under the title">
+          </div>
+          <button type="submit" class="admin-btn primary" id="disciplineSubmit">
+            <span>＋ Add discipline</span>
+          </button>
+        </form>
+
+        <ul class="group-list" id="disciplineList"><!-- rendered by admin.js --></ul>
+      </section>
+
+      <!-- ---------- MASTERCLASSES FOR THE SELECTED DISCIPLINE ---------- -->
+      <section class="admin-section" id="videoSection">
+        <div class="section-title-wrap">
+          <h2 class="admin-heading">
+            <span>Masterclasses</span>
+            <span id="videoSectionGroup" class="admin-group-name"></span>
+          </h2>
+          <p class="admin-hint">Metadata renders the card; a video_url pointing at assets/videos/ makes it playable.</p>
+        </div>
+
+        <div class="field admin-select-row">
+          <span>Discipline</span>
+          <select id="videoDiscipline"></select>
+        </div>
+
+        <form class="admin-form" id="videoForm" autocomplete="off">
+          <div class="field">
+            <span>Title *</span>
+            <input type="text" id="videoTitle" placeholder="Full masterclass title" required>
+          </div>
+
+          <div class="field-row two-col">
+            <div class="field">
+              <span>Speaker</span>
+              <input type="text" id="videoSpeaker" placeholder="e.g. Josiah Go">
+            </div>
+            <div class="field">
+              <span>Minutes</span>
+              <input type="number" id="videoMinutes" min="1" placeholder="e.g. 42">
+            </div>
+          </div>
+
+          <div class="field-row two-col">
+            <div class="field">
+              <span>Tag</span>
+              <input type="text" id="videoTag" placeholder="Defaults to discipline name">
+            </div>
+            <div class="field">
+              <span>Highlight phrase</span>
+              <input type="text" id="videoHighlight" placeholder="Accent text on card">
+            </div>
+          </div>
+
+          <div class="field-row two-col">
+            <div class="field">
+              <span>Rating (0-100)</span>
+              <input type="number" id="videoRating" min="0" max="100" placeholder="e.g. 92">
+            </div>
+            <div class="field">
+              <span>Sort order</span>
+              <input type="number" id="videoSort" min="1" placeholder="e.g. 1">
+            </div>
+          </div>
+
+          <div class="field">
+            <span>Summary</span>
+            <textarea id="videoSummary" rows="3" placeholder="One paragraph shown on the watch page"></textarea>
+          </div>
+
+          <div class="field">
+            <span>Target outcomes (one per line)</span>
+            <textarea id="videoOutcomes" rows="3" placeholder="Grow ventures&#10;Close the action gap"></textarea>
+          </div>
+
+          <div class="field">
+            <span>Video URL (path under assets/videos/)</span>
+            <input type="text" id="videoUrl" placeholder="/assets/videos/my-clip.mp4">
+          </div>
+
+          <div class="field-row two-col">
+            <label class="check-field">
+              <input type="checkbox" id="videoIsClip">
+              <span>Insight clip</span>
+            </label>
+            <label class="check-field">
+              <input type="checkbox" id="videoFeatured">
+              <span>Featured on Home</span>
+            </label>
+          </div>
+
+          <button type="submit" class="admin-btn primary" id="videoSubmit">
+            <span>＋ Add masterclass</span>
+          </button>
+        </form>
+
+        <ul class="video-list" id="videoList"><!-- rendered by admin.js --></ul>
+      </section>
+
+      <!-- ---------- LOCAL DEMO DATA ---------- -->
+      <section class="admin-section admin-note">
+        <h2 class="admin-heading">Local demo data</h2>
+        <p>Disciplines and masterclasses are stored in this browser only. Restoring the default catalogue discards your edits.</p>
+        <button type="button" class="admin-btn danger wide" id="restoreCatalogueBtn">Restore default catalogue</button>
+      </section>
+
+    </main>
+
+  </div>
+
+  <div class="toast-msg" id="pageToast" role="status"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../assets/js/pages/admin.js"></script>
+  <!-- PWA Service Worker Registration -->
+  <script type="module" src="../assets/js/pwa.js"></script>
+
+  <!-- Chrome / Mobile PWA Install Prompt Banner -->
+  <div id="pwaInstallBanner" class="pwa-install-banner">
+    <img src="../assets/images/icon-192.png" alt="Continuum">
+    <div class="pwa-copy">
+      <div class="pwa-title">Continuum Academy</div>
+      <div class="pwa-sub">Install app for the best experience</div>
+    </div>
+    <button id="pwaInstallBtn" class="pwa-install-btn" type="button">Install</button>
+    <button id="pwaDismissBtn" class="pwa-dismiss-btn" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+</body>
+</html>

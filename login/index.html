@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Continuum Academy - Login</title>
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" href="../assets/images/icon-circle-192.png">
+
+  <!-- Auth screens share the login card language -->
+  <link rel="stylesheet" href="../assets/css/base/auth.css">
+
+</head>
+
+<body>
+  <!-- Toast feedback notification -->
+  <div class="toast-msg" id="loginToast" role="status"></div>
+
+  <div class="login-container">
+
+    <!-- Top Brand Header with Continuum Logo (left) and Powered By Mansmith (right) -->
+    <header class="brand-header">
+      <a href="../home/" class="brand-link" aria-label="Continuum Academy Home">
+        <img src="../assets/images/logo.png" alt="Continuum Academy Inc." class="brand-logo-img">
+      </a>
+      <div class="brand-divider"></div>
+      <div class="powered-badge">
+        <span class="powered-text">POWERED BY</span>
+        <img src="../assets/images/mansmith.png" alt="Mansmith and Fielders, Inc." class="mansmith-logo-img">
+      </div>
+    </header>
+
+    <!-- Main Login Card (Glassmorphism rounded border card) -->
+    <main class="login-card">
+      <h1 class="headline" id="loginHeading">Welcome back</h1>
+      <p class="subheadline" id="loginSubheading">Enter your credentials to access your executive learning cockpit</p>
+
+      <form class="login-form" id="loginForm" autocomplete="on">
+
+        <!-- Email Input Field -->
+        <div class="form-group">
+          <label class="form-label" for="email">EMAIL ADDRESS</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="input-box"
+            placeholder="name@company.com"
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <!-- Password Input Field -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <label class="form-label" for="password">PASSWORD</label>
+            <a href="../forgot-password/" class="forgot-link">Forgot Password ?</a>
+          </div>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="input-box"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+          >
+        </div>
+
+        <!-- Where a rejected sign-in lands -->
+        <p class="form-error" id="loginError" role="alert"></p>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-submit">
+          <span>Sign In</span>
+          <span class="arrow-icon">➔</span>
+        </button>
+
+      </form>
+
+      <!-- One-tap demo accounts. These replace the old OAuth and magic-link
+           routes: the static build signs in entirely in the browser. -->
+      <div id="altOptions">
+        <div class="auth-divider">or use a demo account</div>
+
+        <div class="oauth-row">
+          <button type="button" class="oauth-btn" data-demo-email="member@continuum.com.ph">
+            <span>Member</span>
+          </button>
+
+          <button type="button" class="oauth-btn" data-demo-email="admin@continuum.com.ph">
+            <span>Administrator</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sign Up Prompt -->
+      <p class="signup-hint">
+        Don't have an account ? <a href="../signup/" class="signup-link">Start Free</a>
+      </p>
+    </main>
+
+    <!-- Footer Links -->
+    <footer class="login-footer">
+      <div class="footer-row">
+        <a href="#" class="footer-link">Terms &amp; Conditions</a>
+        <span class="dot">•</span>
+        <a href="#" class="footer-link">Privacy Policy</a>
+        <span class="dot">•</span>
+        <a href="#" class="footer-link">Recurring Terms</a>
+      </div>
+      <div class="footer-row">
+        <a href="#" class="footer-link">Refund Policy</a>
+        <span class="dot">•</span>
+        <a href="#" class="footer-link">Contact</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script type="module" src="../assets/js/pages/auth.js"></script>
+  <!-- PWA Service Worker Registration -->
+  <script type="module" src="../assets/js/pwa.js"></script>
+
+  <!-- Chrome / Mobile PWA Install Prompt Banner -->
+  <div id="pwaInstallBanner" class="pwa-install-banner">
+    <img src="../assets/images/icon-192.png" alt="Continuum">
+    <div class="pwa-copy">
+      <div class="pwa-title">Continuum Academy</div>
+      <div class="pwa-sub">Install app for the best experience</div>
+    </div>
+    <button id="pwaInstallBtn" class="pwa-install-btn" type="button">Install</button>
+    <button id="pwaDismissBtn" class="pwa-dismiss-btn" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Continuum Academy - the executive learning cockpit for entrepreneurs, marketers and leaders.">
+  <title>Continuum Academy - Executive Learning Cockpit</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="assets/images/icon-circle-192.png">
+
+  <!-- Shared tokens, reset and poster artwork, then the landing layout -->
+  <link rel="stylesheet" href="assets/css/base/foundation.css">
+  <link rel="stylesheet" href="assets/css/pages/landing.css">
+</head>
+
+<body class="landing-body">
+  <div class="landing-shell">
+
+    <!-- Brand bar -->
+    <header class="landing-top">
+      <a href="index.html" aria-label="Continuum Academy home">
+        <img src="assets/images/logo.png" alt="Continuum Academy Inc." class="landing-logo">
+      </a>
+      <nav class="landing-nav" aria-label="Account">
+        <a href="login/">Sign in</a>
+        <a href="signup/" class="nav-cta">Start free</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="landing-hero">
+        <span class="landing-eyebrow">The executive learning cockpit</span>
+        <h1 class="landing-title">Learn how the best <em>lead, build and grow</em>.</h1>
+        <p class="landing-lede">
+          Stream masterclasses from founders and operators who have done it before.
+          One discipline at a time, built for the decisions you face this quarter.
+        </p>
+
+        <div class="landing-cta">
+          <a class="landing-btn primary" id="landingPrimaryCta" href="login/">Enter the Academy</a>
+          <a class="landing-btn secondary" href="signup/">Create a free account</a>
+        </div>
+
+        <p class="landing-session" id="landingSession" hidden></p>
+      </section>
+
+      <!-- Featured preview -->
+      <section class="landing-section" aria-labelledby="landingPreviewTitle">
+        <div class="landing-section-head">
+          <h2 id="landingPreviewTitle">Featured masterclasses</h2>
+          <span>Preview</span>
+        </div>
+        <div class="cards-carousel" id="landingPreview"></div>
+      </section>
+
+      <!-- Why the Academy -->
+      <section class="landing-section" aria-labelledby="landingValuesTitle">
+        <div class="landing-section-head">
+          <h2 id="landingValuesTitle">Built for busy operators</h2>
+          <span>How it works</span>
+        </div>
+        <div class="landing-values">
+          <article class="landing-value">
+            <span class="value-num">01 - Curated</span>
+            <b>Seven disciplines, one path</b>
+            <p>Entrepreneurship, marketing, leadership, strategy, finance, technology and mastery - each mapped to a clear goal.</p>
+          </article>
+          <article class="landing-value">
+            <span class="value-num">02 - Short</span>
+            <b>Insight in minutes</b>
+            <p>Executive-length classes and quick insight clips you can finish between meetings, then revisit on demand.</p>
+          </article>
+          <article class="landing-value">
+            <span class="value-num">03 - Yours</span>
+            <b>Resume where you left off</b>
+            <p>Save masterclasses to My List, track your progress and pick up exactly where you paused on any device.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Disciplines -->
+      <section class="landing-section" aria-labelledby="landingDisciplinesTitle">
+        <div class="landing-section-head">
+          <h2 id="landingDisciplinesTitle">Explore the disciplines</h2>
+          <span>Full catalogue</span>
+        </div>
+        <div class="landing-disciplines" id="landingDisciplines"></div>
+      </section>
+    </main>
+
+    <footer class="landing-footer">
+      <span>&copy; Continuum Academy Inc. Powered by Mansmith and Fielders, Inc.</span>
+      <span><a href="login/">Sign in</a> &middot; <a href="signup/">Start free</a></span>
+    </footer>
+
+  </div>
+
+  <!-- Page module: static landing preview built from the local catalogue -->
+  <script type="module" src="assets/js/pages/landing.js"></script>
+  <!-- PWA Service Worker Registration -->
+  <script type="module" src="assets/js/pwa.js"></script>
+
+  <!-- Chrome / Mobile PWA Install Prompt Banner -->
+  <div id="pwaInstallBanner" class="pwa-install-banner">
+    <img src="assets/images/icon-192.png" alt="Continuum">
+    <div class="pwa-copy">
+      <div class="pwa-title">Continuum Academy</div>
+      <div class="pwa-sub">Install app for the best experience</div>
+    </div>
+    <button id="pwaInstallBtn" class="pwa-install-btn" type="button">Install</button>
+    <button id="pwaDismissBtn" class="pwa-dismiss-btn" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+</body>
+</html>

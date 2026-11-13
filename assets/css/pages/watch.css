@@ -1,0 +1,159 @@
+/* ---------- WATCH PAGE ----------
+   Player stage, resume/completion bar and the My List / Share actions. Colours
+   and spacing come from the shared foundation tokens. */
+
+.watch-main {
+  padding-top: 10px;
+  gap: 16px;
+}
+
+/* ---------- BACK LINK ---------- */
+.watch-back {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-sub);
+  text-decoration: none;
+}
+.watch-back svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.watch-back:active {
+  color: var(--accent);
+}
+
+/* ---------- PLAYER STAGE ---------- */
+.watch-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000000;
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+.watch-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+}
+
+/* "Ready" fallback shown when a video has no playable URL yet */
+.watch-note {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-sub);
+  background:
+    radial-gradient(circle at 12% 6%, rgba(29, 195, 221, 0.12) 0%, transparent 55%),
+    linear-gradient(160deg, rgba(21, 31, 42, 0.97) 0%, rgba(11, 17, 23, 0.99) 100%);
+}
+
+/* ---------- RESUME / COMPLETION BAR ---------- */
+.watch-progress {
+  height: 4px;
+  border-radius: 99px;
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+.watch-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.2s linear;
+}
+
+/* ---------- METADATA ---------- */
+.watch-meta {
+  display: flex;
+  flex-direction: column;
+}
+.watch-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+}
+.watch-title {
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 6px 0 4px;
+}
+.watch-speaker {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ---------- ACTIONS ---------- */
+.watch-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.watch-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.watch-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.watch-btn:active {
+  transform: scale(0.97);
+}
+.watch-btn[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.watch-btn[aria-pressed="true"] svg {
+  stroke: var(--ink);
+}
+
+/* ---------- MISSING STATE ---------- */
+.watch-missing {
+  padding: 40px 8px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+.watch-missing a {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
