@@ -6,7 +6,7 @@
  * network fallback keeps the app usable offline and still picks up new builds
  * thanks to the versioned cache name.
  */
-const CACHE_NAME = 'continuum-cache-v6';
+const CACHE_NAME = 'continuum-cache-v7';
 const PRECACHE_URLS = [
   './',
   './index.html',

@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# IDE HTML sharing artifacts
+.trae-html-share-packages/
+
+# Node (only needed for the optional Vercel functions in api/)
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
