@@ -460,6 +460,12 @@ body {
   justify-content: center;
   pointer-events: none;
   z-index: 50;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Auto-hide when scrolling down on phone */
+.bottom-nav-container.nav-hidden {
+  transform: translateY(calc(100% + 24px));
 }
 
 .floating-nav {
@@ -1898,7 +1904,8 @@ body {
 
 /* /* nav-update */ Laptop/Desktop (>=761px): bottom bar is display:none (unreachable, unfocusable) */
 @media (min-width: 761px) {
-  .bottom-nav-container {
+  .bottom-nav-container,
+  .floating-nav {
     display: none !important;
   }
 }
@@ -1931,9 +1938,5 @@ body:has(dialog[open]) .bottom-nav-container {
 
   .app-container {
     max-width: 1320px;
-  }
-
-  .floating-nav {
-    max-width: 440px;
   }
 }
