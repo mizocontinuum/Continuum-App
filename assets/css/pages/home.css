@@ -9,14 +9,16 @@
 .hero-section {
   position: relative;
   width: 100%;
-  margin-top: 20px; /* Spacious, comfortable breathing room below navigation bar */
+  margin-top: clamp(12px, 2vw, 20px);
   border-radius: 20px;
   overflow: hidden;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 520px;
-  padding: 20px 18px;
+  min-height: clamp(420px, 64vh, 600px);
+  min-height: clamp(420px, 64svh, 600px);
+  padding: clamp(18px, 3vw, 36px);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3); /* Softened, balanced card shadow */
   border: 1px solid rgba(29, 195, 221, 0.12);
   background: var(--surface);
@@ -46,10 +48,45 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 25%, rgba(29, 195, 221, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse at 76% 32%, rgba(29, 195, 221, 0.16) 0%, transparent 36%),
+    radial-gradient(ellipse at 91% 78%, rgba(93, 92, 214, 0.12) 0%, transparent 35%),
+    radial-gradient(circle at 50% 25%, rgba(29, 195, 221, 0.1) 0%, transparent 65%),
     linear-gradient(180deg, #151f2a 0%, #0b1117 100%);
   z-index: 1;
   transition: opacity 0.4s ease, background 0.6s ease;
+}
+
+/* Deliberate artwork for the demo fallback when no trailer is available. */
+.hero-backdrop::before {
+  content: "";
+  position: absolute;
+  top: 44%;
+  right: 12%;
+  width: clamp(250px, 36vw, 560px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  border: 1px solid rgba(105, 220, 235, 0.13);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 36%, rgba(29, 195, 221, 0.12), transparent 42%),
+    radial-gradient(circle, rgba(18, 38, 48, 0.05) 42%, rgba(8, 14, 20, 0.18) 72%);
+  box-shadow:
+    0 0 0 34px rgba(29, 195, 221, 0.025),
+    0 0 0 72px rgba(29, 195, 221, 0.018),
+    0 0 90px rgba(29, 195, 221, 0.08);
+  pointer-events: none;
+}
+
+.hero-backdrop::after {
+  content: "";
+  position: absolute;
+  top: 44%;
+  right: calc(12% + clamp(72px, 12vw, 186px));
+  width: 1px;
+  height: min(62%, 380px);
+  transform: translateY(-50%) rotate(36deg);
+  background: linear-gradient(transparent, rgba(105, 220, 235, 0.18), transparent);
+  pointer-events: none;
 }
 
 /* When live video is playing: gently dim backdrop so speaker is bright and clear, without ever going pitch black */
@@ -60,25 +97,24 @@
 .hero-overlay {
   position: absolute;
   inset: 0;
-  /* Top 40% is crystal clear so speaker is well-lit and unobstructed; gradient smoothly darkens where text sits */
+  /* Keep the title readable without washing out the fallback artwork. */
   background: linear-gradient(
     180deg,
-    rgba(11, 17, 23, 0) 0%,
-    rgba(11, 17, 23, 0.04) 30%,
-    rgba(11, 17, 23, 0.45) 58%,
-    rgba(11, 17, 23, 0.88) 82%,
-    rgba(11, 17, 23, 0.98) 100%
+    rgba(11, 17, 23, 0.02) 0%,
+    rgba(11, 17, 23, 0.08) 34%,
+    rgba(11, 17, 23, 0.48) 66%,
+    rgba(11, 17, 23, 0.94) 100%
   );
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
 }
 
 /* Carousel Chevron Buttons */
 .chevron-btn {
   position: absolute;
-  top: 130px;
-  width: 38px;
-  height: 38px;
+  top: 34%;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(11, 17, 23, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -121,6 +157,8 @@
   z-index: 5;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 680px;
 }
 
 /* Carousel Indicator Dashes */
@@ -147,19 +185,23 @@
 
 /* Featured Title */
 .hero-title {
-  font-size: 19px;
-  line-height: 1.25;
+  max-width: 22ch;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.12;
   font-weight: 800;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.6px;
   color: #ffffff;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 /* Primary Play Button */
 .btn-play {
   width: 100%;
-  height: 48px;
+  min-height: 48px;
+  max-width: 520px;
   background-color: #ffffff;
   color: var(--ink);
   border: none;
@@ -196,6 +238,7 @@
 .btn-row-dual {
   display: flex;
   gap: 10px;
+  max-width: 520px;
   margin-bottom: 16px;
 }
 
@@ -241,6 +284,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  max-width: 520px;
 }
 
 .media-controls {
@@ -336,6 +381,7 @@
   font-weight: 700;
   color: #ffffff;
   letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
 
@@ -412,19 +458,27 @@
    the nav, so trim it and tighten the copy block. */
 @media (max-width: 400px) {
   .hero-section {
-    min-height: 440px;
+    min-height: clamp(410px, 62vh, 490px);
+    min-height: clamp(410px, 62svh, 490px);
     padding: 16px 14px;
   }
 
   .hero-title {
-    font-size: 17px;
+    font-size: 21px;
     margin-bottom: 14px;
   }
 
   .chevron-btn {
-    top: 110px;
-    width: 34px;
-    height: 34px;
+    top: 30%;
+  }
+
+  .spotlight-badge {
+    gap: 6px;
+    padding: 6px 9px;
+  }
+
+  .spotlight-text {
+    font-size: 11px;
   }
 }
 
@@ -432,8 +486,8 @@
    comfortable left-anchored block instead of spanning the whole frame. */
 @media (min-width: 768px) {
   .hero-section {
-    min-height: 560px;
-    padding: 30px;
+    min-height: clamp(500px, 62vh, 620px);
+    min-height: clamp(500px, 62svh, 620px);
   }
 
   .hero-details {
@@ -448,8 +502,8 @@
 /* Wide desktop: give the stage and the copy block more room to fill the shell */
 @media (min-width: 1280px) {
   .hero-section {
-    min-height: 620px;
-    padding: 40px;
+    min-height: clamp(520px, 62vh, 640px);
+    min-height: clamp(520px, 62svh, 640px);
   }
 
   .hero-details {
