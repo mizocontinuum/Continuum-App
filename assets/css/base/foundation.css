@@ -14,39 +14,67 @@
 */
 
 
-/* SIMPLE PALETTE
-   Surfaces: page, card, raised · Accent: one cyan in three states
+/* DESIGN TOKENS — "Continuum" dark-first palette (Netflix-style)
+   Surfaces: page, card, raised · Accent: ONE cyan, never red
    Text: three levels · everything else is neutral black, white or slate. */
+/* restyle */
 :root {
+  color-scheme: dark;
+
   /* Surfaces */
-  --bg-page: #0b1117;         /* soft slate, not pure black */
-  --surface: #151f2a;         /* cards, sheets */
-  --surface-raised: #1c2833;  /* buttons, badges, chips */
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  --bg-page: #070c11;         /* deep canvas */
+  --surface: #0e1620;         /* cards, sheets */
+  --surface-raised: #1a2530;  /* buttons, badges, chips */
+  --line: rgba(39, 65, 79, 0.55);
+  --line-strong: #27414f;
 
   /* One accent */
-  --accent: #1dc3dd;
-  --accent-hover: #35d2ea;
-  --accent-active: #14a7bd;
-  --accent-glow: rgba(29, 195, 221, 0.18);
+  --accent: #4cc3e0;
+  --accent-hover: #68d3ee;
+  --accent-active: #2ba6c4;
+  --accent-glow: rgba(76, 195, 224, 0.28);
+  --accent-soft: rgba(76, 195, 224, 0.12);
+  --accent-line: rgba(76, 195, 224, 0.32);
   --gold: #e6a23c;            /* forthcoming / coming soon only */
-  --ink: #000000;             /* text that sits on the accent */
+  --ink: #04141a;             /* text that sits on the accent */
 
   /* Text */
   --text: #ffffff;
-  --text-sub: #a7b6c2;
-  --text-muted: #8b9aa7;
+  --text-sub: #b6c7d2;
+  --text-muted: #9bb2bf;
 
   /* Page depth: one simple vertical shift, darker toward the bottom */
-  --bg-page-gradient: linear-gradient(180deg, #111a23 0%, #0b1117 45%, #080d12 100%);
+  --bg-page-gradient: linear-gradient(180deg, #0b131b 0%, #070c11 55%, #05090d 100%);
 
   /* Component surfaces, all derived from the scale above */
   --card-bg: var(--surface);
   --btn-accent-bg: var(--accent);
-  --btn-secondary-bg: var(--surface-raised);
-  --btn-secondary-border: var(--line-strong);
-  --nav-bg: rgba(11, 17, 23, 0.85);
+  --btn-secondary-bg: rgba(26, 37, 48, 0.55);
+  --btn-secondary-border: rgba(255, 255, 255, 0.14);
+  --nav-bg: rgba(14, 22, 32, 0.72);
+  --glass-bg: rgba(14, 22, 32, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --topbar-bg: rgba(7, 12, 17, 0.5);
+  --topbar-bg-scrolled: rgba(7, 12, 17, 0.85);
+  --overlay-bg: rgba(7, 12, 17, 0.85);
+  --sheet-bg: #090e13;
+  /* restyle — poster art stays dark in both themes, like streaming thumbnails */
+  --art-raised: #1a2530;
+  --art: #0e1620;
+
+  /* Corner radii — Netflix-style soft rounding */
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Elevation & glow */
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6);
+  --glow-accent: 0 6px 22px rgba(76, 195, 224, 0.32);
+
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
@@ -58,7 +86,50 @@
   --content-inset: max(var(--gutter), var(--safe-left), var(--safe-right));
   /* Brand mark height. Keep in sync with --logo-height in assets/css/base/auth.css */
   --logo-height: 40px;
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Light theme, applied only when the OS asks for it (dark-first app). */
+/* restyle */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --bg-page: #eef3f6;
+    --surface: #f8fbfc;
+    --surface-raised: #ffffff;
+    --line: rgba(13, 27, 36, 0.1);
+    --line-strong: rgba(13, 27, 36, 0.18);
+
+    --accent: #0a8fb0;
+    --accent-hover: #0b9dbd;
+    --accent-active: #077a95;
+    --accent-glow: rgba(10, 143, 176, 0.22);
+    --accent-soft: rgba(10, 143, 176, 0.1);
+    --accent-line: rgba(10, 143, 176, 0.3);
+    --ink: #ffffff;
+
+    --text: #0d1b24;
+    --text-sub: #3f5563;
+    --text-muted: #5d7383;
+
+    --bg-page-gradient: linear-gradient(180deg, #f5f9fb 0%, #eef3f6 55%, #e7eef3 100%);
+
+    --btn-secondary-bg: rgba(255, 255, 255, 0.72);
+    --btn-secondary-border: rgba(13, 27, 36, 0.14);
+    --nav-bg: rgba(248, 251, 252, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(13, 27, 36, 0.12);
+    --topbar-bg: rgba(248, 251, 252, 0.62);
+    --topbar-bg-scrolled: rgba(248, 251, 252, 0.92);
+    --overlay-bg: rgba(13, 27, 36, 0.45);
+    --sheet-bg: #ffffff;
+
+    --shadow-sm: 0 4px 14px rgba(13, 27, 36, 0.1);
+    --shadow-md: 0 12px 30px rgba(13, 27, 36, 0.14);
+    --shadow-lg: 0 24px 60px rgba(13, 27, 36, 0.18);
+    --glow-accent: 0 6px 22px rgba(10, 143, 176, 0.24);
+  }
 }
 
 * {
@@ -155,23 +226,26 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: calc(var(--safe-top) + 14px) var(--content-inset) 14px;
-  background: rgba(11, 17, 23, 0.6);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  /* restyle — transparent at the top of the page */
+  background: transparent;
+  backdrop-filter: blur(0px) saturate(140%);
+  -webkit-backdrop-filter: blur(0px) saturate(140%);
+  border-bottom: 1px solid transparent;
   transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     padding 0.25s ease;
 }
 
-/* Scrolled state: softly blurs & adapts to cards/colors passing underneath with a balanced cyan-glass outline */
+/* Scrolled state: fades in the frosted glass plate + cyan hairline */
+/* restyle */
 .top-bar.scrolled {
-  background: rgba(11, 17, 23, 0.85);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border-bottom: 1px solid rgba(29, 195, 221, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(29, 195, 221, 0.12);
+  background: var(--topbar-bg-scrolled);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border-bottom: 1px solid var(--accent-line);
+  box-shadow: var(--shadow-md), 0 1px 0 var(--accent-line);
 }
 
 .brand-link {
@@ -195,6 +269,14 @@ body {
   width: auto;
   object-fit: contain;
   display: block;
+  /* restyle — cyan brand glow */
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+/* restyle — icons follow the theme text colour instead of a baked-in white */
+.icon-btn svg,
+.bell-icon {
+  stroke: currentColor;
 }
 
 .top-actions {
@@ -203,22 +285,24 @@ body {
   gap: 18px;
 }
 
+/* restyle */
 .icon-btn {
   background: none;
   border: none;
-  color: #ffffff;
+  color: var(--text);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   padding: 0;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
 }
 
 .icon-btn:hover {
   transform: scale(1.06);
   opacity: 0.9;
+  color: var(--accent);
 }
 
 .icon-btn:active {
@@ -231,24 +315,28 @@ body {
   display: block;
 }
 
+/* restyle — rounded-square avatar with a cyan hairline */
 .avatar-btn {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 12px;
   background: var(--surface-raised);
-  border: none;
+  border: 1px solid var(--accent-line);
   box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  overflow: hidden;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .avatar-btn:hover {
   transform: scale(1.05);
   opacity: 0.95;
+  border-color: var(--accent);
+  box-shadow: var(--glow-accent);
 }
 
 .avatar-btn:active {
@@ -316,21 +404,22 @@ body {
   z-index: 90;
 }
 
+/* restyle — frosted glass tab bar, 22px rounding, safe-area aware */
 .floating-nav {
   pointer-events: auto;
   width: 100%;
   max-width: 400px;
   height: 62px;
   background: var(--nav-bg);
-  border: 1px solid rgba(28, 40, 51, 0.6);
-  border-radius: 36px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 4px 8px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 1px rgba(29, 195, 221, 0.32);
+  box-shadow: var(--shadow-lg), 0 0 1px var(--accent-line);
 }
 
 .nav-tab {
@@ -383,10 +472,11 @@ body {
   transform: translateY(-1px);
 }
 
-/* Active tab: soft accent tint, with aria-current="page" support */
+/* Active tab: soft cyan tint, with aria-current="page" support */
+/* restyle */
 .nav-tab.active,
 .nav-tab[aria-current="page"] {
-  background: rgba(29, 195, 221, 0.12);
+  background: var(--accent-soft);
   border-color: transparent;
   color: var(--accent);
   box-shadow: none;
@@ -398,28 +488,31 @@ body {
 }
 
 /* ---------- TOAST NOTIFICATION ---------- */
+/* restyle — pill-shaped, high-contrast toast anchored bottom-centre */
 .toast-msg {
   position: fixed;
-  top: calc(var(--safe-top) + 16px);
+  bottom: calc(var(--safe-bottom) + 96px);
   left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  color: #ffffff;
-  padding: 10px 18px;
-  border-radius: 99px;
+  transform: translateX(-50%) translateY(120px);
+  background: var(--surface-raised);
+  border: 1px solid var(--accent-line);
+  color: var(--text);
+  padding: 11px 20px;
+  border-radius: var(--radius-pill);
   font-size: 12.5px;
-  font-weight: 600;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(29, 195, 221, 0.32);
-  transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  font-weight: 700;
+  box-shadow: var(--shadow-lg), 0 0 18px var(--accent-glow);
+  transition: transform 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.32s ease;
   z-index: 120;
   pointer-events: none;
   max-width: calc(100vw - 32px);
   text-align: center;
+  opacity: 0;
 }
 
 .toast-msg.show {
   transform: translateX(-50%) translateY(0);
+  opacity: 1;
 }
 
 /* ========================================================
@@ -435,11 +528,12 @@ body {
   margin-bottom: 14px;
 }
 
+/* restyle */
 .section-title {
   font-size: 22px;
   line-height: 1.2;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text);
   letter-spacing: -0.3px;
   overflow-wrap: break-word;
   /* Anchor targets from Explore clear the sticky top bar */
@@ -490,15 +584,16 @@ body {
 }
 
 /* Section eyebrow: one badge style for every row, stacked above the title */
+/* restyle */
 .section-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   margin-bottom: 8px;
   padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(29, 195, 221, 0.12);
-  border: 1px solid rgba(29, 195, 221, 0.32);
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
   color: var(--accent);
   font-size: 10px;
   font-weight: 900;
@@ -547,15 +642,26 @@ body {
   transform: scale(0.97);
 }
 
+/* restyle — rounded thumbnail with gradient art, cyan hover ring + lift */
 .thumb-container {
   width: 100%;
   aspect-ratio: 16 / 10;
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   position: relative;
   background: var(--surface);
-  border: 1px solid rgba(28, 40, 51, 0.85);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.video-card:hover .thumb-container,
+.ranked-video-card:hover .thumb-container,
+.landing-card:hover .thumb-container {
+  transform: scale(1.06);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md), var(--glow-accent);
 }
 
 /* Fallback Card Graphic when no image file is loaded */
@@ -571,40 +677,40 @@ body {
 }
 
 .bg-josiah {
-  background: radial-gradient(circle at 85% 50%, rgba(28, 40, 51, 0.85) 0%, transparent 60%), linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 .bg-chiqui {
-  background: radial-gradient(circle at 85% 50%, rgba(28, 40, 51, 0.85) 0%, transparent 60%), linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 .bg-donald {
-  background: radial-gradient(circle at 85% 50%, rgba(29, 195, 221, 0.32) 0%, transparent 60%), linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 85% 50%, var(--accent-line) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 .bg-jv {
-  background: radial-gradient(circle at 85% 50%, rgba(28, 40, 51, 0.85) 0%, transparent 60%), linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 .bg-bea {
-  background: radial-gradient(circle at 85% 50%, rgba(29, 195, 221, 0.32) 0%, transparent 60%), linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 85% 50%, var(--accent-line) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 .bg-emilio {
-  background: radial-gradient(circle at 85% 50%, rgba(28, 40, 51, 0.85) 0%, transparent 60%), linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 /* Neutral art variants for the discipline rows (same scale, no accent hue) */
 .bg-slate-a {
-  background: radial-gradient(circle at 82% 46%, rgba(28, 40, 51, 0.85) 0%, transparent 60%), linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 82% 46%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 .bg-slate-b {
-  background: radial-gradient(circle at 18% 28%, rgba(28, 40, 51, 0.85) 0%, transparent 58%), linear-gradient(160deg, var(--surface) 0%, var(--surface-raised) 100%);
+  background: radial-gradient(circle at 18% 28%, var(--art-raised) 0%, transparent 58%), linear-gradient(160deg, var(--art) 0%, var(--art-raised) 100%);
 }
 
 .bg-slate-c {
-  background: radial-gradient(circle at 72% 72%, rgba(28, 40, 51, 0.85) 0%, transparent 55%), linear-gradient(200deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background: radial-gradient(circle at 72% 72%, var(--art-raised) 0%, transparent 55%), linear-gradient(200deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 /* "Coming soon" chip for preview titles — sits in the art stack, not over it */
@@ -694,7 +800,7 @@ body {
   height: 52px;
   border-radius: 50%;
   background: rgba(28, 40, 51, 0.45);
-  border: 1px solid rgba(29, 195, 221, 0.32);
+  border: 1px solid var(--accent-line);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -710,10 +816,11 @@ body {
 }
 
 /* Play Overlay on Hover/Focus */
+/* restyle */
 .thumb-play-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(11, 17, 23, 0.4);
+  background: rgba(7, 12, 17, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -724,12 +831,22 @@ body {
 .video-card:hover .thumb-play-overlay,
 .ranked-video-card:hover .thumb-play-overlay {
   opacity: 1;
-  background: rgba(11, 17, 23, 0.6);
+  background: rgba(7, 12, 17, 0.62);
 }
 
+/* Touch devices have no hover — keep the play affordance permanently visible. */
+/* restyle */
+@media (hover: none) {
+  .thumb-play-overlay {
+    opacity: 1;
+    background: linear-gradient(180deg, transparent 40%, rgba(7, 12, 17, 0.55) 100%);
+  }
+}
+
+/* restyle — cyan filled play chip with a soft glow */
 .play-pill-icon {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--accent);
   color: var(--ink);
@@ -738,14 +855,15 @@ body {
   justify-content: center;
   font-size: 14px;
   font-weight: 900;
-  box-shadow: 0 4px 14px rgba(29, 195, 221, 0.32);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.14);
   transform: scale(0.9);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .video-card:hover .play-pill-icon,
 .ranked-video-card:hover .play-pill-icon {
   transform: scale(1.05);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), var(--glow-accent);
 }
 
 /* Duration Badge */
@@ -754,7 +872,7 @@ body {
   bottom: 8px;
   right: 8px;
   background: rgba(11, 17, 23, 0.85);
-  border: 1px solid rgba(29, 195, 221, 0.32);
+  border: 1px solid var(--accent-line);
   border-radius: 6px;
   padding: 2px 6px;
   font-size: 9.5px;
@@ -778,10 +896,11 @@ body {
   display: block;
 }
 
+/* restyle */
 .card-caption {
   font-size: 12.5px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text);
   margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
@@ -817,29 +936,33 @@ body {
     max-width: 620px;
     max-height: 88vh;
     border-radius: 22px;
-    border-bottom: 1px solid rgba(29, 195, 221, 0.32);
+    border-bottom: 1px solid var(--accent-line);
   }
 }
 
+/* restyle — blurred backdrop tint */
 .video-modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(11, 17, 23, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--overlay-bg);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
+/* restyle — rounded 22px sheet, gradient header wash, cyan hairline */
 .video-modal-sheet {
   position: relative;
   z-index: 10;
   width: 100%;
   max-width: 440px;
-  background: #090e13;
-  border: 1px solid rgba(29, 195, 221, 0.32);
+  background:
+    linear-gradient(180deg, var(--accent-soft) 0%, transparent 160px),
+    var(--sheet-bg);
+  border: 1px solid var(--accent-line);
   border-bottom: none;
-  border-radius: 22px 22px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: 0;
-  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.85), 0 0 24px rgba(29, 195, 221, 0.12);
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.6), 0 0 26px var(--accent-glow);
   display: flex;
   flex-direction: column;
   animation: slide-up 0.28s cubic-bezier(0.18, 0.89, 0.32, 1);
@@ -937,7 +1060,7 @@ body {
 }
 
 .video-modal-close:hover {
-  background: rgba(29, 195, 221, 0.2);
+  background: var(--accent-soft); /* restyle */
   color: var(--accent);
 }
 
@@ -951,7 +1074,7 @@ body {
 .video-sample-fallback {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--surface) 0%, var(--bg-page) 100%);
+  background: linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%); /* restyle */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -987,7 +1110,7 @@ body {
   font-size: 12.5px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(29, 195, 221, 0.32);
+  box-shadow: 0 4px 14px var(--accent-line);
   transition: transform 0.15s ease, background 0.2s ease;
 }
 
@@ -1031,7 +1154,7 @@ body {
 }
 
 .sheet-match-chip {
-  color: #46d369;
+  color: var(--accent); /* restyle — single accent, no green/red */
   font-weight: 800;
 }
 
@@ -1050,14 +1173,16 @@ body {
   line-height: 1;
 }
 
-/* Primary CTA Button */
+/* Primary CTA Button — cyan gradient with a glow */
+/* restyle */
 .sheet-primary-btn {
+  position: relative;
   width: 100%;
   height: 46px;
-  background: #ffffff;
-  color: #000000;
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 55%, var(--accent-active) 100%);
+  color: var(--ink);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 15px;
   font-weight: 800;
   display: flex;
@@ -1066,12 +1191,34 @@ body {
   gap: 8px;
   cursor: pointer;
   margin: 4px 0 6px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  transition: transform 0.15s ease, background-color 0.2s ease;
+  overflow: hidden;
+  box-shadow: var(--glow-accent);
+  transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+/* Shine sweep on hover */
+/* restyle */
+.sheet-primary-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+.sheet-primary-btn:hover::after {
+  left: 120%;
 }
 
 .sheet-primary-btn:hover {
-  background: #f0f0f0;
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: var(--glow-accent), 0 10px 26px rgba(0, 0, 0, 0.35);
 }
 
 .sheet-primary-btn:active {
@@ -1080,7 +1227,7 @@ body {
 
 .sheet-cta-sparkle {
   font-size: 13px;
-  color: #000000;
+  color: var(--ink);
 }
 
 .sheet-divider {
@@ -1212,36 +1359,38 @@ body {
   margin-top: 6px;
 }
 
+/* restyle */
 .sheet-module-card {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #131b24;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
   padding: 12px;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, transform 0.15s;
 }
 
 .sheet-module-card:hover {
-  background: #182330;
-  border-color: rgba(29, 195, 221, 0.3);
+  background: var(--surface-raised);
+  border-color: var(--accent-line);
   transform: translateX(2px);
 }
 
+/* restyle */
 .sheet-module-num {
   width: 58px;
   height: 46px;
   flex-shrink: 0;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #1dc3dd 0%, #0d5f6c 100%);
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-active) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
   font-weight: 900;
-  color: #07121a;
+  color: var(--ink);
 }
 
 .sheet-module-content h5 {
@@ -1462,7 +1611,7 @@ body {
 }
 
 .ls-react-btn.active {
-  background: rgba(29, 195, 221, 0.25);
+  background: var(--accent-soft); /* restyle */
   color: var(--accent);
   border: 1px solid var(--accent);
 }
@@ -1641,7 +1790,7 @@ body {
   left: 0;
   bottom: 0;
   width: 0%;
-  background: #e50914; /* Netflix Cinema Red */
+  background: var(--accent); /* restyle — cyan scrubber, never Netflix red */
   border-radius: 99px;
 }
 
@@ -1653,8 +1802,8 @@ body {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #e50914;
-  box-shadow: 0 0 8px rgba(229, 9, 20, 0.6);
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
   pointer-events: none;
 }
 
@@ -1756,19 +1905,31 @@ body {
 }
 
 /* Touch devices: guarantee comfortable tap targets on the chrome controls. */
+/* restyle — 46px+ touch targets */
 @media (pointer: coarse) {
   .icon-btn {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: 46px;
+    min-height: 46px;
   }
 
   .avatar-btn {
-    width: 40px;
-    height: 40px;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
   }
 
   .nav-tab {
     height: 52px;
+  }
+}
+
+/* Mobile shell (<=760px): 16px inputs so iOS never zooms on focus. */
+/* restyle */
+@media (max-width: 760px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
   }
 }
 

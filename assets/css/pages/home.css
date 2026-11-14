@@ -6,11 +6,12 @@
 */
 
 /* ---------- HERO / TRAILER SECTION ---------- */
+/* restyle — large rounded card, dark stage in both themes (Netflix-style) */
 .hero-section {
   position: relative;
   width: 100%;
   margin-top: clamp(12px, 2vw, 20px);
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
   isolation: isolate;
   display: flex;
@@ -19,9 +20,9 @@
   min-height: clamp(420px, 64vh, 600px);
   min-height: clamp(420px, 64svh, 600px);
   padding: clamp(18px, 3vw, 36px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3); /* Softened, balanced card shadow */
-  border: 1px solid rgba(29, 195, 221, 0.12);
-  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--accent-line);
+  background: var(--art);
 }
 
 /* ---------- LIVE TRAILER LAYER ---------- */
@@ -34,7 +35,7 @@
   /* Frame the speaker's face prominently in the upper viewport */
   object-position: center 12%;
   z-index: 0;
-  background: var(--bg-page);
+  background: var(--art); /* restyle */
   transition: opacity 0.4s ease;
 }
 
@@ -44,14 +45,15 @@
 }
 
 /* Dynamic ambient cinematic backdrop */
+/* restyle — poster art stays dark so the white hero copy always reads */
 .hero-backdrop {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 76% 32%, rgba(29, 195, 221, 0.16) 0%, transparent 36%),
+    radial-gradient(ellipse at 76% 32%, var(--accent-glow) 0%, transparent 36%),
     radial-gradient(ellipse at 91% 78%, rgba(93, 92, 214, 0.12) 0%, transparent 35%),
-    radial-gradient(circle at 50% 25%, rgba(29, 195, 221, 0.1) 0%, transparent 65%),
-    linear-gradient(180deg, #151f2a 0%, #0b1117 100%);
+    radial-gradient(circle at 50% 25%, var(--accent-soft) 0%, transparent 65%),
+    linear-gradient(180deg, var(--art-raised) 0%, var(--art) 100%);
   z-index: 1;
   transition: opacity 0.4s ease, background 0.6s ease;
 }
@@ -65,15 +67,15 @@
   width: clamp(250px, 36vw, 560px);
   aspect-ratio: 1;
   transform: translateY(-50%);
-  border: 1px solid rgba(105, 220, 235, 0.13);
+  border: 1px solid rgba(76, 195, 224, 0.16); /* restyle */
   border-radius: 50%;
   background:
-    radial-gradient(circle at 38% 36%, rgba(29, 195, 221, 0.12), transparent 42%),
+    radial-gradient(circle at 38% 36%, var(--accent-soft), transparent 42%), /* restyle */
     radial-gradient(circle, rgba(18, 38, 48, 0.05) 42%, rgba(8, 14, 20, 0.18) 72%);
   box-shadow:
-    0 0 0 34px rgba(29, 195, 221, 0.025),
-    0 0 0 72px rgba(29, 195, 221, 0.018),
-    0 0 90px rgba(29, 195, 221, 0.08);
+    0 0 0 34px rgba(76, 195, 224, 0.025), /* restyle */
+    0 0 0 72px rgba(76, 195, 224, 0.018), /* restyle */
+    0 0 90px var(--accent-glow); /* restyle */
   pointer-events: none;
 }
 
@@ -85,7 +87,7 @@
   width: 1px;
   height: min(62%, 380px);
   transform: translateY(-50%) rotate(36deg);
-  background: linear-gradient(transparent, rgba(105, 220, 235, 0.18), transparent);
+  background: linear-gradient(transparent, rgba(76, 195, 224, 0.2), transparent); /* restyle */
   pointer-events: none;
 }
 
@@ -94,17 +96,19 @@
   opacity: 0.12;
 }
 
+/* restyle — left-anchored dark fade keeps the hero copy readable */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  /* Keep the title readable without washing out the fallback artwork. */
-  background: linear-gradient(
-    180deg,
-    rgba(11, 17, 23, 0.02) 0%,
-    rgba(11, 17, 23, 0.08) 34%,
-    rgba(11, 17, 23, 0.48) 66%,
-    rgba(11, 17, 23, 0.94) 100%
-  );
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4, 9, 13, 0.94) 0%,
+      rgba(4, 9, 13, 0.72) 38%,
+      rgba(4, 9, 13, 0.18) 68%,
+      rgba(4, 9, 13, 0) 88%
+    ),
+    linear-gradient(180deg, rgba(4, 9, 13, 0) 42%, rgba(4, 9, 13, 0.88) 100%);
   z-index: 3;
   pointer-events: none;
 }
@@ -133,9 +137,10 @@
   height: 18px;
 }
 
+/* restyle — glass chevrons, always dark because the hero stage is always dark */
 .chevron-btn:hover {
-  background: rgba(11, 17, 23, 0.85);
-  border-color: rgba(29, 195, 221, 0.32);
+  background: rgba(4, 9, 13, 0.88);
+  border-color: var(--accent);
   transform: scale(1.1);
 }
 
@@ -161,51 +166,55 @@
   max-width: 680px;
 }
 
-/* Carousel Indicator Dashes */
+/* Carousel Indicator Dashes — segmented progress bars above the title */
+/* restyle */
 .carousel-indicators {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .dash {
-  width: 22px;
-  height: 3px;
-  border-radius: 99px;
-  background-color: rgba(255, 255, 255, 0.12);
-  transition: background-color 0.3s ease, width 0.3s ease;
+  width: 26px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.22);
+  transition: background-color 0.3s ease, width 0.3s ease, box-shadow 0.3s ease;
 }
 
 .dash.active {
   background-color: var(--accent);
   box-shadow: 0 0 12px var(--accent-glow);
-  width: 28px;
+  width: 38px;
 }
 
 /* Featured Title */
+/* restyle — big, bold, tight letter-spacing */
 .hero-title {
   max-width: 22ch;
-  font-size: clamp(22px, 3vw, 34px);
-  line-height: 1.12;
-  font-weight: 800;
-  letter-spacing: -0.6px;
+  font-size: clamp(26px, 4vw, 44px);
+  line-height: 1.04;
+  font-weight: 900;
+  letter-spacing: -1.1px;
   color: #ffffff;
   margin-bottom: 20px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
   text-wrap: balance;
   overflow-wrap: break-word;
 }
 
-/* Primary Play Button */
+/* Primary Play Button — cyan gradient, glow, play icon in a circle, shine sweep */
+/* restyle */
 .btn-play {
+  position: relative;
   width: 100%;
-  min-height: 48px;
+  min-height: 50px;
   max-width: 520px;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 55%, var(--accent-active) 100%);
   color: var(--ink);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-size: 16px;
   font-weight: 800;
   font-family: inherit;
@@ -213,21 +222,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
-  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  gap: 10px;
+  overflow: hidden;
+  box-shadow: var(--glow-accent);
+  transition: transform 0.18s ease, box-shadow 0.25s ease, filter 0.25s ease;
   margin-bottom: 12px;
 }
 
+/* Play icon inside a translucent circle */
+/* restyle */
 .btn-play .play-icon {
-  width: 18px;
-  height: 18px;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  border-radius: 50%;
+  background: rgba(4, 20, 26, 0.22);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+/* Shine sweep on hover */
+/* restyle */
+.btn-play::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.btn-play:hover::after {
+  left: 120%;
 }
 
 .btn-play:hover {
-  background-color: #ffffff;
+  filter: brightness(1.06);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(29, 195, 221, 0.32);
+  box-shadow: var(--glow-accent), 0 10px 28px rgba(0, 0, 0, 0.4);
 }
 
 .btn-play:active {
@@ -242,12 +278,13 @@
   margin-bottom: 16px;
 }
 
+/* restyle — glass secondary buttons that lift on hover, tint cyan when saved */
 .btn-secondary {
   flex: 1;
-  height: 44px;
-  background: var(--btn-secondary-bg);
-  border: 1px solid var(--btn-secondary-border);
-  border-radius: 10px;
+  height: 46px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-sm);
   color: #ffffff;
   font-size: 14.5px;
   font-weight: 700;
@@ -257,20 +294,29 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.18s ease, box-shadow 0.2s ease;
 }
 
 .btn-secondary:hover {
-  background: rgba(28, 40, 51, 0.6);
+  background: rgba(255, 255, 255, 0.18);
   border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(29, 195, 221, 0.32);
-  transform: translateY(-1px);
+  box-shadow: var(--glow-accent);
+  transform: translateY(-2px);
 }
 
 .btn-secondary:active {
   transform: scale(0.98);
+}
+
+/* Saved / pressed state reads as cyan */
+/* restyle */
+.btn-secondary.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent-line), var(--glow-accent);
 }
 
 .btn-secondary .plus-icon {
@@ -294,18 +340,21 @@
   gap: 10px;
 }
 
+/* restyle — round glass icon buttons, cyan filled when active */
 .circle-btn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(28, 40, 51, 0.45);
-  border: 1.5px solid rgba(29, 195, 221, 0.32);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .circle-btn svg {
@@ -315,8 +364,8 @@
 
 .circle-btn:hover {
   border-color: var(--accent);
-  background: rgba(28, 40, 51, 0.85);
-  box-shadow: 0 0 12px var(--accent-glow);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: var(--glow-accent);
   transform: scale(1.08);
 }
 
@@ -324,24 +373,27 @@
   transform: scale(0.94);
 }
 
+/* Active: solid cyan fill */
+/* restyle */
 .circle-btn.active {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(29, 195, 221, 0.12);
-  box-shadow: 0 0 14px var(--accent-glow);
+  border-color: transparent;
+  color: var(--ink);
+  background: var(--accent);
+  box-shadow: var(--glow-accent);
 }
 
 /* Spotlight Badge */
+/* restyle — glass pill */
 .spotlight-badge {
   display: flex;
   align-items: center;
   gap: 7px;
-  background: rgba(28, 40, 51, 0.6);
-  border: 1px solid var(--line-strong);
-  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-pill);
   padding: 6px 14px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
   box-shadow: none;
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -421,9 +473,10 @@
   pointer-events: none;
 }
 
+/* restyle — big outlined rank numeral with a cyan rim and heavy drop shadow */
 .rank-num {
   display: block;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   font-size: 96px;
   font-weight: 900;
   line-height: 1;
@@ -432,7 +485,7 @@
   color: transparent;
   -webkit-text-stroke: 3.3px rgba(255, 255, 255, 0.92);
   letter-spacing: -1.7px;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 14px var(--accent-glow));
   user-select: none;
 }
 
@@ -444,18 +497,26 @@
   /* In FRONT of number */
 }
 
+/* restyle */
 .ranked-body .thumb-container {
   position: relative;
   z-index: 2;
-  background-color: var(--surface);
+  background-color: var(--art);
   /* Solid base cleanly masks the number behind */
-  border: 1px solid rgba(28, 40, 51, 0.85);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-md);
 }
 
 /* ---------- RESPONSIVE ---------- */
-/* Small phones: the 520px hero is taller than the viewport allows alongside
-   the nav, so trim it and tighten the copy block. */
+/* restyle — hero arrows are hidden on the mobile shell */
+@media (max-width: 760px) {
+  .chevron-btn {
+    display: none;
+  }
+}
+
+/* Small phones: the hero is taller than the viewport allows alongside the
+   nav, so trim it and tighten the copy block. */
 @media (max-width: 400px) {
   .hero-section {
     min-height: clamp(410px, 62vh, 490px);
@@ -464,12 +525,9 @@
   }
 
   .hero-title {
-    font-size: 21px;
+    font-size: 24px;
+    letter-spacing: -0.7px;
     margin-bottom: 14px;
-  }
-
-  .chevron-btn {
-    top: 30%;
   }
 
   .spotlight-badge {
@@ -494,8 +552,9 @@
     max-width: 600px;
   }
 
+  /* restyle */
   .hero-title {
-    font-size: 26px;
+    font-size: 34px;
   }
 }
 
@@ -510,7 +569,8 @@
     max-width: 680px;
   }
 
+  /* restyle */
   .hero-title {
-    font-size: 30px;
+    font-size: 42px;
   }
 }

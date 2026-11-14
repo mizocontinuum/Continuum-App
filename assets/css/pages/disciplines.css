@@ -29,10 +29,11 @@
 }
 
 /* Empty state, only visible if the data file is missing */
+/* restyle */
 .library-empty {
   padding: 28px 16px;
   border: 1px dashed var(--line-strong);
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   text-align: center;
   font-size: 13px;
   line-height: 1.5;

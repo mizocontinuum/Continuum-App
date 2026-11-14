@@ -3,22 +3,25 @@
    rest of the app's sheets; theme.css handles everything else. */
 
 /* Gradient avatar — the blue-to-purple mark from the design */
+/* restyle */
 .top-bar .avatar-btn {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 55%, var(--accent-active) 100%);
   border: none;
-  color: #ffffff;
+  color: var(--ink);
   font-weight: 700;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+/* restyle */
 .top-bar .avatar-btn:hover,
 .top-bar .avatar-btn:focus-visible {
   transform: scale(1.05);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
+/* restyle */
 .top-bar .avatar-btn.menu-active {
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-line);
 }
 
 .top-bar .avatar-btn:focus-visible {
@@ -32,6 +35,7 @@
 }
 
 /* ---------- PANEL ---------- */
+/* restyle */
 .user-menu-panel {
   position: absolute;
   top: calc(100% + 12px);
@@ -39,10 +43,10 @@
   width: 280px;
   max-width: calc(100vw - 24px);
   box-sizing: border-box;
-  background: #0d1420;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(29, 195, 221, 0.06);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
   padding: 6px;
   z-index: 160;
 
@@ -78,14 +82,16 @@
 }
 
 /* ---------- HEADER ---------- */
+/* restyle */
 .user-menu-header {
   padding: 14px 12px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--line);
   margin-bottom: 6px;
 }
 
+/* restyle */
 .user-menu-name {
-  color: #ffffff;
+  color: var(--text);
   font-size: 15px;
   font-weight: 800;
   text-transform: uppercase;
@@ -93,8 +99,9 @@
   overflow-wrap: anywhere;
 }
 
+/* restyle */
 .user-menu-email {
-  color: #8b9aa7;
+  color: var(--text-muted);
   font-size: 12.5px;
   margin-top: 3px;
   overflow-wrap: anywhere;
@@ -107,15 +114,16 @@
   gap: 2px;
 }
 
+/* restyle */
 .user-menu-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   border: none;
   background: transparent;
-  color: #e8eef4;
+  color: var(--text);
   font-family: inherit;
   font-size: 14px;
   text-align: left;
@@ -123,12 +131,14 @@
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
-  transition: background 0.12s ease;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 
+/* restyle */
 .user-menu-item:hover,
 .user-menu-item:focus-visible {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--surface-raised);
+  color: var(--accent);
 }
 
 .user-menu-item:focus-visible {
@@ -142,15 +152,16 @@
   flex-shrink: 0;
 }
 
-/* Icon tints — the label stays neutral except Log Out, per the design */
-.tint-teal .menu-icon   { color: #2dd4bf; }
-.tint-yellow .menu-icon { color: #eab308; }
-.tint-purple .menu-icon { color: #a78bfa; }
-.tint-theme .menu-icon  { color: #38bdf8; }
+/* restyle */
+.tint-teal .menu-icon   { color: var(--accent); }
+.tint-yellow .menu-icon { color: var(--accent); }
+.tint-purple .menu-icon { color: var(--accent); }
+.tint-theme .menu-icon  { color: var(--accent); }
 
+/* restyle */
 .tint-red,
 .tint-red .menu-icon {
-  color: #f472b6;
+  color: var(--text-sub);
 }
 
 /* Divider before Log Out */
@@ -160,6 +171,7 @@
   position: relative;
 }
 
+/* restyle */
 .user-menu-divider::before {
   content: "";
   position: absolute;
@@ -167,7 +179,7 @@
   left: 8px;
   right: 8px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--line);
 }
 
 /* ---------- RESPONSIVE ---------- */
@@ -178,6 +190,7 @@
 }
 
 /* ---------- NOTIFICATION BELL ---------- */
+/* restyle */
 .bell-badge {
   position: absolute;
   top: -5px;
@@ -186,17 +199,18 @@
   height: 16px;
   padding: 0 4px;
   box-sizing: border-box;
-  border-radius: 99px;
-  background: #ef4444;
-  color: #ffffff;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--ink);
   font-size: 10px;
   font-weight: 800;
   line-height: 16px;
   text-align: center;
-  box-shadow: 0 0 0 2px #0b1117;
+  box-shadow: 0 0 0 2px var(--bg-page);
 }
 
 /* Panel shares the avatar menu's sheet styling and open/close motion. */
+/* restyle */
 .notif-panel {
   position: absolute;
   top: calc(100% + 12px);
@@ -204,10 +218,10 @@
   width: 320px;
   max-width: calc(100vw - 24px);
   box-sizing: border-box;
-  background: #0d1420;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(29, 195, 221, 0.06);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
   padding: 6px;
   z-index: 160;
   opacity: 0;
@@ -240,11 +254,12 @@
   }
 }
 
+/* restyle */
 .notif-head {
   padding: 12px 12px 10px;
   margin-bottom: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
   font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
@@ -259,38 +274,44 @@
   overflow-y: auto;
 }
 
+/* restyle */
 .notif-item {
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 
+/* restyle */
 .notif-item.unread {
-  background: rgba(29, 195, 221, 0.08);
+  background: var(--accent-soft);
 }
 
+/* restyle */
 .notif-title {
-  color: #ffffff;
+  color: var(--text);
   font-size: 14px;
   font-weight: 700;
 }
 
+/* restyle */
 .notif-body {
   margin-top: 3px;
-  color: #a7b6c2;
+  color: var(--text-sub);
   font-size: 12.5px;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
 
+/* restyle */
 .notif-time {
   margin-top: 5px;
-  color: #8b9aa7;
+  color: var(--text-muted);
   font-size: 11px;
 }
 
+/* restyle */
 .notif-empty {
   padding: 22px 12px;
   text-align: center;
-  color: #8b9aa7;
+  color: var(--text-muted);
   font-size: 13px;
 }

@@ -1,31 +1,98 @@
 /* ---------- ROOT & THEME — same palette as Home / Login ---------- */
+/* restyle */
 :root {
+  color-scheme: dark;
+
   /* Surfaces */
-  --bg-page: #0b1117;         /* soft slate, not pure black */
-  --surface: #151f2a;         /* panels, sheets */
-  --surface-raised: #1c2833;  /* buttons, chips */
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  --bg-page: #070c11;         /* deep canvas */
+  --surface: #0e1620;         /* panels, sheets */
+  --surface-raised: #1a2530;  /* buttons, chips */
+  --line: rgba(39, 65, 79, 0.55);
+  --line-strong: #27414f;
 
   /* One accent */
-  --accent: #1dc3dd;
-  --accent-hover: #35d2ea;
-  --accent-active: #14a7bd;
-  --accent-glow: rgba(29, 195, 221, 0.18);
+  --accent: #4cc3e0;
+  --accent-hover: #68d3ee;
+  --accent-active: #2ba6c4;
+  --accent-glow: rgba(76, 195, 224, 0.28);
+  --accent-soft: rgba(76, 195, 224, 0.12);
+  --accent-line: rgba(76, 195, 224, 0.32);
+  --gold: #e6a23c;            /* forthcoming / coming soon only */
+  --ink: #04141a;             /* text that sits on the accent */
 
   /* Text */
   --text: #ffffff;
-  --text-sub: #a7b6c2;
-  --text-muted: #8b9aa7;
+  --text-sub: #b6c7d2;
+  --text-muted: #9bb2bf;
 
   /* Page depth: same simple vertical shift as Home / Login */
-  --bg-page-gradient: linear-gradient(180deg, #111a23 0%, #0b1117 45%, #080d12 100%);
+  --bg-page-gradient: linear-gradient(180deg, #0b131b 0%, #070c11 55%, #05090d 100%);
+
+  /* Poster art stays dark in both themes, like streaming thumbnails */
+  --art-raised: #1a2530;
+  --art: #0e1620;
+
+  /* Always-dark feed stage: the clip plays over poster art in both themes */
+  --stage-line: rgba(255, 255, 255, 0.08);
+  --stage-chip: rgba(255, 255, 255, 0.12);
+  --stage-overlay: rgba(7, 12, 17, 0.85);
+  --stage-shade-top: rgba(7, 12, 17, 0.6);
+  --stage-shade-bottom: rgba(7, 12, 17, 0.85);
+  --stage-cta-bg: #ffffff;
+  --stage-cta-ink: #05131a;
+  --stage-text: #ffffff;
+  --stage-text-muted: #9bb2bf;
+
+  /* Corner radii — Netflix-style soft rounding */
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Elevation & glow */
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6);
 
   --nav-height: 58px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Light theme, applied only when the OS asks for it (dark-first app).
+   The clip feed itself stays dark (see the --stage-* tokens above). */
+/* restyle */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --bg-page: #eef3f6;
+    --surface: #f8fbfc;
+    --surface-raised: #ffffff;
+    --line: rgba(13, 27, 36, 0.1);
+    --line-strong: rgba(13, 27, 36, 0.18);
+
+    --accent: #0a8fb0;
+    --accent-hover: #0b9dbd;
+    --accent-active: #077a95;
+    --accent-glow: rgba(10, 143, 176, 0.22);
+    --accent-soft: rgba(10, 143, 176, 0.1);
+    --accent-line: rgba(10, 143, 176, 0.3);
+    --ink: #ffffff;
+
+    --text: #0d1b24;
+    --text-sub: #3f5563;
+    --text-muted: #5d7383;
+
+    --bg-page-gradient: linear-gradient(180deg, #f5f9fb 0%, #eef3f6 55%, #e7eef3 100%);
+
+    --shadow-sm: 0 4px 14px rgba(13, 27, 36, 0.1);
+    --shadow-md: 0 12px 30px rgba(13, 27, 36, 0.14);
+    --shadow-lg: 0 24px 60px rgba(13, 27, 36, 0.18);
+  }
 }
 
 * {
@@ -76,10 +143,11 @@ body {
 }
 
 /* ---------- VIDEO / MEDIA AREA ---------- */
+/* restyle */
 .art {
   position: absolute;
   inset: 0;
-  background: var(--g, var(--surface));
+  background: var(--g, var(--art));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,27 +159,29 @@ body {
   opacity: .14;
   letter-spacing: -4px;
 }
+/* restyle */
 .shade {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(11, 17, 23, 0.6) 0%,
+    var(--stage-shade-top) 0%,
     transparent 18%,
     transparent 42%,
-    rgba(11, 17, 23, 0.85) 88%,
-    rgba(11, 17, 23, 0.85) 100%
+    var(--stage-shade-bottom) 88%,
+    var(--stage-shade-bottom) 100%
   );
 }
 
 /* ---------- TOP BAR & PROGRESS ---------- */
+/* restyle */
 .bars {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--stage-chip);
   z-index: 5;
 }
 .bars span {
@@ -131,16 +201,19 @@ body {
   align-items: center;
   z-index: 4;
 }
+/* restyle */
 .top b {
+  color: var(--stage-text);
   font-size: 17px;
   font-weight: 800;
   letter-spacing: 0.5px;
 }
+/* restyle */
 .top .tag {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--stage-chip);
   backdrop-filter: blur(8px);
   padding: 4px 10px;
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 600;
 }
@@ -170,11 +243,12 @@ body {
   gap: 16px;
   z-index: 4;
 }
+/* restyle */
 .rail button {
   width: 50px;
   background: none;
   border: 0;
-  color: var(--text);
+  color: var(--stage-text);
   font: inherit;
   font-size: 11px;
   font-weight: 600;
@@ -184,26 +258,28 @@ body {
   align-items: center;
   gap: 4px;
 }
+/* restyle */
 .rail button em {
   font-style: normal;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(11, 17, 23, 0.85);
+  background: var(--stage-overlay);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--stage-chip);
   transition: transform .15s ease, background .2s ease;
 }
 .rail button:active em {
   transform: scale(0.92);
 }
+/* restyle */
 .rail button.on em {
   background: var(--accent);
-  color: var(--bg-page);
+  color: var(--ink);
 }
 
 /* ---------- BOTTOM METADATA & ACTIONS ---------- */
@@ -221,16 +297,19 @@ body {
   text-transform: uppercase;
   letter-spacing: .5px;
 }
+/* restyle */
 .info h2 {
+  color: var(--stage-text);
   font-size: 21px;
   line-height: 1.2;
   margin: 4px 0 6px;
   font-weight: 800;
   text-shadow: 0 1px 4px rgba(0,0,0,.6);
 }
+/* restyle */
 .meta {
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--stage-text-muted);
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -238,20 +317,22 @@ body {
   gap: 6px;
 }
 .meta b { color: var(--accent); }
+/* restyle */
 .meta u {
   text-decoration: none;
-  border: 1px solid var(--text-muted);
-  border-radius: 4px;
+  border: 1px solid var(--stage-text-muted);
+  border-radius: var(--radius-sm);
   padding: 0 4px;
   font-size: 10px;
   font-weight: 700;
 }
+/* restyle */
 .cta {
   width: 100%;
   border: 0;
-  border-radius: 10px;
-  background: #ffffff;
-  color: #000000;
+  border-radius: var(--radius-sm);
+  background: var(--stage-cta-bg);
+  color: var(--stage-cta-ink);
   font: inherit;
   font-weight: 800;
   font-size: 15px;
@@ -261,28 +342,31 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.3);
+  box-shadow: var(--shadow-sm);
   transition: transform .1s ease, background-color .15s;
 }
+/* restyle */
 .cta:active {
   transform: scale(0.98);
-  background: #ffffff;
+  background: var(--stage-cta-bg);
 }
+/* restyle */
 .sub {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--stage-text-muted);
   text-align: center;
   margin-top: 6px;
 }
 
 /* ---------- BOTTOM NAVIGATION BAR ---------- */
+/* restyle */
 .bottom-nav {
   height: calc(var(--nav-height) + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
-  background: rgba(11, 17, 23, 0.85);
+  background: var(--stage-overlay);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--stage-line);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -290,11 +374,12 @@ body {
   position: relative;
 }
 
+/* restyle */
 .nav-item {
   flex: 1;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--stage-text-muted);
   text-decoration: none;
   display: flex;
   flex-direction: column;
@@ -332,6 +417,7 @@ body {
 }
 
 /* ---------- TOAST NOTIFICATION ---------- */
+/* restyle */
 .toast {
   position: fixed;
   left: 20px;
@@ -339,13 +425,13 @@ body {
   top: calc(var(--safe-top) + 20px);
   background: var(--surface);
   border: 1px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 12px 16px;
   font-size: 13px;
   font-weight: 600;
   text-align: center;
   z-index: 50;
-  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  box-shadow: var(--shadow-md);
   transform: translateY(-120px);
   transition: transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }

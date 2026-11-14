@@ -9,15 +9,16 @@
 }
 
 /* ---------- FREE ACCESS PITCH ---------- */
+/* restyle */
 .free-hero {
   position: relative;
   padding: 20px 20px 24px;
-  border-radius: 22px;
-  border: 1px solid rgba(29, 195, 221, 0.16);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--accent-line);
   background:
-    radial-gradient(circle at 12% 4%, rgba(29, 195, 221, 0.16) 0%, transparent 46%),
-    linear-gradient(158deg, rgba(21, 31, 42, 0.96) 0%, rgba(15, 23, 31, 0.98) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    radial-gradient(circle at 12% 4%, var(--accent-soft) 0%, transparent 46%),
+    linear-gradient(158deg, var(--surface-raised) 0%, var(--surface) 100%);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -28,15 +29,16 @@
 }
 
 /* The promise: outlined, so it reads as a stamp rather than a button */
+/* restyle */
 .free-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   height: 38px;
   padding: 0 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1.5px solid var(--accent);
-  background: rgba(29, 195, 221, 0.14);
+  background: var(--accent-soft);
   color: var(--accent);
   font-size: 10.5px;
   font-weight: 800;
@@ -50,14 +52,15 @@
   flex-shrink: 0;
 }
 
+/* restyle */
 .free-tag {
   display: inline-flex;
   align-items: center;
   height: 38px;
   padding: 0 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface-raised);
   color: var(--text-sub);
   font-size: 10.5px;
   font-weight: 800;
@@ -99,14 +102,15 @@
   display: none;
 }
 
+/* restyle */
 .filter-pill {
   flex: 0 0 auto;
   height: 40px;
   padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: transparent;
-  color: var(--text);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  color: var(--text-sub);
   font-family: var(--font-family);
   font-size: 12.5px;
   font-weight: 800;
@@ -120,10 +124,11 @@
   transform: scale(0.97);
 }
 
+/* restyle */
 .filter-pill[aria-selected="true"] {
-  background: var(--accent);
+  background: var(--accent-soft);
   border-color: var(--accent);
-  color: var(--ink);
+  color: var(--accent);
 }
 
 /* ---------- ONE SECTION PER DISCIPLINE ---------- */
@@ -188,13 +193,24 @@
   transform: scale(0.97);
 }
 
+/* restyle */
 .exp-thumb {
   position: relative;
   aspect-ratio: 16 / 10;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--surface);
-  border: 1px solid rgba(28, 40, 51, 0.85);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+/* restyle */
+.exp-card:hover .exp-thumb {
+  transform: scale(1.06);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md), var(--glow-accent);
 }
 
 /* Miniature poster: the artwork shrinks, its type shrinks with it */
@@ -224,11 +240,12 @@
   font-size: 6px;
 }
 
+/* restyle */
 .exp-tag {
   margin-top: 8px;
   font-size: 8.5px;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
   color: var(--text-muted);
   white-space: nowrap;
@@ -250,10 +267,11 @@
 }
 
 /* ---------- EMPTY / NOSCRIPT ---------- */
+/* restyle */
 .explore-empty {
   padding: 34px 16px;
   border: 1px dashed var(--line-strong);
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   text-align: center;
   font-size: 13px;
   line-height: 1.5;

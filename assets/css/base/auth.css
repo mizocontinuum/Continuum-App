@@ -4,36 +4,109 @@
    here so the static build has a single auth stylesheet. */
 
 /* ---------- PALETTE ---------- */
+/* restyle */
 :root {
+  color-scheme: dark;
+
   /* Surfaces */
-  --bg-page: #0b1117;         /* soft slate, not pure black */
-  --surface: #151f2a;         /* cards, sheets */
-  --surface-raised: #1c2833;  /* buttons, badges, chips */
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  --bg-page: #070c11;         /* deep canvas */
+  --surface: #0e1620;         /* cards, sheets */
+  --surface-raised: #1a2530;  /* buttons, badges, chips */
+  --line: rgba(39, 65, 79, 0.55);
+  --line-strong: #27414f;
 
   /* One accent */
-  --accent: #1dc3dd;
-  --accent-hover: #35d2ea;
-  --accent-active: #14a7bd;
-  --accent-glow: rgba(29, 195, 221, 0.18);
-  --ink: #000000;             /* text that sits on the accent */
+  --accent: #4cc3e0;
+  --accent-hover: #68d3ee;
+  --accent-active: #2ba6c4;
+  --accent-glow: rgba(76, 195, 224, 0.28);
+  --accent-soft: rgba(76, 195, 224, 0.12);
+  --accent-line: rgba(76, 195, 224, 0.32);
+  --gold: #e6a23c;            /* forthcoming / coming soon only */
+  --ink: #04141a;             /* text that sits on the accent */
 
   /* Text */
   --text: #ffffff;
-  --text-sub: #a7b6c2;
-  --text-muted: #8b9aa7;
+  --text-sub: #b6c7d2;
+  --text-muted: #9bb2bf;
 
   /* Page depth: one simple vertical shift behind the card */
-  --bg-page-gradient: linear-gradient(180deg, #111a23 0%, #0b1117 45%, #080d12 100%);
+  --bg-page-gradient: linear-gradient(180deg, #0b131b 0%, #070c11 55%, #05090d 100%);
 
   /* Component surfaces */
   --card-bg: var(--surface);
   --btn-accent-bg: var(--accent);
-  --btn-secondary-bg: var(--surface-raised);
-  --btn-secondary-border: var(--line-strong);
+  --btn-secondary-bg: rgba(26, 37, 48, 0.55);
+  --btn-secondary-border: rgba(255, 255, 255, 0.14);
+  --nav-bg: rgba(14, 22, 32, 0.72);
+  --glass-bg: rgba(14, 22, 32, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --topbar-bg: rgba(7, 12, 17, 0.5);
+  --topbar-bg-scrolled: rgba(7, 12, 17, 0.85);
+  --overlay-bg: rgba(7, 12, 17, 0.85);
+  --sheet-bg: #090e13;
+  /* restyle — poster art stays dark in both themes */
+  --art-raised: #1a2530;
+  --art: #0e1620;
+
+  /* Corner radii — Netflix-style soft rounding */
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Elevation & glow */
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6);
+  --glow-accent: 0 6px 22px rgba(76, 195, 224, 0.32);
+
   --logo-height: 40px;
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Light theme, applied only when the OS asks for it (dark-first app). */
+/* restyle */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --bg-page: #eef3f6;
+    --surface: #f8fbfc;
+    --surface-raised: #ffffff;
+    --line: rgba(13, 27, 36, 0.1);
+    --line-strong: rgba(13, 27, 36, 0.18);
+
+    --accent: #0a8fb0;
+    --accent-hover: #0b9dbd;
+    --accent-active: #077a95;
+    --accent-glow: rgba(10, 143, 176, 0.22);
+    --accent-soft: rgba(10, 143, 176, 0.1);
+    --accent-line: rgba(10, 143, 176, 0.3);
+    --ink: #ffffff;
+
+    --text: #0d1b24;
+    --text-sub: #3f5563;
+    --text-muted: #5d7383;
+
+    --bg-page-gradient: linear-gradient(180deg, #f5f9fb 0%, #eef3f6 55%, #e7eef3 100%);
+
+    --btn-secondary-bg: rgba(255, 255, 255, 0.72);
+    --btn-secondary-border: rgba(13, 27, 36, 0.14);
+    --nav-bg: rgba(248, 251, 252, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(13, 27, 36, 0.12);
+    --topbar-bg: rgba(248, 251, 252, 0.62);
+    --topbar-bg-scrolled: rgba(248, 251, 252, 0.92);
+    --overlay-bg: rgba(13, 27, 36, 0.45);
+    --sheet-bg: #ffffff;
+
+    --shadow-sm: 0 4px 14px rgba(13, 27, 36, 0.1);
+    --shadow-md: 0 12px 30px rgba(13, 27, 36, 0.14);
+    --shadow-lg: 0 24px 60px rgba(13, 27, 36, 0.18);
+    --glow-accent: 0 6px 22px rgba(10, 143, 176, 0.24);
+  }
 }
 
 * {
@@ -83,32 +156,36 @@ html, body {
   width: 100%;
 }
 
+/* restyle */
 .brand-logo-img {
   height: 34px;
   max-width: min(165px, 46vw);
   width: auto;
   object-fit: contain;
   display: block;
+  filter: drop-shadow(0 0 10px var(--accent-glow));
 }
 
+/* restyle */
 .brand-divider {
   width: 1.5px;
   height: 26px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--line-strong);
   flex-shrink: 0;
 }
 
+/* restyle */
 .powered-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(11, 17, 23, 0.6);
+  background: var(--glass-bg);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 12px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-sm);
 }
 
 .powered-text {
@@ -127,21 +204,23 @@ html, body {
 }
 
 /* ---------- AUTH CARD ---------- */
+/* restyle */
 .login-card {
   margin: 30px 0 20px;
   display: flex;
   flex-direction: column;
-  background: var(--card-bg);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   padding: 36px 24px 30px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-lg);
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* restyle */
 .login-card:hover {
-  border-color: var(--line-strong);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-lg), var(--glow-accent);
 }
 
 .headline {
@@ -223,12 +302,13 @@ html, body {
   background-color: var(--accent-hover);
 }
 
+/* restyle */
 .input-box {
   width: 100%;
   height: 48px;
-  background: var(--btn-secondary-bg);
-  border: 1.5px solid var(--btn-secondary-border);
-  border-radius: 10px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
   padding: 0 16px;
   color: var(--text);
   font-size: 14px;
@@ -237,35 +317,41 @@ html, body {
   transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
 }
 
+/* restyle */
 .input-box::placeholder {
-  color: #8b9aa7;
+  color: var(--text-muted);
   font-size: 13.5px;
   transition: color 0.2s ease;
 }
 
+/* restyle */
 .input-box:hover {
-  border-color: rgba(29, 195, 221, 0.32);
-  background: rgba(28, 40, 51, 0.6);
+  border-color: var(--accent-line);
+  background: var(--surface-raised);
 }
 
 .input-box:hover::placeholder {
   color: var(--text-muted);
 }
 
+/* restyle */
 .input-box:focus {
   border-color: var(--accent);
   background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(29, 195, 221, 0.32), 0 0 14px var(--accent-glow);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 0 14px var(--accent-glow);
 }
 
 /* ---------- SUBMIT BUTTON (matches Continuum Brand Accent) ---------- */
+/* restyle */
 .btn-submit {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 50px;
   margin-top: 8px;
-  background: var(--btn-accent-bg);
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 55%, var(--accent-active) 100%);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   color: var(--ink);
   font-size: 15px;
   font-weight: 900;
@@ -276,22 +362,42 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 16px var(--accent-glow);
-  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: var(--glow-accent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
+/* restyle */
+.btn-submit::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+/* restyle */
+.btn-submit:hover::after {
+  left: 120%;
+}
+
+/* restyle */
 .btn-submit:hover {
-  background: linear-gradient(135deg, var(--accent-hover) 0%, #1dc3dd 100%);
-  color: var(--ink);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 22px rgba(29, 195, 221, 0.32);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-accent), 0 10px 26px rgba(0, 0, 0, 0.35);
+  filter: brightness(1.06);
 }
 
+/* restyle */
 .btn-submit:active {
   background: var(--accent-active);
   color: var(--ink);
   transform: translateY(0) scale(0.985);
-  box-shadow: 0 3px 12px rgba(29, 195, 221, 0.32);
+  box-shadow: 0 3px 12px var(--accent-glow);
 }
 
 .btn-submit[disabled],
@@ -377,27 +483,30 @@ html, body {
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
+/* restyle */
 .footer-link:hover {
   color: var(--text);
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: var(--accent-soft);
 }
 
+/* restyle */
 .dot {
-  color: #2a3540;
+  color: var(--line-strong);
   font-size: 9px;
 }
 
 /* ---------- TOAST ---------- */
+/* restyle */
 .toast-msg {
   position: fixed;
   top: calc(env(safe-area-inset-top, 20px) + 16px);
   left: 50%;
   transform: translateX(-50%) translateY(-100px);
   background: var(--surface);
-  border: 1px solid var(--accent);
+  border: 1px solid var(--accent-line);
   color: var(--text);
   padding: 10px 18px;
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   font-size: 12.5px;
   font-weight: 600;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
@@ -412,14 +521,15 @@ html, body {
 
 /* ---------- INLINE VALIDATION ---------- */
 /* One line under the form. Empty by default so the card has no dead space. */
+/* restyle */
 .form-error {
   display: none;
   font-size: 12px;
   line-height: 1.45;
-  color: #ff8b8b;
-  background: rgba(255, 96, 96, 0.09);
-  border: 1px solid rgba(255, 96, 96, 0.28);
-  border-radius: 10px;
+  color: var(--gold);
+  background: rgba(230, 162, 60, 0.12);
+  border: 1px solid rgba(230, 162, 60, 0.32);
+  border-radius: var(--radius-sm);
   padding: 10px 12px;
   margin: 0;
 }
@@ -428,9 +538,10 @@ html, body {
   display: block;
 }
 
+/* restyle */
 .input-box.invalid {
-  border-color: rgba(255, 96, 96, 0.55);
-  box-shadow: 0 0 0 3px rgba(255, 96, 96, 0.1);
+  border-color: rgba(230, 162, 60, 0.55);
+  box-shadow: 0 0 0 3px rgba(230, 162, 60, 0.12);
 }
 
 .field-hint {
@@ -459,15 +570,16 @@ html, body {
 
 /* ---------- DEMO NOTICE ---------- */
 /* Tells the reader plainly that the session is local. */
+/* restyle */
 .auth-note {
   margin-top: 18px;
   border: 1px dashed var(--line-strong);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   padding: 12px 14px;
   font-size: 11.5px;
   line-height: 1.5;
   color: var(--text-muted);
-  background: rgba(29, 195, 221, 0.05);
+  background: var(--accent-soft);
 }
 
 .auth-note strong {
@@ -521,6 +633,7 @@ html, body {
   letter-spacing: -0.2px;
 }
 
+/* restyle */
 .profile-hero {
   display: flex;
   flex-direction: column;
@@ -528,11 +641,12 @@ html, body {
   gap: 8px;
   background: var(--card-bg);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 26px 20px 22px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-md);
 }
 
+/* restyle */
 .profile-avatar-lg {
   width: 66px;
   height: 66px;
@@ -544,7 +658,7 @@ html, body {
   font-weight: 900;
   color: var(--ink);
   background: var(--accent);
-  box-shadow: 0 0 0 4px rgba(29, 195, 221, 0.14);
+  box-shadow: 0 0 0 4px var(--accent-soft);
   margin-bottom: 4px;
 }
 
@@ -562,6 +676,7 @@ html, body {
   text-align: center;
 }
 
+/* restyle */
 .demo-chip {
   margin-top: 6px;
   font-size: 10px;
@@ -569,9 +684,9 @@ html, body {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--accent);
-  border: 1px solid rgba(29, 195, 221, 0.4);
-  background: rgba(29, 195, 221, 0.1);
-  border-radius: 999px;
+  border: 1px solid var(--accent-line);
+  background: var(--accent-soft);
+  border-radius: var(--radius-pill);
   padding: 4px 10px;
 }
 
@@ -590,10 +705,11 @@ html, body {
   padding-left: 4px;
 }
 
+/* restyle */
 .settings-card {
   background: var(--card-bg);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
@@ -651,13 +767,14 @@ button.setting-row:active {
   background: var(--surface-raised);
 }
 
+/* restyle */
 .danger-btn {
   margin-top: 22px;
   width: 100%;
-  border: 1px solid rgba(255, 96, 96, 0.4);
-  background: rgba(255, 96, 96, 0.08);
-  color: #ff8b8b;
-  border-radius: 14px;
+  border: 1px solid rgba(230, 162, 60, 0.4);
+  background: rgba(230, 162, 60, 0.08);
+  color: var(--gold);
+  border-radius: var(--radius-sm);
   padding: 15px;
   font-size: 13.5px;
   font-weight: 800;
@@ -665,8 +782,9 @@ button.setting-row:active {
   cursor: pointer;
 }
 
+/* restyle */
 .danger-btn:active {
-  background: rgba(255, 96, 96, 0.16);
+  background: rgba(230, 162, 60, 0.16);
 }
 
 .app-version {
@@ -711,21 +829,25 @@ button.setting-row:active {
   gap: 10px;
 }
 
+/* restyle */
 .oauth-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid var(--line-strong);
-  background: var(--surface-raised);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
   color: var(--text);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   padding: 12px 10px;
   font-size: 13px;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .oauth-btn:hover {

@@ -1,50 +1,74 @@
 /* ---------- CONTINUUM ACADEMY — LIGHT THEME ---------- */
-/* Loaded after home.css. The whole app paints from the palette variables
-   declared in home.css :root, so switching <html data-theme="light">
-   re-skins every surface, text level and divider in one place.
-   The user-menu panel and video sheets stay dark navy by design. */
+/* restyle
+   The app is dark-first: the dark palette lives in
+   assets/css/base/foundation.css :root, and the light palette is applied either
+   by the OS (prefers-color-scheme: light, handled in foundation.css) or
+   explicitly by <html data-theme="light">. Both paths land on the same values,
+   so the whole UI re-skins from one place. */
 
+/* restyle — explicit light theme, mirroring the media-query palette */
 html[data-theme="light"] {
+  color-scheme: light;
+
   /* Surfaces */
-  --bg-page: #f2f5f9;
-  --surface: #ffffff;
-  --surface-raised: #e7edf4;
-  --line: rgba(13, 20, 31, 0.10);
-  --line-strong: rgba(13, 20, 31, 0.18);
+  --bg-page: #eef3f6;
+  --surface: #f8fbfc;
+  --surface-raised: #ffffff;
+  --line: rgba(13, 27, 36, 0.1);
+  --line-strong: rgba(13, 27, 36, 0.18);
+
+  /* Accent */
+  --accent: #0a8fb0;
+  --accent-hover: #0b9dbd;
+  --accent-active: #077a95;
+  --accent-glow: rgba(10, 143, 176, 0.22);
+  --accent-soft: rgba(10, 143, 176, 0.1);
+  --accent-line: rgba(10, 143, 176, 0.3);
+  --ink: #ffffff;
 
   /* Text */
-  --text: #101820;
-  --text-sub: #46545f;
-  --text-muted: #66747f;
+  --text: #0d1b24;
+  --text-sub: #3f5563;
+  --text-muted: #5d7383;
 
   /* Depth & chrome */
-  --bg-page-gradient: linear-gradient(180deg, #f7fafc 0%, #eef3f8 45%, #e7eef5 100%);
-  --nav-bg: rgba(247, 250, 252, 0.9);
+  --bg-page-gradient: linear-gradient(180deg, #f5f9fb 0%, #eef3f6 55%, #e7eef3 100%);
+  --nav-bg: rgba(248, 251, 252, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(13, 27, 36, 0.12);
+  --btn-secondary-bg: rgba(255, 255, 255, 0.72);
+  --btn-secondary-border: rgba(13, 27, 36, 0.14);
+  --topbar-bg: rgba(248, 251, 252, 0.62);
+  --topbar-bg-scrolled: rgba(248, 251, 252, 0.92);
+  --overlay-bg: rgba(13, 27, 36, 0.45);
+  --sheet-bg: #ffffff;
 
-  /* Accent stays the same cyan, but text on it turns dark-on-light safe */
-  --accent-glow: rgba(29, 195, 221, 0.22);
+  /* Elevation */
+  --shadow-sm: 0 4px 14px rgba(13, 27, 36, 0.1);
+  --shadow-md: 0 12px 30px rgba(13, 27, 36, 0.14);
+  --shadow-lg: 0 24px 60px rgba(13, 27, 36, 0.18);
+  --glow-accent: 0 6px 22px rgba(10, 143, 176, 0.24);
 }
 
-/* Anything that hardcoded white text against the dark page reads through
-   the variables above; these are the few surfaces that need a direct fix. */
+/* restyle — chrome specifics that read from a literal rather than a token */
 html[data-theme="light"] body {
   color: var(--text);
 }
 
 html[data-theme="light"] .top-bar,
 html[data-theme="light"] .bottom-nav-container {
-  /* Frosted chrome picks up the light glass tone instead of dark */
   border-color: var(--line);
 }
 
-html[data-theme="light"] .icon-btn svg {
+html[data-theme="light"] .icon-btn svg,
+html[data-theme="light"] .bell-icon {
   stroke: var(--text);
 }
 
 html[data-theme="light"] .floating-nav {
   background: var(--surface);
   border-color: var(--line-strong);
-  box-shadow: 0 8px 24px rgba(13, 20, 31, 0.12);
+  box-shadow: var(--shadow-md);
 }
 
 html[data-theme="light"] .nav-tab,
@@ -54,17 +78,16 @@ html[data-theme="light"] .nav-tab .nav-label {
 
 html[data-theme="light"] .nav-tab.active,
 html[data-theme="light"] .nav-tab[aria-current="page"] {
-  color: var(--accent-active);
+  color: var(--accent);
 }
 
 html[data-theme="light"] .toast-msg {
   color: var(--text);
 }
 
-html[data-theme="light"] .card-caption {
-  color: var(--text);
-}
-
 html[data-theme="light"] .section-subtitle {
   color: var(--text-sub);
 }
+
+/* Card artwork is intentionally dark in both themes (streaming posters), so
+   the copy painted over it keeps its fixed white. */

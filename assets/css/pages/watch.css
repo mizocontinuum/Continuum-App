@@ -29,15 +29,16 @@
 }
 
 /* ---------- PLAYER STAGE ---------- */
+/* restyle */
 .watch-stage {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 18px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: #000000;
   border: 1px solid var(--line);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-md);
 }
 .watch-video {
   display: block;
@@ -47,6 +48,7 @@
 }
 
 /* "Ready" fallback shown when a video has no playable URL yet */
+/* restyle */
 .watch-note {
   position: absolute;
   inset: 0;
@@ -60,22 +62,25 @@
   line-height: 1.5;
   color: var(--text-sub);
   background:
-    radial-gradient(circle at 12% 6%, rgba(29, 195, 221, 0.12) 0%, transparent 55%),
-    linear-gradient(160deg, rgba(21, 31, 42, 0.97) 0%, rgba(11, 17, 23, 0.99) 100%);
+    radial-gradient(circle at 12% 6%, var(--accent-soft) 0%, transparent 55%),
+    linear-gradient(160deg, var(--art-raised) 0%, var(--art) 100%);
 }
 
 /* ---------- RESUME / COMPLETION BAR ---------- */
+/* restyle */
 .watch-progress {
   height: 4px;
-  border-radius: 99px;
-  background: var(--surface-raised);
+  border-radius: var(--radius-pill);
+  background: var(--line);
   overflow: hidden;
 }
+/* restyle */
 .watch-progress span {
   display: block;
   height: 100%;
   width: 0;
   background: var(--accent);
+  border-radius: var(--radius-pill);
   transition: width 0.2s linear;
 }
 
@@ -109,6 +114,7 @@
   gap: 10px;
   margin-top: 16px;
 }
+/* restyle */
 .watch-btn {
   flex: 1;
   display: inline-flex;
@@ -116,9 +122,11 @@
   justify-content: center;
   gap: 8px;
   padding: 12px;
-  border-radius: 12px;
-  border: 1px solid var(--line-strong);
-  background: var(--surface-raised);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text);
   font: inherit;
   font-size: 14px;
@@ -131,13 +139,20 @@
   height: 18px;
   flex-shrink: 0;
 }
+/* restyle */
+.watch-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-line);
+}
 .watch-btn:active {
   transform: scale(0.97);
 }
+/* restyle */
 .watch-btn[aria-pressed="true"] {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 55%, var(--accent-active) 100%);
+  border-color: transparent;
   color: var(--ink);
+  box-shadow: var(--glow-accent);
 }
 .watch-btn[aria-pressed="true"] svg {
   stroke: var(--ink);
