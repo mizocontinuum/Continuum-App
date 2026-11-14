@@ -1,19 +1,12 @@
 /**
  * Continuum Academy service worker.
  *
- * Static assets only. The backend lives under /api/* and is never touched by
- * this worker: those responses are private (a session, a member's progress) and
- * must always come straight from the network. Everything else is
- * cache-first with a network fallback, so the shell stays usable offline and
- * new builds arrive thanks to the versioned cache name.
+ * Static assets only. Document navigations go directly to the browser so
+ * redirects (such as auth middleware sending /home/ to /login/) work normally.
+ * The backend under /api/* is also never touched by this worker.
  */
-const CACHE_NAME = 'continuum-cache-v8';
+const CACHE_NAME = 'continuum-cache';
 const PRECACHE_URLS = [
-  './',
-  './index.html',
-  './login/',
-  './signup/',
-  './home/',
   './manifest.json',
   './assets/css/base/foundation.css',
   './assets/css/base/theme.css',
@@ -54,6 +47,11 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
+
+  // Let the browser handle document redirects from protected routes. Navigation
+  // requests use redirect mode "manual"; forwarding them through fetch() can
+  // reject an opaqueredirect response as a network error.
+  if (event.request.mode === 'navigate') return;
 
   // Never cache the API. A cached /api/auth/session would paint a stale
   // identity, and a cached 401 would lock a signed-in member out.
