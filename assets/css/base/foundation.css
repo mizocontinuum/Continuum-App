@@ -49,6 +49,8 @@
   --nav-bg: rgba(11, 17, 23, 0.85);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* Horizontal page gutter. Widens on desktop; edge-bleeding rows subtract it */
+  --gutter: 16px;
   /* Brand mark height. Keep in sync with --logo-height in assets/css/base/auth.css */
   --logo-height: 40px;
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -89,10 +91,11 @@ body {
   position: relative;
 }
 
-/* App Container for Mobile Frame / Responsive View */
+/* App Container: full-width on phones, progressively capped and centred on
+   tablets and desktop so the same mobile-first column can breathe wider. */
 .app-container {
   width: 100%;
-  max-width: 440px;
+  max-width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
@@ -100,6 +103,38 @@ body {
   position: relative;
   background-color: transparent;
   padding-bottom: calc(110px + var(--safe-bottom));
+}
+
+/* ----- App shell breakpoints ----- */
+@media (min-width: 600px) {
+  .app-container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 760px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-container {
+    max-width: 1080px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .app-container {
+    max-width: 1200px;
+  }
+}
+
+/* Roomier gutters once there is desktop width to spare */
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 24px;
+  }
 }
 
 /* ---------- TOP BAR (Sticky Navigation with Frosted Glass & Dynamic Color Adaptation) ---------- */
@@ -114,7 +149,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: calc(var(--safe-top) + 14px) 20px 14px;
+  padding: calc(var(--safe-top) + 14px) var(--gutter) 14px;
   background: rgba(11, 17, 23, 0.6);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -229,7 +264,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0 16px 28px;
+  padding: 0 var(--gutter) 28px;
   gap: 22px;
 }
 
@@ -269,7 +304,7 @@ body {
   right: 0;
   display: flex;
   justify-content: center;
-  padding: 0 16px calc(var(--safe-bottom) + 12px);
+  padding: 0 var(--gutter) calc(var(--safe-bottom) + 12px);
   pointer-events: none;
   z-index: 90;
 }
@@ -372,7 +407,8 @@ body {
   transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   z-index: 120;
   pointer-events: none;
-  white-space: nowrap;
+  max-width: calc(100vw - 32px);
+  text-align: center;
 }
 
 .toast-msg.show {
@@ -759,6 +795,22 @@ body {
 
 .video-modal.open {
   display: flex;
+}
+
+/* Desktop: turn the bottom sheet into a centred dialog instead of a full-bleed
+   edge-to-edge panel that would stretch across a wide viewport. */
+@media (min-width: 768px) {
+  .video-modal {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .video-modal-sheet {
+    max-width: 620px;
+    max-height: 88vh;
+    border-radius: 22px;
+    border-bottom: 1px solid rgba(29, 195, 221, 0.32);
+  }
 }
 
 .video-modal-backdrop {

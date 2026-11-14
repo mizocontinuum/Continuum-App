@@ -406,3 +406,21 @@
   border: 1px solid rgba(28, 40, 51, 0.85);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
+
+/* ---------- RESPONSIVE ---------- */
+/* On desktop the hero stretches wide; keep the copy and controls in a
+   comfortable left-anchored block instead of spanning the whole frame. */
+@media (min-width: 768px) {
+  .hero-section {
+    min-height: 560px;
+    padding: 30px;
+  }
+
+  .hero-details {
+    max-width: 600px;
+  }
+
+  .hero-title {
+    font-size: 26px;
+  }
+}

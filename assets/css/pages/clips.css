@@ -355,3 +355,22 @@ button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* ---------- RESPONSIVE ---------- */
+/* Desktop: keep the vertical clip feed as a centred phone-width column rather
+   than stretching full-bleed across the monitor. */
+@media (min-width: 768px) {
+  body {
+    align-items: center;
+  }
+
+  .feed {
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .bottom-nav {
+    width: 100%;
+    max-width: 460px;
+  }
+}

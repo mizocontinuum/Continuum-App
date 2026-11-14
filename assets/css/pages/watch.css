@@ -157,3 +157,15 @@
   font-weight: 600;
   text-decoration: none;
 }
+
+/* ---------- RESPONSIVE ---------- */
+/* Keep a single readable column: a 16:9 stage at full desktop width would be
+   enormous. Cap the column and centre it. */
+@media (min-width: 768px) {
+  .watch-main {
+    width: 100%;
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

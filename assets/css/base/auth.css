@@ -55,6 +55,8 @@ html, body {
   font-family: var(--font-family);
   display: flex;
   justify-content: center;
+  /* Guard against horizontal scroll from the brand header on narrow phones */
+  overflow-x: clip;
 }
 
 .login-container {
@@ -72,6 +74,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 12px;
   padding-top: 6px;
   width: 100%;
@@ -79,7 +82,7 @@ html, body {
 
 .brand-logo-img {
   height: 34px;
-  max-width: 165px;
+  max-width: min(165px, 46vw);
   width: auto;
   object-fit: contain;
   display: block;
@@ -726,4 +729,21 @@ button.setting-row:active {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+}
+
+/* ---------- RESPONSIVE ---------- */
+/* Centre the auth card vertically on tall/desktop viewports instead of
+   stretching the brand header and footer to opposite edges. */
+@media (min-width: 768px) {
+  .login-container {
+    justify-content: center;
+    gap: 28px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 40px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px);
+  }
+
+  /* A little more width for the account settings rows on desktop */
+  .profile-container {
+    max-width: 560px;
+  }
 }

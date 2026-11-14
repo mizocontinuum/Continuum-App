@@ -21,7 +21,7 @@
   align-items: center;
   gap: 12px;
   height: 54px;
-  padding: 0 16px;
+  padding: 0 var(--gutter);
 }
 
 .search-icon {
@@ -265,6 +265,19 @@
   font-size: 13px;
   line-height: 1.5;
   color: var(--text-muted);
+}
+
+/* ---------- RESPONSIVE GRID ---------- */
+@media (min-width: 768px) {
+  .search-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .search-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 

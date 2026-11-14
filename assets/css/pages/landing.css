@@ -306,7 +306,38 @@
   color: var(--text-sub);
 }
 
-/* ---------- WIDER SCREENS ---------- */
+/* ---------- RESPONSIVE ---------- */
+
+/* Narrow phones: shrink the brand bar so the logo and the two nav links fit */
+@media (max-width: 400px) {
+  .landing-shell {
+    padding: 0 14px calc(48px + var(--safe-bottom));
+  }
+
+  .landing-top {
+    gap: 10px;
+  }
+
+  .landing-logo {
+    height: 32px;
+  }
+
+  .landing-nav a {
+    padding: 8px 10px;
+    font-size: 12.5px;
+  }
+}
+
+/* Tablet: fill the width with more than one column before the desktop breakpoint */
+@media (min-width: 620px) {
+  .landing-values {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .landing-disciplines {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media (min-width: 860px) {
   .landing-hero {

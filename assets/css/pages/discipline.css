@@ -281,3 +281,25 @@
   font-weight: 700;
   text-decoration: none;
 }
+
+/* ---------- RESPONSIVE ---------- */
+@media (min-width: 768px) {
+  .disc-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Keep the hero's type measure comfortable rather than bleeding full width */
+  .disc-hero {
+    padding: 28px 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .disc-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .disc-blurb {
+    max-width: 70ch;
+  }
+}

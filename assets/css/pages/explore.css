@@ -86,8 +86,8 @@
 .track-filter {
   display: flex;
   gap: 10px;
-  margin: 0 -16px;
-  padding: 2px 16px;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 2px var(--gutter);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
@@ -256,4 +256,17 @@
   font-size: 13px;
   line-height: 1.5;
   color: var(--text-muted);
+}
+
+/* ---------- RESPONSIVE GRID ---------- */
+@media (min-width: 768px) {
+  .track-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .track-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
