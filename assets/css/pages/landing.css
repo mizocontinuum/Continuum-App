@@ -336,6 +336,26 @@
   }
 }
 
+/* Match the member app shell's intermediate max-widths so the public landing
+   page and the authenticated app share the exact same outer column width. */
+@media (min-width: 600px) {
+  .landing-shell {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .landing-shell {
+    max-width: 760px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-shell {
+    max-width: 1080px;
+  }
+}
+
 @media (min-width: 860px) {
   .landing-hero {
     padding: 64px 56px 58px;

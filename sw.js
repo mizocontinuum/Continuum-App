@@ -5,7 +5,7 @@
  * redirects (such as auth middleware sending /home/ to /login/) work normally.
  * The backend under /api/* is also never touched by this worker.
  */
-const CACHE_NAME = 'continuum-cache-v14';
+const CACHE_NAME = 'continuum-cache-v16';
 const PRECACHE_URLS = [
   './manifest.json',
   './assets/css/base/foundation.css',
@@ -25,10 +25,24 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
-      .catch((error) => {
-        console.warn('Pre-cache error during install:', error);
-      })
+      .then((cache) =>
+        // Bypass the browser HTTP cache so a bumped CACHE_NAME always pulls
+        // the latest assets instead of re-staling them from disk cache.
+        Promise.all(
+          PRECACHE_URLS.map((url) =>
+            fetch(url, { cache: 'reload' })
+              .then((response) => {
+                if (response && response.status === 200 && response.type === 'basic') {
+                  return cache.put(url, response.clone()).then(() => response);
+                }
+                return response;
+              })
+              .catch((error) => {
+                console.warn('Pre-cache fetch failed for', url, error);
+              })
+          )
+        )
+      )
       .then(() => self.skipWaiting())
   );
 });
@@ -60,7 +74,9 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
-      return fetch(event.request)
+      // Bypass the browser HTTP cache so first-time network fetches store
+      // fresh content, not a stale copy from disk cache.
+      return fetch(event.request, { cache: 'no-cache' })
         .then((response) => {
           if (response && response.status === 200 && response.type === 'basic') {
             const copy = response.clone();
