@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ------------------------------ elements ------------------------------ */
 
-  const statsHost = document.getElementById('adminStats');
-
   const disciplineForm = document.getElementById('disciplineForm');
   const disciplineTitle = document.getElementById('disciplineTitle');
   const disciplineGoal = document.getElementById('disciplineGoal');
@@ -77,32 +75,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   /* ------------------------------- rendering ---------------------------- */
-
-  function renderStats() {
-    if (!statsHost) return;
-    const disciplines = listDisciplines();
-    const videos = listVideos();
-    const cards = [
-      ['Disciplines', disciplines.length],
-      ['Masterclasses', videos.length],
-      ['Clips', videos.filter((video) => video.is_clip).length],
-      ['Featured', videos.filter((video) => video.featured).length]
-    ];
-    statsHost.replaceChildren(
-      ...cards.map(([label, value]) => {
-        const card = document.createElement('div');
-        card.className = 'admin-stat';
-        const amount = document.createElement('span');
-        amount.className = 'admin-stat-value';
-        amount.textContent = String(value);
-        const caption = document.createElement('span');
-        caption.className = 'admin-stat-label';
-        caption.textContent = label;
-        card.append(amount, caption);
-        return card;
-      })
-    );
-  }
 
   function renderDisciplineOptions() {
     if (!videoDiscipline) return;
@@ -293,7 +265,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderDisciplines();
     renderDisciplineOptions();
     renderVideos();
-    renderStats();
     showToast('Discipline deleted.');
   }
 
@@ -313,7 +284,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderDisciplineOptions();
       renderDisciplines();
       renderVideos();
-      renderStats();
     } catch (err) {
       showToast(err.message || 'Could not save the discipline.', true);
     }
@@ -351,7 +321,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     deleteVideo(video.id);
     renderVideos();
     renderDisciplines();
-    renderStats();
     showToast('Masterclass deleted.');
   }
 
@@ -389,7 +358,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       resetVideoForm();
       renderVideos();
       renderDisciplines();
-      renderStats();
     } catch (err) {
       showToast(err.message || 'Could not save the masterclass.', true);
     }
@@ -410,7 +378,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     videoForm?.reset();
     if (disciplineSubmit) disciplineSubmit.textContent = '＋ Add discipline';
     if (videoSubmit) videoSubmit.textContent = '＋ Add masterclass';
-    renderStats();
     renderDisciplineOptions();
     renderDisciplines();
     renderVideos();
@@ -419,7 +386,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* -------------------------------- boot ------------------------------- */
 
-  renderStats();
   renderDisciplineOptions();
   renderDisciplines();
   renderVideos();
