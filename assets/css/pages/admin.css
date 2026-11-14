@@ -58,11 +58,6 @@
   backdrop-filter: blur(12px);
 }
 
-.admin-section.admin-note {
-  background: rgba(21, 31, 42, 0.6);
-  border-color: rgba(255, 255, 255, 0.07);
-}
-
 .section-title-wrap {
   margin-bottom: 14px;
 }
@@ -420,14 +415,6 @@
   font-size: 12.5px;
   color: var(--text-muted);
   line-height: 1.45;
-}
-
-/* ---------- BETA NOTE ---------- */
-.admin-note p {
-  font-size: 13px;
-  color: var(--text-sub);
-  line-height: 1.5;
-  margin: 0 0 12px;
 }
 
 /* Ensure mobile safe areas and overflow clipping */

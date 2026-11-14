@@ -13,7 +13,6 @@ import {
   deleteDiscipline,
   saveVideo,
   deleteVideo,
-  resetLocalData,
   assetUrl,
   showToast
 } from '../store.js';
@@ -361,27 +360,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) {
       showToast(err.message || 'Could not save the masterclass.', true);
     }
-  });
-
-  /* ------------------------------ reset all ---------------------------- */
-
-  document.getElementById('restoreCatalogueBtn')?.addEventListener('click', () => {
-    const confirmed = window.confirm(
-      'Restore the default catalogue? This removes every discipline and masterclass you added or edited.'
-    );
-    if (!confirmed) return;
-    resetLocalData();
-    currentDisciplineId = null;
-    editingDisciplineId = null;
-    editingVideoId = null;
-    disciplineForm?.reset();
-    videoForm?.reset();
-    if (disciplineSubmit) disciplineSubmit.textContent = '＋ Add discipline';
-    if (videoSubmit) videoSubmit.textContent = '＋ Add masterclass';
-    renderDisciplineOptions();
-    renderDisciplines();
-    renderVideos();
-    showToast('Default catalogue restored.');
   });
 
   /* -------------------------------- boot ------------------------------- */
