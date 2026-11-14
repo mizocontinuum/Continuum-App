@@ -51,31 +51,48 @@
     </header>
 
     <main class="admin-main">
+      <section class="admin-intro" aria-labelledby="adminPageTitle">
+        <div class="admin-intro-copy">
+          <p class="admin-eyebrow">CONTENT WORKSPACE</p>
+          <h1 id="adminPageTitle">Manage your learning library</h1>
+          <p class="admin-intro-text">Create a discipline first, then add the masterclasses members will learn from.</p>
+        </div>
+        <ol class="admin-workflow" aria-label="Content setup steps">
+          <li><span>1</span>Create a discipline</li>
+          <li><span>2</span>Add masterclasses</li>
+        </ol>
+      </section>
 
       <!-- ---------- DISCIPLINES ---------- -->
-      <section class="admin-section">
-        <div class="section-title-wrap">
-          <h2 class="admin-heading">Disciplines</h2>
-          <p class="admin-hint">Sections members browse on Explore, Disciplines, and Home.</p>
+      <section class="admin-section" aria-labelledby="disciplineHeading">
+        <div class="admin-section-head">
+          <div class="admin-section-title">
+            <span class="admin-step-number" aria-hidden="true">01</span>
+            <div>
+              <p class="admin-kicker">STEP 1</p>
+              <h2 class="admin-heading" id="disciplineHeading">Disciplines</h2>
+            </div>
+          </div>
+          <p class="admin-hint">Create learning categories to organize your content.</p>
         </div>
 
         <form class="admin-form" id="disciplineForm" autocomplete="off">
           <div class="field">
-            <span>Title *</span>
+            <label for="disciplineTitle">Discipline name <span aria-hidden="true">*</span></label>
             <input type="text" id="disciplineTitle" placeholder="e.g. Marketing Discipline" required>
           </div>
           <div class="field-row two-col">
             <div class="field">
-              <span>Goal</span>
+              <label for="disciplineGoal">Learning goal</label>
               <input type="text" id="disciplineGoal" placeholder="Auto-generated from title">
             </div>
             <div class="field">
-              <span>Sort order</span>
+              <label for="disciplineSort">Display order</label>
               <input type="number" id="disciplineSort" min="1" placeholder="e.g. 1">
             </div>
           </div>
           <div class="field">
-            <span>Blurb</span>
+            <label for="disciplineBlurb">Short description</label>
             <input type="text" id="disciplineBlurb" placeholder="One line members see under the title">
           </div>
           <button type="submit" class="admin-btn primary" id="disciplineSubmit">
@@ -83,76 +100,95 @@
           </button>
         </form>
 
-        <ul class="group-list" id="disciplineList"><!-- rendered by admin.js --></ul>
+        <div class="admin-list-heading">
+          <h3>Your disciplines</h3>
+          <p>Select one to manage its masterclasses.</p>
+        </div>
+        <ul class="group-list" id="disciplineList" aria-label="Your disciplines"><!-- rendered by admin.js --></ul>
       </section>
 
       <!-- ---------- MASTERCLASSES FOR THE SELECTED DISCIPLINE ---------- -->
-      <section class="admin-section" id="videoSection">
-        <div class="section-title-wrap">
-          <h2 class="admin-heading">
-            <span>Masterclasses</span>
-            <span id="videoSectionGroup" class="admin-group-name"></span>
-          </h2>
-          <p class="admin-hint">Metadata renders the card; a video_url pointing at assets/videos/ makes it playable.</p>
+      <section class="admin-section" id="videoSection" aria-labelledby="videoHeading">
+        <div class="admin-section-head">
+          <div class="admin-section-title">
+            <span class="admin-step-number" aria-hidden="true">02</span>
+            <div>
+              <p class="admin-kicker">STEP 2</p>
+              <h2 class="admin-heading" id="videoHeading">
+                <span>Masterclasses</span>
+                <span id="videoSectionGroup" class="admin-group-name" aria-live="polite"></span>
+              </h2>
+            </div>
+          </div>
+          <p class="admin-hint">Choose a discipline, then add or update its learning content.</p>
         </div>
 
-        <div class="field admin-select-row">
-          <span>Discipline</span>
-          <select id="videoDiscipline"></select>
+        <div class="admin-selection-panel">
+          <div class="field admin-select-row">
+            <label for="videoDiscipline">Selected discipline</label>
+            <select id="videoDiscipline" aria-describedby="disciplineSelectionHint"></select>
+          </div>
+          <p class="field-help" id="disciplineSelectionHint">Masterclasses you add below will belong to this discipline.</p>
         </div>
 
+        <div class="admin-subsection-heading">
+          <h3>Add a masterclass</h3>
+          <p>Only the title is required. You can add details or edit them later.</p>
+        </div>
         <form class="admin-form" id="videoForm" autocomplete="off">
           <div class="field">
-            <span>Title *</span>
+            <label for="videoTitle">Masterclass title <span aria-hidden="true">*</span></label>
             <input type="text" id="videoTitle" placeholder="Full masterclass title" required>
           </div>
 
           <div class="field-row two-col">
             <div class="field">
-              <span>Speaker</span>
+              <label for="videoSpeaker">Speaker</label>
               <input type="text" id="videoSpeaker" placeholder="e.g. Josiah Go">
             </div>
             <div class="field">
-              <span>Minutes</span>
+              <label for="videoMinutes">Length in minutes</label>
               <input type="number" id="videoMinutes" min="1" placeholder="e.g. 42">
             </div>
           </div>
 
           <div class="field-row two-col">
             <div class="field">
-              <span>Tag</span>
+              <label for="videoTag">Category tag</label>
               <input type="text" id="videoTag" placeholder="Defaults to discipline name">
             </div>
             <div class="field">
-              <span>Highlight phrase</span>
+              <label for="videoHighlight">Highlight phrase</label>
               <input type="text" id="videoHighlight" placeholder="Accent text on card">
             </div>
           </div>
 
           <div class="field-row two-col">
             <div class="field">
-              <span>Rating (0-100)</span>
+              <label for="videoRating">Rating <span class="field-label-hint">(0–100)</span></label>
               <input type="number" id="videoRating" min="0" max="100" placeholder="e.g. 92">
             </div>
             <div class="field">
-              <span>Sort order</span>
+              <label for="videoSort">Display order</label>
               <input type="number" id="videoSort" min="1" placeholder="e.g. 1">
             </div>
           </div>
 
           <div class="field">
-            <span>Summary</span>
+            <label for="videoSummary">Summary</label>
             <textarea id="videoSummary" rows="3" placeholder="One paragraph shown on the watch page"></textarea>
           </div>
 
           <div class="field">
-            <span>Target outcomes (one per line)</span>
+            <label for="videoOutcomes">Learning outcomes</label>
             <textarea id="videoOutcomes" rows="3" placeholder="Grow ventures&#10;Close the action gap"></textarea>
+            <span class="field-help">Enter one outcome per line.</span>
           </div>
 
           <div class="field">
-            <span>Video URL (path under assets/videos/)</span>
-            <input type="text" id="videoUrl" placeholder="/assets/videos/my-clip.mp4">
+            <label for="videoUrl">Video file path</label>
+            <input type="text" id="videoUrl" placeholder="/assets/videos/my-class.mp4">
+            <span class="field-help">Optional. Add a video file path to make this masterclass playable.</span>
           </div>
 
           <div class="field-row two-col">
@@ -171,7 +207,11 @@
           </button>
         </form>
 
-        <ul class="video-list" id="videoList"><!-- rendered by admin.js --></ul>
+        <div class="admin-list-heading">
+          <h3>In this discipline</h3>
+          <p>Edit or remove existing masterclasses.</p>
+        </div>
+        <ul class="video-list" id="videoList" aria-label="Masterclasses in selected discipline"><!-- rendered by admin.js --></ul>
       </section>
 
     </main>
