@@ -172,6 +172,23 @@ would be worse than a slow load. Bump `CACHE_NAME` whenever the shell changes.
 `npm install` is only needed for the serverless dependencies; the static pages
 themselves have no dependencies at all.
 
+### Debugging in VS Code
+
+`.vscode/launch.json` ships three configurations, all pointed at `:3000` so the
+debugged origin matches whatever is serving the site:
+
+| Configuration                       | Dev server                | Use for                                     |
+| ----------------------------------- | ------------------------- | ------------------------------------------- |
+| Debug app (static, python3)         | `python3 -m http.server`  | Page/module work with no backend            |
+| Debug app (vercel dev, full API)    | `vercel dev --listen 3000`| Anything touching `/api/*` (sign-in, data)  |
+| Attach to Chrome (port 9222)        | you start it yourself     | Attaching to a server already running       |
+
+F5 starts the matching task from `.vscode/tasks.json` and launches Chrome, so
+breakpoints in `assets/js/**` resolve against the served files. The static task
+serves the same paths as production (`/login/` → `login/index.html`) but has no
+`/api/*` functions — gated pages will redirect to `/login/`. Use the `vercel dev`
+configuration for auth work; it needs Node.js 22.x and the Vercel CLI on `PATH`.
+
 ## Smoke test
 
 [scripts/smoke.sh](scripts/smoke.sh) runs cheap unauthenticated curl checks
