@@ -16,21 +16,3 @@ if ('serviceWorker' in navigator && window.isSecureContext) {
     });
   });
 }
-
-/* /* nav-update */ Auto-hide bottom bar on scroll down, show on scroll up */
-(() => {
-  let lastY = window.scrollY;
-  window.addEventListener('scroll', () => {
-    const bNav = document.querySelector('.bottom-nav-container');
-    if (!bNav || window.innerWidth > 760) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const curY = window.scrollY;
-    const diff = curY - lastY;
-    if (diff > 10 && curY > 50) {
-      bNav.classList.add('nav-hidden');
-    } else if (diff < -10) {
-      bNav.classList.remove('nav-hidden');
-    }
-    lastY = curY;
-  }, { passive: true });
-})();

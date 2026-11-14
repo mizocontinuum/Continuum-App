@@ -460,11 +460,6 @@ body {
   justify-content: center;
   pointer-events: none;
   z-index: 50;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.bottom-nav-container.nav-hidden {
-  transform: translateY(calc(100% + 30px)) !important;
 }
 
 .floating-nav {
