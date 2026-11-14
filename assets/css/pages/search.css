@@ -3,6 +3,25 @@
    field plus the two result presentations: rows when the field is empty,
    a two-column grid once the visitor starts typing. */
 
+/* /* nav-update */ Responsive search header adaptation */
+@media (max-width: 760px) {
+  .search-page-top-bar {
+    display: none !important;
+  }
+}
+
+@media (min-width: 761px) {
+  .search-header {
+    position: relative;
+    top: auto;
+    padding-top: 12px;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
 /* ---------- SEARCH FIELD (sticky, replaces the top bar) ---------- */
 /* restyle */
 .search-header {

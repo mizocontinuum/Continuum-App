@@ -21,43 +21,50 @@
 :root {
   color-scheme: dark;
 
+  /* /* nav-update */ Brand Colors */
+  --bg: #0b1118;
+  --card: #111922;
+  --surface: #1b2631;
+  --text: #f1f5f9;
+  --muted: #a3b1bf;
+  --accent: #5bc0de;
+  --accent-hi: #7fd0e8;
+  --accent-ink: #06151c;
+
   /* Surfaces */
-  --bg-page: #070c11;         /* deep canvas */
-  --surface: #0e1620;         /* cards, sheets */
-  --surface-raised: #1a2530;  /* buttons, badges, chips */
-  --line: rgba(39, 65, 79, 0.55);
-  --line-strong: #27414f;
+  --bg-page: var(--bg);         /* deep canvas */
+  --surface-raised: var(--surface);  /* buttons, badges, chips */
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.16);
 
   /* One accent */
-  --accent: #4cc3e0;
-  --accent-hover: #68d3ee;
-  --accent-active: #2ba6c4;
-  --accent-glow: rgba(76, 195, 224, 0.28);
-  --accent-soft: rgba(76, 195, 224, 0.12);
-  --accent-line: rgba(76, 195, 224, 0.32);
+  --accent-hover: var(--accent-hi);
+  --accent-active: #3a9bb8;
+  --accent-glow: rgba(91, 192, 222, 0.28);
+  --accent-soft: rgba(91, 192, 222, 0.16);
+  --accent-line: rgba(91, 192, 222, 0.32);
   --gold: #e6a23c;            /* forthcoming / coming soon only */
-  --ink: #04141a;             /* text that sits on the accent */
+  --ink: var(--accent-ink);   /* text that sits on the accent */
 
   /* Text */
-  --text: #ffffff;
-  --text-sub: #b6c7d2;
-  --text-muted: #9bb2bf;
+  --text-sub: var(--muted);
+  --text-muted: var(--muted);
 
-  /* Page depth: one simple vertical shift, darker toward the bottom */
-  --bg-page-gradient: linear-gradient(180deg, #0b131b 0%, #070c11 55%, #05090d 100%);
+  /* Page depth */
+  --bg-page-gradient: radial-gradient(circle at 85% 0%, rgba(70, 130, 150, 0.24) 0%, transparent 60%), #0b1118;
 
   /* Component surfaces, all derived from the scale above */
-  --card-bg: var(--surface);
+  --card-bg: var(--card);
   --btn-accent-bg: var(--accent);
-  --btn-secondary-bg: rgba(26, 37, 48, 0.55);
-  --btn-secondary-border: rgba(255, 255, 255, 0.14);
-  --nav-bg: rgba(14, 22, 32, 0.72);
-  --glass-bg: rgba(14, 22, 32, 0.5);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --topbar-bg: rgba(7, 12, 17, 0.5);
-  --topbar-bg-scrolled: rgba(7, 12, 17, 0.85);
-  --overlay-bg: rgba(7, 12, 17, 0.85);
-  --sheet-bg: #090e13;
+  --btn-secondary-bg: rgba(27, 38, 49, 0.6);
+  --btn-secondary-border: rgba(255, 255, 255, 0.12);
+  --nav-bg: rgba(8, 12, 18, 0.78);
+  --glass-bg: rgba(17, 25, 34, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --topbar-bg: rgba(11, 17, 24, 0.72);
+  --topbar-bg-scrolled: rgba(11, 17, 24, 0.88);
+  --overlay-bg: rgba(11, 17, 24, 0.85);
+  --sheet-bg: var(--card);
   /* restyle — poster art stays dark in both themes, like streaming thumbnails */
   --art-raised: #1a2530;
   --art: #0e1620;
@@ -279,6 +286,53 @@ body {
   stroke: currentColor;
 }
 
+/* /* nav-update */ Desktop Top Navigation Links (STEP 2) */
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-left: 36px;
+  margin-right: auto;
+}
+
+.top-nav-link {
+  color: var(--muted);
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.top-nav-link:hover {
+  color: var(--text);
+}
+
+.top-nav-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.top-nav-link.active,
+.top-nav-link[aria-current="page"] {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.top-nav-link.active::after,
+.top-nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
 .top-actions {
   display: flex;
   align-items: center;
@@ -391,53 +445,52 @@ body {
   background: var(--line);
 }
 
-/* ---------- FLOATING BOTTOM NAVIGATION BAR ---------- */
+/* /* nav-update */ FLOATING BOTTOM NAVIGATION BAR (STEP 3) */
 .bottom-nav-container {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  left: 10px;
+  right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   display: flex;
   justify-content: center;
-  padding: 0 var(--content-inset) calc(var(--safe-bottom) + 12px);
   pointer-events: none;
-  z-index: 90;
+  z-index: 50;
 }
 
-/* restyle — frosted glass tab bar, 22px rounding, safe-area aware */
 .floating-nav {
   pointer-events: auto;
   width: 100%;
-  max-width: 400px;
-  height: 62px;
-  background: var(--nav-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  display: flex;
+  max-width: 520px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  justify-content: space-around;
-  padding: 4px 8px;
-  box-shadow: var(--shadow-lg), 0 0 1px var(--accent-line);
+  padding: 6px;
+  gap: 4px;
+  background: rgba(8, 12, 18, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 .nav-tab {
-  flex: 1;
-  background: none;
-  border: 1px solid transparent;
-  color: var(--text-muted);
-  text-decoration: none;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 3px;
-  height: 48px;
-  border-radius: 20px;
-  transition: all 0.25s ease;
-  padding: 2px 4px;
+  min-height: 50px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-tab:focus-visible {
@@ -449,42 +502,40 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
 }
 
 .nav-tab .nav-icon-wrap svg {
-  width: 19px;
-  height: 19px;
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
 }
 
 .nav-tab .nav-label {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.2px;
-  line-height: 1;
+  line-height: 1.1;
+  letter-spacing: 0.1px;
 }
 
 .nav-tab:hover {
-  color: #ffffff;
+  color: var(--text);
 }
 
-.nav-tab:hover .nav-icon-wrap {
-  transform: translateY(-1px);
-}
-
-/* Active tab: soft cyan tint, with aria-current="page" support */
-/* restyle */
+/* Active tab: #5bc0de with pill background rgba(91,192,222,.16) */
 .nav-tab.active,
 .nav-tab[aria-current="page"] {
-  background: var(--accent-soft);
-  border-color: transparent;
-  color: var(--accent);
-  box-shadow: none;
+  background: rgba(91, 192, 222, 0.16);
+  color: #5bc0de;
 }
 
 .nav-tab.active .nav-icon-wrap svg,
 .nav-tab[aria-current="page"] .nav-icon-wrap svg {
-  stroke-width: 2.3;
+  stroke: #5bc0de;
+  stroke-width: 2;
 }
 
 /* ---------- TOAST NOTIFICATION ---------- */
@@ -1814,6 +1865,33 @@ body {
   textarea {
     font-size: 16px;
   }
+
+  /* /* nav-update */ Phone: show floating bottom tab bar, hide top nav links */
+  .top-nav {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .toast-msg {
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px) + 16px) !important;
+  }
+}
+
+/* /* nav-update */ Laptop/Desktop (>=761px): bottom bar is display:none (unreachable, unfocusable) */
+@media (min-width: 761px) {
+  .bottom-nav-container {
+    display: none !important;
+  }
+}
+
+/* /* nav-update */ Hide bottom bar while modal or full-screen video player is open (STEP 5) */
+body:has(.video-modal.active) .bottom-nav-container,
+body:has(.landscape-player-active) .bottom-nav-container,
+body:has(dialog[open]) .bottom-nav-container {
+  display: none !important;
 }
 
 /* Reduced motion: keep every layout, drop the transitions and animations. */
