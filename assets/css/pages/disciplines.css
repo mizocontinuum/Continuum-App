@@ -13,20 +13,7 @@
    shared with My Library. This file only adds what is specific to a
    discipline listing. */
 
-/* ---------- DISCIPLINE GROUPS ---------- */
-.discipline-group {
-  display: flex;
-  flex-direction: column;
-}
 
-.discipline-group .section-title {
-  margin-bottom: 12px;
-}
-
-/* Panel of fellows / single-speaker rows read better with a shorter name */
-.discipline-group .cards-carousel {
-  padding-left: 0;
-}
 
 /* Empty state, only visible if the data file is missing */
 /* restyle */

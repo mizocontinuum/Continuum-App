@@ -310,12 +310,6 @@ export function saveProgress(videoId, position, completed = false) {
   return map[videoId];
 }
 
-export function clearProgress() {
-  write(KEYS.progress, {});
-  const ids = getFavoriteIds();
-  write(KEYS.favorites, ids);
-}
-
 /** Most recently watched first, for Home and Library "Continue Watching". */
 export function continueWatching() {
   const map = getProgressMap();
@@ -335,16 +329,6 @@ export function watchedVideos() {
     .filter(([, entry]) => entry?.completed)
     .map(([id]) => getVideo(id))
     .filter(Boolean);
-}
-
-/** Percent watched for a video (0-100). */
-export function progressPercent(video) {
-  if (!video) return 0;
-  const entry = getProgress(video.id);
-  if (entry.completed) return 100;
-  const totalSeconds = (video.minutes || 30) * 60;
-  if (!entry.position || !totalSeconds) return 0;
-  return Math.min(100, Math.round((entry.position / totalSeconds) * 100));
 }
 
 /* ------------------------------ notifications --------------------------- */

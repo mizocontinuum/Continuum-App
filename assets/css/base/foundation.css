@@ -676,30 +676,6 @@ body {
   background-size: cover;
 }
 
-.bg-josiah {
-  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
-}
-
-.bg-chiqui {
-  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
-}
-
-.bg-donald {
-  background: radial-gradient(circle at 85% 50%, var(--accent-line) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
-}
-
-.bg-jv {
-  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
-}
-
-.bg-bea {
-  background: radial-gradient(circle at 85% 50%, var(--accent-line) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
-}
-
-.bg-emilio {
-  background: radial-gradient(circle at 85% 50%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
-}
-
 /* Neutral art variants for the discipline rows (same scale, no accent hue) */
 .bg-slate-a {
   background: radial-gradient(circle at 82% 46%, var(--art-raised) 0%, transparent 60%), linear-gradient(135deg, var(--art-raised) 0%, var(--art) 100%);
@@ -711,20 +687,6 @@ body {
 
 .bg-slate-c {
   background: radial-gradient(circle at 72% 72%, var(--art-raised) 0%, transparent 55%), linear-gradient(200deg, var(--art-raised) 0%, var(--art) 100%);
-}
-
-/* "Coming soon" chip for preview titles — sits in the art stack, not over it */
-.thumb-soon {
-  align-self: flex-start;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(230, 162, 60, 0.12);
-  border: 1px solid rgba(230, 162, 60, 0.32);
-  color: var(--gold);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
 }
 
 .thumb-top-logos {
@@ -759,22 +721,6 @@ body {
   max-width: 70%;
 }
 
-.sub-topic {
-  font-size: 9px;
-  font-weight: 800;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
-
-.hl-gold {
-  color: var(--accent);
-}
-
-.hl-cyan {
-  color: var(--accent);
-}
-
 .thumb-speaker-info {
   display: flex;
   flex-direction: column;
@@ -790,29 +736,6 @@ body {
   font-size: 7px;
   color: var(--text-muted);
   white-space: nowrap;
-}
-
-.speaker-avatar-wrap {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: rgba(28, 40, 51, 0.45);
-  border: 1px solid var(--accent-line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-}
-
-.thumb-bottom-logo {
-  font-size: 7.5px;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.8px;
-  margin-top: 2px;
 }
 
 /* Play Overlay on Hover/Focus */
@@ -864,22 +787,6 @@ body {
 .ranked-video-card:hover .play-pill-icon {
   transform: scale(1.05);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), var(--glow-accent);
-}
-
-/* Duration Badge */
-.duration-badge {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: rgba(11, 17, 23, 0.85);
-  border: 1px solid var(--accent-line);
-  border-radius: 6px;
-  padding: 2px 6px;
-  font-size: 9.5px;
-  font-weight: 700;
-  color: #ffffff;
-  backdrop-filter: blur(4px);
-  z-index: 5;
 }
 
 /* Card Meta text below thumb */
@@ -1413,30 +1320,6 @@ body {
 .cards-carousel--empty {
   overflow: visible;
   padding: 0;
-}
-
-.discipline-empty-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  margin: 0 4px;
-}
-
-.discipline-empty-icon {
-  font-size: 20px;
-  line-height: 1;
-  opacity: 0.5;
-}
-
-.discipline-empty-label {
-  margin: 0;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.35);
-  font-style: italic;
 }
 
 

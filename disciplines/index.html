@@ -69,45 +69,6 @@
       <noscript>
         <p class="library-empty">Enable JavaScript to browse the discipline library.</p>
       </noscript>
-
-      <!-- Video Player Modal Overlay -->
-      <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="video-modal-backdrop" id="videoModalBackdrop"></div>
-        <div class="video-modal-sheet">
-          <div class="video-modal-header">
-            <div class="video-modal-text">
-              <span class="video-modal-tag">CONTINUUM STREAM</span>
-              <h3 class="video-modal-title" id="videoModalTitle">Video Title</h3>
-              <p class="video-modal-sub" id="videoModalSpeaker">Speaker</p>
-            </div>
-            <button class="video-modal-close" id="closeVideoBtn" aria-label="Close video player">✕</button>
-          </div>
-
-          <!-- Video Wrapper -->
-          <div class="video-frame-wrap">
-            <!-- No type hint: the browser detects the container, so .mov and .mp4 both work -->
-            <video id="mainVideoPlayer" playsinline controls preload="metadata" poster="">
-              <source id="videoSource" src="">
-              Your browser does not support the video tag.
-            </video>
-            <!-- Overlay fallback if the local video file isn't uploaded yet -->
-            <div class="video-sample-fallback" id="videoFallbackPrompt">
-              <div class="fallback-icon">🎬</div>
-              <h4>Executive Video Ready</h4>
-              <p>Place your video file in <code>assets/videos/</code> or stream online.</p>
-              <button class="btn-sample-play" id="playTrailerClipBtn">Watch Vertical Trailer Clip</button>
-            </div>
-          </div>
-
-          <!-- Interactive Modal Buttons -->
-          <div class="video-modal-controls">
-            <button class="modal-btn" id="modalLikeAction">♥ Like</button>
-            <button class="modal-btn" id="modalListAction">＋ My List</button>
-            <button class="modal-btn" id="modalShareAction">↗ Share</button>
-          </div>
-        </div>
-      </div>
-
     </main>
 
     <!-- Floating Mobile Bottom Navigation Bar -->

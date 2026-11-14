@@ -107,62 +107,6 @@ export function bearerToken(req) {
 }
 
 /* ---------------------------------------------------------------------------
- * CORS
- *
- * Deliberately narrow: `Access-Control-Allow-Credentials` is NEVER sent, so a
- * cross-origin browser can neither read responses nor send session cookies.
- * Web clients must therefore be served from the same origin as this API (see
- * the deployment notes in .env.example). The allow-list exists only so the
- * Expo web dev server on localhost can talk to the API while developing.
- * ------------------------------------------------------------------------ */
-
-const DEV_ORIGINS = new Set([
-  'http://localhost:8081',
-  'http://localhost:8082',
-  'http://127.0.0.1:8081',
-  'http://127.0.0.1:8082',
-  'http://localhost:19006',
-  'http://127.0.0.1:19006'
-]);
-
-/** The caller's origin if it is explicitly allowed, otherwise null. */
-export function allowedOrigin(req) {
-  const origin = req?.headers?.origin;
-  if (typeof origin !== 'string' || !origin) return null;
-
-  const configured = String(process.env.CORS_ALLOWED_ORIGINS || '')
-    .split(',')
-    .map((entry) => entry.trim())
-    .filter(Boolean);
-  if (configured.includes(origin)) return origin;
-
-  // Local development only. A production deployment never matches these.
-  if (process.env.NODE_ENV !== 'production' && DEV_ORIGINS.has(origin)) return origin;
-  return null;
-}
-
-/** Apply CORS headers if the origin is allowed. @returns {boolean} applied */
-export function applyCors(req, res) {
-  const origin = allowedOrigin(req);
-  if (!origin) return false;
-  res.setHeader('Access-Control-Allow-Origin', origin);
-  res.setHeader('Vary', 'Origin');
-  return true;
-}
-
-/** Answer a CORS preflight. */
-export function preflight(res, methods = 'GET, POST, PATCH, DELETE') {
-  res.setHeader('Access-Control-Allow-Methods', methods);
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, X-Client-Platform'
-  );
-  res.setHeader('Access-Control-Max-Age', '600');
-  res.statusCode = 204;
-  res.end();
-}
-
-/* ---------------------------------------------------------------------------
  * Every /api entry point is wrapped in this.
  *
  * Two guarantees, and both matter for "the client never sees a broken
