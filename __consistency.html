@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>consistency-check</title></head>
+<body>
+<pre id="out">running</pre>
+<script>
+const VIEWPORTS = [[320,720],[360,800],[390,844],[768,1024],[1024,768],[1440,900]];
+const out = document.getElementById('out');
+let log = '';
+
+function loadFrame(src, w, h) {
+  return new Promise(function (resolve) {
+    const f = document.createElement('iframe');
+    f.style.cssText = 'position:absolute;left:-99999px;top:0;border:0;width:' + w + 'px;height:' + h + 'px';
+    f.onload = function () { setTimeout(function () { resolve(f); }, 400); };
+    f.src = src;
+    document.body.appendChild(f);
+  });
+}
+
+function measureLanding(w, h) {
+  return loadFrame('/?nocache=' + Date.now(), w, h).then(function (f) {
+    try {
+      const d = f.contentDocument;
+      const shell = d.querySelector('.landing-shell');
+      const r = shell.getBoundingClientRect();
+      const over = d.documentElement.scrollWidth - d.documentElement.clientWidth;
+      log += 'Landing  @ ' + w + 'x' + h + ' | width=' + Math.round(r.width) +
+             'px | maxW=' + f.contentWindow.getComputedStyle(shell).maxWidth +
+             ' | overflow=' + (over > 1 ? 'YES(+' + over + ')' : 'no') + '\n';
+    } catch (e) { log += 'Landing  @ ' + w + 'x' + h + ' | ERROR ' + e + '\n'; }
+    f.remove();
+  });
+}
+
+function measureApp(w, h) {
+  return new Promise(function (resolve) {
+    const f = document.createElement('iframe');
+    f.style.cssText = 'position:absolute;left:-99999px;top:0;border:0;width:' + w + 'px;height:' + h + 'px';
+    f.onload = function () {
+      setTimeout(function () {
+        try {
+          const d = f.contentDocument;
+          const c = d.querySelector('.app-container');
+          const r = c.getBoundingClientRect();
+          const over = d.documentElement.scrollWidth - d.documentElement.clientWidth;
+          log += 'AppShell @ ' + w + 'x' + h + ' | width=' + Math.round(r.width) +
+                 'px | maxW=' + f.contentWindow.getComputedStyle(c).maxWidth +
+                 ' | overflow=' + (over > 1 ? 'YES(+' + over + ')' : 'no') + '\n';
+        } catch (e) { log += 'AppShell @ ' + w + 'x' + h + ' | ERROR ' + e + '\n'; }
+        f.remove(); resolve();
+      }, 350);
+    };
+    f.srcdoc = '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' +
+      '<link rel="stylesheet" href="/assets/css/base/foundation.css"></head><body>' +
+      '<div class="app-container"><header class="top-bar">bar</header><main class="main-content"><p>x</p></main>' +
+      '<div class="bottom-nav-container"><div class="floating-nav">n</div></div></div></body></html>';
+    document.body.appendChild(f);
+  });
+}
+
+(async function () {
+  for (let j = 0; j < VIEWPORTS.length; j++) {
+    await measureLanding(VIEWPORTS[j][0], VIEWPORTS[j][1]);
+    await measureApp(VIEWPORTS[j][0], VIEWPORTS[j][1]);
+    log += '\n';
+  }
+  out.textContent = log + 'DONE';
+  document.title = 'DONE';
+})();
+</script>
+</body>
+</html>

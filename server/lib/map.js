@@ -77,6 +77,58 @@ export function toVideo(row) {
   };
 }
 
+export function toNotification(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    kind: row.kind || 'system',
+    title: row.title,
+    body: row.body || '',
+    createdAt: toEpochMs(row.created_at),
+    read: Boolean(row.read)
+  };
+}
+
+/**
+ * The member profile. Composed from the `profiles` row plus the auth user,
+ * because email and role are authoritative on auth.users/app_metadata and are
+ * deliberately not duplicated into `profiles`.
+ */
+export function toProfile(row, user) {
+  const safeRow = row || {};
+  const meta = user?.user_metadata || {};
+  return {
+    id: safeRow.id || user?.id || '',
+    name: safeRow.full_name || meta.full_name || 'Member',
+    email: user?.email || '',
+    // app_metadata is admin-writable only, so it outranks the self-service
+    // user_metadata copy - same precedence as publicUser() and RLS is_admin().
+    role: user?.app_metadata?.role || meta.role || 'member',
+    tier: safeRow.tier || 'Member',
+    company: safeRow.company || '',
+    title: safeRow.title || '',
+    avatarUrl: safeRow.avatar_url || meta.avatar_url || '',
+    joinedAt: safeRow.created_at || '',
+    streakDays: toNumber(safeRow.streak_days)
+  };
+}
+
+/**
+ * `progress` rows -> the `WatchProgressMap` shape the clients keep in state
+ * (`Record<videoId, { seconds, updatedAt, completed }>`).
+ */
+export function toProgressMap(rows) {
+  const map = {};
+  for (const row of rows || []) {
+    map[row.video_id] = {
+      seconds: toNumber(row.position),
+      updatedAt: toEpochMs(row.updated_at),
+      completed: Boolean(row.completed)
+    };
+  }
+  return map;
+}
+
 /* ---------------------------------------------------------------------------
  * Client body -> database row (the reverse direction)
  *
