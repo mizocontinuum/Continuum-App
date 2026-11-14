@@ -66,7 +66,10 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: calc(env(safe-area-inset-top, 20px) + 24px) 28px calc(env(safe-area-inset-bottom, 20px) + 24px);
+  padding: calc(env(safe-area-inset-top, 20px) + 24px)
+    max(28px, env(safe-area-inset-right, 0px))
+    calc(env(safe-area-inset-bottom, 20px) + 24px)
+    max(28px, env(safe-area-inset-left, 0px));
 }
 
 /* ---------- BRAND HEADER ---------- */
@@ -142,12 +145,13 @@ html, body {
 }
 
 .headline {
-  font-size: 26px;
+  font-size: clamp(22px, 7vw, 26px);
   font-weight: 900;
   text-align: center;
   letter-spacing: -0.3px;
   margin-bottom: 8px;
   color: var(--text);
+  text-wrap: balance;
 }
 
 .subheadline {
@@ -498,7 +502,10 @@ html, body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding: calc(env(safe-area-inset-top, 20px) + 20px) 22px calc(env(safe-area-inset-bottom, 20px) + 28px);
+  padding: calc(env(safe-area-inset-top, 20px) + 20px)
+    max(22px, env(safe-area-inset-right, 0px))
+    calc(env(safe-area-inset-bottom, 20px) + 28px)
+    max(22px, env(safe-area-inset-left, 0px));
 }
 
 .page-head {
@@ -732,6 +739,21 @@ button.setting-row:active {
 }
 
 /* ---------- RESPONSIVE ---------- */
+/* Small phones: trim the card and its inner padding so the form still fits */
+@media (max-width: 360px) {
+  .login-card {
+    padding: 26px 18px 22px;
+  }
+
+  .subheadline {
+    margin-bottom: 22px;
+  }
+
+  .brand-logo-img {
+    height: 30px;
+  }
+}
+
 /* Centre the auth card vertically on tall/desktop viewports instead of
    stretching the brand header and footer to opposite edges. */
 @media (min-width: 768px) {
@@ -745,5 +767,12 @@ button.setting-row:active {
   /* A little more width for the account settings rows on desktop */
   .profile-container {
     max-width: 560px;
+  }
+}
+
+/* Wide desktop: a slightly broader auth column reads better than 420px */
+@media (min-width: 1024px) {
+  .login-container {
+    max-width: 460px;
   }
 }

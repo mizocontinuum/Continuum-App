@@ -352,3 +352,20 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Wide desktop: the seven disciplines fit three-up and the shell can widen */
+@media (min-width: 1080px) {
+  .landing-disciplines {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .landing-shell {
+    max-width: 1200px;
+  }
+
+  .landing-hero {
+    padding: 72px 64px 66px;
+  }
+}

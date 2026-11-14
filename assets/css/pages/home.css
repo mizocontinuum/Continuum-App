@@ -408,6 +408,26 @@
 }
 
 /* ---------- RESPONSIVE ---------- */
+/* Small phones: the 520px hero is taller than the viewport allows alongside
+   the nav, so trim it and tighten the copy block. */
+@media (max-width: 400px) {
+  .hero-section {
+    min-height: 440px;
+    padding: 16px 14px;
+  }
+
+  .hero-title {
+    font-size: 17px;
+    margin-bottom: 14px;
+  }
+
+  .chevron-btn {
+    top: 110px;
+    width: 34px;
+    height: 34px;
+  }
+}
+
 /* On desktop the hero stretches wide; keep the copy and controls in a
    comfortable left-anchored block instead of spanning the whole frame. */
 @media (min-width: 768px) {
@@ -422,5 +442,21 @@
 
   .hero-title {
     font-size: 26px;
+  }
+}
+
+/* Wide desktop: give the stage and the copy block more room to fill the shell */
+@media (min-width: 1280px) {
+  .hero-section {
+    min-height: 620px;
+    padding: 40px;
+  }
+
+  .hero-details {
+    max-width: 680px;
+  }
+
+  .hero-title {
+    font-size: 30px;
   }
 }

@@ -21,7 +21,7 @@
   align-items: center;
   gap: 12px;
   height: 54px;
-  padding: 0 var(--gutter);
+  padding: 0 var(--content-inset);
 }
 
 .search-icon {
@@ -277,6 +277,13 @@
 @media (min-width: 1024px) {
   .search-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Wide desktop: match the fifth column used by the other card grids */
+@media (min-width: 1280px) {
+  .search-grid {
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 

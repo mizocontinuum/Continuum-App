@@ -128,8 +128,8 @@
 .lib-tabs {
   display: flex;
   gap: 10px;
-  margin: 0 calc(-1 * var(--gutter));
-  padding: 2px var(--gutter);
+  margin: 0 calc(-1 * var(--content-inset));
+  padding: 2px var(--content-inset);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;

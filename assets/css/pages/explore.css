@@ -67,11 +67,13 @@
 
 .free-title {
   margin-top: 22px;
-  font-size: 30px;
+  font-size: clamp(25px, 7.5vw, 30px);
   line-height: 1.1;
   font-weight: 900;
   letter-spacing: -1px;
   color: var(--text);
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .free-copy {
@@ -86,8 +88,8 @@
 .track-filter {
   display: flex;
   gap: 10px;
-  margin: 0 calc(-1 * var(--gutter));
-  padding: 2px var(--gutter);
+  margin: 0 calc(-1 * var(--content-inset));
+  padding: 2px var(--content-inset);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
@@ -268,5 +270,13 @@
 @media (min-width: 1024px) {
   .track-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Wide desktop: a fifth column keeps the cards close to their mobile size
+   instead of stretching a four-up row across the whole shell. */
+@media (min-width: 1280px) {
+  .track-grid {
+    grid-template-columns: repeat(5, 1fr);
   }
 }

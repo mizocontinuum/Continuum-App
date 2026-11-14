@@ -67,11 +67,13 @@
 
 .disc-name {
   margin-top: 18px;
-  font-size: 32px;
+  font-size: clamp(26px, 8vw, 32px);
   line-height: 1.08;
   font-weight: 900;
   letter-spacing: -1px;
   color: var(--text);
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .disc-goal {
@@ -301,5 +303,12 @@
 
   .disc-blurb {
     max-width: 70ch;
+  }
+}
+
+/* Wide desktop: match the fifth column used by Explore and Search */
+@media (min-width: 1280px) {
+  .disc-grid {
+    grid-template-columns: repeat(5, 1fr);
   }
 }

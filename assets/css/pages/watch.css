@@ -159,6 +159,19 @@
 }
 
 /* ---------- RESPONSIVE ---------- */
+/* Small phones: a slightly smaller title and tighter action buttons keep the
+   player and the actions above the fold. */
+@media (max-width: 360px) {
+  .watch-title {
+    font-size: 19px;
+  }
+
+  .watch-btn {
+    padding: 11px 8px;
+    font-size: 13px;
+  }
+}
+
 /* Keep a single readable column: a 16:9 stage at full desktop width would be
    enormous. Cap the column and centre it. */
 @media (min-width: 768px) {
@@ -167,5 +180,12 @@
     max-width: 920px;
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+/* Wide desktop: allow a broader stage now that the shell is 1200px+ */
+@media (min-width: 1280px) {
+  .watch-main {
+    max-width: 1040px;
   }
 }
