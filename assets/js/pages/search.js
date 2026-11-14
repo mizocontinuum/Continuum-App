@@ -81,8 +81,8 @@ function resultRow(video, index) {
   play.className = 'result-play';
   play.setAttribute('aria-label', 'Play');
   play.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
-  play.addEventListener('click', (event) => {
-    event.stopPropagation();
+
+  row.addEventListener('click', () => {
     if (video.id) window.location.href = watchUrl(video.id);
   });
 

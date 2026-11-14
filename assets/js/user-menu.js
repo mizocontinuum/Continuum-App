@@ -56,7 +56,7 @@ export async function initPageChrome() {
   return session;
 }
 
-/* /* nav-update */ Auto-hide bottom nav on scroll down, reveal on scroll up (mobile only) */
+/* nav-update: Auto-hide bottom nav on scroll down, reveal on scroll up (mobile only) */
 function initScrollNav() {
   const nav = document.querySelector('.bottom-nav-container');
   if (!nav || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -159,7 +159,7 @@ export function initUserMenu(session = getSession()) {
   const profileBtn = document.getElementById('profileBtn');
   if (!profileBtn) return;
 
-  const topActions = profileBtn.closest('.top-actions');
+  const topActions = profileBtn.closest('.top-actions, .top-bar-right');
   if (!topActions) return;
 
   topActions.classList.add('has-user-menu');

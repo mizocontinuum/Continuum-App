@@ -3,7 +3,7 @@
    field plus the two result presentations: rows when the field is empty,
    a two-column grid once the visitor starts typing. */
 
-/* /* nav-update */ Responsive search header adaptation */
+/* nav-update: Responsive search header adaptation */
 @media (max-width: 760px) {
   .search-page-top-bar {
     display: none !important;

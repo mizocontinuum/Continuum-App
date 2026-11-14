@@ -21,7 +21,7 @@
 :root {
   color-scheme: dark;
 
-  /* /* nav-update */ Brand Colors */
+  /* nav-update: Brand Colors */
   --bg: #0b1118;
   --card: #111922;
   --surface: #1b2631;
@@ -286,7 +286,7 @@ body {
   stroke: currentColor;
 }
 
-/* /* nav-update */ Desktop Top Navigation Links (STEP 2) */
+/* nav-update: Desktop Top Navigation Links (STEP 2) */
 .top-nav {
   display: flex;
   align-items: center;
@@ -450,7 +450,7 @@ body {
   background: var(--line);
 }
 
-/* /* nav-update */ FLOATING BOTTOM NAVIGATION BAR (STEP 3) */
+/* nav-update: FLOATING BOTTOM NAVIGATION BAR (STEP 3) */
 .bottom-nav-container {
   position: fixed;
   left: 10px;
@@ -1888,7 +1888,7 @@ body {
     font-size: 16px;
   }
 
-  /* /* nav-update */ Phone: show floating bottom tab bar, hide top nav links */
+  /* nav-update: Phone: show floating bottom tab bar, hide top nav links */
   .top-nav {
     display: none !important;
   }
@@ -1902,7 +1902,7 @@ body {
   }
 }
 
-/* /* nav-update */ Laptop/Desktop (>=761px): bottom bar is display:none (unreachable, unfocusable) */
+/* nav-update: Laptop/Desktop (>=761px): bottom bar is display:none (unreachable, unfocusable) */
 @media (min-width: 761px) {
   .bottom-nav-container,
   .floating-nav {
@@ -1910,7 +1910,7 @@ body {
   }
 }
 
-/* /* nav-update */ Hide bottom bar while modal or full-screen video player is open (STEP 5) */
+/* nav-update: Hide bottom bar while modal or full-screen video player is open (STEP 5) */
 body:has(.video-modal.active) .bottom-nav-container,
 body:has(.landscape-player-active) .bottom-nav-container,
 body:has(dialog[open]) .bottom-nav-container {
