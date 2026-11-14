@@ -7,7 +7,8 @@
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
-  padding: 0 20px calc(48px + var(--safe-bottom));
+  /* Match the member app shell: responsive gutter + landscape safe-area insets */
+  padding: 0 var(--content-inset) calc(48px + var(--safe-bottom));
 }
 
 /* ---------- TOP BAR ---------- */
@@ -310,10 +311,6 @@
 
 /* Narrow phones: shrink the brand bar so the logo and the two nav links fit */
 @media (max-width: 400px) {
-  .landing-shell {
-    padding: 0 14px calc(48px + var(--safe-bottom));
-  }
-
   .landing-top {
     gap: 10px;
   }
@@ -367,5 +364,13 @@
 
   .landing-hero {
     padding: 72px 64px 66px;
+  }
+}
+
+/* Wide desktop: match the member app shell's 1320px column so landing and
+   member pages share the same outer width. */
+@media (min-width: 1440px) {
+  .landing-shell {
+    max-width: 1320px;
   }
 }
