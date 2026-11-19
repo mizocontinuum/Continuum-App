@@ -1,21 +1,23 @@
 /* ==========================================================================
-   Continuum Academy — Netflix-Style Cinematic Landing Page CSS
+   Continuum Academy — Dark Azure & Azure Netflix-Style Cinematic Landing Page
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Netflix+Sans:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  --primary-red: #E50914;
-  --primary-red-hover: #F40612;
-  --bg-black: #000000;
-  --card-bg: rgba(22, 22, 22, 0.75);
-  --card-bg-solid: #161616;
-  --card-border: rgba(128, 128, 128, 0.35);
-  --divider-color: #232323;
+  /* Azure & Dark Azure Theme Palette */
+  --azure: #007FFF;
+  --azure-bright: #1EA0FF;
+  --azure-glow: rgba(0, 127, 255, 0.45);
+  --dark-azure: #003B73;
+  --dark-azure-deep: #001B36;
+  --bg-black: #03080E;
+  --card-bg: rgba(7, 24, 46, 0.65);
+  --card-border: rgba(0, 127, 255, 0.22);
+  --divider-color: #0b1a2d;
   --text-white: #FFFFFF;
-  --text-muted: rgba(255, 255, 255, 0.7);
-  --text-dim: #8c8c8c;
-  --glow-red: rgba(229, 9, 20, 0.35);
+  --text-muted: rgba(230, 243, 255, 0.72);
+  --text-dim: #6c8ba8;
   --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -44,7 +46,7 @@ body.landing-body {
   position: relative;
 }
 
-/* Atmospheric Netflix-like Background Vignette & Radial Radial Glow */
+/* Atmospheric Dark Azure Ambient Glow */
 body.landing-body::before {
   content: "";
   position: fixed;
@@ -53,8 +55,8 @@ body.landing-body::before {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse 90% 70% at 50% -15%, rgba(229, 9, 20, 0.22) 0%, transparent 75%),
-    radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0.4) 0%, rgba(0, 0, 0, 0.95) 100%);
+    radial-gradient(ellipse 95% 70% at 50% -12%, rgba(0, 127, 255, 0.25) 0%, transparent 75%),
+    radial-gradient(circle at 50% 60%, rgba(0, 35, 70, 0.35) 0%, rgba(3, 8, 14, 0.98) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -83,7 +85,7 @@ body.landing-body::before {
   width: 100%;
   margin: 0 auto;
   padding: 24px 48px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(180deg, rgba(3, 8, 14, 0.9) 0%, rgba(3, 8, 14, 0) 100%);
 }
 
 .landing-logo {
@@ -92,11 +94,12 @@ body.landing-body::before {
   display: block;
   object-fit: contain;
   transition: transform 0.25s ease, filter 0.25s ease;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 2px 10px rgba(0, 127, 255, 0.3));
 }
 
 .landing-logo:hover {
   transform: scale(1.03);
+  filter: drop-shadow(0 0 14px rgba(0, 127, 255, 0.6));
 }
 
 .landing-nav {
@@ -110,33 +113,35 @@ body.landing-body::before {
   color: var(--text-white);
   font-size: 0.9375rem;
   font-weight: 600;
-  padding: 7px 18px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease;
+  padding: 8px 20px;
+  border-radius: 6px;
+  transition: all 0.25s ease;
 }
 
 .landing-nav a:not(.nav-cta) {
   color: var(--text-white);
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 27, 54, 0.5);
+  border: 1px solid rgba(0, 127, 255, 0.35);
+  backdrop-filter: blur(8px);
 }
 
 .landing-nav a:not(.nav-cta):hover {
-  border-color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--azure);
+  background: rgba(0, 127, 255, 0.15);
+  box-shadow: 0 0 12px rgba(0, 127, 255, 0.3);
 }
 
 .landing-nav .nav-cta {
-  background-color: var(--primary-red);
+  background: linear-gradient(135deg, var(--azure) 0%, var(--dark-azure) 100%);
   color: var(--text-white);
-  border: 1px solid transparent;
-  box-shadow: 0 2px 10px rgba(229, 9, 20, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 14px var(--azure-glow);
 }
 
 .landing-nav .nav-cta:hover {
-  background-color: var(--primary-red-hover);
-  box-shadow: 0 4px 16px rgba(229, 9, 20, 0.6);
+  background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 100%);
+  box-shadow: 0 4px 20px rgba(0, 127, 255, 0.65);
+  transform: translateY(-1px);
 }
 
 /* ---------------- Main Content ---------------- */
@@ -157,21 +162,21 @@ main {
   text-align: center;
   padding: 140px 24px 80px;
   background: 
-    linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.65) 50%, rgba(0, 0, 0, 0.85) 100%),
-    radial-gradient(circle at center, rgba(16, 16, 20, 0.6) 0%, rgba(0, 0, 0, 0.95) 100%),
+    linear-gradient(to top, rgba(3, 8, 14, 1) 0%, rgba(0, 27, 54, 0.7) 50%, rgba(3, 8, 14, 0.88) 100%),
+    radial-gradient(circle at center, rgba(0, 59, 115, 0.4) 0%, rgba(3, 8, 14, 0.95) 100%),
     url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
   border-bottom: 8px solid var(--divider-color);
 }
 
-/* Curved arch accent bottom shadow effect */
+/* Bottom Glow Arch */
 .landing-hero::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: radial-gradient(50% 500% at 50% 100%, transparent 60%, rgba(0, 0, 0, 0.9) 100%);
+  height: 70px;
+  background: radial-gradient(50% 500% at 50% 100%, rgba(0, 127, 255, 0.12) 0%, transparent 80%);
   pointer-events: none;
 }
 
@@ -181,9 +186,9 @@ main {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2.5px;
-  color: var(--primary-red);
+  color: var(--azure-bright);
   margin-bottom: 16px;
-  text-shadow: 0 0 16px var(--glow-red);
+  text-shadow: 0 0 16px var(--azure-glow);
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -195,30 +200,31 @@ main {
   letter-spacing: -0.025em;
   color: var(--text-white);
   margin-bottom: 20px;
-  text-shadow: 0 3px 20px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
   animation: fadeIn 1s ease-out;
 }
 
 .landing-title em {
   font-style: normal;
-  background: linear-gradient(135deg, #FFFFFF 20%, #E50914 100%);
+  background: linear-gradient(135deg, #FFFFFF 25%, var(--azure) 80%, var(--azure-bright) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
+  filter: drop-shadow(0 0 25px rgba(0, 127, 255, 0.35));
 }
 
 .landing-lede {
   max-width: 720px;
   font-size: clamp(1.1rem, 2vw, 1.45rem);
   font-weight: 400;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.88);
-  margin-bottom: 36px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+  line-height: 1.55;
+  color: rgba(230, 243, 255, 0.88);
+  margin-bottom: 38px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
   animation: fadeIn 1.2s ease-out;
 }
 
-/* Call To Action Buttons (Netflix Style Large Pill/Rounded Rect) */
+/* Call To Action Buttons */
 .landing-cta {
   display: flex;
   align-items: center;
@@ -226,7 +232,7 @@ main {
   flex-wrap: wrap;
   gap: 16px;
   width: 100%;
-  max-width: 580px;
+  max-width: 600px;
   animation: fadeIn 1.3s ease-out;
 }
 
@@ -246,11 +252,12 @@ main {
   text-align: center;
 }
 
+/* Primary CTA: Vivid Azure Gradient */
 .landing-btn.primary {
-  background-color: var(--primary-red);
+  background: linear-gradient(135deg, var(--azure) 0%, var(--dark-azure) 100%);
   color: var(--text-white);
-  border: 1px solid transparent;
-  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 22px var(--azure-glow);
   position: relative;
   overflow: hidden;
 }
@@ -266,26 +273,28 @@ main {
 }
 
 .landing-btn.primary:hover {
-  background-color: var(--primary-red-hover);
+  background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(229, 9, 20, 0.7);
+  box-shadow: 0 8px 30px rgba(0, 127, 255, 0.7);
 }
 
 .landing-btn.primary:hover::after {
   transform: translateX(4px);
 }
 
+/* Secondary CTA: Frosted Dark Azure */
 .landing-btn.secondary {
-  background-color: rgba(109, 109, 110, 0.65);
+  background-color: rgba(0, 35, 70, 0.65);
   color: var(--text-white);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 127, 255, 0.35);
+  backdrop-filter: blur(10px);
 }
 
 .landing-btn.secondary:hover {
-  background-color: rgba(109, 109, 110, 0.9);
-  border-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(0, 59, 115, 0.85);
+  border-color: var(--azure);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 127, 255, 0.3);
 }
 
 /* ---------------- Feature / Values Section ---------------- */
@@ -294,7 +303,7 @@ main {
   max-width: 1280px;
   width: 100%;
   margin: 0 auto;
-  padding: 80px 32px 100px;
+  padding: 85px 32px 105px;
   border-bottom: 8px solid var(--divider-color);
 }
 
@@ -303,7 +312,7 @@ main {
   flex-direction: column-reverse;
   align-items: center;
   text-align: center;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 56px;
 }
 
@@ -312,7 +321,7 @@ main {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: var(--primary-red);
+  color: var(--azure-bright);
 }
 
 .landing-section-head h2 {
@@ -322,18 +331,19 @@ main {
   color: var(--text-white);
 }
 
-/* Values Grid: Netflix Tile / Feature Card Layout */
+/* Values Grid: Dark Azure Glassmorphism Cards */
 .landing-values {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
+  gap: 26px;
 }
 
 .landing-value {
-  background: linear-gradient(145deg, rgba(29, 22, 34, 0.85) 0%, rgba(19, 16, 24, 0.95) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(155deg, rgba(0, 35, 70, 0.7) 0%, rgba(3, 17, 34, 0.85) 100%);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
   border-radius: 16px;
-  padding: 36px 30px;
+  padding: 38px 32px;
   position: relative;
   overflow: hidden;
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
@@ -350,15 +360,15 @@ main {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(229, 9, 20, 0.8), transparent);
+  background: linear-gradient(90deg, transparent, var(--azure-bright), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .landing-value:hover {
   transform: translateY(-6px);
-  border-color: rgba(229, 9, 20, 0.5);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(229, 9, 20, 0.2);
+  border-color: var(--azure);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 24px var(--azure-glow);
 }
 
 .landing-value:hover::before {
@@ -371,7 +381,7 @@ main {
   font-weight: 800;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--primary-red);
+  color: var(--azure-bright);
   margin-bottom: 14px;
 }
 
@@ -411,7 +421,7 @@ main {
 }
 
 .landing-footer a:hover {
-  color: var(--text-white);
+  color: var(--azure-bright);
 }
 
 @keyframes fadeIn {
