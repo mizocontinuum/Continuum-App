@@ -47,6 +47,86 @@
         </div>
       </section>
 
+      <!-- Netflix / Disney+ Style "Trending Now" Section with Top 5 Rank Numbers & Interactive Modal Trigger -->
+      <section class="landing-trending" aria-labelledby="trendingTitle">
+        <!-- Netflix Curved Glowing Arch separator -->
+        <div class="trending-curve-arch"></div>
+
+        <div class="trending-container">
+          <div class="trending-head">
+            <h2 id="trendingTitle" class="trending-title">Trending Now</h2>
+          </div>
+
+          <div class="trending-carousel-wrap">
+            <div class="trending-carousel" id="trendingCarousel">
+              <!-- Item 1: The Offering Model (Josiah Go) -->
+              <div class="trending-card" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="THE OFFERING MODEL: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Strategy &bull; Marketing &bull; Innovation"
+                data-desc="Learn the definitive framework for creating high-value market offerings, capturing unmet customer demand and sustaining competitive advantage with renowned marketing guru Josiah Go."
+                data-art="assets/images/card-1.png" data-badge="assets/images/card-1.png">
+                <span class="trending-rank">1</span>
+                <div class="trending-poster-box">
+                  <img src="assets/images/card-1.png" alt="The Offering Model - Josiah Go" class="trending-poster">
+                </div>
+              </div>
+
+              <!-- Item 2: The Offering Model -->
+              <div class="trending-card" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="MARKET ENTRY STRATEGY: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Leadership &bull; Growth"
+                data-desc="Master systematic market entry, barrier breakdown, and enterprise positioning designed for founders and corporate operators."
+                data-art="assets/images/card-2.png" data-badge="assets/images/card-2.png">
+                <span class="trending-rank">2</span>
+                <div class="trending-poster-box">
+                  <img src="assets/images/card-2.png" alt="Market Entry Strategy - Josiah Go" class="trending-poster">
+                </div>
+              </div>
+
+              <!-- Item 3: The Offering Model -->
+              <div class="trending-card" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="VALUE CREATION & SCALING: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Entrepreneurship &bull; Strategy"
+                data-desc="Explore end-to-end business model design and value orchestration from the executive learning cockpit of Continuum Academy."
+                data-art="assets/images/card-3.png" data-badge="assets/images/card-3.png">
+                <span class="trending-rank">3</span>
+                <div class="trending-poster-box">
+                  <img src="assets/images/card-3.png" alt="Value Creation & Scaling - Josiah Go"
+                    class="trending-poster">
+                </div>
+              </div>
+
+              <!-- Item 4: The Offering Model -->
+              <div class="trending-card" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="DISRUPTIVE POSITIONING: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Marketing &bull; Innovation"
+                data-desc="How top enterprise brands carve non-contested market space and out-maneuver incumbents with agile value propositions."
+                data-art="assets/images/card-4.png" data-badge="assets/images/card-4.png">
+                <span class="trending-rank">4</span>
+                <div class="trending-poster-box">
+                  <img src="assets/images/card-4.png" alt="Disruptive Positioning - Josiah Go" class="trending-poster">
+                </div>
+              </div>
+
+              <!-- Item 5: The Offering Model -->
+              <div class="trending-card" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="OPERATIONAL MASTERY: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Executive Leadership"
+                data-desc="Frameworks for strategic discipline, board-level decision making, and operational alignment across high-growth organizations."
+                data-art="assets/images/card-5.png" data-badge="assets/images/card-5.png">
+                <span class="trending-rank">5</span>
+                <div class="trending-poster-box">
+                  <img src="assets/images/card-5.png" alt="Operational Mastery - Josiah Go" class="trending-poster">
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Arrow Button -->
+            <button class="trending-nav-btn next" aria-label="Scroll right" id="trendingNextBtn">&#8250;</button>
+          </div>
+        </div>
+      </section>
+
       <!-- Netflix / Disney+ Style "Enjoy on your TV" Spotlight Section -->
       <section class="landing-spotlight" aria-labelledby="tvFeatureTitle">
         <div class="spotlight-container">
@@ -101,6 +181,129 @@
     </footer>
 
   </div>
+
+  <!-- Netflix & Disney+ Style Interactive 3D Modal Backdrop & Dialog -->
+  <div class="netflix-modal-backdrop" id="trendingModalBackdrop" aria-hidden="true">
+    <div class="netflix-modal-dialog" id="trendingModalDialog" role="dialog" aria-modal="true"
+      aria-labelledby="modalTitle">
+      <!-- Close Button -->
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+
+      <!-- Top Cinematic Artwork / Video Backdrop -->
+      <div class="modal-artwork-box">
+        <img src="assets/images/card-1.png" alt="Show backdrop" class="modal-artwork-img" id="modalArtImg">
+        <div class="modal-art-gradient"></div>
+        <div class="modal-floating-title" id="modalFloatingTitle">
+          <h3 id="modalTitle">THE OFFERING MODEL</h3>
+          <span class="modal-subtitle" id="modalSubtitle">JOSIAH GO</span>
+        </div>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div class="modal-body">
+        <!-- Tags Bar (Year, Rating, Type, Genre) -->
+        <div class="modal-tags">
+          <span class="tag-badge" id="modalYear">2026</span>
+          <span class="tag-badge" id="modalRating">16+</span>
+          <span class="tag-badge" id="modalType">Show</span>
+          <span class="tag-badge" id="modalGenre">Dramas</span>
+        </div>
+
+        <!-- Description Paragraph -->
+        <p class="modal-description" id="modalDesc">
+          In a hospital dominated by ego and corruption, an enigmatic but brilliant surgeon arrives — taking on
+          seemingly impossible cases amid fierce opposition.
+        </p>
+
+        <!-- Action Button (Red Netflix CTA) -->
+        <div class="modal-actions">
+          <a href="signup/" class="modal-cta-btn" id="modalCtaBtn">
+            <span>Get Started</span>
+            <span class="cta-arrow">&#8250;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightweight Script for Modal Triggering -->
+  <script>
+    (function () {
+      const backdrop = document.getElementById('trendingModalBackdrop');
+      const dialog = document.getElementById('trendingModalDialog');
+      const closeBtn = document.getElementById('modalCloseBtn');
+      const cards = document.querySelectorAll('.trending-card');
+      const nextBtn = document.getElementById('trendingNextBtn');
+      const carousel = document.getElementById('trendingCarousel');
+
+      // Modal elements
+      const modalTitle = document.getElementById('modalTitle');
+      const modalSubtitle = document.getElementById('modalSubtitle');
+      const modalYear = document.getElementById('modalYear');
+      const modalRating = document.getElementById('modalRating');
+      const modalType = document.getElementById('modalType');
+      const modalGenre = document.getElementById('modalGenre');
+      const modalDesc = document.getElementById('modalDesc');
+      const modalArtImg = document.getElementById('modalArtImg');
+
+      function openModal(card) {
+        const titleRaw = card.getAttribute('data-title') || '';
+        const parts = titleRaw.split(':');
+        modalTitle.textContent = parts[0] ? parts[0].trim() : titleRaw;
+        modalSubtitle.textContent = parts[1] ? parts[1].trim() : '';
+
+        modalYear.textContent = card.getAttribute('data-year') || '2026';
+        modalRating.textContent = card.getAttribute('data-rating') || '16+';
+        modalType.textContent = card.getAttribute('data-type') || 'Show';
+        modalGenre.innerHTML = card.getAttribute('data-genre') || 'Dramas';
+        modalDesc.textContent = card.getAttribute('data-desc') || '';
+        const targetArt = card.getAttribute('data-art') || card.getAttribute('data-badge') || 'assets/images/card-1.png';
+        modalArtImg.onerror = function() {
+          this.onerror = null;
+          this.src = 'assets/images/card-1.png';
+        };
+        modalArtImg.src = targetArt;
+
+        backdrop.classList.add('active');
+        backdrop.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        backdrop.classList.remove('active');
+        backdrop.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => openModal(card));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal(card);
+          }
+        });
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && backdrop.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      if (nextBtn && carousel) {
+        nextBtn.addEventListener('click', () => {
+          carousel.scrollBy({ left: 320, behavior: 'smooth' });
+        });
+      }
+    })();
+  </script>
 </body>
 
 </html>
