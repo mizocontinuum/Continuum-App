@@ -5,10 +5,18 @@
  * redirects (such as auth middleware sending /home/ to /login/) work normally.
  * The backend under /api/* is also never touched by this worker.
  */
-const CACHE_NAME = 'continuum-cache-v22';
+const CACHE_NAME = 'continuum-cache-v23';
 const PRECACHE_URLS = [
   './manifest.json',
   './assets/css/base/foundation.css',
+  './assets/css/modules/tokens.css',
+  './assets/css/modules/shell.css',
+  './assets/css/modules/header.css',
+  './assets/css/modules/bottom-nav.css',
+  './assets/css/modules/cards.css',
+  './assets/css/modules/toast.css',
+  './assets/css/modules/video-modal.css',
+  './assets/css/modules/utilities.css',
   './assets/css/base/theme.css',
   './assets/css/base/auth.css',
   './assets/css/pages/landing.css',
