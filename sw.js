@@ -5,7 +5,7 @@
  * redirects (such as auth middleware sending /home/ to /login/) work normally.
  * The backend under /api/* is also never touched by this worker.
  */
-const CACHE_NAME = 'continuum-cache-v21';
+const CACHE_NAME = 'continuum-cache-v22';
 const PRECACHE_URLS = [
   './manifest.json',
   './assets/css/base/foundation.css',
@@ -70,6 +70,22 @@ self.addEventListener('fetch', (event) => {
   // Never cache the API. A cached /api/auth/session would paint a stale
   // identity, and a cached 401 would lock a signed-in member out.
   if (url.pathname.startsWith('/api/')) return;
+
+  // In local development or previews, prioritize network so CSS/JS changes are immediately visible
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-cache' })
+        .then((response) => {
+          if (response && response.status === 200 && response.type === 'basic') {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
