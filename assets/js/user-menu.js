@@ -52,26 +52,7 @@ export async function initPageChrome() {
   paintSession(session);
   wireLogoutButtons();
   initUserMenu(session);
-  initScrollNav();
   return session;
-}
-
-/* nav-update: Auto-hide bottom nav on scroll down, reveal on scroll up (mobile only) */
-function initScrollNav() {
-  const nav = document.querySelector('.bottom-nav-container');
-  if (!nav || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let lastY = window.scrollY;
-  window.addEventListener('scroll', () => {
-    if (window.innerWidth > 760) return;
-    const curY = window.scrollY;
-    const diff = curY - lastY;
-    if (curY > 80 && diff > 10) {
-      nav.classList.add('nav-hidden');
-    } else if (diff < -10 || curY <= 40) {
-      nav.classList.remove('nav-hidden');
-    }
-    lastY = curY;
-  }, { passive: true });
 }
 
 /**
