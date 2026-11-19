@@ -18,7 +18,7 @@ import {
   resetLocalData,
   showToast
 } from '../store.js';
-import { initPageChrome, paintSession } from '../user-menu.js';
+import { initPageChrome, paintSession } from '../user-menu.js?v=21';
 
 /** A handful of common zones; Asia/Shanghai first so it is the demo default. */
 const TIMEZONES = [

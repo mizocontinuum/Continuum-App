@@ -4,7 +4,7 @@
  */
 import { listCatalogue } from '../store.js';
 import { createDisciplineRow, attachCardNavigation } from '../cards.js';
-import { initPageChrome } from '../user-menu.js';
+import { initPageChrome } from '../user-menu.js?v=21';
 
 document.addEventListener('DOMContentLoaded', async () => {
   if (!(await initPageChrome())) return;

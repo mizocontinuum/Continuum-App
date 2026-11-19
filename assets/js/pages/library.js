@@ -13,7 +13,7 @@ import {
   watchLink
 } from '../store.js';
 import { createThumbArtwork, attachCardNavigation } from '../cards.js';
-import { initPageChrome } from '../user-menu.js';
+import { initPageChrome } from '../user-menu.js?v=21';
 
 const state = { view: 'list', query: '', disciplineId: '' };
 

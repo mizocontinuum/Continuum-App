@@ -20,7 +20,7 @@ import {
   showToast
 } from '../store.js';
 import { createVideoCard, createDisciplineRow, attachCardNavigation } from '../cards.js';
-import { initPageChrome } from '../user-menu.js';
+import { initPageChrome } from '../user-menu.js?v=21';
 
 const AUTO_ADVANCE_MS = 7000;
 const LANDSCAPE_SPEEDS = [0.75, 1, 1.25, 1.5, 2];

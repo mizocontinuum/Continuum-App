@@ -7,7 +7,7 @@
  */
 import { clipVideos, listVideos, isFavorite, toggleFavorite } from '../store.js';
 import { attachCardNavigation, watchUrl } from '../cards.js';
-import { initPageChrome } from '../user-menu.js';
+import { initPageChrome } from '../user-menu.js?v=21';
 
 /** Slate gradients for the poster area, cycled for visual variety. */
 const GRADIENTS = [

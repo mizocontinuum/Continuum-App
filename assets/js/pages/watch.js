@@ -19,7 +19,7 @@ import {
   assetUrl,
   showToast
 } from '../store.js';
-import { initPageChrome } from '../user-menu.js';
+import { initPageChrome } from '../user-menu.js?v=21';
 
 const SAVE_EVERY_MS = 10000;
 const COMPLETE_RATIO = 0.95;

@@ -7,7 +7,7 @@
  */
 import { searchCatalog, listVideos, showToast } from '../store.js';
 import { createThumbArtwork } from '../cards.js';
-import { initPageChrome } from '../user-menu.js';
+import { initPageChrome } from '../user-menu.js?v=21';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const session = await initPageChrome();
