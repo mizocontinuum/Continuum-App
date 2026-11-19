@@ -1,11 +1,12 @@
 /* ==========================================================================
-   Continuum Academy — Dark Azure & Azure Netflix-Style Cinematic Landing Page
+   Continuum Academy — Netflix & Disney+ Hybrid Landing Page
+   Palette: Dark Azure & Azure (Preserved)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  /* Azure & Dark Azure Theme Palette */
+  /* Azure & Dark Azure Theme Palette (Untouched) */
   --azure: #007FFF;
   --azure-bright: #1EA0FF;
   --azure-glow: rgba(0, 127, 255, 0.45);
@@ -46,7 +47,7 @@ body.landing-body {
   position: relative;
 }
 
-/* Atmospheric Dark Azure Ambient Glow */
+/* Disney+ Atmospheric Deep Aurora & Starlight Ambient Background */
 body.landing-body::before {
   content: "";
   position: fixed;
@@ -55,8 +56,10 @@ body.landing-body::before {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse 95% 70% at 50% -12%, rgba(0, 127, 255, 0.25) 0%, transparent 75%),
-    radial-gradient(circle at 50% 60%, rgba(0, 35, 70, 0.35) 0%, rgba(3, 8, 14, 0.98) 100%);
+    radial-gradient(ellipse 100% 80% at 50% -10%, rgba(0, 127, 255, 0.28) 0%, transparent 65%),
+    radial-gradient(circle at 15% 45%, rgba(0, 59, 115, 0.22) 0%, transparent 50%),
+    radial-gradient(circle at 85% 65%, rgba(0, 127, 255, 0.15) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(3, 8, 14, 0.4) 0%, rgba(3, 8, 14, 0.98) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -71,9 +74,9 @@ body.landing-body::before {
   flex-direction: column;
 }
 
-/* ---------------- Header / Top Bar ---------------- */
+/* ---------------- Header / Top Bar (Disney+ Floating Blur Bar) ---------------- */
 .landing-top {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -81,11 +84,13 @@ body.landing-body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1920px;
   width: 100%;
-  margin: 0 auto;
-  padding: 24px 48px;
-  background: linear-gradient(180deg, rgba(3, 8, 14, 0.9) 0%, rgba(3, 8, 14, 0) 100%);
+  padding: 18px 48px;
+  background: rgba(3, 8, 14, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 127, 255, 0.15);
+  transition: all 0.3s ease;
 }
 
 .landing-logo {
@@ -93,13 +98,13 @@ body.landing-body::before {
   width: auto;
   display: block;
   object-fit: contain;
-  transition: transform 0.25s ease, filter 0.25s ease;
-  filter: drop-shadow(0 2px 10px rgba(0, 127, 255, 0.3));
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
+  filter: drop-shadow(0 0 10px rgba(0, 127, 255, 0.4));
 }
 
 .landing-logo:hover {
-  transform: scale(1.03);
-  filter: drop-shadow(0 0 14px rgba(0, 127, 255, 0.6));
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 16px rgba(30, 160, 255, 0.7));
 }
 
 .landing-nav {
@@ -111,36 +116,41 @@ body.landing-body::before {
 .landing-nav a {
   text-decoration: none;
   color: var(--text-white);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 6px;
-  transition: all 0.25s ease;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 10px 24px;
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+/* Disney+ Style Frosted Sign-in */
 .landing-nav a:not(.nav-cta) {
   color: var(--text-white);
   background: rgba(0, 27, 54, 0.5);
-  border: 1px solid rgba(0, 127, 255, 0.35);
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 127, 255, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 .landing-nav a:not(.nav-cta):hover {
-  border-color: var(--azure);
-  background: rgba(0, 127, 255, 0.15);
-  box-shadow: 0 0 12px rgba(0, 127, 255, 0.3);
+  background: rgba(0, 127, 255, 0.2);
+  border-color: var(--azure-bright);
+  box-shadow: 0 0 16px rgba(0, 127, 255, 0.45);
+  color: #FFFFFF;
 }
 
+/* Disney+ / Netflix Hybrid Primary CTA Nav Button */
 .landing-nav .nav-cta {
   background: linear-gradient(135deg, var(--azure) 0%, var(--dark-azure) 100%);
   color: var(--text-white);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 2px 14px var(--azure-glow);
 }
 
 .landing-nav .nav-cta:hover {
   background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 100%);
-  box-shadow: 0 4px 20px rgba(0, 127, 255, 0.65);
+  box-shadow: 0 4px 22px rgba(0, 127, 255, 0.7);
   transform: translateY(-1px);
 }
 
@@ -151,7 +161,7 @@ main {
   flex-direction: column;
 }
 
-/* ---------------- Hero Section (Netflix Cinematic Masthead) ---------------- */
+/* ---------------- Hero Section (Netflix Cinematic Scale + Disney+ Horizon Elegance) ---------------- */
 .landing-hero {
   position: relative;
   min-height: 88vh;
@@ -160,79 +170,98 @@ main {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 140px 24px 80px;
+  padding: 120px 24px 90px;
   background: 
-    linear-gradient(to top, rgba(3, 8, 14, 1) 0%, rgba(0, 27, 54, 0.7) 50%, rgba(3, 8, 14, 0.88) 100%),
-    radial-gradient(circle at center, rgba(0, 59, 115, 0.4) 0%, rgba(3, 8, 14, 0.95) 100%),
+    linear-gradient(to top, rgba(3, 8, 14, 1) 0%, rgba(0, 27, 54, 0.6) 50%, rgba(3, 8, 14, 0.85) 100%),
+    radial-gradient(circle at center, rgba(0, 59, 115, 0.45) 0%, rgba(3, 8, 14, 0.95) 100%),
     url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
-  border-bottom: 8px solid var(--divider-color);
+  border-bottom: 1px solid rgba(0, 127, 255, 0.2);
 }
 
-/* Bottom Glow Arch */
+/* Disney+ Curved Horizon Light Flare */
 .landing-hero::after {
   content: "";
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   right: 0;
-  height: 70px;
-  background: radial-gradient(50% 500% at 50% 100%, rgba(0, 127, 255, 0.12) 0%, transparent 80%);
+  height: 90px;
+  background: radial-gradient(55% 100% at 50% 100%, rgba(0, 127, 255, 0.35) 0%, rgba(0, 59, 115, 0.15) 45%, transparent 100%);
   pointer-events: none;
 }
 
+/* Disney+ Pill Eyebrow Badge */
 .landing-eyebrow {
-  display: inline-block;
-  font-size: 0.95rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 2.5px;
+  letter-spacing: 3px;
   color: var(--azure-bright);
-  margin-bottom: 16px;
-  text-shadow: 0 0 16px var(--azure-glow);
+  background: rgba(0, 59, 115, 0.45);
+  border: 1px solid rgba(0, 127, 255, 0.35);
+  backdrop-filter: blur(8px);
+  padding: 6px 18px;
+  border-radius: 50px;
+  margin-bottom: 24px;
+  box-shadow: 0 0 20px rgba(0, 127, 255, 0.25);
   animation: fadeIn 0.8s ease-out;
 }
 
+.landing-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--azure-bright);
+  box-shadow: 0 0 8px var(--azure-bright);
+}
+
+/* Netflix High-Impact Typography with Disney+ Shimmer */
 .landing-title {
-  max-width: 960px;
-  font-size: clamp(2.3rem, 5.2vw, 4rem);
+  max-width: 980px;
+  font-size: clamp(2.4rem, 5.5vw, 4.25rem);
   font-weight: 900;
-  line-height: 1.12;
+  line-height: 1.1;
   letter-spacing: -0.025em;
   color: var(--text-white);
-  margin-bottom: 20px;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
+  margin-bottom: 22px;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
   animation: fadeIn 1s ease-out;
 }
 
 .landing-title em {
   font-style: normal;
-  background: linear-gradient(135deg, #FFFFFF 25%, var(--azure) 80%, var(--azure-bright) 100%);
+  background: linear-gradient(135deg, #FFFFFF 20%, var(--azure) 70%, var(--azure-bright) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
-  filter: drop-shadow(0 0 25px rgba(0, 127, 255, 0.35));
+  filter: drop-shadow(0 0 25px rgba(0, 127, 255, 0.4));
 }
 
 .landing-lede {
-  max-width: 720px;
+  max-width: 740px;
   font-size: clamp(1.1rem, 2vw, 1.45rem);
   font-weight: 400;
-  line-height: 1.55;
-  color: rgba(230, 243, 255, 0.88);
-  margin-bottom: 38px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+  line-height: 1.6;
+  color: rgba(230, 243, 255, 0.85);
+  margin-bottom: 40px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
   animation: fadeIn 1.2s ease-out;
 }
 
-/* Call To Action Buttons */
+/* Call To Action Buttons (Netflix Large Scale + Disney+ Rounded Capsule) */
 .landing-cta {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 18px;
   width: 100%;
-  max-width: 600px;
+  max-width: 640px;
   animation: fadeIn 1.3s ease-out;
 }
 
@@ -241,23 +270,25 @@ main {
   align-items: center;
   justify-content: center;
   font-family: inherit;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
   text-decoration: none;
-  padding: 16px 36px;
-  border-radius: 6px;
-  min-height: 58px;
+  padding: 18px 40px;
+  border-radius: 8px;
+  min-height: 60px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   text-align: center;
 }
 
-/* Primary CTA: Vivid Azure Gradient */
+/* Primary Button: Netflix Size & Arrow + Disney+ Deep Glow */
 .landing-btn.primary {
   background: linear-gradient(135deg, var(--azure) 0%, var(--dark-azure) 100%);
   color: var(--text-white);
   border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 22px var(--azure-glow);
+  box-shadow: 0 4px 25px var(--azure-glow);
   position: relative;
   overflow: hidden;
 }
@@ -267,44 +298,44 @@ main {
   font-size: 1.7rem;
   line-height: 0;
   margin-left: 10px;
-  transition: transform 0.2s ease;
+  transition: transform 0.25s ease;
   display: inline-block;
   vertical-align: middle;
 }
 
 .landing-btn.primary:hover {
   background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 127, 255, 0.7);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 36px rgba(0, 127, 255, 0.75);
 }
 
 .landing-btn.primary:hover::after {
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
-/* Secondary CTA: Frosted Dark Azure */
+/* Secondary Button: Disney+ Translucent Glassmorphism */
 .landing-btn.secondary {
-  background-color: rgba(0, 35, 70, 0.65);
+  background: rgba(0, 35, 70, 0.55);
   color: var(--text-white);
-  border: 1px solid rgba(0, 127, 255, 0.35);
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 127, 255, 0.4);
+  backdrop-filter: blur(12px);
 }
 
 .landing-btn.secondary:hover {
-  background-color: rgba(0, 59, 115, 0.85);
-  border-color: var(--azure);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 127, 255, 0.3);
+  background: rgba(0, 59, 115, 0.85);
+  border-color: var(--azure-bright);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 25px rgba(0, 127, 255, 0.35);
 }
 
 /* ---------------- Feature / Values Section ---------------- */
 .landing-section {
   position: relative;
-  max-width: 1280px;
+  max-width: 1320px;
   width: 100%;
   margin: 0 auto;
-  padding: 85px 32px 105px;
-  border-bottom: 8px solid var(--divider-color);
+  padding: 95px 36px 115px;
+  border-bottom: 1px solid rgba(0, 127, 255, 0.15);
 }
 
 .landing-section-head {
@@ -313,14 +344,14 @@ main {
   align-items: center;
   text-align: center;
   gap: 12px;
-  margin-bottom: 56px;
+  margin-bottom: 64px;
 }
 
 .landing-section-head span {
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   color: var(--azure-bright);
 }
 
@@ -329,31 +360,46 @@ main {
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-white);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
 }
 
-/* Values Grid: Dark Azure Glassmorphism Cards */
+/* ---------------- Disney+ Brand Hub / Netflix Feature Grid ---------------- */
 .landing-values {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 26px;
+  gap: 28px;
 }
 
+/* Disney+ Interactive 3D Tile with Netflix Narrative Depth */
 .landing-value {
-  background: linear-gradient(155deg, rgba(0, 35, 70, 0.7) 0%, rgba(3, 17, 34, 0.85) 100%);
-  border: 1px solid var(--card-border);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  padding: 38px 32px;
+  background: linear-gradient(155deg, rgba(7, 28, 54, 0.75) 0%, rgba(2, 12, 24, 0.9) 100%);
+  border: 2px solid rgba(0, 127, 255, 0.2);
+  backdrop-filter: blur(14px);
+  border-radius: 14px;
+  padding: 42px 34px;
   position: relative;
   overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              border-color 0.3s ease, 
-              box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
   display: flex;
   flex-direction: column;
 }
 
+/* Disney+ Top Sheen Beam */
 .landing-value::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(30, 160, 255, 0.15), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+/* Netflix Top Accent Line + Disney+ Border Bloom on Hover */
+.landing-value::after {
   content: "";
   position: absolute;
   top: 0;
@@ -366,12 +412,19 @@ main {
 }
 
 .landing-value:hover {
-  transform: translateY(-6px);
-  border-color: var(--azure);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 24px var(--azure-glow);
+  transform: translateY(-8px) scale(1.025);
+  border-color: var(--azure-bright);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(0, 127, 255, 0.4),
+    inset 0 0 15px rgba(0, 127, 255, 0.15);
 }
 
 .landing-value:hover::before {
+  left: 100%;
+}
+
+.landing-value:hover::after {
   opacity: 1;
 }
 
@@ -379,10 +432,11 @@ main {
   display: inline-block;
   font-size: 0.85rem;
   font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--azure-bright);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  text-shadow: 0 0 10px rgba(0, 127, 255, 0.5);
 }
 
 .landing-value b {
@@ -396,20 +450,22 @@ main {
 
 .landing-value p {
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-muted);
   flex-grow: 1;
 }
 
-/* ---------------- Footer ---------------- */
+/* ---------------- Footer (Disney+ / Netflix Minimalist Format) ---------------- */
 .landing-footer {
-  max-width: 1280px;
+  max-width: 1320px;
   width: 100%;
   margin: 0 auto;
-  padding: 60px 32px 80px;
+  padding: 60px 36px 80px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
   color: var(--text-dim);
   font-size: 0.875rem;
 }
@@ -427,7 +483,7 @@ main {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -438,7 +494,7 @@ main {
 /* ---------------- Responsive Breakpoints ---------------- */
 @media (max-width: 860px) {
   .landing-top {
-    padding: 20px 24px;
+    padding: 16px 24px;
   }
 
   .landing-logo {
@@ -447,13 +503,13 @@ main {
 
   .landing-hero {
     min-height: 75vh;
-    padding: 120px 20px 60px;
+    padding: 110px 20px 60px;
   }
 
   .landing-btn {
     width: 100%;
-    font-size: 1.1rem;
-    padding: 14px 24px;
+    font-size: 1rem;
+    padding: 16px 24px;
   }
 
   .landing-cta {
@@ -462,7 +518,7 @@ main {
   }
 
   .landing-section {
-    padding: 60px 20px 70px;
+    padding: 65px 20px 75px;
   }
 
   .landing-values {
@@ -472,7 +528,7 @@ main {
 
 @media (max-width: 480px) {
   .landing-top {
-    padding: 16px;
+    padding: 14px 16px;
   }
 
   .landing-nav {
@@ -480,7 +536,8 @@ main {
   }
 
   .landing-nav a {
-    font-size: 0.85rem;
-    padding: 6px 12px;
+    font-size: 0.78rem;
+    padding: 8px 14px;
+    letter-spacing: 1px;
   }
 }
