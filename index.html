@@ -1,30 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#000000">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Continuum Academy - the executive learning cockpit for entrepreneurs, marketers and leaders.">
   <title>Continuum Academy - Executive Learning Cockpit</title>
 
-  <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
-  <link rel="shortcut icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="assets/images/icon-circle-192.png">
-
-  <!-- Shared tokens, reset and poster artwork, then the landing layout -->
-  <link rel="stylesheet" href="assets/css/base/foundation.css?v=21">
-  <link rel="stylesheet" href="assets/css/pages/landing.css">
 </head>
 
 <body class="landing-body">
   <div class="landing-shell">
 
-    <!-- Brand bar -->
+    <!-- Header -->
     <header class="landing-top">
       <a href="index.html" aria-label="Continuum Academy home">
         <img src="assets/images/logo.png" alt="Continuum Academy Inc." class="landing-logo">
@@ -35,8 +26,9 @@
       </nav>
     </header>
 
+    <!-- Main Content -->
     <main>
-      <!-- Hero -->
+      <!-- Hero Section -->
       <section class="landing-hero">
         <span class="landing-eyebrow">The executive learning cockpit</span>
         <h1 class="landing-title">Learn how the best <em>lead, build and grow</em>.</h1>
@@ -46,23 +38,12 @@
         </p>
 
         <div class="landing-cta">
-          <a class="landing-btn primary" id="landingPrimaryCta" href="login/">Enter the Academy</a>
+          <a class="landing-btn primary" href="login/">Enter the Academy</a>
           <a class="landing-btn secondary" href="signup/">Create a free account</a>
         </div>
-
-        <p class="landing-session" id="landingSession" hidden></p>
       </section>
 
-      <!-- Featured preview -->
-      <section class="landing-section" aria-labelledby="landingPreviewTitle">
-        <div class="landing-section-head">
-          <h2 id="landingPreviewTitle">Featured masterclasses</h2>
-          <span>Preview</span>
-        </div>
-        <div class="cards-carousel" id="landingPreview"></div>
-      </section>
-
-      <!-- Why the Academy -->
+      <!-- Values / Features -->
       <section class="landing-section" aria-labelledby="landingValuesTitle">
         <div class="landing-section-head">
           <h2 id="landingValuesTitle">Built for busy operators</h2>
@@ -86,28 +67,15 @@
           </article>
         </div>
       </section>
-
-      <!-- Disciplines -->
-      <section class="landing-section" aria-labelledby="landingDisciplinesTitle">
-        <div class="landing-section-head">
-          <h2 id="landingDisciplinesTitle">Explore the disciplines</h2>
-          <span>Full catalogue</span>
-        </div>
-        <div class="landing-disciplines" id="landingDisciplines"></div>
-      </section>
     </main>
 
+    <!-- Footer -->
     <footer class="landing-footer">
       <span>&copy; Continuum Academy Inc. Powered by Mansmith and Fielders, Inc.</span>
       <span><a href="login/">Sign in</a> &middot; <a href="signup/">Start free</a></span>
     </footer>
 
   </div>
-
-  <!-- Page module: static landing preview built from the local catalogue -->
-  <script type="module" src="assets/js/pages/landing.js"></script>
-  <!-- PWA Service Worker Registration -->
-  <script type="module" src="assets/js/pwa.js"></script>
-
 </body>
+
 </html>
