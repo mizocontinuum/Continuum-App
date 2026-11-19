@@ -440,7 +440,6 @@ main {
   line-height: 0.75;
   color: #03080E;
   -webkit-text-stroke: 4px #595959;
-  text-stroke: 4px #595959;
   z-index: 1;
   pointer-events: none;
   user-select: none;
@@ -497,7 +496,6 @@ main {
 .trending-card:hover .trending-rank,
 .trending-card:focus-visible .trending-rank {
   -webkit-text-stroke-color: var(--azure-bright);
-  text-stroke-color: var(--azure-bright);
   filter: drop-shadow(0 0 24px rgba(0, 127, 255, 0.85));
 }
 
