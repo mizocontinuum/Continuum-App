@@ -233,11 +233,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: calc(var(--safe-top) + 14px) var(--content-inset) 14px;
-  /* restyle — transparent at the top of the page */
-  background: transparent;
-  backdrop-filter: blur(0px) saturate(140%);
-  -webkit-backdrop-filter: blur(0px) saturate(140%);
-  border-bottom: 1px solid transparent;
+  background: var(--topbar-bg);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -245,12 +245,11 @@ body {
     padding 0.25s ease;
 }
 
-/* Scrolled state: fades in the frosted glass plate + cyan hairline */
-/* restyle */
+/* Scrolled state: adds deeper frosted glass plate + subtle accent line */
 .top-bar.scrolled {
   background: var(--topbar-bg-scrolled);
-  backdrop-filter: blur(22px) saturate(180%);
-  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-bottom: 1px solid var(--accent-line);
   box-shadow: var(--shadow-md), 0 1px 0 var(--accent-line);
 }
