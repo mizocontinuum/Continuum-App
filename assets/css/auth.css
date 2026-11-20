@@ -1,0 +1,461 @@
+/* ==========================================================================
+   Continuum Academy — 2026 Cinematic 3D Auth & Signup Stylesheet
+   Ultra-Premium Dark Azure & Azure  |  Netflix × Disney+ Hybrid Design
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Core Brand Azure Palette (Matches Landing Page) */
+  --azure: #007FFF;
+  --azure-bright: #1EA0FF;
+  --azure-vivid: #33B5FF;
+  --azure-glow: rgba(0, 127, 255, 0.45);
+  --dark-azure: #003B73;
+  --bg-black: #03080E;
+  --bg-card: rgba(7, 18, 37, 0.75);
+  --bg-card-border: rgba(0, 127, 255, 0.22);
+  --text-white: #FFFFFF;
+  --text-muted: rgba(230, 243, 255, 0.72);
+  --text-dim: #6c8ba8;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Reset ──────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100vh;
+  font-family: var(--font-display);
+  background-color: var(--bg-black);
+  color: var(--text-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Atmospheric Deep Space Canvas (Matches Landing Page) ───────────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 100% 65% at 50% -10%, rgba(0, 127, 255, 0.25) 0%, transparent 60%),
+    radial-gradient(circle 600px at 20% 50%, rgba(0, 59, 115, 0.22) 0%, transparent 100%),
+    radial-gradient(circle 500px at 80% 60%, rgba(30, 160, 255, 0.12) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle dark noise/grain overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+/* ── Spline 3D Stage in Background ───────────────────────────────────────── */
+.auth-spline-stage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 620px;
+  height: 620px;
+  max-width: 95vw;
+  max-height: 95vw;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.65;
+}
+
+#authSplineCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 50px rgba(0, 127, 255, 0.4));
+}
+
+/* ── Main Container ─────────────────────────────────────────────────────── */
+.login-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36px 24px 28px;
+  perspective: 1200px;
+}
+
+/* ── Brand Header Bar ───────────────────────────────────────────────────── */
+.brand-header {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(7, 18, 37, 0.4);
+  border: 1px solid rgba(0, 127, 255, 0.18);
+  border-radius: 50px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  margin-bottom: 30px;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 127, 255, 0.3));
+}
+
+.brand-divider {
+  display: none;
+}
+
+.powered-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.powered-text {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+.mansmith-logo-img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.85;
+}
+
+/* ── Cinematic 3D Glass Card (Holographic Executive Cockpit) ────────────── */
+.login-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--bg-card-border);
+  border-radius: 24px;
+  padding: 42px 38px;
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.85),
+    0 0 35px rgba(0, 127, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 0 20px rgba(0, 59, 115, 0.2);
+  transform-style: preserve-3d;
+  position: relative;
+  margin: auto 0;
+  overflow: hidden;
+}
+
+/* Shimmer sweep on card header */
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--azure-bright), #FFFFFF, var(--azure-bright), transparent);
+  opacity: 0.8;
+}
+
+.headline {
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--text-white);
+  margin-bottom: 8px;
+  text-align: center;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+}
+
+.subheadline {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 28px;
+  line-height: 1.45;
+}
+
+/* ── Form Controls & Floating Glowing Inputs ────────────────────────────── */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.form-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--azure-bright);
+  text-shadow: 0 0 10px rgba(0, 127, 255, 0.35);
+}
+
+.input-box {
+  width: 100%;
+  background: rgba(3, 8, 14, 0.7);
+  border: 1px solid rgba(0, 127, 255, 0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text-white);
+  outline: none;
+  transition: all 0.3s var(--ease-out-expo);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.input-box::placeholder {
+  color: rgba(108, 139, 168, 0.65);
+}
+
+.input-box:focus {
+  border-color: var(--azure-bright);
+  background: rgba(7, 18, 37, 0.9);
+  box-shadow:
+    0 0 0 3px rgba(0, 127, 255, 0.25),
+    0 0 20px rgba(0, 127, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.field-hint {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* ── Form Error & Notifications ─────────────────────────────────────────── */
+.form-error {
+  font-size: 0.82rem;
+  color: #FF5A5A;
+  background: rgba(255, 90, 90, 0.1);
+  border: 1px solid rgba(255, 90, 90, 0.3);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: none;
+}
+
+.form-error:not(:empty) {
+  display: block;
+}
+
+/* ── High-Impact CTA Button (Matches Landing Primary Button) ────────────── */
+.btn-submit {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 28px;
+  margin-top: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow:
+    0 8px 28px rgba(0, 127, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: all 0.35s var(--ease-out-expo);
+  overflow: hidden;
+}
+
+.btn-submit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 36px rgba(0, 127, 255, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btn-submit:hover::before {
+  left: 100%;
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+.arrow-icon {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-submit:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* ── Auth Alternates & Notes ────────────────────────────────────────────── */
+.auth-note {
+  margin-top: 18px;
+  padding: 12px 16px;
+  background: rgba(0, 127, 255, 0.12);
+  border: 1px solid rgba(0, 127, 255, 0.3);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.auth-alt {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.auth-alt a {
+  color: var(--azure-bright);
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.auth-alt a:hover {
+  color: #FFFFFF;
+  text-shadow: 0 0 12px rgba(0, 127, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Toast Notification ─────────────────────────────────────────────────── */
+.toast-msg {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  background: rgba(7, 18, 37, 0.95);
+  border: 1px solid var(--azure-bright);
+  box-shadow: 0 8px 32px rgba(0, 127, 255, 0.4);
+  color: var(--text-white);
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: none;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.login-footer {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 36px;
+}
+
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-link {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--azure-bright);
+}
+
+.dot {
+  color: rgba(108, 139, 168, 0.4);
+  font-size: 0.75rem;
+}
+
+/* ── Responsive Mobile Refinement ───────────────────────────────────────── */
+@media (max-width: 540px) {
+  .login-container {
+    padding: 20px 16px;
+  }
+
+  .brand-header {
+    padding: 10px 18px;
+    border-radius: 30px;
+  }
+
+  .brand-logo-img {
+    height: 30px;
+  }
+
+  .mansmith-logo-img {
+    height: 20px;
+  }
+
+  .login-card {
+    padding: 30px 22px;
+    border-radius: 20px;
+  }
+
+  .headline {
+    font-size: 1.5rem;
+  }
+}
