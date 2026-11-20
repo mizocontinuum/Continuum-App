@@ -1469,3 +1469,302 @@ main {
       transition-duration: 0.01ms !important;
     }
   }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DISCIPLINES SECTION — "Enter The Academy" Showcase Grid
+   ══════════════════════════════════════════════════════════════════════════ */
+.landing-disciplines {
+  position: relative;
+  width: 100%;
+  padding: 100px 0 120px;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 20%, rgba(0, 127, 255, 0.12) 0%, transparent 70%),
+    linear-gradient(180deg, var(--bg-black) 0%, rgba(3, 15, 30, 0.7) 50%, var(--bg-black) 100%);
+  border-bottom: none;
+  overflow: hidden;
+  scroll-margin-top: 70px;
+}
+
+.disciplines-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+  position: relative;
+  z-index: 2;
+}
+
+.disciplines-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 40px;
+}
+
+.disciplines-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--azure-bright);
+  margin-bottom: 14px;
+  text-shadow: 0 0 14px var(--azure-glow);
+}
+
+.disciplines-title {
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-weight: 900;
+  color: var(--text-white);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
+}
+
+.disciplines-subtitle {
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  color: rgba(230, 243, 255, 0.78);
+  line-height: 1.6;
+}
+
+/* ── Discipline Category Filter Bar ────────────────────────────────────── */
+.disciplines-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 48px;
+}
+
+.discipline-filter-pill {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(230, 243, 255, 0.8);
+  background: rgba(4, 18, 38, 0.65);
+  border: 1px solid rgba(0, 127, 255, 0.22);
+  padding: 9px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.discipline-filter-pill:hover {
+  color: var(--text-white);
+  background: rgba(0, 127, 255, 0.18);
+  border-color: var(--azure-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(0, 127, 255, 0.35);
+}
+
+.discipline-filter-pill.active {
+  color: var(--text-white);
+  background: linear-gradient(135deg, var(--azure) 0%, var(--dark-azure) 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px var(--azure-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* ── Disciplines Video Grid ────────────────────────────────────────────── */
+.disciplines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 28px;
+  margin-bottom: 60px;
+}
+
+.discipline-video-card {
+  background: linear-gradient(175deg, rgba(8, 25, 48, 0.75) 0%, rgba(3, 12, 24, 0.9) 100%);
+  border: 1px solid rgba(0, 127, 255, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  transition: all 0.4s var(--ease-out-expo);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.discipline-video-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--azure-bright);
+  box-shadow:
+    0 24px 50px rgba(0, 0, 0, 0.85),
+    0 0 35px rgba(0, 127, 255, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Thumbnail Area */
+.discipline-card-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--bg-black);
+  cursor: pointer;
+  outline: none;
+}
+
+.discipline-card-thumb .thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.discipline-video-card:hover .discipline-card-thumb .thumb-img {
+  transform: scale(1.06);
+}
+
+/* Thumbnail Hover Overlay & Play Button */
+.thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.75) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.35s ease;
+}
+
+.play-button-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(0, 127, 255, 0.9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(0, 127, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: scale(0.9);
+  transition: all 0.35s var(--ease-spring);
+}
+
+.play-button-icon svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 3px;
+}
+
+.discipline-video-card:hover .play-button-icon {
+  transform: scale(1.12);
+  background: var(--azure-bright);
+  box-shadow: 0 0 35px rgba(30, 160, 255, 0.9);
+}
+
+.video-duration-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(3, 8, 14, 0.85);
+  border: 1px solid rgba(0, 127, 255, 0.3);
+  backdrop-filter: blur(8px);
+  color: rgba(230, 243, 255, 0.9);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Card Information Body */
+.discipline-card-info {
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.discipline-badge {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.discipline-badge.entrepreneurship {
+  background: rgba(0, 127, 255, 0.2);
+  color: var(--azure-bright);
+  border: 1px solid rgba(0, 127, 255, 0.35);
+}
+
+.discipline-badge.marketing {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.discipline-badge.leadership {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.discipline-badge.strategy {
+  background: rgba(168, 85, 247, 0.18);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+.discipline-badge.finance {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.discipline-badge.innovation {
+  background: rgba(236, 72, 153, 0.18);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+}
+
+.discipline-video-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-white);
+  line-height: 1.35;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.discipline-instructor {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-top: auto;
+}
+
+/* Section Bottom CTA */
+.disciplines-footer-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 127, 255, 0.15);
+}
+
+.cta-notice {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(230, 243, 255, 0.8);
+}
+
+@media (max-width: 860px) {
+  .disciplines-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .disciplines-container {
+    padding: 0 20px;
+  }
+}

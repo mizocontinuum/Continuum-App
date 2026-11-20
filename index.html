@@ -45,7 +45,7 @@
         </p>
 
         <div class="landing-cta">
-          <a class="landing-btn primary" href="explore/">Enter the Academy</a>
+          <a class="landing-btn primary" href="#disciplinesSection" id="enterAcademyBtn">Enter the Academy</a>
           <a class="landing-btn secondary" href="signup/">Create a free account</a>
         </div>
       </section>
@@ -126,6 +126,183 @@
 
             <!-- Right Arrow Button -->
             <button class="trending-nav-btn next" aria-label="Scroll right" id="trendingNextBtn">&#8250;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- All Disciplines Showcase Section (Anchor target for 'Enter the Academy') -->
+      <section class="landing-disciplines" id="disciplinesSection" aria-labelledby="disciplinesTitle">
+        <div class="disciplines-container">
+          <div class="disciplines-header">
+            <span class="disciplines-eyebrow">Explore Continuum Curriculum</span>
+            <h2 id="disciplinesTitle" class="disciplines-title">Master Executive Disciplines</h2>
+            <p class="disciplines-subtitle">
+              Browse world-class masterclasses across all core disciplines. Click any discipline track to explore video masterclasses and syllabus previews.
+            </p>
+          </div>
+
+          <!-- Discipline Category Pill Filter Bar -->
+          <div class="disciplines-filter-bar" role="tablist" aria-label="Discipline filter">
+            <button class="discipline-filter-pill active" data-filter="all" type="button">All Disciplines</button>
+            <button class="discipline-filter-pill" data-filter="entrepreneurship" type="button">Entrepreneurship</button>
+            <button class="discipline-filter-pill" data-filter="marketing" type="button">Marketing & Sales</button>
+            <button class="discipline-filter-pill" data-filter="leadership" type="button">Leadership</button>
+            <button class="discipline-filter-pill" data-filter="strategy" type="button">Strategy & Scale</button>
+            <button class="discipline-filter-pill" data-filter="finance" type="button">Corporate Finance</button>
+            <button class="discipline-filter-pill" data-filter="innovation" type="button">Innovation & Tech</button>
+          </div>
+
+          <!-- Disciplines Video Grid (Video Cards with Titles & Thumbnails) -->
+          <div class="disciplines-grid" id="disciplinesGrid">
+            <!-- Card 1: Entrepreneurship -->
+            <div class="discipline-video-card" data-category="entrepreneurship">
+              <div class="discipline-card-thumb" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="ENTREPRENEURIAL VENTURING: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Entrepreneurship &bull; Strategy"
+                data-desc="Frameworks for building venture resilience, rapid ideation-to-market testing, and scaling early operations."
+                data-art="assets/images/card-1.png">
+                <img src="assets/images/card-1.png" alt="Entrepreneurial Venturing" class="thumb-img">
+                <div class="thumb-overlay">
+                  <div class="play-button-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <span class="video-duration-badge">8 Lessons &bull; 48m</span>
+                </div>
+              </div>
+              <div class="discipline-card-info">
+                <div class="discipline-badge entrepreneurship">Entrepreneurship</div>
+                <h3 class="discipline-video-title">Entrepreneurial Venturing: Zero to One</h3>
+                <p class="discipline-instructor">Josiah Go &bull; Founder & Chairman</p>
+              </div>
+            </div>
+
+            <!-- Card 2: Marketing -->
+            <div class="discipline-video-card" data-category="marketing">
+              <div class="discipline-card-thumb" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="THE OFFERING MODEL: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Marketing &bull; Innovation"
+                data-desc="Learn the definitive framework for creating high-value market offerings, capturing unmet customer demand and sustaining competitive advantage."
+                data-art="assets/images/card-2.png">
+                <img src="assets/images/card-2.png" alt="The Offering Model" class="thumb-img">
+                <div class="thumb-overlay">
+                  <div class="play-button-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <span class="video-duration-badge">12 Lessons &bull; 1h 24m</span>
+                </div>
+              </div>
+              <div class="discipline-card-info">
+                <div class="discipline-badge marketing">Marketing & Sales</div>
+                <h3 class="discipline-video-title">The Offering Model: High-Value Propositions</h3>
+                <p class="discipline-instructor">Josiah Go &bull; Marketing Strategist</p>
+              </div>
+            </div>
+
+            <!-- Card 3: Leadership -->
+            <div class="discipline-video-card" data-category="leadership">
+              <div class="discipline-card-thumb" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="OPERATIONAL MASTERY: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Executive Leadership"
+                data-desc="Frameworks for strategic discipline, board-level decision making, and operational alignment across high-growth organizations."
+                data-art="assets/images/card-3.png">
+                <img src="assets/images/card-3.png" alt="Operational Mastery" class="thumb-img">
+                <div class="thumb-overlay">
+                  <div class="play-button-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <span class="video-duration-badge">10 Lessons &bull; 1h 10m</span>
+                </div>
+              </div>
+              <div class="discipline-card-info">
+                <div class="discipline-badge leadership">Leadership</div>
+                <h3 class="discipline-video-title">Executive Command & Operational Alignment</h3>
+                <p class="discipline-instructor">Josiah Go &bull; Executive Coach</p>
+              </div>
+            </div>
+
+            <!-- Card 4: Strategy & Scale -->
+            <div class="discipline-video-card" data-category="strategy">
+              <div class="discipline-card-thumb" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="MARKET ENTRY STRATEGY: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Strategy &bull; Growth"
+                data-desc="Master systematic market entry, barrier breakdown, and enterprise positioning designed for founders and corporate operators."
+                data-art="assets/images/card-4.png">
+                <img src="assets/images/card-4.png" alt="Market Entry Strategy" class="thumb-img">
+                <div class="thumb-overlay">
+                  <div class="play-button-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <span class="video-duration-badge">9 Lessons &bull; 56m</span>
+                </div>
+              </div>
+              <div class="discipline-card-info">
+                <div class="discipline-badge strategy">Strategy & Scale</div>
+                <h3 class="discipline-video-title">Market Entry & Competitive Moats</h3>
+                <p class="discipline-instructor">Josiah Go &bull; Enterprise Strategist</p>
+              </div>
+            </div>
+
+            <!-- Card 5: Corporate Finance -->
+            <div class="discipline-video-card" data-category="finance">
+              <div class="discipline-card-thumb" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="VALUE CREATION & SCALING: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Corporate Finance &bull; Valuation"
+                data-desc="Explore end-to-end business model design and capital allocation from the executive learning cockpit of Continuum Academy."
+                data-art="assets/images/card-5.png">
+                <img src="assets/images/card-5.png" alt="Corporate Finance" class="thumb-img">
+                <div class="thumb-overlay">
+                  <div class="play-button-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <span class="video-duration-badge">7 Lessons &bull; 45m</span>
+                </div>
+              </div>
+              <div class="discipline-card-info">
+                <div class="discipline-badge finance">Corporate Finance</div>
+                <h3 class="discipline-video-title">Capital Allocation & Enterprise Valuation</h3>
+                <p class="discipline-instructor">Josiah Go &bull; Strategic Finance Advisor</p>
+              </div>
+            </div>
+
+            <!-- Card 6: Innovation & Tech -->
+            <div class="discipline-video-card" data-category="innovation">
+              <div class="discipline-card-thumb" tabindex="0" role="button" aria-haspopup="dialog"
+                data-title="DISRUPTIVE POSITIONING: JOSIAH GO" data-year="2026" data-rating="Masterclass"
+                data-type="Executive Class" data-genre="Innovation &bull; Technology"
+                data-desc="How top enterprise brands carve non-contested market space and out-maneuver incumbents with agile value propositions."
+                data-art="assets/images/card-2.png">
+                <img src="assets/images/card-2.png" alt="Innovation & Tech" class="thumb-img">
+                <div class="thumb-overlay">
+                  <div class="play-button-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <span class="video-duration-badge">11 Lessons &bull; 1h 15m</span>
+                </div>
+              </div>
+              <div class="discipline-card-info">
+                <div class="discipline-badge innovation">Innovation & Tech</div>
+                <h3 class="discipline-video-title">Disruptive Positioning & Digital Edge</h3>
+                <p class="discipline-instructor">Josiah Go &bull; Innovation Architect</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom CTA inside Disciplines Section -->
+          <div class="disciplines-footer-cta">
+            <span class="cta-notice">Ready to start streaming full masterclasses?</span>
+            <a href="signup/" class="landing-btn primary">Start Free Learning</a>
           </div>
         </div>
       </section>
@@ -279,7 +456,9 @@
         document.body.style.overflow = '';
       }
 
-      cards.forEach(card => {
+      // Hook all cards that can trigger modal (Trending + Disciplines cards)
+      const allModalCards = document.querySelectorAll('.trending-card, .discipline-card-thumb');
+      allModalCards.forEach(card => {
         card.addEventListener('click', () => openModal(card));
         card.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -288,6 +467,38 @@
           }
         });
       });
+
+      // Filter pills for Disciplines section
+      const filterPills = document.querySelectorAll('.discipline-filter-pill');
+      const videoCards = document.querySelectorAll('.discipline-video-card');
+
+      filterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          filterPills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          const filter = pill.getAttribute('data-filter');
+
+          videoCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Smooth scroll for 'Enter the Academy'
+      const enterAcademyBtn = document.getElementById('enterAcademyBtn');
+      if (enterAcademyBtn) {
+        enterAcademyBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById('disciplinesSection');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
 
       closeBtn.addEventListener('click', closeModal);
 
