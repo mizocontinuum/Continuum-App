@@ -2164,6 +2164,8 @@ document.addEventListener('DOMContentLoaded', function () {
         heroEyebrow: (document.getElementById('setHeroEyebrow') || {}).value,
         heroTitle: (document.getElementById('setHeroTitle') || {}).value,
         heroLede: (document.getElementById('setHeroLede') || {}).value,
+        heroPrimaryCta: (document.getElementById('setHeroPrimaryCta') || {}).value,
+        heroSecondaryCta: (document.getElementById('setHeroSecondaryCta') || {}).value,
         discEyebrow: (document.getElementById('setDiscEyebrow') || {}).value,
         discTitle: (document.getElementById('setDiscTitle') || {}).value,
         discSubtitle: (document.getElementById('setDiscSubtitle') || {}).value,
@@ -2221,6 +2223,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (d.heroEyebrow && document.getElementById('setHeroEyebrow')) document.getElementById('setHeroEyebrow').value = d.heroEyebrow;
       if (d.heroTitle && document.getElementById('setHeroTitle')) document.getElementById('setHeroTitle').value = d.heroTitle;
       if (d.heroLede && document.getElementById('setHeroLede')) document.getElementById('setHeroLede').value = d.heroLede;
+      if (d.heroPrimaryCta && document.getElementById('setHeroPrimaryCta')) document.getElementById('setHeroPrimaryCta').value = d.heroPrimaryCta;
+      if (d.heroSecondaryCta && document.getElementById('setHeroSecondaryCta')) document.getElementById('setHeroSecondaryCta').value = d.heroSecondaryCta;
       if (d.discEyebrow && document.getElementById('setDiscEyebrow')) document.getElementById('setDiscEyebrow').value = d.discEyebrow;
       if (d.discTitle && document.getElementById('setDiscTitle')) document.getElementById('setDiscTitle').value = d.discTitle;
       if (d.discSubtitle && document.getElementById('setDiscSubtitle')) document.getElementById('setDiscSubtitle').value = d.discSubtitle;

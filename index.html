@@ -526,6 +526,12 @@
           const ledeEl = document.querySelector('.landing-lede');
           if (ledeEl && s.heroLede) ledeEl.textContent = s.heroLede;
 
+          const primaryCtaEl = document.querySelector('#enterAcademyBtn');
+          if (primaryCtaEl && s.heroPrimaryCta) primaryCtaEl.textContent = s.heroPrimaryCta;
+
+          const secondaryCtaEl = document.querySelector('.landing-cta .landing-btn.secondary');
+          if (secondaryCtaEl && s.heroSecondaryCta) secondaryCtaEl.textContent = s.heroSecondaryCta;
+
           const discEyebrowEl = document.querySelector('.disciplines-eyebrow');
           if (discEyebrowEl && s.discEyebrow) discEyebrowEl.textContent = s.discEyebrow;
 

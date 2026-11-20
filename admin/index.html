@@ -1535,15 +1535,40 @@
           <!-- TAB 1: General & Branding Settings -->
           <div class="settings-tab-pane active" id="setGeneral">
             <div class="settings-card">
-              <h2 class="settings-section-title">Landing Page Content & Brand Customizer</h2>
-              <p class="settings-section-desc">Direktang i-type at i-edit ang mga texts, titles, at descriptions ng buong Landing Page nang walang binabagong code.</p>
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+                <div>
+                  <h2 class="settings-section-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--azure-bright);">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span>Landing Page Visual Content & Brand Customizer</span>
+                  </h2>
+                  <p class="settings-section-desc" style="margin-bottom: 0;">Live content studio: i-customize ang teksto, headlines, buttons, at live preview ng Academy Landing Page.</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <a href="../" target="_blank" class="compact-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    <span>Open Live Landing Page</span>
+                  </a>
+                </div>
+              </div>
 
               <form id="formSetGeneral" onsubmit="event.preventDefault();">
                 <!-- 1. Platform Identity & Header -->
-                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
-                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-                    1. Brand Identity & Header
-                  </h3>
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">01</span>
+                    <div>
+                      <h3 class="settings-studio-title">Brand Identity & Navigation</h3>
+                      <p class="settings-studio-sub">Pangalan ng platform, contact channels, at header navigation</p>
+                    </div>
+                  </div>
                   <div class="form-row">
                     <div class="form-group">
                       <label for="setSiteName">Platform Name</label>
@@ -1557,12 +1582,16 @@
                 </div>
 
                 <!-- 2. Hero Section Content -->
-                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
-                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-                    2. Hero Section (Main Banner)
-                  </h3>
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">02</span>
+                    <div>
+                      <h3 class="settings-studio-title">Hero Section (Main Banner)</h3>
+                      <p class="settings-studio-sub">Ang unang nakikita ng executive visitors pagkabukas ng website</p>
+                    </div>
+                  </div>
                   <div class="form-group">
-                    <label for="setHeroEyebrow">Hero Pill / Eyebrow Text</label>
+                    <label for="setHeroEyebrow">Hero Badge / Eyebrow Text</label>
                     <input type="text" id="setHeroEyebrow" class="form-input" value="The Performance Learning Academy">
                   </div>
                   <div class="form-group">
@@ -1570,37 +1599,55 @@
                     <input type="text" id="setHeroTitle" class="form-input" value="Learn how the best lead, build and grow.">
                   </div>
                   <div class="form-group">
-                    <label for="setHeroLede">Hero Subheadline / Description</label>
+                    <label for="setHeroLede">Hero Subheadline / Executive Description</label>
                     <textarea id="setHeroLede" class="form-textarea" rows="3">Stream masterclasses from founders and operators who have done it before. One discipline at a time, built for the decisions you face this quarter.</textarea>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setHeroPrimaryCta">Primary Button Text</label>
+                      <input type="text" id="setHeroPrimaryCta" class="form-input" value="Enter the Academy">
+                    </div>
+                    <div class="form-group">
+                      <label for="setHeroSecondaryCta">Secondary Button Text</label>
+                      <input type="text" id="setHeroSecondaryCta" class="form-input" value="Create a free account">
+                    </div>
                   </div>
                 </div>
 
                 <!-- 3. Disciplines Showcase Section -->
-                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
-                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-                    3. Disciplines Showcase Section
-                  </h3>
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">03</span>
+                    <div>
+                      <h3 class="settings-studio-title">Disciplines Curriculum Showcase</h3>
+                      <p class="settings-studio-sub">Interactive discipline filter pills at course catalog grid</p>
+                    </div>
+                  </div>
                   <div class="form-row">
                     <div class="form-group">
-                      <label for="setDiscEyebrow">Disciplines Eyebrow</label>
+                      <label for="setDiscEyebrow">Section Eyebrow</label>
                       <input type="text" id="setDiscEyebrow" class="form-input" value="Explore Continuum Curriculum">
                     </div>
                     <div class="form-group">
-                      <label for="setDiscTitle">Disciplines Section Title</label>
+                      <label for="setDiscTitle">Section Title</label>
                       <input type="text" id="setDiscTitle" class="form-input" value="Master Executive Disciplines">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="setDiscSubtitle">Disciplines Subtitle / Description</label>
+                    <label for="setDiscSubtitle">Curriculum Description</label>
                     <textarea id="setDiscSubtitle" class="form-textarea" rows="2">Browse world-class masterclasses across all core disciplines. Click any discipline track to explore video masterclasses and syllabus previews.</textarea>
                   </div>
                 </div>
 
                 <!-- 4. TV Streaming Showcase Section -->
-                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
-                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-                    4. Streaming Spotlight Section
-                  </h3>
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">04</span>
+                    <div>
+                      <h3 class="settings-studio-title">Streaming Spotlight & TV Showcase</h3>
+                      <p class="settings-studio-sub">Device ecosystem compatibility (Smart TVs, Mobile, Apple TV)</p>
+                    </div>
+                  </div>
                   <div class="form-row">
                     <div class="form-group">
                       <label for="setSpotEyebrow">Spotlight Eyebrow</label>
@@ -1618,15 +1665,23 @@
                 </div>
 
                 <!-- 5. Footer Copyright & Attribution -->
-                <div>
-                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-                    5. Footer Attribution & Copyright
-                  </h3>
+                <div class="settings-studio-block" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">05</span>
+                    <div>
+                      <h3 class="settings-studio-title">Footer Attribution & Legal</h3>
+                      <p class="settings-studio-sub">Copyright notice at corporate governance branding</p>
+                    </div>
+                  </div>
                   <div class="form-group">
                     <label for="setFooterCopy">Footer Copyright Notice</label>
                     <input type="text" id="setFooterCopy" class="form-input" value="© Continuum Academy Inc. Powered by Mansmith and Fielders, Inc.">
                   </div>
                 </div>
+
+              </form>
+            </div>
+          </div>
 
               </form>
             </div>
