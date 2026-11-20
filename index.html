@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description"
     content="Continuum Academy - the executive learning cockpit for entrepreneurs, marketers and leaders.">
-  <title>Continuum Academy - Executive Learning Cockpit</title>
+  <title>Continuum Academy</title>
 
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
@@ -34,7 +34,9 @@
     <main>
       <!-- Hero Section -->
       <section class="landing-hero">
-        <span class="landing-eyebrow">The executive learning cockpit</span>
+        <div class="hero-bg-layer" aria-hidden="true"></div>
+        <div class="hero-grid-floor" aria-hidden="true"></div>
+        <span class="landing-eyebrow">The Performance Learning Academy</span>
         <h1 class="landing-title">Learn how the best <em>lead, build and grow</em>.</h1>
         <p class="landing-lede">
           Stream masterclasses from founders and operators who have done it before.
@@ -258,7 +260,7 @@
         modalGenre.innerHTML = card.getAttribute('data-genre') || 'Dramas';
         modalDesc.textContent = card.getAttribute('data-desc') || '';
         const targetArt = card.getAttribute('data-art') || card.getAttribute('data-badge') || 'assets/images/card-1.png';
-        modalArtImg.onerror = function() {
+        modalArtImg.onerror = function () {
           this.onerror = null;
           this.src = 'assets/images/card-1.png';
         };
