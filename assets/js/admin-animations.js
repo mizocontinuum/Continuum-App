@@ -2134,15 +2134,10 @@ function initAdminPolyhedron(canvas) {
 
   var angleX = 0.2;
   var angleY = 0.4;
-  var targetAngleX = 0.2;
-  var targetAngleY = 0.4;
-
-  window.addEventListener('mousemove', function(e) {
-    var nx = (e.clientX / window.innerWidth) - 0.5;
-    var ny = (e.clientY / window.innerHeight) - 0.5;
-    targetAngleY = nx * 0.4 + 0.4;
-    targetAngleX = ny * 0.4 + 0.2;
-  });
+  var angleZ = 0.1;
+  var autoSpeedY = 0.008;
+  var autoSpeedX = 0.005;
+  var autoSpeedZ = 0.003;
 
   function rotateY(p, a) {
     var cos = Math.cos(a), sin = Math.sin(a);
@@ -2152,13 +2147,19 @@ function initAdminPolyhedron(canvas) {
     var cos = Math.cos(a), sin = Math.sin(a);
     return [p[0], p[1] * cos - p[2] * sin, p[1] * sin + p[2] * cos];
   }
+  function rotateZ(p, a) {
+    var cos = Math.cos(a), sin = Math.sin(a);
+    return [p[0] * cos - p[1] * sin, p[0] * sin + p[1] * cos, p[2]];
+  }
 
   function render() {
     requestAnimationFrame(render);
     ctx.clearRect(0, 0, width, height);
 
-    angleX += (targetAngleX - angleX) * 0.05 + 0.002;
-    angleY += (targetAngleY - angleY) * 0.05 + 0.004;
+    // Continuous 3D Auto-Rotation
+    angleY += autoSpeedY;
+    angleX += autoSpeedX;
+    angleZ += autoSpeedZ;
 
     var cx = width / 2;
     var cy = height / 2;
@@ -2166,12 +2167,14 @@ function initAdminPolyhedron(canvas) {
     var transformedOuter = outerVerts.map(function(v) {
       var r = rotateY(v, angleY);
       r = rotateX(r, angleX);
+      r = rotateZ(r, angleZ);
       return [r[0] + cx, r[1] + cy, r[2]];
     });
 
     var transformedInner = innerVerts.map(function(v) {
-      var r = rotateY(v, -angleY * 1.3);
-      r = rotateX(r, -angleX * 1.3);
+      var r = rotateY(v, -angleY * 1.4);
+      r = rotateX(r, -angleX * 1.4);
+      r = rotateZ(r, -angleZ * 1.4);
       return [r[0] + cx, r[1] + cy, r[2]];
     });
 
