@@ -579,6 +579,67 @@ body::after {
   text-underline-offset: 2px;
 }
 
+/* ── Temporary Demo Credentials Helper Box ───────────────────────────────── */
+.demo-credentials-box {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: rgba(0, 27, 54, 0.45);
+  border: 1px dashed rgba(0, 127, 255, 0.35);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.demo-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--azure-bright);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.demo-buttons-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-fill-btn {
+  background: rgba(4, 18, 38, 0.7);
+  border: 1px solid rgba(0, 127, 255, 0.25);
+  color: rgba(230, 243, 255, 0.85);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.demo-fill-btn strong {
+  color: var(--text-white);
+  margin-right: 4px;
+}
+
+.demo-fill-btn.admin-badge:hover {
+  border-color: var(--azure-bright);
+  background: rgba(0, 127, 255, 0.2);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.demo-fill-btn.student-badge:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.18);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
 /* Elegant floating position for default reCAPTCHA badge if visible */
 .grecaptcha-badge {
   z-index: 9999 !important;

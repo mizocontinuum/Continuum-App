@@ -91,6 +91,25 @@
           <span class="arrow-icon">➔</span>
         </button>
 
+        <!-- Temporary Admin & Student Demo Quick Fill Helper -->
+        <div class="demo-credentials-box">
+          <div class="demo-box-header">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Temporary Demo Credentials</span>
+          </div>
+          <div class="demo-buttons-row">
+            <button type="button" class="demo-fill-btn admin-badge" id="demoAdminBtn">
+              <strong>Admin:</strong> admin@continuum.ph / admin123
+            </button>
+            <button type="button" class="demo-fill-btn student-badge" id="demoStudentBtn">
+              <strong>Student:</strong> student@continuum.ph / student123
+            </button>
+          </div>
+        </div>
+
         <!-- reCAPTCHA v3 Security Badge Note -->
         <p class="recaptcha-badge-note">
           Protected by reCAPTCHA &bull;
@@ -144,46 +163,102 @@
   <!-- Auth Shared Animations (Consistent & Zero-lag) -->
   <script src="../assets/js/auth-animations.js"></script>
 
-  <!-- Google reCAPTCHA v3 Handler -->
+  <!-- Login & Mock Auth Handler -->
   <script>
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-      loginForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('loginSubmit');
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.style.opacity = '0.75';
-        }
+    (function () {
+      const loginForm = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const errorMsg = document.getElementById('loginError');
+      const toast = document.getElementById('loginToast');
+      const demoAdminBtn = document.getElementById('demoAdminBtn');
+      const demoStudentBtn = document.getElementById('demoStudentBtn');
 
-        if (typeof grecaptcha !== 'undefined') {
-          grecaptcha.ready(function () {
-            grecaptcha.execute('reCAPTCHA_site_key', { action: 'submit' }).then(function (token) {
-              // Append recaptcha token to form or pass to backend
-              let tokenInput = document.getElementById('g-recaptcha-response');
-              if (!tokenInput) {
-                tokenInput = document.createElement('input');
-                tokenInput.type = 'hidden';
-                tokenInput.id = 'g-recaptcha-response';
-                tokenInput.name = 'g-recaptcha-response';
-                loginForm.appendChild(tokenInput);
-              }
-              tokenInput.value = token;
+      function showToast(text, isError = false) {
+        if (!toast) return;
+        toast.textContent = text;
+        toast.className = 'toast-msg active' + (isError ? ' error' : '');
+        setTimeout(() => {
+          toast.className = 'toast-msg';
+        }, 3200);
+      }
 
-              // Ready for backend submission:
-              // console.log('reCAPTCHA Token acquired:', token);
-            }).catch(function (err) {
-              console.warn('reCAPTCHA execution error:', err);
-            }).finally(function () {
-              if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = '';
-              }
-            });
-          });
-        }
-      });
-    }
+      // Quick-fill buttons
+      if (demoAdminBtn && emailInput && passwordInput) {
+        demoAdminBtn.addEventListener('click', function () {
+          emailInput.value = 'admin@continuum.ph';
+          passwordInput.value = 'admin123';
+          if (errorMsg) errorMsg.textContent = '';
+          showToast('Admin credentials filled!');
+        });
+      }
+
+      if (demoStudentBtn && emailInput && passwordInput) {
+        demoStudentBtn.addEventListener('click', function () {
+          emailInput.value = 'student@continuum.ph';
+          passwordInput.value = 'student123';
+          if (errorMsg) errorMsg.textContent = '';
+          showToast('Student credentials filled!');
+        });
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const email = (emailInput.value || '').trim().toLowerCase();
+          const pass = (passwordInput.value || '').trim();
+
+          const submitBtn = document.getElementById('loginSubmit');
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.75';
+          }
+
+          // Clear previous error
+          if (errorMsg) errorMsg.textContent = '';
+
+          // 1. Temporary Admin Account Check
+          if (email === 'admin@continuum.ph' && pass === 'admin123') {
+            sessionStorage.setItem('continuum_session', JSON.stringify({
+              role: 'admin',
+              email: 'admin@continuum.ph',
+              name: 'Executive Admin'
+            }));
+            showToast('Welcome Admin! Redirecting to Dashboard...');
+            setTimeout(() => {
+              window.location.href = '../admin/';
+            }, 800);
+            return;
+          }
+
+          // 2. Temporary Student Account Check
+          if (email === 'student@continuum.ph' && pass === 'student123') {
+            sessionStorage.setItem('continuum_session', JSON.stringify({
+              role: 'student',
+              email: 'student@continuum.ph',
+              name: 'Student Learner'
+            }));
+            showToast('Login successful! Redirecting to Student Home...');
+            setTimeout(() => {
+              window.location.href = '../home/';
+            }, 800);
+            return;
+          }
+
+          // 3. Fallback invalid credentials
+          setTimeout(() => {
+            if (errorMsg) {
+              errorMsg.textContent = 'Invalid email or password. Use demo credentials above.';
+            }
+            showToast('Invalid credentials', true);
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.style.opacity = '';
+            }
+          }, 400);
+        });
+      }
+    })();
   </script>
 
 </body>
