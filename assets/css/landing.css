@@ -71,7 +71,7 @@ body.landing-body::after {
   content: "";
   position: fixed;
   inset: 0;
-  background: url("../images/backgroundLP.jpg") center/cover no-repeat;
+  background: url("../images/landing-background.jpg") center/cover no-repeat;
   pointer-events: none;
   z-index: 0;
   opacity: 0.18;
@@ -240,7 +240,7 @@ main {
   background:
     radial-gradient(ellipse 75% 55% at 50% 45%, rgba(0, 59, 115, 0.4) 0%, rgba(3, 8, 14, 0.92) 80%),
     linear-gradient(to top, var(--bg-black) 0%, rgba(0, 27, 54, 0.6) 50%, rgba(3, 8, 14, 0.85) 100%),
-    url("../images/backgroundLP.jpg") center/cover no-repeat;
+    url("../images/landing-background.jpg") center/cover no-repeat;
   transform: translateZ(-80px) rotateX(4deg) scale(1.15);
   transform-origin: center center;
   filter: contrast(1.1) brightness(0.92) saturate(1.2);

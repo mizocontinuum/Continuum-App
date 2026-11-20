@@ -141,7 +141,7 @@
           </div>
           <div class="spotlight-media">
             <div class="tv-frame-wrap">
-              <img src="assets/images/TestBanner.jpg" alt="Continuum Academy TV streaming showcase" class="tv-image">
+              <img src="assets/images/masterclass-banner.jpg" alt="Continuum Academy TV streaming showcase" class="tv-image">
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@
 
       <!-- Top Cinematic Artwork Banner with Floating Title -->
       <div class="modal-artwork-box">
-        <img src="assets/images/TestBanner.jpg" alt="Show backdrop" class="modal-artwork-img" id="modalArtImg">
+        <img src="assets/images/masterclass-banner.jpg" alt="Show backdrop" class="modal-artwork-img" id="modalArtImg">
         <div class="modal-art-overlay"></div>
         <div class="modal-floating-title" id="modalFloatingTitle">
           <span class="modal-kicker">Executive Masterclass</span>
@@ -260,10 +260,11 @@
         modalType.textContent = card.getAttribute('data-type') || 'Show';
         modalGenre.innerHTML = card.getAttribute('data-genre') || 'Dramas';
         modalDesc.textContent = card.getAttribute('data-desc') || '';
-        const targetArt = card.getAttribute('data-art') || card.getAttribute('data-badge') || 'assets/images/TestBanner.jpg';
+        const fallbackBanner = 'assets/images/masterclass-banner.jpg';
+        const targetArt = card.getAttribute('data-art') || card.getAttribute('data-badge') || fallbackBanner;
         modalArtImg.onerror = function () {
           this.onerror = null;
-          this.src = 'assets/images/TestBanner.jpg';
+          this.src = fallbackBanner;
         };
         modalArtImg.src = targetArt;
 
