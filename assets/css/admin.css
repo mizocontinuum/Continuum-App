@@ -1727,3 +1727,140 @@ body::after {
   color: var(--azure-bright);
   flex-shrink: 0;
 }
+
+
+/* ==========================================================================
+   Platform Settings Sub-View Styles
+   ========================================================================== */
+
+.settings-nav-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+  overflow-x: auto;
+}
+
+.settings-pill-btn {
+  padding: 8px 16px;
+  border-radius: 9px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.settings-pill-btn:hover {
+  color: #FFF;
+  background: rgba(0, 127, 255, 0.08);
+}
+
+.settings-pill-btn.active {
+  background: rgba(0, 127, 255, 0.18);
+  border-color: var(--azure-border);
+  color: #FFF;
+  box-shadow: 0 0 14px rgba(0, 127, 255, 0.2);
+}
+
+.settings-tab-pane {
+  display: none;
+}
+
+.settings-tab-pane.active {
+  display: block;
+}
+
+.settings-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.settings-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFF;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-section-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 16px;
+}
+
+.settings-toggle-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: .3s var(--ease-out-expo);
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: ;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s var(--ease-out-expo);
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--azure);
+  box-shadow: 0 0 12px rgba(0, 127, 255, 0.5);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}

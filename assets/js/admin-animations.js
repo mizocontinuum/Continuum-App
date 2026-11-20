@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var videosView = document.getElementById('videosView');
     var studentsView = document.getElementById('studentsView');
     var categoriesView = document.getElementById('categoriesView');
+    var settingsView = document.getElementById('settingsView');
 
     // Deactivate all panes
     if (dashboardView) dashboardView.classList.remove('active');
@@ -112,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (videosView) videosView.classList.remove('active');
     if (studentsView) studentsView.classList.remove('active');
     if (categoriesView) categoriesView.classList.remove('active');
+    if (settingsView) settingsView.classList.remove('active');
 
     if (viewName === 'analytics') {
       if (analyticsView) {
@@ -132,6 +134,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if (categoriesView) {
         categoriesView.classList.add('active');
         renderCategoryManagement();
+      }
+    } else if (viewName === 'settings') {
+      if (settingsView) {
+        settingsView.classList.add('active');
       }
     } else {
       if (dashboardView) dashboardView.classList.add('active');
@@ -158,6 +164,8 @@ document.addEventListener('DOMContentLoaded', function () {
     switchView('students');
   } else if (window.location.hash === '#categories') {
     switchView('categories');
+  } else if (window.location.hash === '#settings') {
+    switchView('settings');
   } else if (window.location.hash === '#categories') {
     switchView('categories');
   }
@@ -2050,6 +2058,34 @@ document.addEventListener('DOMContentLoaded', function () {
       if (cmSortSelect) cmSortSelect.value = 'order';
       renderCategoryManagement();
     };
+  }
+
+
+  // ==========================================================================
+  // 10. Platform Settings Tabs & Save Handling
+  // ==========================================================================
+  var settingsPills = document.querySelectorAll('.settings-pill-btn[data-settab]');
+  settingsPills.forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      settingsPills.forEach(function(p) { p.classList.remove('active'); });
+      document.querySelectorAll('.settings-tab-pane').forEach(function(pane) { pane.classList.remove('active'); });
+
+      pill.classList.add('active');
+      var targetId = pill.getAttribute('data-settab');
+      var targetPane = document.getElementById(targetId);
+      if (targetPane) targetPane.classList.add('active');
+    });
+  });
+
+  var btnSaveAllSettings = document.getElementById('btnSaveAllSettings');
+  if (btnSaveAllSettings) {
+    btnSaveAllSettings.addEventListener('click', function() {
+      var origText = btnSaveAllSettings.innerHTML;
+      btnSaveAllSettings.innerHTML = '<span style="color:#00E599;">✓ Settings Saved Successfully!</span>';
+      setTimeout(function() {
+        btnSaveAllSettings.innerHTML = origText;
+      }, 2000);
+    });
   }
 
 });

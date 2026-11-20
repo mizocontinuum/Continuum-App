@@ -1417,6 +1417,322 @@
           </div>
 
         </div><!-- /#categoriesView -->
+              <!-- ==================== VIEW 6: PLATFORM SETTINGS ==================== -->
+        <div class="admin-view-pane" id="settingsView">
+          
+          <!-- 1. Page Header -->
+          <div class="reports-header-card">
+            <div>
+              <p class="page-eyebrow">SYSTEM CONFIGURATION</p>
+              <h1 class="page-title">Platform Settings</h1>
+              <p class="page-subtitle">Configure branding, streaming integrations, access controls, email notifications, and admin security.</p>
+            </div>
+
+            <div class="reports-controls">
+              <button class="topbar-btn primary-cta" id="btnSaveAllSettings">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                <span>Save All Changes</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Four Compact Settings Statistics / System Health Cards -->
+          <div class="compact-stats-grid">
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">System Status</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="color: var(--status-active); font-size: 22px;">Operational</div>
+              <div class="stat-delta positive">
+                <span>99.98% uptime SLA</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Video CDN Status</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="font-size: 22px;">Mux / HLS</div>
+              <div class="stat-delta positive">
+                <span>Global edge caching active</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Security & Auth</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="font-size: 22px;">reCAPTCHA v3</div>
+              <div class="stat-delta positive">
+                <span>Bot protection enabled</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Database Engine</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="font-size: 22px;">PostgreSQL</div>
+              <div class="stat-delta neutral">
+                <span>Supabase RLS active</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. Settings Navigation Tabs -->
+          <div class="settings-nav-pills">
+            <button class="settings-pill-btn active" data-settab="setGeneral">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>General & Branding</span>
+            </button>
+
+            <button class="settings-pill-btn" data-settab="setVideoDelivery">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+              <span>Video & Streaming CDN</span>
+            </button>
+
+            <button class="settings-pill-btn" data-settab="setSecurity">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Security & Roles</span>
+            </button>
+
+            <button class="settings-pill-btn" data-settab="setNotifications">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span>Email & Notifications</span>
+            </button>
+          </div>
+
+          <!-- TAB 1: General & Branding Settings -->
+          <div class="settings-tab-pane active" id="setGeneral">
+            <div class="settings-card">
+              <h2 class="settings-section-title">Academy Identity & Domain</h2>
+              <p class="settings-section-desc">General platform settings, executive brand title, and contact metadata.</p>
+
+              <form id="formSetGeneral" onsubmit="event.preventDefault();">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="setSiteName">Platform Name</label>
+                    <input type="text" id="setSiteName" class="form-input" value="Continuum Executive Academy">
+                  </div>
+                  <div class="form-group">
+                    <label for="setSupportEmail">Support Email</label>
+                    <input type="email" id="setSupportEmail" class="form-input" value="support@continuum.academy">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="setTagline">Executive Tagline</label>
+                  <input type="text" id="setTagline" class="form-input" value="Masterclasses for High-Impact Corporate Leadership">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="setBrandTheme">Color Theme</label>
+                    <select id="setBrandTheme" class="form-select">
+                      <option value="azure" selected>Cinematic Dark Azure (Official 2026)</option>
+                      <option value="midnight">Midnight Obsidian</option>
+                      <option value="cobalt">Deep Cobalt Executive</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="setTimezone">Default Timezone</label>
+                    <select id="setTimezone" class="form-select">
+                      <option value="Asia/Manila" selected>Asia/Manila (PHT, UTC+8)</option>
+                      <option value="Asia/Singapore">Asia/Singapore (SGT, UTC+8)</option>
+                      <option value="America/New_York">America/New_York (EST, UTC-5)</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB 2: Video & Streaming CDN Settings -->
+          <div class="settings-tab-pane" id="setVideoDelivery">
+            <div class="settings-card">
+              <h2 class="settings-section-title">Adaptive Video Streaming CDN (HLS/DASH)</h2>
+              <p class="settings-section-desc">Configure video ingestion engine, video quality parameters, and watermark protection.</p>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="setVideoProvider">Video Delivery Engine</label>
+                  <select id="setVideoProvider" class="form-select">
+                    <option value="mux" selected>Mux Video (Adaptive HLS Stream)</option>
+                    <option value="cloudflare">Cloudflare Stream</option>
+                    <option value="supabase">Direct Storage Streaming</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="setDefaultQuality">Max Allowed Resolution</label>
+                  <select id="setDefaultQuality" class="form-select">
+                    <option value="4k">4K Ultra HD (2160p)</option>
+                    <option value="1080p" selected>Full HD (1080p 60fps)</option>
+                    <option value="720p">HD (720p)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Dynamic Anti-Piracy Watermark</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Overlay logged-in student email subtly during video playback.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleWatermark" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Auto-Save Playback Position</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Save student progress every 5 seconds for seamless resume on any device.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleAutoResume" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Security & Access Control Settings -->
+          <div class="settings-tab-pane" id="setSecurity">
+            <div class="settings-card">
+              <h2 class="settings-section-title">Access Rules & Role-Based Permissions</h2>
+              <p class="settings-section-desc">Strict authentication policies enforcing security rules specified in the academy roadmap.</p>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Automatic Student Role Assignment</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">All new self-service registrations receive the Student role automatically.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleAutoStudent" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Google reCAPTCHA v3 Protection</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Silent background bot screening on Sign In and Registration forms.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleRecaptcha" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Prevent Concurrent Logins</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Terminate older student session when a new device logs into the same account.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleConcurrent" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Admin Activity Audit Logging</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Log video uploads, role updates, suspensions, and deletions to activity_logs table.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleAudit" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: Email & Notification Settings -->
+          <div class="settings-tab-pane" id="setNotifications">
+            <div class="settings-card">
+              <h2 class="settings-section-title">Automated Student Alerts & Digests</h2>
+              <p class="settings-section-desc">Transactional emails sent to learners upon registration, course updates, and milestone completions.</p>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">New Masterclass Announcement</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Notify students when a new video is published in their enrolled disciplines.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleNewVideoEmail" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Course Completion Certificate Email</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Automatically send certificate download link when progress reaches 100%.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleCertEmail" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-toggle-row">
+                <div>
+                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Weekly Learning Digest</div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Weekly summary of watch time and recommendations sent every Monday morning.</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleWeeklyDigest" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /#settingsView -->
       </main>
 
     </div>
