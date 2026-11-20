@@ -861,7 +861,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('vmEditCategorySelect').value = vid.category;
     document.getElementById('vmEditStatusSelect').value = vid.status;
     document.getElementById('vmEditDescInput').value = vid.description;
-    document.getElementById('vmEditThumbSelect').value = vid.thumbnail;
+    var thumbFileInput = document.getElementById('vmEditThumbFile');
+    if (thumbFileInput) thumbFileInput.value = '';
 
     vmEditModal.classList.add('open');
   }
@@ -881,7 +882,10 @@ document.addEventListener('DOMContentLoaded', function () {
         vid.category = document.getElementById('vmEditCategorySelect').value;
         vid.status = document.getElementById('vmEditStatusSelect').value;
         vid.description = document.getElementById('vmEditDescInput').value;
-        vid.thumbnail = document.getElementById('vmEditThumbSelect').value;
+        var thumbFile = document.getElementById('vmEditThumbFile');
+        if (thumbFile && thumbFile.files && thumbFile.files[0]) {
+          vid.thumbnail = URL.createObjectURL(thumbFile.files[0]);
+        }
         vmEditModal.classList.remove('open');
         renderVideoManagement();
       }
