@@ -2081,6 +2081,28 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // ── Global Admin Toast Notification Helper ─────────────────────────────────
+  function showAdminToast(msg, isSuccess) {
+    var toast = document.getElementById('adminToast');
+    if (!toast) return;
+    toast.innerHTML = (isSuccess ? '<span style="color:#00E599; font-size:16px;">✓</span> ' : '<span style="color:var(--azure-bright); font-size:16px;">ℹ</span> ') + msg;
+    toast.className = 'admin-toast-feedback show' + (isSuccess ? ' success' : '');
+    setTimeout(function() {
+      toast.className = 'admin-toast-feedback';
+    }, 3200);
+  }
+
+  // Live Toggle Switch Feedback for All Security & Video Toggles
+  var allToggles = document.querySelectorAll('.toggle-switch input[type="checkbox"]');
+  allToggles.forEach(function(toggle) {
+    toggle.addEventListener('change', function() {
+      var row = toggle.closest('.settings-toggle-row');
+      var label = row ? (row.querySelector('div > div:first-child') || {}).textContent : 'Setting';
+      var state = toggle.checked ? 'ENABLED' : 'DISABLED';
+      showAdminToast('<strong>' + label.trim() + '</strong> is now <span style="color:' + (toggle.checked ? '#00E599' : '#ff5252') + '">' + state + '</span>.', toggle.checked);
+    });
+  });
+
   var btnSaveAllSettings = document.getElementById('btnSaveAllSettings');
   if (btnSaveAllSettings) {
     btnSaveAllSettings.addEventListener('click', function() {
@@ -2103,8 +2125,26 @@ document.addEventListener('DOMContentLoaded', function () {
       // 2. Persist to localStorage so the Landing Page reflects it immediately
       localStorage.setItem('continuum_landing_settings', JSON.stringify(landingData));
 
+      // 3. Gather Security & CDN settings
+      var securityData = {
+        minPassLength: (document.getElementById('setMinPassLength') || {}).value,
+        sessionTimeout: (document.getElementById('setSessionTimeout') || {}).value,
+        maxAttempts: (document.getElementById('setMaxLoginAttempts') || {}).value,
+        lockoutDuration: (document.getElementById('setLockoutDuration') || {}).value,
+        allowedIps: (document.getElementById('setAdminAllowedIps') || {}).value,
+        admin2FA: (document.getElementById('toggleAdmin2FA') || {}).checked,
+        autoStudent: (document.getElementById('toggleAutoStudent') || {}).checked,
+        recaptcha: (document.getElementById('toggleRecaptcha') || {}).checked,
+        concurrentLogins: (document.getElementById('toggleConcurrent') || {}).checked,
+        deviceFingerprint: (document.getElementById('toggleDeviceFingerprint') || {}).checked,
+        auditLog: (document.getElementById('toggleAudit') || {}).checked
+      };
+      localStorage.setItem('continuum_security_settings', JSON.stringify(securityData));
+
       var origText = btnSaveAllSettings.innerHTML;
-      btnSaveAllSettings.innerHTML = '<span style="color:#00E599;">✓ Landing Page Settings Saved!</span>';
+      btnSaveAllSettings.innerHTML = '<span style="color:#00E599;">✓ All Settings Saved!</span>';
+      showAdminToast('All Platform & Security Settings Saved Successfully!', true);
+
       setTimeout(function() {
         btnSaveAllSettings.innerHTML = origText;
       }, 2000);
@@ -2128,6 +2168,22 @@ document.addEventListener('DOMContentLoaded', function () {
       if (d.spotTitle && document.getElementById('setSpotTitle')) document.getElementById('setSpotTitle').value = d.spotTitle;
       if (d.spotDesc && document.getElementById('setSpotDesc')) document.getElementById('setSpotDesc').value = d.spotDesc;
       if (d.footerCopy && document.getElementById('setFooterCopy')) document.getElementById('setFooterCopy').value = d.footerCopy;
+    }
+
+    var savedSecurity = localStorage.getItem('continuum_security_settings');
+    if (savedSecurity) {
+      var s = JSON.parse(savedSecurity);
+      if (s.minPassLength && document.getElementById('setMinPassLength')) document.getElementById('setMinPassLength').value = s.minPassLength;
+      if (s.sessionTimeout && document.getElementById('setSessionTimeout')) document.getElementById('setSessionTimeout').value = s.sessionTimeout;
+      if (s.maxAttempts && document.getElementById('setMaxLoginAttempts')) document.getElementById('setMaxLoginAttempts').value = s.maxAttempts;
+      if (s.lockoutDuration && document.getElementById('setLockoutDuration')) document.getElementById('setLockoutDuration').value = s.lockoutDuration;
+      if (s.allowedIps && document.getElementById('setAdminAllowedIps')) document.getElementById('setAdminAllowedIps').value = s.allowedIps;
+      if (typeof s.admin2FA === 'boolean' && document.getElementById('toggleAdmin2FA')) document.getElementById('toggleAdmin2FA').checked = s.admin2FA;
+      if (typeof s.autoStudent === 'boolean' && document.getElementById('toggleAutoStudent')) document.getElementById('toggleAutoStudent').checked = s.autoStudent;
+      if (typeof s.recaptcha === 'boolean' && document.getElementById('toggleRecaptcha')) document.getElementById('toggleRecaptcha').checked = s.recaptcha;
+      if (typeof s.concurrentLogins === 'boolean' && document.getElementById('toggleConcurrent')) document.getElementById('toggleConcurrent').checked = s.concurrentLogins;
+      if (typeof s.deviceFingerprint === 'boolean' && document.getElementById('toggleDeviceFingerprint')) document.getElementById('toggleDeviceFingerprint').checked = s.deviceFingerprint;
+      if (typeof s.auditLog === 'boolean' && document.getElementById('toggleAudit')) document.getElementById('toggleAudit').checked = s.auditLog;
     }
   } catch (e) {
     console.warn('Failed loading settings:', e);
