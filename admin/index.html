@@ -1533,44 +1533,99 @@
           <!-- TAB 1: General & Branding Settings -->
           <div class="settings-tab-pane active" id="setGeneral">
             <div class="settings-card">
-              <h2 class="settings-section-title">Academy Identity & Domain</h2>
-              <p class="settings-section-desc">General platform settings, executive brand title, and contact metadata.</p>
+              <h2 class="settings-section-title">Landing Page Content & Brand Customizer</h2>
+              <p class="settings-section-desc">Direktang i-type at i-edit ang mga texts, titles, at descriptions ng buong Landing Page nang walang binabagong code.</p>
 
               <form id="formSetGeneral" onsubmit="event.preventDefault();">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="setSiteName">Platform Name</label>
-                    <input type="text" id="setSiteName" class="form-input" value="Continuum Executive Academy">
-                  </div>
-                  <div class="form-group">
-                    <label for="setSupportEmail">Support Email</label>
-                    <input type="email" id="setSupportEmail" class="form-input" value="support@continuum.academy">
+                <!-- 1. Platform Identity & Header -->
+                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    1. Brand Identity & Header
+                  </h3>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setSiteName">Platform Name</label>
+                      <input type="text" id="setSiteName" class="form-input" value="Continuum Academy">
+                    </div>
+                    <div class="form-group">
+                      <label for="setSupportEmail">Support Contact Email</label>
+                      <input type="email" id="setSupportEmail" class="form-input" value="support@continuum.academy">
+                    </div>
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label for="setTagline">Executive Tagline</label>
-                  <input type="text" id="setTagline" class="form-input" value="Masterclasses for High-Impact Corporate Leadership">
+                <!-- 2. Hero Section Content -->
+                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    2. Hero Section (Main Banner)
+                  </h3>
+                  <div class="form-group">
+                    <label for="setHeroEyebrow">Hero Pill / Eyebrow Text</label>
+                    <input type="text" id="setHeroEyebrow" class="form-input" value="The Performance Learning Academy">
+                  </div>
+                  <div class="form-group">
+                    <label for="setHeroTitle">Hero Main Headline Title</label>
+                    <input type="text" id="setHeroTitle" class="form-input" value="Learn how the best lead, build and grow.">
+                  </div>
+                  <div class="form-group">
+                    <label for="setHeroLede">Hero Subheadline / Description</label>
+                    <textarea id="setHeroLede" class="form-textarea" rows="3">Stream masterclasses from founders and operators who have done it before. One discipline at a time, built for the decisions you face this quarter.</textarea>
+                  </div>
                 </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="setBrandTheme">Color Theme</label>
-                    <select id="setBrandTheme" class="form-select">
-                      <option value="azure" selected>Cinematic Dark Azure (Official 2026)</option>
-                      <option value="midnight">Midnight Obsidian</option>
-                      <option value="cobalt">Deep Cobalt Executive</option>
-                    </select>
+                <!-- 3. Disciplines Showcase Section -->
+                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    3. Disciplines Showcase Section
+                  </h3>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setDiscEyebrow">Disciplines Eyebrow</label>
+                      <input type="text" id="setDiscEyebrow" class="form-input" value="Explore Continuum Curriculum">
+                    </div>
+                    <div class="form-group">
+                      <label for="setDiscTitle">Disciplines Section Title</label>
+                      <input type="text" id="setDiscTitle" class="form-input" value="Master Executive Disciplines">
+                    </div>
                   </div>
                   <div class="form-group">
-                    <label for="setTimezone">Default Timezone</label>
-                    <select id="setTimezone" class="form-select">
-                      <option value="Asia/Manila" selected>Asia/Manila (PHT, UTC+8)</option>
-                      <option value="Asia/Singapore">Asia/Singapore (SGT, UTC+8)</option>
-                      <option value="America/New_York">America/New_York (EST, UTC-5)</option>
-                    </select>
+                    <label for="setDiscSubtitle">Disciplines Subtitle / Description</label>
+                    <textarea id="setDiscSubtitle" class="form-textarea" rows="2">Browse world-class masterclasses across all core disciplines. Click any discipline track to explore video masterclasses and syllabus previews.</textarea>
                   </div>
                 </div>
+
+                <!-- 4. TV Streaming Showcase Section -->
+                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    4. Streaming Spotlight Section
+                  </h3>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setSpotEyebrow">Spotlight Eyebrow</label>
+                      <input type="text" id="setSpotEyebrow" class="form-input" value="Stream Anywhere">
+                    </div>
+                    <div class="form-group">
+                      <label for="setSpotTitle">Spotlight Headline</label>
+                      <input type="text" id="setSpotTitle" class="form-input" value="Enjoy on your TV">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="setSpotDesc">Spotlight Description</label>
+                    <textarea id="setSpotDesc" class="form-textarea" rows="2">Watch on Smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.</textarea>
+                  </div>
+                </div>
+
+                <!-- 5. Footer Copyright & Attribution -->
+                <div>
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    5. Footer Attribution & Copyright
+                  </h3>
+                  <div class="form-group">
+                    <label for="setFooterCopy">Footer Copyright Notice</label>
+                    <input type="text" id="setFooterCopy" class="form-input" value="© Continuum Academy Inc. Powered by Mansmith and Fielders, Inc.">
+                  </div>
+                </div>
+
               </form>
             </div>
           </div>

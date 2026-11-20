@@ -2084,12 +2084,53 @@ document.addEventListener('DOMContentLoaded', function () {
   var btnSaveAllSettings = document.getElementById('btnSaveAllSettings');
   if (btnSaveAllSettings) {
     btnSaveAllSettings.addEventListener('click', function() {
+      // 1. Gather all Landing Page Customizer values
+      var landingData = {
+        siteName: (document.getElementById('setSiteName') || {}).value,
+        supportEmail: (document.getElementById('setSupportEmail') || {}).value,
+        heroEyebrow: (document.getElementById('setHeroEyebrow') || {}).value,
+        heroTitle: (document.getElementById('setHeroTitle') || {}).value,
+        heroLede: (document.getElementById('setHeroLede') || {}).value,
+        discEyebrow: (document.getElementById('setDiscEyebrow') || {}).value,
+        discTitle: (document.getElementById('setDiscTitle') || {}).value,
+        discSubtitle: (document.getElementById('setDiscSubtitle') || {}).value,
+        spotEyebrow: (document.getElementById('setSpotEyebrow') || {}).value,
+        spotTitle: (document.getElementById('setSpotTitle') || {}).value,
+        spotDesc: (document.getElementById('setSpotDesc') || {}).value,
+        footerCopy: (document.getElementById('setFooterCopy') || {}).value
+      };
+
+      // 2. Persist to localStorage so the Landing Page reflects it immediately
+      localStorage.setItem('continuum_landing_settings', JSON.stringify(landingData));
+
       var origText = btnSaveAllSettings.innerHTML;
-      btnSaveAllSettings.innerHTML = '<span style="color:#00E599;">✓ Settings Saved Successfully!</span>';
+      btnSaveAllSettings.innerHTML = '<span style="color:#00E599;">✓ Landing Page Settings Saved!</span>';
       setTimeout(function() {
         btnSaveAllSettings.innerHTML = origText;
       }, 2000);
     });
+  }
+
+  // Load existing landing settings if present in localStorage
+  try {
+    var savedLanding = localStorage.getItem('continuum_landing_settings');
+    if (savedLanding) {
+      var d = JSON.parse(savedLanding);
+      if (d.siteName && document.getElementById('setSiteName')) document.getElementById('setSiteName').value = d.siteName;
+      if (d.supportEmail && document.getElementById('setSupportEmail')) document.getElementById('setSupportEmail').value = d.supportEmail;
+      if (d.heroEyebrow && document.getElementById('setHeroEyebrow')) document.getElementById('setHeroEyebrow').value = d.heroEyebrow;
+      if (d.heroTitle && document.getElementById('setHeroTitle')) document.getElementById('setHeroTitle').value = d.heroTitle;
+      if (d.heroLede && document.getElementById('setHeroLede')) document.getElementById('setHeroLede').value = d.heroLede;
+      if (d.discEyebrow && document.getElementById('setDiscEyebrow')) document.getElementById('setDiscEyebrow').value = d.discEyebrow;
+      if (d.discTitle && document.getElementById('setDiscTitle')) document.getElementById('setDiscTitle').value = d.discTitle;
+      if (d.discSubtitle && document.getElementById('setDiscSubtitle')) document.getElementById('setDiscSubtitle').value = d.discSubtitle;
+      if (d.spotEyebrow && document.getElementById('setSpotEyebrow')) document.getElementById('setSpotEyebrow').value = d.spotEyebrow;
+      if (d.spotTitle && document.getElementById('setSpotTitle')) document.getElementById('setSpotTitle').value = d.spotTitle;
+      if (d.spotDesc && document.getElementById('setSpotDesc')) document.getElementById('setSpotDesc').value = d.spotDesc;
+      if (d.footerCopy && document.getElementById('setFooterCopy')) document.getElementById('setFooterCopy').value = d.footerCopy;
+    }
+  } catch (e) {
+    console.warn('Failed loading settings:', e);
   }
 
 });

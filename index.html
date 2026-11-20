@@ -511,6 +511,45 @@
           carousel.scrollBy({ left: 320, behavior: 'smooth' });
         });
       }
+
+      // Sync settings updated from Admin > General & Branding Customizer
+      try {
+        const rawSettings = localStorage.getItem('continuum_landing_settings');
+        if (rawSettings) {
+          const s = JSON.parse(rawSettings);
+          const eyebrowEl = document.querySelector('.landing-eyebrow');
+          if (eyebrowEl && s.heroEyebrow) eyebrowEl.textContent = s.heroEyebrow;
+
+          const titleEl = document.querySelector('.landing-title');
+          if (titleEl && s.heroTitle) titleEl.innerHTML = s.heroTitle;
+
+          const ledeEl = document.querySelector('.landing-lede');
+          if (ledeEl && s.heroLede) ledeEl.textContent = s.heroLede;
+
+          const discEyebrowEl = document.querySelector('.disciplines-eyebrow');
+          if (discEyebrowEl && s.discEyebrow) discEyebrowEl.textContent = s.discEyebrow;
+
+          const discTitleEl = document.querySelector('.disciplines-title');
+          if (discTitleEl && s.discTitle) discTitleEl.textContent = s.discTitle;
+
+          const discSubEl = document.querySelector('.disciplines-subtitle');
+          if (discSubEl && s.discSubtitle) discSubEl.textContent = s.discSubtitle;
+
+          const spotEyebrowEl = document.querySelector('.spotlight-eyebrow');
+          if (spotEyebrowEl && s.spotEyebrow) spotEyebrowEl.textContent = s.spotEyebrow;
+
+          const spotTitleEl = document.querySelector('.spotlight-title');
+          if (spotTitleEl && s.spotTitle) spotTitleEl.textContent = s.spotTitle;
+
+          const spotDescEl = document.querySelector('.spotlight-desc');
+          if (spotDescEl && s.spotDesc) spotDescEl.textContent = s.spotDesc;
+
+          const footerEl = document.querySelector('.landing-footer span');
+          if (footerEl && s.footerCopy) footerEl.textContent = s.footerCopy;
+        }
+      } catch (err) {
+        console.warn('Could not sync landing settings:', err);
+      }
     })();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
