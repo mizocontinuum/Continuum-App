@@ -556,3 +556,33 @@ body::after {
     font-size: 1.5rem;
   }
 }
+
+/* ── Google reCAPTCHA v3 Privacy & Security Pill ────────────────────────── */
+.recaptcha-badge-note {
+  margin-top: 14px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+}
+
+.recaptcha-badge-note a {
+  color: var(--azure-bright);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.recaptcha-badge-note a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Elegant floating position for default reCAPTCHA badge if visible */
+.grecaptcha-badge {
+  z-index: 9999 !important;
+  box-shadow: 0 4px 20px rgba(0, 127, 255, 0.25) !important;
+  border-radius: 8px 0 0 8px !important;
+  overflow: hidden !important;
+}

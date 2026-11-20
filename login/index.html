@@ -17,6 +17,9 @@
 
   <!-- 2026 Cinematic Dark Azure Auth Stylesheet -->
   <link rel="stylesheet" href="../assets/css/auth.css">
+
+  <!-- Google reCAPTCHA v3 API -->
+  <script src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"></script>
 </head>
 
 <body>
@@ -82,11 +85,18 @@
         <!-- Where a rejected sign-in lands -->
         <p class="form-error" id="loginError" role="alert"></p>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn-submit">
+        <!-- Submit Button with reCAPTCHA v3 Verification -->
+        <button type="submit" class="btn-submit" id="loginSubmit">
           <span>Sign In</span>
           <span class="arrow-icon">➔</span>
         </button>
+
+        <!-- reCAPTCHA v3 Security Badge Note -->
+        <p class="recaptcha-badge-note">
+          Protected by reCAPTCHA &bull;
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy</a> &bull;
+          <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms</a>
+        </p>
 
       </form>
 
@@ -160,6 +170,48 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <!-- Auth Shared Animations (Consistent & Zero-lag) -->
   <script src="../assets/js/auth-animations.js"></script>
+
+  <!-- Google reCAPTCHA v3 Handler -->
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('loginSubmit');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = '0.75';
+        }
+
+        if (typeof grecaptcha !== 'undefined') {
+          grecaptcha.ready(function () {
+            grecaptcha.execute('reCAPTCHA_site_key', { action: 'submit' }).then(function (token) {
+              // Append recaptcha token to form or pass to backend
+              let tokenInput = document.getElementById('g-recaptcha-response');
+              if (!tokenInput) {
+                tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.id = 'g-recaptcha-response';
+                tokenInput.name = 'g-recaptcha-response';
+                loginForm.appendChild(tokenInput);
+              }
+              tokenInput.value = token;
+
+              // Ready for backend submission:
+              // console.log('reCAPTCHA Token acquired:', token);
+            }).catch(function (err) {
+              console.warn('reCAPTCHA execution error:', err);
+            }).finally(function () {
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '';
+              }
+            });
+          });
+        }
+      });
+    }
+  </script>
 
 </body>
 
