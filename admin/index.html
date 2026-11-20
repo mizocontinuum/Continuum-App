@@ -1634,14 +1634,16 @@
           <div class="settings-tab-pane" id="setVideoDelivery">
             <div class="settings-card">
               <h2 class="settings-section-title">Adaptive Video Streaming CDN (HLS/DASH)</h2>
-              <p class="settings-section-desc">Configure video ingestion engine, video quality parameters, and watermark protection.</p>
+              <p class="settings-section-desc">I-configure ang video ingestion engine, custom stream domain, player settings, at anti-piracy protection.</p>
 
+              <!-- 1. Video Engine & Resolution -->
               <div class="form-row">
                 <div class="form-group">
                   <label for="setVideoProvider">Video Delivery Engine</label>
                   <select id="setVideoProvider" class="form-select">
-                    <option value="mux" selected>Mux Video (Adaptive HLS Stream)</option>
-                    <option value="cloudflare">Cloudflare Stream</option>
+                    <option value="cloudflare" selected>Cloudflare Stream (Fastest CDN in Manila, Highly Recommended)</option>
+                    <option value="mux">Mux Video (Adaptive HLS Stream)</option>
+                    <option value="bunny">Bunny.net Stream (Low-Cost E-Learning Storage)</option>
                     <option value="supabase">Direct Storage Streaming</option>
                   </select>
                 </div>
@@ -1649,32 +1651,88 @@
                   <label for="setDefaultQuality">Max Allowed Resolution</label>
                   <select id="setDefaultQuality" class="form-select">
                     <option value="4k">4K Ultra HD (2160p)</option>
-                    <option value="1080p" selected>Full HD (1080p 60fps)</option>
+                    <option value="1080p" selected>Full HD (1080p 60fps - Recommended)</option>
                     <option value="720p">HD (720p)</option>
                   </select>
                 </div>
               </div>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Dynamic Anti-Piracy Watermark</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Overlay logged-in student email subtly during video playback.</div>
+              <!-- 2. Stream Delivery Domain & API Configuration -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="setStreamDomain">Custom Streaming Domain / CDN URL</label>
+                  <input type="text" id="setStreamDomain" class="form-input" value="https://stream.continuum.academy" placeholder="e.g. https://videocdn.continuum.academy">
                 </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleWatermark" checked>
-                  <span class="toggle-slider"></span>
-                </label>
+                <div class="form-group">
+                  <label for="setStreamApiKey">CDN / Stream API Access Key</label>
+                  <input type="password" id="setStreamApiKey" class="form-input" value="cf_stream_token_live_94827103" placeholder="Enter API Token or Secret Key">
+                </div>
               </div>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Auto-Save Playback Position</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Save student progress every 5 seconds for seamless resume on any device.</div>
+              <!-- 3. Player Experience Settings -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="setDefaultPlaybackRate">Default Playback Speed Options</label>
+                  <select id="setDefaultPlaybackRate" class="form-select">
+                    <option value="all" selected>Full Speed Range (0.75x, 1x, 1.25x, 1.5x, 2x)</option>
+                    <option value="normal">Standard Only (1x, 1.25x, 1.5x)</option>
+                  </select>
                 </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleAutoResume" checked>
-                  <span class="toggle-slider"></span>
-                </label>
+                <div class="form-group">
+                  <label for="setBufferTarget">Preload & Buffer Cache Target</label>
+                  <select id="setBufferTarget" class="form-select">
+                    <option value="aggressive">Aggressive Preload (Instant Play, Higher Bandwidth)</option>
+                    <option value="balanced" selected>Balanced Smart Cache (30s buffer ahead)</option>
+                    <option value="minimal">Minimal Bandwidth (Conserve student mobile data)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- 4. Watermark & Security Toggles -->
+              <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Dynamic Anti-Piracy Watermark</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Overlay logged-in student email subtly during video playback to prevent illegal screen recordings.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleWatermark" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Auto-Save Playback Position</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Save student progress every 5 seconds for seamless resume on any device.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAutoResume" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Require Signed Stream URLs (DRM-Lite Protection)</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Videos will only play with a temporary expiring cryptographic token (blocks direct file link downloads).</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleSignedUrls" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Auto-Generate Chapter Markers & Transcripts</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Automatically create video syllabus timestamps and AI captions upon upload.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAutoChapters" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
