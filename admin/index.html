@@ -1740,51 +1740,137 @@
           <!-- TAB 3: Security & Access Control Settings -->
           <div class="settings-tab-pane" id="setSecurity">
             <div class="settings-card">
-              <h2 class="settings-section-title">Access Rules & Role-Based Permissions</h2>
-              <p class="settings-section-desc">Strict authentication policies enforcing security rules specified in the academy roadmap.</p>
+              <h2 class="settings-section-title">Access Rules, Authentication & Security Policies</h2>
+              <p class="settings-section-desc">Mahigpit na security rules, role permissions, at brute-force defense policies para maprotektahan ang buong academy.</p>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Automatic Student Role Assignment</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">All new self-service registrations receive the Student role automatically.</div>
+              <!-- Section 1: Authentication & Password Security Parameters -->
+              <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  1. Password Policy & Session Timeout
+                </h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="setMinPassLength">Minimum Password Length</label>
+                    <select id="setMinPassLength" class="form-select">
+                      <option value="8" selected>8 Characters (Standard)</option>
+                      <option value="10">10 Characters (Recommended for Executive Accounts)</option>
+                      <option value="12">12 Characters (High Security)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="setSessionTimeout">Inactivity Session Timeout</label>
+                    <select id="setSessionTimeout" class="form-select">
+                      <option value="30m">30 Minutes (High Security)</option>
+                      <option value="2h" selected>2 Hours of Inactivity (Balanced)</option>
+                      <option value="24h">24 Hours (Standard Student)</option>
+                      <option value="never">Never (Stay signed in)</option>
+                    </select>
+                  </div>
                 </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleAutoStudent" checked>
-                  <span class="toggle-slider"></span>
-                </label>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="setMaxLoginAttempts">Failed Login Lockout Threshold</label>
+                    <select id="setMaxLoginAttempts" class="form-select">
+                      <option value="3">Lock account after 3 failed attempts</option>
+                      <option value="5" selected>Lock account after 5 failed attempts (Recommended)</option>
+                      <option value="10">Lock account after 10 failed attempts</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="setLockoutDuration">Account Lockout Duration</label>
+                    <select id="setLockoutDuration" class="form-select">
+                      <option value="15m" selected>15 Minutes temporary cooldown</option>
+                      <option value="30m">30 Minutes</option>
+                      <option value="manual">Manual Admin Unlock Required</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Google reCAPTCHA v3 Protection</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Silent background bot screening on Sign In and Registration forms.</div>
+              <!-- Section 2: IP Whitelisting & Admin Perimeter Defense -->
+              <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  2. Admin Perimeter & Access Defense
+                </h3>
+                <div class="form-group">
+                  <label for="setAdminAllowedIps">Admin IP Allowlist (CIDR or Comma-separated IPs)</label>
+                  <input type="text" id="setAdminAllowedIps" class="form-input" placeholder="e.g. 112.198.0.1, 120.29.74.0/24 (Leave blank to allow all IPs)">
+                  <span style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; display: block;">Hahayaan lang ang mga specified IP address na ma-access ang `/admin/` portal.</span>
                 </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleRecaptcha" checked>
-                  <span class="toggle-slider"></span>
-                </label>
               </div>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Prevent Concurrent Logins</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Terminate older student session when a new device logs into the same account.</div>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleConcurrent" checked>
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
+              <!-- Section 3: Security & Anti-Fraud Toggles -->
+              <div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  3. Identity & Session Enforcement Toggles
+                </h3>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Admin Activity Audit Logging</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Log video uploads, role updates, suspensions, and deletions to activity_logs table.</div>
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Require Two-Factor Authentication (2FA) for Admins</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Obligatory Time-based OTP (Google Authenticator) before accessing the admin dashboard.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAdmin2FA" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
                 </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleAudit" checked>
-                  <span class="toggle-slider"></span>
-                </label>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Automatic Student Role Assignment</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">All new self-service registrations receive the Student role automatically.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAutoStudent" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Google reCAPTCHA v3 Protection</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Silent background bot screening on Sign In and Registration forms.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleRecaptcha" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Prevent Concurrent Student Logins (Anti-Account Sharing)</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Awtomatikong i-logout ang lumang session kapag may nag-login na bagong device gamit ang iisang student account.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleConcurrent" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Device Fingerprinting & New Location Alert</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">I-detect kung bago ang device o browser at magpadala ng security verification email sa student.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleDeviceFingerprint" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Admin Activity Audit Logging</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">I-record ang lahat ng video uploads, edit ng categories, pagsuspinde ng account, at delete actions sa security audit log.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAudit" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
