@@ -263,8 +263,8 @@ main {
   background-size: 60px 60px;
   transform: rotateX(72deg) translateZ(-40px);
   transform-origin: 50% 100%;
-  mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, rgba(0,0,0,0.85) 0%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, rgba(0,0,0,0.85) 0%, transparent 80%);
+  mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, rgba(0, 0, 0, 0.85) 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, rgba(0, 0, 0, 0.85) 0%, transparent 80%);
   pointer-events: none;
   z-index: 1;
   opacity: 0.6;
@@ -549,12 +549,12 @@ main {
   display: none;
 }
 
-/* ── Individual Trending Card ───────────────────────────────────────────── */
+/* ── Individual Trending Card (Balanced Cinematic Scale) ───────────────── */
 .trending-card {
   position: relative;
   flex: 0 0 auto;
-  width: 220px;
-  height: 240px;
+  width: 255px;
+  height: 285px;
   display: flex;
   align-items: flex-end;
   cursor: pointer;
@@ -587,34 +587,34 @@ main {
 /* Giant Rank Number — Outlined with Azure Glow */
 .trending-rank {
   position: absolute;
-  left: -4px;
-  bottom: -20px;
-  font-size: 9rem;
+  left: -6px;
+  bottom: -24px;
+  font-size: 11rem;
   font-weight: 900;
   line-height: 0.72;
   color: transparent;
-  -webkit-text-stroke: 3px rgba(0, 127, 255, 0.35);
+  -webkit-text-stroke: 3.5px rgba(0, 127, 255, 0.38);
   z-index: 1;
   pointer-events: none;
   user-select: none;
   transition: all 0.45s var(--ease-out-expo);
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.95));
 }
 
 /* Poster Art Box with Holographic Border */
 .trending-poster-box {
   position: relative;
-  margin-left: 60px;
-  width: 148px;
-  height: 210px;
+  margin-left: 78px;
+  width: 170px;
+  height: 250px;
   border-radius: 12px;
   overflow: hidden;
   background-color: var(--bg-elevated);
-  border: 1.5px solid rgba(0, 127, 255, 0.2);
+  border: 1.5px solid rgba(0, 127, 255, 0.22);
   box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.8),
-    0 2px 8px rgba(0, 127, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    0 12px 32px rgba(0, 0, 0, 0.85),
+    0 3px 10px rgba(0, 127, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
   z-index: 2;
   transition: all 0.45s var(--ease-out-expo);
 }
@@ -676,19 +676,19 @@ main {
   filter: drop-shadow(0 0 28px rgba(0, 127, 255, 0.8));
 }
 
-/* ── Carousel Nav Button ────────────────────────────────────────────────── */
+/* Carousel Scroll Navigation Button */
 .trending-nav-btn {
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 90px;
-  background: rgba(3, 8, 14, 0.7);
-  border: 1px solid rgba(0, 127, 255, 0.25);
-  backdrop-filter: blur(12px);
+  width: 48px;
+  height: 105px;
+  background: rgba(3, 8, 14, 0.75);
+  border: 1.5px solid rgba(0, 127, 255, 0.3);
+  backdrop-filter: blur(14px);
   color: var(--text-white);
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 300;
   display: flex;
   align-items: center;
@@ -700,14 +700,14 @@ main {
 }
 
 .trending-nav-btn:hover {
-  background: rgba(0, 127, 255, 0.3);
+  background: rgba(0, 127, 255, 0.35);
   border-color: var(--azure-bright);
-  box-shadow: 0 0 20px rgba(0, 127, 255, 0.5);
+  box-shadow: 0 0 22px rgba(0, 127, 255, 0.55);
   transform: translateY(-50%) scale(1.05);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   MODAL — Netflix/Disney+ 3D Cinematic Dialog (Azure Theme)
+   MODAL — Netflix/Disney+ 3D Ultra-Premium Glassmorphism Dialog
    ══════════════════════════════════════════════════════════════════════════ */
 .netflix-modal-backdrop {
   position: fixed;
@@ -715,9 +715,9 @@ main {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(16px) saturate(0.6);
-  -webkit-backdrop-filter: blur(16px) saturate(0.6);
+  background-color: rgba(1, 6, 14, 0.82);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
   z-index: 999999;
   display: flex;
   align-items: center;
@@ -735,28 +735,28 @@ main {
   pointer-events: auto !important;
 }
 
-/* 3D Elevated Dialog */
+/* 3D Elevated Dialog — Sleek Executive Cinema Glass */
 .netflix-modal-dialog {
   position: relative;
   width: 100%;
-  max-width: 480px;
+  max-width: 580px;
   margin: auto;
-  background: linear-gradient(165deg, #0e1f36 0%, #060e1a 100%);
-  border-radius: 16px;
+  background: linear-gradient(175deg, rgba(14, 31, 54, 0.94) 0%, rgba(4, 12, 24, 0.98) 100%);
+  border-radius: 20px;
   overflow: hidden;
   box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.95),
-    0 0 50px rgba(0, 127, 255, 0.3),
-    0 0 120px rgba(0, 127, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  border: 1.5px solid rgba(0, 127, 255, 0.3);
-  transform: scale(0.9) translateY(30px);
+  0 35px 90px rgba(0, 0, 0, 0.95),
+  0 0 60px rgba(0, 127, 255, 0.35),
+  0 0 120px rgba(0, 127, 255, 0.12),
+  inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border: 1.5px solid rgba(0, 127, 255, 0.35);
+  transform: scale(0.92) translateY(24px);
   opacity: 0;
   max-height: calc(100vh - 48px);
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  transition: transform 0.45s var(--ease-spring), opacity 0.35s ease;
+  transition: transform 0.45s var(--ease-spring), opacity 0.35s ease, border-color 0.4s ease;
 }
 
 .netflix-modal-dialog::-webkit-scrollbar {
@@ -768,40 +768,41 @@ main {
   opacity: 1 !important;
 }
 
-/* Close Button */
+/* Floating Close Button */
 .modal-close-btn {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 36px;
-  height: 36px;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: rgba(0, 20, 40, 0.8);
+  background: rgba(3, 12, 24, 0.75);
   border: 1px solid rgba(0, 127, 255, 0.35);
   color: var(--text-white);
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 20;
+  z-index: 25;
   transition: all 0.3s var(--ease-out-expo);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .modal-close-btn:hover {
   background: var(--azure);
   border-color: var(--azure-bright);
   transform: scale(1.1) rotate(90deg);
-  box-shadow: 0 0 18px rgba(0, 127, 255, 0.85);
+  box-shadow: 0 0 20px rgba(0, 127, 255, 0.85);
 }
 
-/* Modal Artwork Hero */
+/* Modal Artwork Hero Box */
 .modal-artwork-box {
   position: relative;
   width: 100%;
-  height: 260px;
+  height: 290px;
   background-color: var(--bg-black);
   overflow: hidden;
 }
@@ -810,774 +811,808 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 25%;
   display: block;
+  transform: scale(1.02);
+  transition: transform 0.8s var(--ease-out-expo);
 }
 
-.modal-art-gradient {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 130px;
-  background: linear-gradient(180deg, transparent 0%, #060e1a 100%);
-  pointer-events: none;
-}
+  .netflix-modal-backdrop.active .modal-artwork-img {
+    transform: scale(1.06);
+  }
 
-/* Floating Title */
-.modal-floating-title {
-  position: absolute;
-  bottom: 18px;
-  left: 24px;
-  right: 24px;
-  z-index: 10;
-}
+  /* Multi-directional cinematic vignette & gradient */
+  .modal-art-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(3, 8, 14, 0.3) 0%, transparent 40%, rgba(4, 12, 24, 0.85) 75%, rgba(4, 12, 24, 1) 100%),
+      radial-gradient(circle at 10% 20%, rgba(0, 127, 255, 0.25) 0%, transparent 60%);
+    pointer-events: none;
+  }
 
-.modal-floating-title h3 {
-  font-size: 1.75rem;
-  font-weight: 900;
-  color: var(--text-white);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.5);
-}
+  /* Floating Title & Metadata over artwork */
+  .modal-floating-title {
+    position: absolute;
+    bottom: 16px;
+    left: 28px;
+    right: 28px;
+    z-index: 10;
+  }
 
-.modal-subtitle {
-  display: block;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--azure-bright);
-  margin-top: 4px;
-  text-shadow: 0 0 12px var(--azure-glow);
-}
+  .modal-kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--azure-bright);
+    margin-bottom: 6px;
+    text-shadow: 0 0 12px rgba(0, 127, 255, 0.6);
+  }
 
-/* Modal Content Body */
-.modal-body {
-  padding: 10px 24px 28px;
-  background: transparent;
-}
+  .modal-floating-title h3 {
+    font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+    font-weight: 900;
+    color: var(--text-white);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 0, 0, 0.6);
+  }
 
-.modal-tags {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
+  .modal-subtitle {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(230, 243, 255, 0.85);
+    margin-top: 4px;
+  }
 
-.tag-badge {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(230, 243, 255, 0.9);
-  background: rgba(0, 127, 255, 0.1);
-  border: 1px solid rgba(0, 127, 255, 0.25);
-  padding: 4px 10px;
-  border-radius: 6px;
-  backdrop-filter: blur(4px);
-}
+  /* Modal Content Body */
+  .modal-body {
+    padding: 12px 28px 32px;
+    background: transparent;
+  }
 
-.modal-description {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: rgba(230, 243, 255, 0.82);
-  margin-bottom: 24px;
-}
+  .modal-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
 
-/* Azure 3D CTA Button */
-.modal-actions {
-  display: flex;
-  align-items: center;
-}
+  .tag-badge {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: rgba(230, 243, 255, 0.92);
+    background: rgba(0, 59, 115, 0.35);
+    border: 1px solid rgba(0, 127, 255, 0.28);
+    padding: 5px 12px;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    letter-spacing: 0.5px;
+  }
 
-.modal-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, var(--azure) 0%, var(--dark-azure) 100%);
-  color: var(--text-white);
-  font-size: 1rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  text-decoration: none;
-  padding: 13px 28px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 6px 20px var(--azure-glow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-  transition: all 0.3s var(--ease-out-expo);
-  position: relative;
-  overflow: hidden;
-}
+  .tag-badge.tag-highlight {
+    background: rgba(0, 127, 255, 0.22);
+    border-color: var(--azure-bright);
+    color: var(--azure-bright);
+    font-weight: 800;
+  }
 
-/* Shimmer on modal CTA */
-.modal-cta-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.2) 50%, transparent 65%);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
+  .tag-badge.tag-genre {
+    background: transparent;
+    border-color: rgba(0, 127, 255, 0.2);
+    color: rgba(230, 243, 255, 0.75);
+  }
 
-.modal-cta-btn:hover {
-  background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 100%);
-  transform: translateY(-2px) scale(1.03);
-  box-shadow:
-    0 10px 28px rgba(0, 127, 255, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
+  .modal-description {
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: rgba(230, 243, 255, 0.82);
+    margin-bottom: 26px;
+  }
 
-.modal-cta-btn:hover::before {
-  transform: translateX(100%);
-}
+  /* Azure 3D Tactile CTA Button */
+  .modal-actions {
+    display: flex;
+    align-items: center;
+  }
 
-.cta-arrow {
-  font-size: 1.35rem;
-  line-height: 0;
-  transition: transform 0.3s var(--ease-spring);
-}
+  .modal-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 50%, var(--dark-azure) 100%);
+    color: var(--text-white);
+    font-size: 1.02rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    text-decoration: none;
+    padding: 14px 34px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.6),
+    0 4px 20px var(--azure-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+    transition: all 0.35s var(--ease-out-expo);
+    position: relative;
+    overflow: hidden;
+  }
 
-.modal-cta-btn:hover .cta-arrow {
-  transform: translateX(5px);
-}
+  /* Shimmer on modal CTA */
+  .modal-cta-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+    transform: translateX(-100%);
+    transition: transform 0.65s ease;
+  }
 
-/* ══════════════════════════════════════════════════════════════════════════
+  .modal-cta-btn:hover {
+    background: linear-gradient(135deg, var(--azure-vivid) 0%, var(--azure-bright) 50%, var(--azure) 100%);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+    0 14px 32px rgba(0, 127, 255, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .modal-cta-btn:hover::before {
+    transform: translateX(100%);
+  }
+
+  .cta-arrow {
+    font-size: 1.4rem;
+    line-height: 0;
+    transition: transform 0.3s var(--ease-spring);
+  }
+
+  .modal-cta-btn:hover .cta-arrow {
+    transform: translateX(6px);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
    SPOTLIGHT — "Enjoy on your TV" 3D Perspective Section
    ══════════════════════════════════════════════════════════════════════════ */
-.landing-spotlight {
-  position: relative;
-  width: 100%;
-  padding: 110px 36px 130px;
-  background:
-    radial-gradient(ellipse 60% 50% at 75% 50%, rgba(0, 127, 255, 0.12) 0%, transparent 70%),
-    linear-gradient(180deg, rgba(3, 8, 14, 0.95) 0%, rgba(0, 27, 54, 0.3) 50%, rgba(3, 8, 14, 0.95) 100%);
-  border-bottom: none;
-  overflow: hidden;
-  perspective: 1400px;
-}
-
-/* Floating ambient particles (decorative pseudo-elements) */
-.landing-spotlight::before {
-  content: "";
-  position: absolute;
-  top: 15%;
-  right: 10%;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(0, 127, 255, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: floatParticle 8s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-.landing-spotlight::after {
-  content: "";
-  position: absolute;
-  bottom: 20%;
-  left: 5%;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, rgba(30, 160, 255, 0.06) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: floatParticle 10s ease-in-out 2s infinite alternate-reverse;
-  pointer-events: none;
-}
-
-.spotlight-container {
-  max-width: 1360px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 60px;
-  transform-style: preserve-3d;
-}
-
-.spotlight-text {
-  flex: 1 1 50%;
-  max-width: 580px;
-  text-align: left;
-  transform: translateZ(20px);
-}
-
-.spotlight-eyebrow {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  color: var(--azure-bright);
-  margin-bottom: 16px;
-  text-shadow: 0 0 16px var(--azure-glow);
-}
-
-.spotlight-title {
-  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
-  font-weight: 900;
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-  color: var(--text-white);
-  margin-bottom: 22px;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
-}
-
-.spotlight-desc {
-  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-  font-weight: 400;
-  line-height: 1.6;
-  color: rgba(230, 243, 255, 0.78);
-}
-
-.spotlight-media {
-  flex: 1 1 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  perspective: 1200px;
-}
-
-/* 3D Isometric Floating Screen */
-.tv-frame-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 580px;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #000;
-  transform: rotateY(-8deg) rotateX(3deg) translateZ(20px);
-  transform-style: preserve-3d;
-  border: 2px solid rgba(0, 127, 255, 0.25);
-  box-shadow:
-    -18px 28px 60px rgba(0, 0, 0, 0.9),
-    0 0 40px rgba(0, 127, 255, 0.3),
-    0 0 100px rgba(0, 127, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s ease, border-color 0.4s ease;
-}
-
-/* Glossy sweep sheen */
-.tv-frame-wrap::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
-  transform: skewX(-25deg);
-  transition: left 0.8s ease;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Ambient glow behind TV */
-.tv-frame-wrap::after {
-  content: "";
-  position: absolute;
-  inset: -20px;
-  background: radial-gradient(ellipse at center, rgba(0, 127, 255, 0.15) 0%, transparent 70%);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-}
-
-.tv-frame-wrap:hover {
-  transform: rotateY(0deg) rotateX(0deg) translateY(-8px) scale(1.03);
-  border-color: var(--azure-bright);
-  box-shadow:
-    0 35px 80px rgba(0, 0, 0, 0.95),
-    0 0 60px rgba(0, 127, 255, 0.5),
-    0 0 120px rgba(0, 127, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.tv-frame-wrap:hover::before {
-  left: 140%;
-}
-
-.tv-frame-wrap:hover::after {
-  opacity: 1;
-}
-
-.tv-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   VALUES / FEATURES — Holographic 3D Cards with Animated Borders
-   ══════════════════════════════════════════════════════════════════════════ */
-.landing-section {
-  position: relative;
-  max-width: 1360px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 100px 36px 120px;
-  border-bottom: none;
-  perspective: 1200px;
-}
-
-.landing-section-head {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  text-align: center;
-  gap: 12px;
-  margin-bottom: 70px;
-}
-
-.landing-section-head span {
-  font-size: 0.82rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  color: var(--azure-bright);
-  text-shadow: 0 0 10px rgba(0, 127, 255, 0.4);
-}
-
-.landing-section-head h2 {
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
-  font-weight: 900;
-  letter-spacing: -0.025em;
-  color: var(--text-white);
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
-}
-
-/* 3D Card Grid */
-.landing-values {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
-  transform-style: preserve-3d;
-}
-
-/* Holographic Feature Card */
-.landing-value {
-  background: linear-gradient(155deg, rgba(8, 28, 55, 0.75) 0%, rgba(3, 12, 25, 0.9) 100%);
-  border: 1px solid rgba(0, 127, 255, 0.18);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 36px 28px;
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 14px 36px rgba(0, 0, 0, 0.6),
-    0 2px 10px rgba(0, 127, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 16px rgba(0, 59, 115, 0.2);
-  transform-style: preserve-3d;
-  transform: translateZ(0);
-  transition: all 0.5s var(--ease-out-expo);
-  display: flex;
-  flex-direction: column;
-}
-
-/* Staggered entrance for value cards */
-.landing-value:nth-child(1) {
-  animation: cardReveal 0.8s var(--ease-out-expo) 0.1s both;
-}
-
-.landing-value:nth-child(2) {
-  animation: cardReveal 0.8s var(--ease-out-expo) 0.25s both;
-}
-
-.landing-value:nth-child(3) {
-  animation: cardReveal 0.8s var(--ease-out-expo) 0.4s both;
-}
-
-/* Animated sheen sweep */
-.landing-value::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(30, 160, 255, 0.15), rgba(255, 255, 255, 0.05), transparent);
-  transition: left 0.8s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Animated top azure edge line */
-.landing-value::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--azure) 30%, var(--azure-bright) 50%, var(--azure) 70%, transparent 100%);
-  opacity: 0.3;
-  transition: opacity 0.4s ease, box-shadow 0.4s ease;
-}
-
-/* Hover: 3D Elevation + Holographic Glow */
-.landing-value:hover {
-  transform: translateY(-14px) translateZ(25px);
-  border-color: rgba(0, 127, 255, 0.4);
-  box-shadow:
-    0 28px 60px rgba(0, 0, 0, 0.85),
-    0 0 40px rgba(0, 127, 255, 0.4),
-    0 0 100px rgba(0, 127, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 0 20px rgba(0, 127, 255, 0.2);
-}
-
-.landing-value:hover::before {
-  left: 120%;
-}
-
-.landing-value:hover::after {
-  opacity: 1;
-  box-shadow: 0 0 12px rgba(0, 127, 255, 0.6);
-}
-
-.value-num {
-  position: relative;
-  z-index: 2;
-  display: inline-block;
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--azure-bright);
-  margin-bottom: 18px;
-  text-shadow: 0 0 14px rgba(0, 127, 255, 0.5);
-  transform: translateZ(15px);
-}
-
-.landing-value b {
-  position: relative;
-  z-index: 2;
-  display: block;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--text-white);
-  line-height: 1.25;
-  margin-bottom: 14px;
-  transform: translateZ(20px);
-}
-
-.landing-value p {
-  position: relative;
-  z-index: 2;
-  font-size: 0.98rem;
-  line-height: 1.65;
-  color: var(--text-muted);
-  flex-grow: 1;
-  transform: translateZ(10px);
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   FOOTER
-   ══════════════════════════════════════════════════════════════════════════ */
-.landing-footer {
-  max-width: 1360px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 60px 36px 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 16px;
-  color: var(--text-dim);
-  font-size: 0.875rem;
-}
-
-.landing-footer a {
-  color: var(--text-dim);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.25s ease;
-}
-
-.landing-footer a:hover {
-  color: var(--azure-bright);
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   KEYFRAME ANIMATIONS — 2026 Cinematic Choreography
-   ══════════════════════════════════════════════════════════════════════════ */
-
-/* Hero 3D Background Floating Parallax Animation */
-@keyframes hero3dFloat {
-  0% {
-    transform: translateZ(-80px) rotateX(4deg) rotateY(-1.5deg) scale(1.15);
-  }
-  50% {
-    transform: translateZ(-50px) rotateX(1deg) rotateY(1.5deg) scale(1.18);
-  }
-  100% {
-    transform: translateZ(-90px) rotateX(-2deg) rotateY(-0.5deg) scale(1.15);
-  }
-}
-
-/* Aurora background drift */
-@keyframes auroraShift {
-  0% {
-    filter: hue-rotate(0deg) brightness(1);
-  }
-
-  100% {
-    filter: hue-rotate(8deg) brightness(1.05);
-  }
-}
-
-/* Header glow line pulse */
-@keyframes headerGlow {
-  0% {
-    opacity: 0.3;
-  }
-
-  100% {
-    opacity: 0.7;
-  }
-}
-
-/* Hero radial light pulse */
-@keyframes heroPulse {
-  0% {
-    transform: translateX(-50%) scale(1);
-    opacity: 0.6;
-  }
-
-  100% {
-    transform: translateX(-50%) scale(1.2);
-    opacity: 1;
-  }
-}
-
-/* Hero title entrance */
-@keyframes heroTitleIn {
-  from {
-    opacity: 0;
-    transform: translateY(28px) translateZ(35px);
-    filter: blur(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) translateZ(35px);
-    filter: blur(0);
-  }
-}
-
-/* Hero fade up */
-@keyframes heroFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) translateZ(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) translateZ(20px);
-  }
-}
-
-/* Eyebrow floating */
-@keyframes float3D {
-  0% {
-    transform: translateY(0px) translateZ(25px);
-  }
-
-  100% {
-    transform: translateY(-8px) translateZ(32px);
-  }
-}
-
-/* Dot pulse */
-@keyframes pulseDot {
-
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 12px var(--azure-bright), 0 0 24px rgba(30, 160, 255, 0.5);
-  }
-
-  50% {
-    opacity: 0.5;
-    box-shadow: 0 0 6px var(--azure-bright), 0 0 12px rgba(30, 160, 255, 0.3);
-  }
-}
-
-/* Trending card staggered entrance */
-@keyframes cardSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px) translateX(20px) scale(0.92);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) translateX(0) scale(1);
-  }
-}
-
-/* Arch pulse */
-@keyframes archPulse {
-  0% {
-    filter: drop-shadow(0 0 16px rgba(0, 127, 255, 0.5));
-  }
-
-  100% {
-    filter: drop-shadow(0 0 28px rgba(0, 127, 255, 0.8));
-  }
-}
-
-/* Value card reveal */
-@keyframes cardReveal {
-  from {
-    opacity: 0;
-    transform: translateY(40px) translateZ(0) scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) translateZ(0) scale(1);
-  }
-}
-
-/* Floating particle */
-@keyframes floatParticle {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.4;
-  }
-
-  100% {
-    transform: translate(20px, -30px) scale(1.3);
-    opacity: 0.7;
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   RESPONSIVE BREAKPOINTS
-   ══════════════════════════════════════════════════════════════════════════ */
-@media (max-width: 860px) {
-  .landing-top {
-    padding: 14px 24px;
-  }
-
-  .landing-logo {
-    height: 32px;
-  }
-
-  .landing-hero {
-    min-height: 78vh;
-    padding: 110px 20px 70px;
-  }
-
-  .landing-btn {
+  .landing-spotlight {
+    position: relative;
     width: 100%;
-    font-size: 1rem;
-    padding: 16px 24px;
+    padding: 110px 36px 130px;
+    background:
+      radial-gradient(ellipse 60% 50% at 75% 50%, rgba(0, 127, 255, 0.12) 0%, transparent 70%),
+      linear-gradient(180deg, rgba(3, 8, 14, 0.95) 0%, rgba(0, 27, 54, 0.3) 50%, rgba(3, 8, 14, 0.95) 100%);
+    border-bottom: none;
+    overflow: hidden;
+    perspective: 1400px;
   }
 
-  .landing-cta {
-    flex-direction: column;
-    max-width: 400px;
+  /* Floating ambient particles (decorative pseudo-elements) */
+  .landing-spotlight::before {
+    content: "";
+    position: absolute;
+    top: 15%;
+    right: 10%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(0, 127, 255, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatParticle 8s ease-in-out infinite alternate;
+    pointer-events: none;
   }
 
-  .landing-section {
-    padding: 70px 20px 80px;
-  }
-
-  .landing-values {
-    grid-template-columns: 1fr;
+  .landing-spotlight::after {
+    content: "";
+    position: absolute;
+    bottom: 20%;
+    left: 5%;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(30, 160, 255, 0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatParticle 10s ease-in-out 2s infinite alternate-reverse;
+    pointer-events: none;
   }
 
   .spotlight-container {
-    flex-direction: column;
-    text-align: center;
-    gap: 40px;
+    max-width: 1360px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    transform-style: preserve-3d;
   }
 
   .spotlight-text {
-    max-width: 100%;
-    text-align: center;
+    flex: 1 1 50%;
+    max-width: 580px;
+    text-align: left;
+    transform: translateZ(20px);
   }
 
+  .spotlight-eyebrow {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--azure-bright);
+    margin-bottom: 16px;
+    text-shadow: 0 0 16px var(--azure-glow);
+  }
+
+  .spotlight-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--text-white);
+    margin-bottom: 22px;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
+  }
+
+  .spotlight-desc {
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(230, 243, 255, 0.78);
+  }
+
+  .spotlight-media {
+    flex: 1 1 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    perspective: 1200px;
+  }
+
+  /* 3D Isometric Floating Screen */
   .tv-frame-wrap {
-    transform: none !important;
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    transform: rotateY(-8deg) rotateX(3deg) translateZ(20px);
+    transform-style: preserve-3d;
+    border: 2px solid rgba(0, 127, 255, 0.25);
+    box-shadow:
+      -18px 28px 60px rgba(0, 0, 0, 0.9),
+      0 0 40px rgba(0, 127, 255, 0.3),
+      0 0 100px rgba(0, 127, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s ease, border-color 0.4s ease;
   }
 
-  .landing-spotlight {
-    padding: 70px 20px 80px;
+  /* Glossy sweep sheen */
+  .tv-frame-wrap::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+    transform: skewX(-25deg);
+    transition: left 0.8s ease;
+    pointer-events: none;
+    z-index: 2;
   }
 
-  .trending-container {
-    padding: 0 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .landing-top {
-    padding: 12px 16px;
-  }
-
-  .landing-nav {
-    gap: 8px;
+  /* Ambient glow behind TV */
+  .tv-frame-wrap::after {
+    content: "";
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center, rgba(0, 127, 255, 0.15) 0%, transparent 70%);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
   }
 
-  .landing-nav a {
-    font-size: 0.75rem;
-    padding: 8px 14px;
-    letter-spacing: 0.8px;
+  .tv-frame-wrap:hover {
+    transform: rotateY(0deg) rotateX(0deg) translateY(-8px) scale(1.03);
+    border-color: var(--azure-bright);
+    box-shadow:
+      0 35px 80px rgba(0, 0, 0, 0.95),
+      0 0 60px rgba(0, 127, 255, 0.5),
+      0 0 120px rgba(0, 127, 255, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
 
-  .landing-hero {
-    min-height: 70vh;
-    padding: 100px 16px 60px;
+  .tv-frame-wrap:hover::before {
+    left: 140%;
   }
 
-  .landing-title {
-    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  .tv-frame-wrap:hover::after {
+    opacity: 1;
   }
 
-  .trending-card {
-    width: 190px;
-    height: 210px;
+  .tv-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
   }
 
-  .trending-poster-box {
-    width: 130px;
-    height: 185px;
-    margin-left: 50px;
+  /* ══════════════════════════════════════════════════════════════════════════
+   VALUES / FEATURES — Holographic 3D Cards with Animated Borders
+   ══════════════════════════════════════════════════════════════════════════ */
+  .landing-section {
+    position: relative;
+    max-width: 1360px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 100px 36px 120px;
+    border-bottom: none;
+    perspective: 1200px;
   }
 
-  .trending-rank {
-    font-size: 7.5rem;
+  .landing-section-head {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    margin-bottom: 70px;
   }
 
-  .netflix-modal-dialog {
-    max-width: 100%;
-    border-radius: 12px;
+  .landing-section-head span {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--azure-bright);
+    text-shadow: 0 0 10px rgba(0, 127, 255, 0.4);
   }
 
-  .modal-artwork-box {
-    height: 200px;
+  .landing-section-head h2 {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    color: var(--text-white);
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
   }
-}
 
-/* ── Reduced Motion ─────────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* 3D Card Grid */
+  .landing-values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    transform-style: preserve-3d;
   }
-}
+
+  /* Holographic Feature Card */
+  .landing-value {
+    background: linear-gradient(155deg, rgba(8, 28, 55, 0.75) 0%, rgba(3, 12, 25, 0.9) 100%);
+    border: 1px solid rgba(0, 127, 255, 0.18);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 36px 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 14px 36px rgba(0, 0, 0, 0.6),
+      0 2px 10px rgba(0, 127, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 0 16px rgba(0, 59, 115, 0.2);
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    transition: all 0.5s var(--ease-out-expo);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Staggered entrance for value cards */
+  .landing-value:nth-child(1) {
+    animation: cardReveal 0.8s var(--ease-out-expo) 0.1s both;
+  }
+
+  .landing-value:nth-child(2) {
+    animation: cardReveal 0.8s var(--ease-out-expo) 0.25s both;
+  }
+
+  .landing-value:nth-child(3) {
+    animation: cardReveal 0.8s var(--ease-out-expo) 0.4s both;
+  }
+
+  /* Animated sheen sweep */
+  .landing-value::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(30, 160, 255, 0.15), rgba(255, 255, 255, 0.05), transparent);
+    transition: left 0.8s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Animated top azure edge line */
+  .landing-value::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--azure) 30%, var(--azure-bright) 50%, var(--azure) 70%, transparent 100%);
+    opacity: 0.3;
+    transition: opacity 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  /* Hover: 3D Elevation + Holographic Glow */
+  .landing-value:hover {
+    transform: translateY(-14px) translateZ(25px);
+    border-color: rgba(0, 127, 255, 0.4);
+    box-shadow:
+      0 28px 60px rgba(0, 0, 0, 0.85),
+      0 0 40px rgba(0, 127, 255, 0.4),
+      0 0 100px rgba(0, 127, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 0 20px rgba(0, 127, 255, 0.2);
+  }
+
+  .landing-value:hover::before {
+    left: 120%;
+  }
+
+  .landing-value:hover::after {
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(0, 127, 255, 0.6);
+  }
+
+  .value-num {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--azure-bright);
+    margin-bottom: 18px;
+    text-shadow: 0 0 14px rgba(0, 127, 255, 0.5);
+    transform: translateZ(15px);
+  }
+
+  .landing-value b {
+    position: relative;
+    z-index: 2;
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-white);
+    line-height: 1.25;
+    margin-bottom: 14px;
+    transform: translateZ(20px);
+  }
+
+  .landing-value p {
+    position: relative;
+    z-index: 2;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    flex-grow: 1;
+    transform: translateZ(10px);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════════════════════════════════════ */
+  .landing-footer {
+    max-width: 1360px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px 36px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    color: var(--text-dim);
+    font-size: 0.875rem;
+  }
+
+  .landing-footer a {
+    color: var(--text-dim);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.25s ease;
+  }
+
+  .landing-footer a:hover {
+    color: var(--azure-bright);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS — 2026 Cinematic Choreography
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  /* Hero 3D Background Floating Parallax Animation */
+  @keyframes hero3dFloat {
+    0% {
+      transform: translateZ(-80px) rotateX(4deg) rotateY(-1.5deg) scale(1.15);
+    }
+
+    50% {
+      transform: translateZ(-50px) rotateX(1deg) rotateY(1.5deg) scale(1.18);
+    }
+
+    100% {
+      transform: translateZ(-90px) rotateX(-2deg) rotateY(-0.5deg) scale(1.15);
+    }
+  }
+
+  /* Aurora background drift */
+  @keyframes auroraShift {
+    0% {
+      filter: hue-rotate(0deg) brightness(1);
+    }
+
+    100% {
+      filter: hue-rotate(8deg) brightness(1.05);
+    }
+  }
+
+  /* Header glow line pulse */
+  @keyframes headerGlow {
+    0% {
+      opacity: 0.3;
+    }
+
+    100% {
+      opacity: 0.7;
+    }
+  }
+
+  /* Hero radial light pulse */
+  @keyframes heroPulse {
+    0% {
+      transform: translateX(-50%) scale(1);
+      opacity: 0.6;
+    }
+
+    100% {
+      transform: translateX(-50%) scale(1.2);
+      opacity: 1;
+    }
+  }
+
+  /* Hero title entrance */
+  @keyframes heroTitleIn {
+    from {
+      opacity: 0;
+      transform: translateY(28px) translateZ(35px);
+      filter: blur(6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(35px);
+      filter: blur(0);
+    }
+  }
+
+  /* Hero fade up */
+  @keyframes heroFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px) translateZ(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(20px);
+    }
+  }
+
+  /* Eyebrow floating */
+  @keyframes float3D {
+    0% {
+      transform: translateY(0px) translateZ(25px);
+    }
+
+    100% {
+      transform: translateY(-8px) translateZ(32px);
+    }
+  }
+
+  /* Dot pulse */
+  @keyframes pulseDot {
+
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 12px var(--azure-bright), 0 0 24px rgba(30, 160, 255, 0.5);
+    }
+
+    50% {
+      opacity: 0.5;
+      box-shadow: 0 0 6px var(--azure-bright), 0 0 12px rgba(30, 160, 255, 0.3);
+    }
+  }
+
+  /* Trending card staggered entrance */
+  @keyframes cardSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px) translateX(20px) scale(0.92);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) translateX(0) scale(1);
+    }
+  }
+
+  /* Arch pulse */
+  @keyframes archPulse {
+    0% {
+      filter: drop-shadow(0 0 16px rgba(0, 127, 255, 0.5));
+    }
+
+    100% {
+      filter: drop-shadow(0 0 28px rgba(0, 127, 255, 0.8));
+    }
+  }
+
+  /* Value card reveal */
+  @keyframes cardReveal {
+    from {
+      opacity: 0;
+      transform: translateY(40px) translateZ(0) scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(0) scale(1);
+    }
+  }
+
+  /* Floating particle */
+  @keyframes floatParticle {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.4;
+    }
+
+    100% {
+      transform: translate(20px, -30px) scale(1.3);
+      opacity: 0.7;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ══════════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 860px) {
+    .landing-top {
+      padding: 14px 24px;
+    }
+
+    .landing-logo {
+      height: 32px;
+    }
+
+    .landing-hero {
+      min-height: 78vh;
+      padding: 110px 20px 70px;
+    }
+
+    .landing-btn {
+      width: 100%;
+      font-size: 1rem;
+      padding: 16px 24px;
+    }
+
+    .landing-cta {
+      flex-direction: column;
+      max-width: 400px;
+    }
+
+    .landing-section {
+      padding: 70px 20px 80px;
+    }
+
+    .landing-values {
+      grid-template-columns: 1fr;
+    }
+
+    .spotlight-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 40px;
+    }
+
+    .spotlight-text {
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .tv-frame-wrap {
+      transform: none !important;
+    }
+
+    .landing-spotlight {
+      padding: 70px 20px 80px;
+    }
+
+    .trending-container {
+      padding: 0 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .landing-top {
+      padding: 12px 16px;
+    }
+
+    .landing-nav {
+      gap: 8px;
+    }
+
+    .landing-nav a {
+      font-size: 0.75rem;
+      padding: 8px 14px;
+      letter-spacing: 0.8px;
+    }
+
+    .landing-hero {
+      min-height: 70vh;
+      padding: 100px 16px 60px;
+    }
+
+    .landing-title {
+      font-size: clamp(1.6rem, 7vw, 2.2rem);
+    }
+
+    .trending-card {
+      width: 220px;
+      height: 250px;
+    }
+
+    .trending-poster-box {
+      width: 150px;
+      height: 220px;
+      margin-left: 65px;
+    }
+
+    .trending-rank {
+      font-size: 9.5rem;
+    }
+
+    .netflix-modal-dialog {
+      max-width: 100%;
+      border-radius: 12px;
+    }
+
+    .modal-artwork-box {
+      height: 200px;
+    }
+  }
+
+  /* ── Reduced Motion ─────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }

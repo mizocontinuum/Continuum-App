@@ -191,11 +191,12 @@
       <!-- Close Button -->
       <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
 
-      <!-- Top Cinematic Artwork / Video Backdrop -->
+      <!-- Top Cinematic Artwork Banner with Floating Title -->
       <div class="modal-artwork-box">
-        <img src="assets/images/card-1.png" alt="Show backdrop" class="modal-artwork-img" id="modalArtImg">
-        <div class="modal-art-gradient"></div>
+        <img src="assets/images/TestBanner.jpg" alt="Show backdrop" class="modal-artwork-img" id="modalArtImg">
+        <div class="modal-art-overlay"></div>
         <div class="modal-floating-title" id="modalFloatingTitle">
+          <span class="modal-kicker">Executive Masterclass</span>
           <h3 id="modalTitle">THE OFFERING MODEL</h3>
           <span class="modal-subtitle" id="modalSubtitle">JOSIAH GO</span>
         </div>
@@ -205,19 +206,19 @@
       <div class="modal-body">
         <!-- Tags Bar (Year, Rating, Type, Genre) -->
         <div class="modal-tags">
-          <span class="tag-badge" id="modalYear">2026</span>
-          <span class="tag-badge" id="modalRating">16+</span>
-          <span class="tag-badge" id="modalType">Show</span>
-          <span class="tag-badge" id="modalGenre">Dramas</span>
+          <span class="tag-badge tag-highlight" id="modalYear">2026</span>
+          <span class="tag-badge" id="modalRating">Masterclass</span>
+          <span class="tag-badge" id="modalType">Executive Class</span>
+          <span class="tag-badge tag-genre" id="modalGenre">Strategy &bull; Marketing &bull; Innovation</span>
         </div>
 
         <!-- Description Paragraph -->
         <p class="modal-description" id="modalDesc">
-          In a hospital dominated by ego and corruption, an enigmatic but brilliant surgeon arrives — taking on
-          seemingly impossible cases amid fierce opposition.
+          Learn the definitive framework for creating high-value market offerings, capturing unmet customer demand and
+          sustaining competitive advantage with renowned marketing guru Josiah Go.
         </p>
 
-        <!-- Action Button (Red Netflix CTA) -->
+        <!-- Action Button (Azure 3D Glowing CTA) -->
         <div class="modal-actions">
           <a href="signup/" class="modal-cta-btn" id="modalCtaBtn">
             <span>Get Started</span>
@@ -259,10 +260,10 @@
         modalType.textContent = card.getAttribute('data-type') || 'Show';
         modalGenre.innerHTML = card.getAttribute('data-genre') || 'Dramas';
         modalDesc.textContent = card.getAttribute('data-desc') || '';
-        const targetArt = card.getAttribute('data-art') || card.getAttribute('data-badge') || 'assets/images/card-1.png';
+        const targetArt = card.getAttribute('data-art') || card.getAttribute('data-badge') || 'assets/images/TestBanner.jpg';
         modalArtImg.onerror = function () {
           this.onerror = null;
-          this.src = 'assets/images/card-1.png';
+          this.src = 'assets/images/TestBanner.jpg';
         };
         modalArtImg.src = targetArt;
 
