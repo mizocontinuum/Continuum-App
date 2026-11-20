@@ -1880,41 +1880,126 @@
           <!-- TAB 4: Email & Notification Settings -->
           <div class="settings-tab-pane" id="setNotifications">
             <div class="settings-card">
-              <h2 class="settings-section-title">Automated Student Alerts & Digests</h2>
-              <p class="settings-section-desc">Transactional emails sent to learners upon registration, course updates, and milestone completions.</p>
+              <h2 class="settings-section-title">Automated Student Alerts & Email Dispatch Center</h2>
+              <p class="settings-section-desc">Transactional notifications at direktang magpadala ng mensahe o alerto sa mga mag-aaral pagkatapos nilang mag-login.</p>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">New Masterclass Announcement</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Notify students when a new video is published in their enrolled disciplines.</div>
+              <!-- Section 1: Direct Broadcast & Student Message Composer -->
+              <div style="margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">
+                    1. Direct Student Message & Alert Dispatcher
+                  </h3>
+                  <span style="font-size: 11.5px; background: rgba(0, 127, 255, 0.18); color: var(--azure-bright); border: 1px solid rgba(0, 127, 255, 0.3); padding: 4px 10px; border-radius: 20px; font-weight: 600;">
+                    Instant In-App & Email
+                  </span>
                 </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleNewVideoEmail" checked>
-                  <span class="toggle-slider"></span>
-                </label>
+                <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">
+                  Pumili ng partikular na student o ipadala sa lahat ng active learners. Mababasa agad ng student ang custom alert na ito pagka-login nila sa kanilang Learning Cockpit.
+                </p>
+
+                <form id="formDirectDispatch" onsubmit="event.preventDefault();">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="dispatchRecipient">Recipient Student</label>
+                      <select id="dispatchRecipient" class="form-select">
+                        <option value="all">Broadcast to All Active Students (8 Students)</option>
+                        <option value="m.rodriguez@executive.ph">Marcus Rodriguez (m.rodriguez@executive.ph)</option>
+                        <option value="alysia.tan@innovate.co">Alysia Tan (alysia.tan@innovate.co)</option>
+                        <option value="danilo.m@mendoza-holdings.com">Danilo Mendoza (danilo.m@mendoza-holdings.com)</option>
+                        <option value="claurel@apexretail.org">Christine Laurel (claurel@apexretail.org)</option>
+                        <option value="custom">Specific Custom Email Address...</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group" id="customEmailGroup" style="display: none;">
+                      <label for="dispatchCustomEmail">Custom Email Address</label>
+                      <input type="email" id="dispatchCustomEmail" class="form-input" placeholder="e.g. learner@company.com">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="dispatchNoticeType">Notification Urgency / Priority</label>
+                      <select id="dispatchNoticeType" class="form-select">
+                        <option value="announcement" selected>Standard Academy Announcement</option>
+                        <option value="urgent">Urgent Advisory / System Update</option>
+                        <option value="welcome">New Learner Welcome & Orientation</option>
+                        <option value="assignment">Course Milestone Recommendation</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dispatchSubject">Email Subject / Banner Headline</label>
+                    <input type="text" id="dispatchSubject" class="form-input" value="Welcome to Continuum Executive Academy — Your Masterclass Access is Ready!" placeholder="Enter message subject...">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dispatchBody">Message Content (Appears in Student Cockpit upon Login)</label>
+                    <textarea id="dispatchBody" class="form-textarea" rows="4" placeholder="Type your custom announcement, curriculum note, or personal message to the student here...">Greetings Leader! Your executive masterclass library across 7 core disciplines is now accessible. Stream your first masterclass from Josiah Go and track your milestone progress.</textarea>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 14px;">
+                    <button type="button" class="topbar-btn primary-cta" id="btnSendStudentMessage" style="padding: 10px 22px;">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                      </svg>
+                      <span>Dispatch Email & Login Alert</span>
+                    </button>
+                  </div>
+                </form>
               </div>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Course Completion Certificate Email</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Automatically send certificate download link when progress reaches 100%.</div>
+              <!-- Section 2: Automated Transactional Email Triggers -->
+              <div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  2. Automated Transactional Email Triggers
+                </h3>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Student Sign-In / Login Confirmation Email</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Magpadala ng authentication digest o welcome email sa bawat matagumpay na login ng user.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleLoginEmail" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
                 </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleCertEmail" checked>
-                  <span class="toggle-slider"></span>
-                </label>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">New Masterclass Announcement</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Notify students when a new video is published in their enrolled disciplines.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleNewVideoEmail" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Course Completion Certificate Email</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Automatically send certificate download link when progress reaches 100%.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleCertEmail" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Weekly Learning Digest</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Weekly summary of watch time and recommendations sent every Monday morning.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleWeeklyDigest" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
               </div>
 
-              <div class="settings-toggle-row">
-                <div>
-                  <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Weekly Learning Digest</div>
-                  <div style="font-size: 12px; color: var(--text-muted);">Weekly summary of watch time and recommendations sent every Monday morning.</div>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="toggleWeeklyDigest" checked>
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
             </div>
           </div>
 

@@ -2093,6 +2093,57 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Live Toggle Switch Feedback for All Security & Video Toggles
+  // ── Direct Student Message Dispatch Handler ──────────────────────────────
+  var dispatchRecipient = document.getElementById('dispatchRecipient');
+  var customEmailGroup = document.getElementById('customEmailGroup');
+  if (dispatchRecipient && customEmailGroup) {
+    dispatchRecipient.addEventListener('change', function() {
+      if (dispatchRecipient.value === 'custom') {
+        customEmailGroup.style.display = 'block';
+      } else {
+        customEmailGroup.style.display = 'none';
+      }
+    });
+  }
+
+  var btnSendStudentMessage = document.getElementById('btnSendStudentMessage');
+  if (btnSendStudentMessage) {
+    btnSendStudentMessage.addEventListener('click', function() {
+      var recipient = dispatchRecipient ? dispatchRecipient.value : 'all';
+      if (recipient === 'custom') {
+        recipient = (document.getElementById('dispatchCustomEmail') || {}).value || 'custom user';
+      }
+      var subject = (document.getElementById('dispatchSubject') || {}).value || 'Academy Notice';
+      var body = (document.getElementById('dispatchBody') || {}).value || '';
+      var urgency = (document.getElementById('dispatchNoticeType') || {}).value || 'announcement';
+
+      if (!body.trim()) {
+        showAdminToast('Please type a message body before dispatching.', false);
+        return;
+      }
+
+      // Store in localStorage for the Student App (home) to display upon login
+      var dispatchedAlert = {
+        recipient: recipient,
+        subject: subject,
+        body: body,
+        urgency: urgency,
+        timestamp: new Date().toISOString(),
+        unread: true
+      };
+      localStorage.setItem('continuum_active_student_notice', JSON.stringify(dispatchedAlert));
+
+      btnSendStudentMessage.innerHTML = '<span>✓ Dispatched Successfully!</span>';
+      btnSendStudentMessage.style.background = 'linear-gradient(135deg, #00E599 0%, #009966 100%)';
+      showAdminToast('Login Alert & Email dispatched to <strong>' + recipient + '</strong>!', true);
+
+      setTimeout(function() {
+        btnSendStudentMessage.innerHTML = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg><span>Dispatch Email & Login Alert</span>';
+        btnSendStudentMessage.style.background = '';
+      }, 2500);
+    });
+  }
+
   var allToggles = document.querySelectorAll('.toggle-switch input[type="checkbox"]');
   allToggles.forEach(function(toggle) {
     toggle.addEventListener('change', function() {
@@ -2140,6 +2191,15 @@ document.addEventListener('DOMContentLoaded', function () {
         auditLog: (document.getElementById('toggleAudit') || {}).checked
       };
       localStorage.setItem('continuum_security_settings', JSON.stringify(securityData));
+
+      // 4. Gather Notification & Email Toggles
+      var notifData = {
+        loginEmail: (document.getElementById('toggleLoginEmail') || {}).checked,
+        newVideo: (document.getElementById('toggleNewVideoEmail') || {}).checked,
+        certEmail: (document.getElementById('toggleCertEmail') || {}).checked,
+        weeklyDigest: (document.getElementById('toggleWeeklyDigest') || {}).checked
+      };
+      localStorage.setItem('continuum_notif_settings', JSON.stringify(notifData));
 
       var origText = btnSaveAllSettings.innerHTML;
       btnSaveAllSettings.innerHTML = '<span style="color:#00E599;">✓ All Settings Saved!</span>';
