@@ -2268,128 +2268,194 @@ function initAdminPolyhedron(canvas) {
   resize();
   window.addEventListener('resize', resize);
 
-  var phi = (1 + Math.sqrt(5)) / 2;
-  var rawVertices = [
-    [-1,  phi, 0], [ 1,  phi, 0], [-1, -phi, 0], [ 1, -phi, 0],
-    [0, -1,  phi], [0,  1,  phi], [0, -1, -phi], [0,  1, -phi],
-    [ phi, 0, -1], [ phi, 0,  1], [-phi, 0, -1], [-phi, 0,  1]
-  ];
+  // Load the Logo Icon Image for 3D volumetric extrusion & holographic rendering
+  var logoImg = new Image();
+  logoImg.src = '../assets/images/logo-icon.png';
+  var logoLoaded = false;
+  logoImg.onload = function() {
+    logoLoaded = true;
+  };
+  // Fallback if path relative from root or nested
+  logoImg.onerror = function() {
+    var fallback = new Image();
+    fallback.src = 'assets/images/logo-icon.png';
+    fallback.onload = function() {
+      logoImg = fallback;
+      logoLoaded = true;
+    };
+  };
 
-  var outerRadius = 78;
-  var innerRadius = 48;
-  var outerVerts = rawVertices.map(function(v) {
-    var len = Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
-    return [v[0]/len * outerRadius, v[1]/len * outerRadius, v[2]/len * outerRadius];
-  });
-  var innerVerts = rawVertices.map(function(v) {
-    var len = Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
-    return [v[0]/len * innerRadius, v[1]/len * innerRadius, v[2]/len * innerRadius];
-  });
+  var angleY = 0;
+  var angleX = 0.15;
+  var time = 0;
 
-  var faces = [
-    [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
-    [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
-    [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
-    [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]
-  ];
-
-  var angleX = 0.2;
-  var angleY = 0.4;
-  var angleZ = 0.1;
-  var autoSpeedY = 0.008;
-  var autoSpeedX = 0.005;
-  var autoSpeedZ = 0.003;
-
-  function rotateY(p, a) {
-    var cos = Math.cos(a), sin = Math.sin(a);
-    return [p[0] * cos + p[2] * sin, p[1], -p[0] * sin + p[2] * cos];
-  }
-  function rotateX(p, a) {
-    var cos = Math.cos(a), sin = Math.sin(a);
-    return [p[0], p[1] * cos - p[2] * sin, p[1] * sin + p[2] * cos];
-  }
-  function rotateZ(p, a) {
-    var cos = Math.cos(a), sin = Math.sin(a);
-    return [p[0] * cos - p[1] * sin, p[0] * sin + p[1] * cos, p[2]];
+  // Outer orbital ring / cage particles
+  var orbitParticles = [];
+  var numParticles = 24;
+  for (var i = 0; i < numParticles; i++) {
+    var theta = (i / numParticles) * Math.PI * 2;
+    orbitParticles.push({
+      theta: theta,
+      speed: 0.015 + (i % 3) * 0.005,
+      radius: 75 + (i % 2) * 12,
+      yOffset: (Math.sin(i * 1.5) * 20),
+      size: 1.5 + (i % 3) * 0.8
+    });
   }
 
   function render() {
     requestAnimationFrame(render);
     ctx.clearRect(0, 0, width, height);
 
-    // Continuous 3D Auto-Rotation
-    angleY += autoSpeedY;
-    angleX += autoSpeedX;
-    angleZ += autoSpeedZ;
+    time += 0.02;
+    angleY += 0.018; // smooth 3D yaw spin
+    var floatY = Math.sin(time) * 6; // gentle levitation floating
+    var tiltX = Math.sin(time * 0.7) * 0.12 + 0.1; // dynamic pitch
 
     var cx = width / 2;
-    var cy = height / 2;
+    var cy = height / 2 + floatY;
 
-    var transformedOuter = outerVerts.map(function(v) {
-      var r = rotateY(v, angleY);
-      r = rotateX(r, angleX);
-      r = rotateZ(r, angleZ);
-      return [r[0] + cx, r[1] + cy, r[2]];
-    });
+    // 1. Ambient Hologram Backlight Glow (Azure)
+    var bgGlow = ctx.createRadialGradient(cx, cy, 10, cx, cy, 90);
+    bgGlow.addColorStop(0, 'rgba(0, 127, 255, 0.28)');
+    bgGlow.addColorStop(0.5, 'rgba(0, 127, 255, 0.08)');
+    bgGlow.addColorStop(1, 'rgba(0, 127, 255, 0)');
+    ctx.fillStyle = bgGlow;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 90, 0, Math.PI * 2);
+    ctx.fill();
 
-    var transformedInner = innerVerts.map(function(v) {
-      var r = rotateY(v, -angleY * 1.4);
-      r = rotateX(r, -angleX * 1.4);
-      r = rotateZ(r, -angleZ * 1.4);
-      return [r[0] + cx, r[1] + cy, r[2]];
-    });
-
+    // 2. 3D Holographic Orbiting Ring (Gimbal Rings around 3D Logo)
     ctx.save();
-    ctx.strokeStyle = 'rgba(0, 127, 255, 0.25)';
+    ctx.translate(cx, cy);
+
+    // Orbital ring 1
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 82, 28, angleY * 0.5, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(0, 127, 255, 0.22)';
     ctx.lineWidth = 1;
-    for (var f = 0; f < faces.length; f++) {
-      var tri = faces[f];
-      ctx.beginPath();
-      ctx.moveTo(transformedInner[tri[0]][0], transformedInner[tri[0]][1]);
-      ctx.lineTo(transformedInner[tri[1]][0], transformedInner[tri[1]][1]);
-      ctx.lineTo(transformedInner[tri[2]][0], transformedInner[tri[2]][1]);
-      ctx.closePath();
-      ctx.stroke();
-    }
+    ctx.setLineDash([6, 6]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Orbital ring 2 (tilted counter-axis)
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 70, 22, -angleY * 0.35 + 0.5, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(51, 181, 255, 0.18)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
     ctx.restore();
 
-    var sortedFaces = faces.map(function(indices) {
-      var z = (transformedOuter[indices[0]][2] + transformedOuter[indices[1]][2] + transformedOuter[indices[2]][2]) / 3;
-      return { indices: indices, z: z };
-    });
-    sortedFaces.sort(function(a, b) { return a.z - b.z; });
+    // 3. Render 3D Logo Extrusion with Layered Depth
+    var logoAspect = 247 / 292;
+    var baseH = 88;
+    var baseW = baseH * logoAspect; // ~74px
+    var cosY = Math.cos(angleY);
+    var sinY = Math.sin(angleY);
 
-    for (var i = 0; i < sortedFaces.length; i++) {
-      var idx = sortedFaces[i].indices;
-      var p0 = transformedOuter[idx[0]];
-      var p1 = transformedOuter[idx[1]];
-      var p2 = transformedOuter[idx[2]];
+    if (logoLoaded) {
+      // Draw 14 stacked depth slices along the Z-axis to create realistic 3D volume / bevel
+      var depthLayers = 14;
+      var depthSpread = 16; // total 3D thickness in pixels
 
-      var depthAlpha = Math.max(0.08, Math.min(0.35, (sortedFaces[i].z + outerRadius) / (outerRadius * 2)));
+      for (var l = -depthLayers / 2; l <= depthLayers / 2; l++) {
+        var layerZ = (l / depthLayers) * depthSpread;
+        // Project 3D coordinate: rotate around Y and tilt around X
+        var pX = layerZ * sinY;
+        var pZ = layerZ * cosY;
+        var pY = layerZ * Math.sin(tiltX) * -cosY;
 
+        var scaleProj = 1 + (pZ / 260); // perspective scaling
+        var w = baseW * Math.abs(cosY) * scaleProj;
+        // prevent zero width inversion artifacts
+        if (w < 2) w = 2;
+        var h = baseH * scaleProj;
+
+        ctx.save();
+        ctx.translate(cx + pX, cy + pY);
+        ctx.rotate(tiltX * Math.cos(angleY * 0.5));
+
+        // Front vs back vs edge coloring
+        var isFront = (l === depthLayers / 2 && pZ > 0) || (l === -depthLayers / 2 && pZ <= 0);
+        var isCore = Math.abs(l) < 2;
+
+        if (isFront) {
+          // Front polished face: bright white-azure glow
+          ctx.globalAlpha = 0.95;
+          ctx.shadowColor = '#007FFF';
+          ctx.shadowBlur = 12;
+          ctx.drawImage(logoImg, -w / 2, -h / 2, w, h);
+        } else {
+          // Extruded 3D bevel layers (Azure hologram depth gradient)
+          var layerAlpha = 0.08 + (Math.abs(l) / depthLayers) * 0.16;
+          ctx.globalAlpha = layerAlpha;
+          ctx.drawImage(logoImg, -w / 2, -h / 2, w, h);
+
+          // Tint layers with azure
+          ctx.globalCompositeOperation = 'source-atop';
+          var depthColor = isCore ? 'rgba(0, 127, 255, 0.45)' : 'rgba(51, 181, 255, 0.28)';
+          ctx.fillStyle = depthColor;
+          ctx.fillRect(-w / 2, -h / 2, w, h);
+        }
+
+        ctx.restore();
+      }
+
+      // Add central energy core specular shine when facing forward
+      var faceForward = Math.abs(cosY);
+      if (faceForward > 0.4) {
+        ctx.save();
+        ctx.beginPath();
+        var shineRadius = 24 * faceForward;
+        var shineGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, shineRadius);
+        shineGrad.addColorStop(0, 'rgba(255, 255, 255, ' + (0.55 * faceForward) + ')');
+        shineGrad.addColorStop(0.4, 'rgba(51, 181, 255, ' + (0.35 * faceForward) + ')');
+        shineGrad.addColorStop(1, 'rgba(0, 127, 255, 0)');
+        ctx.fillStyle = shineGrad;
+        ctx.arc(cx, cy, shineRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    } else {
+      // Fallback pulse while image finishes loading
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 127, 255, 0.6)';
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(p0[0], p0[1]);
-      ctx.lineTo(p1[0], p1[1]);
-      ctx.lineTo(p2[0], p2[1]);
-      ctx.closePath();
-
-      ctx.fillStyle = 'rgba(0, 127, 255, ' + (depthAlpha * 0.22) + ')';
-      ctx.fill();
-
-      ctx.strokeStyle = 'rgba(51, 181, 255, ' + (depthAlpha * 0.7) + ')';
-      ctx.lineWidth = 1.2;
+      ctx.arc(cx, cy, 32, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.restore();
     }
 
-    for (var v = 0; v < transformedOuter.length; v++) {
-      var pt = transformedOuter[v];
+    // 4. Orbiting Holographic Data Nodes (particles orbiting the 3D logo)
+    for (var p = 0; p < orbitParticles.length; p++) {
+      var pt = orbitParticles[p];
+      pt.theta += pt.speed;
+
+      var px3d = Math.cos(pt.theta) * pt.radius;
+      var pz3d = Math.sin(pt.theta) * pt.radius;
+      var py3d = pt.yOffset + Math.sin(pt.theta * 2 + time) * 8;
+
+      // Rotate with scene
+      var rotX = px3d * Math.cos(angleY * 0.4) - pz3d * Math.sin(angleY * 0.4);
+      var rotZ = px3d * Math.sin(angleY * 0.4) + pz3d * Math.cos(angleY * 0.4);
+
+      var pScale = (rotZ + 120) / 240;
+      if (pScale < 0.2) pScale = 0.2;
+
+      var finalX = cx + rotX;
+      var finalY = cy + py3d * 0.7;
+
       ctx.beginPath();
-      ctx.arc(pt[0], pt[1], 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = '#33B5FF';
+      ctx.arc(finalX, finalY, pt.size * pScale, 0, Math.PI * 2);
+      ctx.fillStyle = (p % 2 === 0) ? '#33B5FF' : '#007FFF';
       ctx.shadowColor = '#007FFF';
-      ctx.shadowBlur = 6;
+      ctx.shadowBlur = 6 * pScale;
+      ctx.globalAlpha = Math.max(0.2, Math.min(0.9, pScale));
       ctx.fill();
       ctx.shadowBlur = 0;
+      ctx.globalAlpha = 1.0;
     }
   }
 
