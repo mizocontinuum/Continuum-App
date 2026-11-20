@@ -104,12 +104,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var analyticsView = document.getElementById('analyticsView');
     var videosView = document.getElementById('videosView');
     var studentsView = document.getElementById('studentsView');
+    var categoriesView = document.getElementById('categoriesView');
 
     // Deactivate all panes
     if (dashboardView) dashboardView.classList.remove('active');
     if (analyticsView) analyticsView.classList.remove('active');
     if (videosView) videosView.classList.remove('active');
     if (studentsView) studentsView.classList.remove('active');
+    if (categoriesView) categoriesView.classList.remove('active');
 
     if (viewName === 'analytics') {
       if (analyticsView) {
@@ -125,6 +127,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if (studentsView) {
         studentsView.classList.add('active');
         renderStudentsManagement();
+      }
+    } else if (viewName === 'categories') {
+      if (categoriesView) {
+        categoriesView.classList.add('active');
+        renderCategoryManagement();
       }
     } else {
       if (dashboardView) dashboardView.classList.add('active');
@@ -149,6 +156,8 @@ document.addEventListener('DOMContentLoaded', function () {
     switchView('videos');
   } else if (window.location.hash === '#students') {
     switchView('students');
+  } else if (window.location.hash === '#categories') {
+    switchView('categories');
   } else if (window.location.hash === '#categories') {
     switchView('categories');
   }

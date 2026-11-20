@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#03080E">
   <title>Admin Dashboard — Continuum Academy</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,6 +17,7 @@
   <link rel="shortcut icon" href="../assets/images/favicon.ico">
   <link rel="icon" type="image/png" href="../assets/images/icon-circle-512.png">
 </head>
+
 <body>
 
   <!-- Backdrop for Mobile Sidebar Drawer -->
@@ -114,7 +116,9 @@
               <button class="nav-item-btn" data-view="settings">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                  </path>
                 </svg>
                 <span>Platform Settings</span>
               </button>
@@ -156,7 +160,7 @@
               <line x1="3" y1="18" x2="21" y2="18"></line>
             </svg>
           </button>
-          
+
           <div class="topbar-search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <circle cx="11" cy="11" r="8"></circle>
@@ -187,423 +191,427 @@
 
       <!-- Dashboard View Content -->
       <main class="admin-content">
-        
+
         <!-- ==================== VIEW 1: DASHBOARD OVERVIEW ==================== -->
         <div class="admin-view-pane active" id="dashboardView">
-        
-        <!-- Header Hero Wrap with Integrated 3D Spline Canvas -->
-        <div class="header-hero-wrap">
-          <div class="header-text-block">
-            <p class="page-eyebrow">CONTINUUM EXECUTIVE ACADEMY</p>
-            <h1 class="page-title">Platform Performance & Operations</h1>
-            <p class="page-subtitle">Real-time overview of student progress, video streams, and learning metrics.</p>
-          </div>
-          
-          <!-- Holographic 3D Polyhedron Embedded Canvas (Balanced, no overlap) -->
-          <div class="admin-spline-stage">
-            <canvas id="adminSplineCanvas"></canvas>
-          </div>
-        </div>
 
-        <!-- 5 Key Metric Stat Cards -->
-        <div class="stats-grid">
-          
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-label">Total Students</span>
-              <div class="stat-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
+          <!-- Header Hero Wrap with Integrated 3D Spline Canvas -->
+          <div class="header-hero-wrap">
+            <div class="header-text-block">
+              <p class="page-eyebrow">CONTINUUM EXECUTIVE ACADEMY</p>
+              <h1 class="page-title">Platform Performance & Operations</h1>
+              <p class="page-subtitle">Real-time overview of student progress, video streams, and learning metrics.</p>
+            </div>
+
+            <!-- Holographic 3D Polyhedron Embedded Canvas (Balanced, no overlap) -->
+            <div class="admin-spline-stage">
+              <canvas id="adminSplineCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- 5 Key Metric Stat Cards -->
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Students</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">1,280</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
                 </svg>
+                <span>+14.2% this month</span>
               </div>
             </div>
-            <div class="stat-value">1,280</div>
-            <div class="stat-delta positive">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              <span>+14.2% this month</span>
-            </div>
-          </div>
 
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-label">Published Videos</span>
-              <div class="stat-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                </svg>
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Published Videos</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">42</div>
+              <div class="stat-delta neutral">
+                <span>8 categories active</span>
               </div>
             </div>
-            <div class="stat-value">42</div>
-            <div class="stat-delta neutral">
-              <span>8 categories active</span>
-            </div>
-          </div>
 
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-label">Total Video Views</span>
-              <div class="stat-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Video Views</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">38,420</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
                 </svg>
+                <span>+28.5% weekly</span>
               </div>
             </div>
-            <div class="stat-value">38,420</div>
-            <div class="stat-delta positive">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              <span>+28.5% weekly</span>
-            </div>
-          </div>
 
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-label">Active Learners</span>
-              <div class="stat-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Active Learners</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">648</div>
+              <div class="stat-delta positive">
+                <span>Active in last 24h</span>
               </div>
             </div>
-            <div class="stat-value">648</div>
-            <div class="stat-delta positive">
-              <span>Active in last 24h</span>
-            </div>
-          </div>
 
-          <div class="stat-card">
-            <div class="stat-header">
-              <span class="stat-label">Avg. Completion</span>
-              <div class="stat-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Avg. Completion</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">76.4%</div>
+              <div class="stat-delta positive">
+                <span>High engagement</span>
               </div>
             </div>
-            <div class="stat-value">76.4%</div>
-            <div class="stat-delta positive">
-              <span>High engagement</span>
-            </div>
+
           </div>
 
-        </div>
+          <!-- Two Column Main Workspace Grid -->
+          <div class="dashboard-grid">
 
-        <!-- Two Column Main Workspace Grid -->
-        <div class="dashboard-grid">
+            <!-- Left Column: Student Viewing Activity & Management -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h2 class="panel-title">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                  <span>Student Watch Activity & Progress</span>
+                </h2>
+                <a href="#students" class="panel-action-link">View all 1,280 students &rarr;</a>
+              </div>
 
-          <!-- Left Column: Student Viewing Activity & Management -->
-          <div class="panel-card">
-            <div class="panel-header">
-              <h2 class="panel-title">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                </svg>
-                <span>Student Watch Activity & Progress</span>
-              </h2>
-              <a href="#students" class="panel-action-link">View all 1,280 students &rarr;</a>
-            </div>
-
-            <div class="table-responsive">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Student</th>
-                    <th>Current Lesson</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="student-cell">
-                        <div class="student-avatar">MR</div>
-                        <div>
-                          <div class="student-meta-name">Marcus Rodriguez</div>
-                          <div class="student-meta-email">m.rodriguez@executive.ph</div>
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Current Lesson</th>
+                      <th>Progress</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar">MR</div>
+                          <div>
+                            <div class="student-meta-name">Marcus Rodriguez</div>
+                            <div class="student-meta-email">m.rodriguez@executive.ph</div>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div style="font-weight: 500;">Brand Strategy Masterclass</div>
-                      <div style="font-size: 11px; color: var(--text-dim);">Watched 32m of 45m</div>
-                    </td>
-                    <td>
-                      <div class="progress-bar-wrap">
-                        <div class="progress-bar-fill" style="width: 71%;"></div>
-                      </div>
-                      <span style="font-size: 12px; font-weight: 600;">71%</span>
-                    </td>
-                    <td>
-                      <span class="status-badge active">Active</span>
-                    </td>
-                    <td>
-                      <div class="row-actions">
-                        <button class="action-icon-btn" title="View Student History">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                          </svg>
-                        </button>
-                        <button class="action-icon-btn danger" title="Suspend Account">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <div class="student-cell">
-                        <div class="student-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">AT</div>
-                        <div>
-                          <div class="student-meta-name">Alysia Tan</div>
-                          <div class="student-meta-email">alysia.tan@innovate.co</div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Brand Strategy Masterclass</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 32m of 45m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 71%;"></div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div style="font-weight: 500;">Disruptive Venture Scaling</div>
-                      <div style="font-size: 11px; color: var(--text-dim);">Watched 48m of 50m</div>
-                    </td>
-                    <td>
-                      <div class="progress-bar-wrap">
-                        <div class="progress-bar-fill" style="width: 96%;"></div>
-                      </div>
-                      <span style="font-size: 12px; font-weight: 600;">96%</span>
-                    </td>
-                    <td>
-                      <span class="status-badge active">Active</span>
-                    </td>
-                    <td>
-                      <div class="row-actions">
-                        <button class="action-icon-btn" title="View Student History">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                          </svg>
-                        </button>
-                        <button class="action-icon-btn danger" title="Suspend Account">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <div class="student-cell">
-                        <div class="student-avatar" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);">DM</div>
-                        <div>
-                          <div class="student-meta-name">Danilo Mendoza</div>
-                          <div class="student-meta-email">danilo.m@mendoza-holdings.com</div>
+                        <span style="font-size: 12px; font-weight: 600;">71%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div style="font-weight: 500;">Marketing Blue Ocean Shift</div>
-                      <div style="font-size: 11px; color: var(--text-dim);">Watched 15m of 60m</div>
-                    </td>
-                    <td>
-                      <div class="progress-bar-wrap">
-                        <div class="progress-bar-fill" style="width: 25%;"></div>
-                      </div>
-                      <span style="font-size: 12px; font-weight: 600;">25%</span>
-                    </td>
-                    <td>
-                      <span class="status-badge active">Active</span>
-                    </td>
-                    <td>
-                      <div class="row-actions">
-                        <button class="action-icon-btn" title="View Student History">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                          </svg>
-                        </button>
-                        <button class="action-icon-btn danger" title="Suspend Account">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
 
-                  <tr>
-                    <td>
-                      <div class="student-cell">
-                        <div class="student-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">CL</div>
-                        <div>
-                          <div class="student-meta-name">Christine Laurel</div>
-                          <div class="student-meta-email">claurel@apexretail.org</div>
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">AT
+                          </div>
+                          <div>
+                            <div class="student-meta-name">Alysia Tan</div>
+                            <div class="student-meta-email">alysia.tan@innovate.co</div>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div style="font-weight: 500;">Executive Crisis Communication</div>
-                      <div style="font-size: 11px; color: var(--text-dim);">Watched 38m of 38m</div>
-                    </td>
-                    <td>
-                      <div class="progress-bar-wrap">
-                        <div class="progress-bar-fill" style="width: 100%;"></div>
-                      </div>
-                      <span style="font-size: 12px; font-weight: 600;">100%</span>
-                    </td>
-                    <td>
-                      <span class="status-badge active">Active</span>
-                    </td>
-                    <td>
-                      <div class="row-actions">
-                        <button class="action-icon-btn" title="View Student History">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                          </svg>
-                        </button>
-                        <button class="action-icon-btn danger" title="Suspend Account">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Disruptive Venture Scaling</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 48m of 50m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 96%;"></div>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 600;">96%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
 
-          <!-- Right Column: Video Library & Category Highlights -->
-          <div class="panel-card">
-            <div class="panel-header">
-              <h2 class="panel-title">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                </svg>
-                <span>Recently Uploaded Videos</span>
-              </h2>
-              <a href="#videos" class="panel-action-link">Manage library &rarr;</a>
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);">DM
+                          </div>
+                          <div>
+                            <div class="student-meta-name">Danilo Mendoza</div>
+                            <div class="student-meta-email">danilo.m@mendoza-holdings.com</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Marketing Blue Ocean Shift</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 15m of 60m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 25%;"></div>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 600;">25%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">CL
+                          </div>
+                          <div>
+                            <div class="student-meta-name">Christine Laurel</div>
+                            <div class="student-meta-email">claurel@apexretail.org</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Executive Crisis Communication</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 38m of 38m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 100%;"></div>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 600;">100%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            <div class="recent-video-list">
-              
-              <div class="video-row-card">
-                <img src="../assets/images/card-1.png" alt="Card" class="video-thumb-preview">
-                <div class="video-details">
-                  <h4 class="video-card-title">Josiah Go: The Marketing Discipline</h4>
-                  <div class="video-card-meta">
-                    <span class="video-tag-pill">Marketing</span>
-                    <span>42m</span>
-                    <span>948 views</span>
+            <!-- Right Column: Video Library & Category Highlights -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h2 class="panel-title">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                  <span>Recently Uploaded Videos</span>
+                </h2>
+                <a href="#videos" class="panel-action-link">Manage library &rarr;</a>
+              </div>
+
+              <div class="recent-video-list">
+
+                <div class="video-row-card">
+                  <img src="../assets/images/card-1.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Josiah Go: The Marketing Discipline</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Marketing</span>
+                      <span>42m</span>
+                      <span>948 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
                   </div>
                 </div>
-                <div class="row-actions">
-                  <button class="action-icon-btn" title="Edit video">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
 
-              <div class="video-row-card">
-                <img src="../assets/images/card-2.png" alt="Card" class="video-thumb-preview">
-                <div class="video-details">
-                  <h4 class="video-card-title">Executive Venture Acceleration 2026</h4>
-                  <div class="video-card-meta">
-                    <span class="video-tag-pill">Leadership</span>
-                    <span>58m</span>
-                    <span>1,240 views</span>
+                <div class="video-row-card">
+                  <img src="../assets/images/card-2.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Executive Venture Acceleration 2026</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Leadership</span>
+                      <span>58m</span>
+                      <span>1,240 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
                   </div>
                 </div>
-                <div class="row-actions">
-                  <button class="action-icon-btn" title="Edit video">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
 
-              <div class="video-row-card">
-                <img src="../assets/images/card-3.png" alt="Card" class="video-thumb-preview">
-                <div class="video-details">
-                  <h4 class="video-card-title">Omnichannel Retail Transformation</h4>
-                  <div class="video-card-meta">
-                    <span class="video-tag-pill">Retail</span>
-                    <span>35m</span>
-                    <span>810 views</span>
+                <div class="video-row-card">
+                  <img src="../assets/images/card-3.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Omnichannel Retail Transformation</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Retail</span>
+                      <span>35m</span>
+                      <span>810 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
                   </div>
                 </div>
-                <div class="row-actions">
-                  <button class="action-icon-btn" title="Edit video">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
 
-              <div class="video-row-card">
-                <img src="../assets/images/card-4.png" alt="Card" class="video-thumb-preview">
-                <div class="video-details">
-                  <h4 class="video-card-title">Closing the Executive Strategy Action Gap</h4>
-                  <div class="video-card-meta">
-                    <span class="video-tag-pill">Strategy</span>
-                    <span>49m</span>
-                    <span>2,105 views</span>
+                <div class="video-row-card">
+                  <img src="../assets/images/card-4.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Closing the Executive Strategy Action Gap</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Strategy</span>
+                      <span>49m</span>
+                      <span>2,105 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
                   </div>
                 </div>
-                <div class="row-actions">
-                  <button class="action-icon-btn" title="Edit video">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
-                </div>
+
               </div>
 
             </div>
 
           </div>
 
-        </div>
-
-              </div><!-- /#dashboardView -->
+        </div><!-- /#dashboardView -->
 
         <!-- ==================== VIEW 2: ANALYTICS & REPORTS ==================== -->
         <div class="admin-view-pane" id="analyticsView">
-          
+
           <!-- 1. Page Header with Title, Description, Date Filter, & Export Actions -->
           <div class="reports-header-card">
             <div>
               <p class="page-eyebrow">CONTINUUM INTELLIGENCE</p>
               <h1 class="page-title">Analytics & Reports</h1>
-              <p class="page-subtitle">Real-time educational metrics, video engagement, student completion, and exportable reports.</p>
+              <p class="page-subtitle">Real-time educational metrics, video engagement, student completion, and
+                exportable reports.</p>
             </div>
 
             <div class="reports-controls">
@@ -648,7 +656,7 @@
 
           <!-- 2. Four Compact Statistics Cards -->
           <div class="compact-stats-grid">
-            
+
             <div class="stat-card">
               <div class="stat-header">
                 <span class="stat-label">Total Video Views</span>
@@ -739,7 +747,8 @@
                   </svg>
                   <span>Video Views Analytics</span>
                 </h2>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Daily streaming volume and executive engagement</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Daily streaming volume and
+                  executive engagement</p>
               </div>
 
               <div class="chart-legend">
@@ -762,7 +771,9 @@
               <div class="panel-header">
                 <h2 class="panel-title">
                   <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    <polygon
+                      points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                    </polygon>
                   </svg>
                   <span>Top Performing Videos (Top 5)</span>
                 </h2>
@@ -828,7 +839,8 @@
               </svg>
               <div>
                 <div style="font-weight: 600; color: #FFF; font-size: 13px;">Comprehensive Analytics Export</div>
-                <div style="font-size: 11.5px; color: var(--text-muted);">Download raw CSV activity logs, formatted executive PDF reports, or print preview.</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Download raw CSV activity logs, formatted
+                  executive PDF reports, or print preview.</div>
               </div>
             </div>
 
@@ -852,15 +864,16 @@
           </div>
 
         </div><!-- /#analyticsView -->
-              <!-- ==================== VIEW 3: VIDEO MANAGEMENT ==================== -->
+        <!-- ==================== VIEW 3: VIDEO MANAGEMENT ==================== -->
         <div class="admin-view-pane" id="videosView">
-          
+
           <!-- 1. Page Header -->
           <div class="reports-header-card">
             <div>
               <p class="page-eyebrow">EDUCATIONAL CURRICULUM</p>
               <h1 class="page-title">Video Management</h1>
-              <p class="page-subtitle">Manage, organize, publish, and monitor all educational masterclasses and video lessons.</p>
+              <p class="page-subtitle">Manage, organize, publish, and monitor all educational masterclasses and video
+                lessons.</p>
             </div>
 
             <div class="reports-controls">
@@ -876,7 +889,7 @@
 
           <!-- 2. Four Compact Video Statistics Cards -->
           <div class="compact-stats-grid">
-            
+
             <div class="stat-card">
               <div class="stat-header">
                 <span class="stat-label">Total Videos</span>
@@ -952,7 +965,7 @@
           <!-- 3. Search and Filtering Bar -->
           <div class="filter-bar-card">
             <div class="filter-left-group">
-              
+
               <div class="filter-search-box">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <circle cx="11" cy="11" r="8"></circle>
@@ -997,7 +1010,8 @@
 
           <!-- 4. Complete Video Management Table -->
           <div class="panel-card" style="padding: 0; overflow: hidden;">
-            <div style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+            <div
+              style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
               <h2 class="panel-title">
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
                   <polygon points="23 7 16 12 23 17 23 7"></polygon>
@@ -1005,7 +1019,8 @@
                 </svg>
                 <span>All Masterclasses & Video Lessons</span>
               </h2>
-              <span id="vmTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5 of 42 videos</span>
+              <span id="vmTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5
+                of 42 videos</span>
             </div>
 
             <div class="table-responsive">
@@ -1039,15 +1054,16 @@
           </div>
 
         </div><!-- /#videosView -->
-              <!-- ==================== VIEW 4: STUDENTS MANAGEMENT ==================== -->
+        <!-- ==================== VIEW 4: STUDENTS MANAGEMENT ==================== -->
         <div class="admin-view-pane" id="studentsView">
-          
+
           <!-- 1. Page Header -->
           <div class="reports-header-card">
             <div>
               <p class="page-eyebrow">EXECUTIVE LEARNER DIRECTORY</p>
               <h1 class="page-title">Students Management</h1>
-              <p class="page-subtitle">Manage student accounts, track lesson progress, monitor engagement, and oversee enrollments.</p>
+              <p class="page-subtitle">Manage student accounts, track lesson progress, monitor engagement, and oversee
+                enrollments.</p>
             </div>
 
             <div class="reports-controls">
@@ -1071,7 +1087,7 @@
 
           <!-- 2. Four Compact Student Statistics Cards -->
           <div class="compact-stats-grid">
-            
+
             <div class="stat-card">
               <div class="stat-header">
                 <span class="stat-label">Total Students</span>
@@ -1149,7 +1165,7 @@
           <!-- 3. Search and Filtering Bar -->
           <div class="filter-bar-card">
             <div class="filter-left-group">
-              
+
               <div class="filter-search-box">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <circle cx="11" cy="11" r="8"></circle>
@@ -1191,7 +1207,8 @@
 
           <!-- 4. Students Management Table -->
           <div class="panel-card" style="padding: 0; overflow: hidden;">
-            <div style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+            <div
+              style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
               <h2 class="panel-title">
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -1199,7 +1216,8 @@
                 </svg>
                 <span>All Enrolled Students</span>
               </h2>
-              <span id="smTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5 of 1,280 students</span>
+              <span id="smTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5
+                of 1,280 students</span>
             </div>
 
             <div class="table-responsive">
@@ -1232,15 +1250,16 @@
           </div>
 
         </div><!-- /#studentsView -->
-              <!-- ==================== VIEW 5: CATEGORIES MANAGEMENT ==================== -->
+        <!-- ==================== VIEW 5: CATEGORIES MANAGEMENT ==================== -->
         <div class="admin-view-pane" id="categoriesView">
-          
+
           <!-- 1. Page Header -->
           <div class="reports-header-card">
             <div>
               <p class="page-eyebrow">CURRICULUM DISCIPLINES</p>
               <h1 class="page-title">Category Management</h1>
-              <p class="page-subtitle">Organize masterclasses by discipline, manage category metadata, and monitor learning catalog distribution.</p>
+              <p class="page-subtitle">Organize masterclasses by discipline, manage category metadata, and monitor
+                learning catalog distribution.</p>
             </div>
 
             <div class="reports-controls">
@@ -1256,7 +1275,7 @@
 
           <!-- 2. Four Compact Statistics Cards -->
           <div class="compact-stats-grid">
-            
+
             <div class="stat-card">
               <div class="stat-header">
                 <span class="stat-label">Total Categories</span>
@@ -1293,7 +1312,9 @@
                 <span class="stat-label">Top Category</span>
                 <div class="stat-icon-wrap">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                    </path>
                   </svg>
                 </div>
               </div>
@@ -1324,7 +1345,7 @@
           <!-- 3. Search and Filtering Bar -->
           <div class="filter-bar-card">
             <div class="filter-left-group">
-              
+
               <div class="filter-search-box">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <circle cx="11" cy="11" r="8"></circle>
@@ -1354,14 +1375,16 @@
 
           <!-- 4. Categories Management Table -->
           <div class="panel-card" style="padding: 0; overflow: hidden;">
-            <div style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+            <div
+              style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
               <h2 class="panel-title">
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                 </svg>
                 <span>Curriculum Disciplines</span>
               </h2>
-              <span id="cmTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5 of 8 categories</span>
+              <span id="cmTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5
+                of 8 categories</span>
             </div>
 
             <div class="table-responsive">
@@ -1410,11 +1433,13 @@
         <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
       </div>
 
-      <form id="uploadVideoForm" onsubmit="event.preventDefault(); alert('Video added to processing queue.'); document.getElementById('adminModal').classList.remove('open');">
-        
+      <form id="uploadVideoForm"
+        onsubmit="event.preventDefault(); alert('Video added to processing queue.'); document.getElementById('adminModal').classList.remove('open');">
+
         <div class="form-group">
           <label for="modalVideoTitle">Video Title</label>
-          <input type="text" id="modalVideoTitle" class="form-input" placeholder="e.g. Strategic Brand Positioning" required>
+          <input type="text" id="modalVideoTitle" class="form-input" placeholder="e.g. Strategic Brand Positioning"
+            required>
         </div>
 
         <div class="form-row">
@@ -1436,7 +1461,8 @@
 
         <div class="form-group">
           <label for="modalDescription">Description</label>
-          <textarea id="modalDescription" class="form-textarea" rows="3" placeholder="Overview of key concepts and actionable takeaways..."></textarea>
+          <textarea id="modalDescription" class="form-textarea" rows="3"
+            placeholder="Overview of key concepts and actionable takeaways..."></textarea>
         </div>
 
         <div class="form-row">
@@ -1582,7 +1608,7 @@
   <div class="admin-modal-backdrop" id="vmDeleteModal">
     <div class="admin-modal-card" style="max-width: 440px;">
       <div class="modal-header">
-        <h3 class="modal-title" style="color: var="--status-danger";">Confirm Deletion</h3>
+        <h3 class="modal-title" style="color: var(--status-danger)">Confirm Deletion</h3>
         <button class="modal-close-btn" id="vmDeleteCloseBtn">&times;</button>
       </div>
 
@@ -1590,12 +1616,14 @@
         Are you sure you want to delete <strong id="vmDeleteVideoTitle" style="color: #FFF;"></strong>?
       </p>
       <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 24px;">
-        This will permanently remove the video from the active catalog and student watch history. This action cannot be undone.
+        This will permanently remove the video from the active catalog and student watch history. This action cannot be
+        undone.
       </p>
 
       <div style="display: flex; justify-content: flex-end; gap: 10px;">
         <button type="button" class="topbar-btn view-site" id="vmDeleteCancelBtn">Cancel</button>
-        <button type="button" class="compact-btn" id="vmDeleteConfirmBtn" style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
+        <button type="button" class="compact-btn" id="vmDeleteConfirmBtn"
+          style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
           Delete Video
         </button>
       </div>
@@ -1620,7 +1648,8 @@
           <div style="font-size: 12px; color: var(--text-muted);" id="smDetailsEmail">m.rodriguez@executive.ph</div>
           <div style="display: flex; gap: 12px; margin-top: 6px; font-size: 11.5px;">
             <span id="smDetailsStatusBadge" class="status-badge active">Active</span>
-            <span style="color: var(--text-dim);">Joined: <span id="smDetailsRegDate" style="color:#FFF;">Oct 12, 2026</span></span>
+            <span style="color: var(--text-dim);">Joined: <span id="smDetailsRegDate" style="color:#FFF;">Oct 12,
+                2026</span></span>
           </div>
         </div>
       </div>
@@ -1748,15 +1777,18 @@
       </div>
 
       <p style="font-size: 13.5px; color: var(--text-main); margin-bottom: 12px;">
-        Are you sure you want to permanently delete the account of <strong id="smDeleteStudentName" style="color: #FFF;"></strong>?
+        Are you sure you want to permanently delete the account of <strong id="smDeleteStudentName"
+          style="color: #FFF;"></strong>?
       </p>
       <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 24px;">
-        This will delete the student profile, remove viewing records, and invalidate their access. This action cannot be undone.
+        This will delete the student profile, remove viewing records, and invalidate their access. This action cannot be
+        undone.
       </p>
 
       <div style="display: flex; justify-content: flex-end; gap: 10px;">
         <button type="button" class="topbar-btn view-site" id="smDeleteCancelBtn">Cancel</button>
-        <button type="button" class="compact-btn" id="smDeleteConfirmBtn" style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
+        <button type="button" class="compact-btn" id="smDeleteConfirmBtn"
+          style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
           Delete Student
         </button>
       </div>
@@ -1781,7 +1813,8 @@
 
         <div class="form-group">
           <label for="smAddEmailInput">Email Address</label>
-          <input type="email" id="smAddEmailInput" class="form-input" placeholder="e.g. maria.santos@company.ph" required>
+          <input type="email" id="smAddEmailInput" class="form-input" placeholder="e.g. maria.santos@company.ph"
+            required>
         </div>
 
         <div class="form-group">
@@ -1828,7 +1861,8 @@
 
         <div class="form-group">
           <label for="cmDescInput">Description</label>
-          <textarea id="cmDescInput" class="form-textarea" rows="3" placeholder="Brief summary of this learning discipline..."></textarea>
+          <textarea id="cmDescInput" class="form-textarea" rows="3"
+            placeholder="Brief summary of this learning discipline..."></textarea>
         </div>
 
         <div class="form-row">
@@ -1878,7 +1912,8 @@
 
       <div style="display: flex; justify-content: flex-end; gap: 10px;">
         <button type="button" class="topbar-btn view-site" id="cmDeleteCancelBtn">Cancel</button>
-        <button type="button" class="compact-btn" id="cmDeleteConfirmBtn" style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
+        <button type="button" class="compact-btn" id="cmDeleteConfirmBtn"
+          style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
           Delete Category
         </button>
       </div>
@@ -1886,4 +1921,5 @@
   </div>
 
 </body>
+
 </html>
