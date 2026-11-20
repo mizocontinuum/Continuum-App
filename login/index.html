@@ -217,31 +217,33 @@
           // Clear previous error
           if (errorMsg) errorMsg.textContent = '';
 
-          // 1. Temporary Admin Account Check
-          if (email === 'admin@continuum.ph' && pass === 'admin123') {
+          // 1. Temporary Admin Account Check (accepts admin@continuum.ph or just admin, and admin123 or admin)
+          if ((email === 'admin@continuum.ph' || email === 'admin') && (pass === 'admin123' || pass === 'admin')) {
             sessionStorage.setItem('continuum_session', JSON.stringify({
               role: 'admin',
               email: 'admin@continuum.ph',
               name: 'Executive Admin'
             }));
+            localStorage.setItem('continuum_auth_user', 'admin');
             showToast('Welcome Admin! Redirecting to Dashboard...');
             setTimeout(() => {
               window.location.href = '../admin/';
-            }, 800);
+            }, 600);
             return;
           }
 
-          // 2. Temporary Student Account Check
-          if (email === 'student@continuum.ph' && pass === 'student123') {
+          // 2. Temporary Student Account Check (accepts student@continuum.ph or student)
+          if ((email === 'student@continuum.ph' || email === 'student') && (pass === 'student123' || pass === 'student')) {
             sessionStorage.setItem('continuum_session', JSON.stringify({
               role: 'student',
               email: 'student@continuum.ph',
               name: 'Student Learner'
             }));
+            localStorage.setItem('continuum_auth_user', 'student');
             showToast('Login successful! Redirecting to Student Home...');
             setTimeout(() => {
               window.location.href = '../home/';
-            }, 800);
+            }, 600);
             return;
           }
 
