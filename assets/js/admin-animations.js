@@ -149,6 +149,8 @@ document.addEventListener('DOMContentLoaded', function () {
     switchView('videos');
   } else if (window.location.hash === '#students') {
     switchView('students');
+  } else if (window.location.hash === '#categories') {
+    switchView('categories');
   }
 
   // ==========================================================================
@@ -1644,6 +1646,400 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    };
+  }
+
+
+  // ==========================================================================
+  // 9. Complete Category Management Engine (CRUD, Filter, Search, Pagination)
+  // ==========================================================================
+
+  var categoryDataset = [
+    {
+      id: 1,
+      name: 'Marketing Discipline',
+      slug: 'marketing',
+      order: 1,
+      videosCount: 14,
+      status: 'active',
+      color: '#1EA0FF',
+      description: 'Brand positioning, competitive defense, strategic commercialization, and pricing elasticity.'
+    },
+    {
+      id: 2,
+      name: 'Strategic Formulation',
+      slug: 'strategy',
+      order: 2,
+      videosCount: 10,
+      status: 'active',
+      color: '#8B5CF6',
+      description: 'Corporate growth architectures, business model turnaround, and closing the action gap.'
+    },
+    {
+      id: 3,
+      name: 'Executive Leadership',
+      slug: 'leadership',
+      order: 3,
+      videosCount: 8,
+      status: 'active',
+      color: '#00E599',
+      description: 'Board governance, crisis leadership, culture transformation, and visionary scaling.'
+    },
+    {
+      id: 4,
+      name: 'Omnichannel Retail',
+      slug: 'retail',
+      order: 4,
+      videosCount: 5,
+      status: 'active',
+      color: '#F59E0B',
+      description: 'Department store turnaround, e-commerce supply chains, dark stores, and retail analytics.'
+    },
+    {
+      id: 5,
+      name: 'Corporate Finance & Ventures',
+      slug: 'finance',
+      order: 5,
+      videosCount: 3,
+      status: 'active',
+      color: '#EC4899',
+      description: 'Venture capital structuring, debt-to-equity synergies, M&A due diligence, and capital allocation.'
+    },
+    {
+      id: 6,
+      name: 'Digital Transformation',
+      slug: 'digital-transformation',
+      order: 6,
+      videosCount: 2,
+      status: 'active',
+      color: '#1EA0FF',
+      description: 'Enterprise AI adoption, cloud transition frameworks, and algorithmic business automation.'
+    },
+    {
+      id: 7,
+      name: 'Human Capital & Talent',
+      slug: 'human-capital',
+      order: 7,
+      videosCount: 0,
+      status: 'inactive',
+      color: '#8B5CF6',
+      description: 'Executive retention, performance equity models, and high-performance organizational design.'
+    },
+    {
+      id: 8,
+      name: 'Crisis & Risk Governance',
+      slug: 'risk-governance',
+      order: 8,
+      videosCount: 0,
+      status: 'inactive',
+      color: '#F59E0B',
+      description: 'Media crisis management, shareholder disputes, regulatory compliance, and risk containment.'
+    }
+  ];
+
+  var cmSearch = '';
+  var cmSort = 'order';
+  var cmCurrentPage = 1;
+  var cmPerPage = 5;
+
+  var pendingDeleteCategoryId = null;
+
+  function renderCategoryManagement() {
+    // 1. Update Category Statistics Cards
+    var totalCount = categoryDataset.length;
+    var totalVideosAssigned = categoryDataset.reduce(function(acc, c) { return acc + c.videosCount; }, 0);
+    
+    // Find top category
+    var sortedByVideos = categoryDataset.slice().sort(function(a, b) { return b.videosCount - a.videosCount; });
+    var topCat = sortedByVideos[0] || { name: 'Marketing', videosCount: 0 };
+
+    var elTotal = document.getElementById('statCmTotal');
+    var elTotalVideos = document.getElementById('statCmTotalVideos');
+    var elTopName = document.getElementById('statCmTopName');
+    var elTopCount = document.getElementById('statCmTopCount');
+
+    if (elTotal) elTotal.textContent = totalCount;
+    if (elTotalVideos) elTotalVideos.textContent = totalVideosAssigned;
+    if (elTopName) elTopName.textContent = topCat.name.replace(' Discipline', '');
+    if (elTopCount) elTopCount.textContent = topCat.videosCount + ' masterclasses';
+
+    // 2. Filter Dataset
+    var filtered = categoryDataset.filter(function(cat) {
+      return !cmSearch || 
+        cat.name.toLowerCase().indexOf(cmSearch.toLowerCase()) !== -1 ||
+        cat.slug.toLowerCase().indexOf(cmSearch.toLowerCase()) !== -1 ||
+        cat.description.toLowerCase().indexOf(cmSearch.toLowerCase()) !== -1;
+    });
+
+    // Sort
+    if (cmSort === 'order') {
+      filtered.sort(function(a, b) { return a.order - b.order; });
+    } else if (cmSort === 'name') {
+      filtered.sort(function(a, b) { return a.name.localeCompare(b.name); });
+    } else if (cmSort === 'videos') {
+      filtered.sort(function(a, b) { return b.videosCount - a.videosCount; });
+    }
+
+    // 3. Paginate
+    var totalFiltered = filtered.length;
+    var totalPages = Math.ceil(totalFiltered / cmPerPage) || 1;
+    if (cmCurrentPage > totalPages) cmCurrentPage = totalPages;
+    if (cmCurrentPage < 1) cmCurrentPage = 1;
+
+    var startIdx = (cmCurrentPage - 1) * cmPerPage;
+    var pageItems = filtered.slice(startIdx, startIdx + cmPerPage);
+
+    var elTableCount = document.getElementById('cmTableCount');
+    if (elTableCount) elTableCount.textContent = 'Showing ' + pageItems.length + ' of ' + totalFiltered + ' categories';
+
+    var elPaginationInfo = document.getElementById('cmPaginationInfo');
+    if (elPaginationInfo) {
+      var startNum = totalFiltered === 0 ? 0 : startIdx + 1;
+      var endNum = Math.min(startIdx + cmPerPage, totalFiltered);
+      elPaginationInfo.textContent = 'Showing ' + startNum + '-' + endNum + ' of ' + totalFiltered + ' categories';
+    }
+
+    // Render Table Rows
+    var tbody = document.getElementById('cmTableBody');
+    if (tbody) {
+      tbody.innerHTML = '';
+      if (pageItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 32px; color: var(--text-dim);">No curriculum disciplines found matching criteria.</td></tr>';
+      } else {
+        pageItems.forEach(function(cat) {
+          var tr = document.createElement('tr');
+          var statusClass = cat.status === 'active' ? 'active' : 'suspended';
+          var statusLabel = cat.status === 'active' ? 'Active' : 'Inactive';
+          var toggleIconTitle = cat.status === 'active' ? 'Hide Category' : 'Activate Category';
+
+          tr.innerHTML = 
+            '<td><span style="font-weight: 700; color: var(--text-dim);">#' + cat.order + '</span></td>' +
+            '<td>' +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
+                '<span class="category-color-dot" style="color:' + cat.color + ';"></span>' +
+                '<span style="font-weight: 600; color: #FFF; font-size: 13.5px;">' + cat.name + '</span>' +
+              '</div>' +
+            '</td>' +
+            '<td><span style="font-size: 12px; color: var(--text-muted); max-width: 280px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">' + cat.description + '</span></td>' +
+            '<td><span class="video-tag-pill">/' + cat.slug + '</span></td>' +
+            '<td><span style="font-weight: 600; color: #FFF;">' + cat.videosCount + ' videos</span></td>' +
+            '<td><span class="status-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
+            '<td style="text-align: right; padding-right: 20px;">' +
+              '<div class="row-actions" style="justify-content: flex-end;">' +
+                '<button class="action-icon-btn btn-cm-edit" data-id="' + cat.id + '" title="Edit category metadata">' +
+                  '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>' +
+                '</button>' +
+                '<button class="action-icon-btn btn-cm-toggle" data-id="' + cat.id + '" title="' + toggleIconTitle + '">' +
+                  '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>' +
+                '</button>' +
+                '<button class="action-icon-btn danger btn-cm-delete" data-id="' + cat.id + '" title="Delete category">' +
+                  '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>' +
+                '</button>' +
+              '</div>' +
+            '</td>';
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    // Render Pagination Buttons
+    var paginationContainer = document.getElementById('cmPaginationButtons');
+    if (paginationContainer) {
+      paginationContainer.innerHTML = '';
+      
+      var prevBtn = document.createElement('button');
+      prevBtn.className = 'page-num-btn';
+      prevBtn.innerHTML = '&larr;';
+      prevBtn.disabled = cmCurrentPage <= 1;
+      prevBtn.onclick = function() { if (cmCurrentPage > 1) { cmCurrentPage--; renderCategoryManagement(); } };
+      paginationContainer.appendChild(prevBtn);
+
+      for (var p = 1; p <= totalPages; p++) {
+        (function(page) {
+          var btn = document.createElement('button');
+          btn.className = 'page-num-btn' + (page === cmCurrentPage ? ' active' : '');
+          btn.textContent = page;
+          btn.onclick = function() { cmCurrentPage = page; renderCategoryManagement(); };
+          paginationContainer.appendChild(btn);
+        })(p);
+      }
+
+      var nextBtn = document.createElement('button');
+      nextBtn.className = 'page-num-btn';
+      nextBtn.innerHTML = '&rarr;';
+      nextBtn.disabled = cmCurrentPage >= totalPages;
+      nextBtn.onclick = function() { if (cmCurrentPage < totalPages) { cmCurrentPage++; renderCategoryManagement(); } };
+      paginationContainer.appendChild(nextBtn);
+    }
+
+    attachCmRowEvents();
+  }
+
+  function attachCmRowEvents() {
+    // Edit Action
+    document.querySelectorAll('.btn-cm-edit').forEach(function(btn) {
+      btn.onclick = function() {
+        var id = parseInt(btn.getAttribute('data-id'), 10);
+        var cat = categoryDataset.find(function(c) { return c.id === id; });
+        if (cat) openCmModal(cat);
+      };
+    });
+
+    // Toggle Status
+    document.querySelectorAll('.btn-cm-toggle').forEach(function(btn) {
+      btn.onclick = function() {
+        var id = parseInt(btn.getAttribute('data-id'), 10);
+        var cat = categoryDataset.find(function(c) { return c.id === id; });
+        if (cat) {
+          cat.status = cat.status === 'active' ? 'inactive' : 'active';
+          renderCategoryManagement();
+        }
+      };
+    });
+
+    // Delete Action
+    document.querySelectorAll('.btn-cm-delete').forEach(function(btn) {
+      btn.onclick = function() {
+        var id = parseInt(btn.getAttribute('data-id'), 10);
+        var cat = categoryDataset.find(function(c) { return c.id === id; });
+        if (cat) openCmDelete(cat);
+      };
+    });
+  }
+
+  // Add / Edit Modal Controls
+  var cmModal = document.getElementById('cmModal');
+  var cmModalTitle = document.getElementById('cmModalTitle');
+  var cmModalCloseBtn = document.getElementById('cmModalCloseBtn');
+  var cmModalCancelBtn = document.getElementById('cmModalCancelBtn');
+  var cmForm = document.getElementById('cmForm');
+  var btnAddCategoryBtn = document.getElementById('btnAddCategoryBtn');
+
+  function openCmModal(cat) {
+    if (!cmModal) return;
+    if (cat) {
+      cmModalTitle.textContent = 'Edit Discipline Category';
+      document.getElementById('cmEditId').value = cat.id;
+      document.getElementById('cmNameInput').value = cat.name;
+      document.getElementById('cmSlugInput').value = cat.slug;
+      document.getElementById('cmOrderInput').value = cat.order;
+      document.getElementById('cmDescInput').value = cat.description;
+      document.getElementById('cmColorSelect').value = cat.color;
+      document.getElementById('cmStatusSelect').value = cat.status;
+    } else {
+      cmModalTitle.textContent = 'Create New Discipline Category';
+      cmForm.reset();
+      document.getElementById('cmEditId').value = '';
+      document.getElementById('cmOrderInput').value = categoryDataset.length + 1;
+    }
+    cmModal.classList.add('open');
+  }
+
+  if (btnAddCategoryBtn) btnAddCategoryBtn.onclick = function() { openCmModal(null); };
+  if (cmModalCloseBtn) cmModalCloseBtn.onclick = function() { cmModal.classList.remove('open'); };
+  if (cmModalCancelBtn) cmModalCancelBtn.onclick = function() { cmModal.classList.remove('open'); };
+  if (cmModal) {
+    cmModal.addEventListener('click', function(e) {
+      if (e.target === cmModal) cmModal.classList.remove('open');
+    });
+  }
+
+  if (cmForm) {
+    cmForm.onsubmit = function(e) {
+      e.preventDefault();
+      var editId = document.getElementById('cmEditId').value;
+      var name = document.getElementById('cmNameInput').value;
+      var slug = document.getElementById('cmSlugInput').value;
+      var order = parseInt(document.getElementById('cmOrderInput').value, 10) || 1;
+      var desc = document.getElementById('cmDescInput').value;
+      var color = document.getElementById('cmColorSelect').value;
+      var status = document.getElementById('cmStatusSelect').value;
+
+      if (editId) {
+        var cat = categoryDataset.find(function(c) { return c.id === parseInt(editId, 10); });
+        if (cat) {
+          cat.name = name;
+          cat.slug = slug;
+          cat.order = order;
+          cat.description = desc;
+          cat.color = color;
+          cat.status = status;
+        }
+      } else {
+        var newCat = {
+          id: Date.now(),
+          name: name,
+          slug: slug,
+          order: order,
+          videosCount: 0,
+          status: status,
+          color: color,
+          description: desc
+        };
+        categoryDataset.push(newCat);
+      }
+
+      cmModal.classList.remove('open');
+      renderCategoryManagement();
+    };
+  }
+
+  // Delete Category Confirmation Modal
+  var cmDeleteModal = document.getElementById('cmDeleteModal');
+  function openCmDelete(cat) {
+    if (!cmDeleteModal) return;
+    pendingDeleteCategoryId = cat.id;
+    document.getElementById('cmDeleteName').textContent = cat.name;
+    cmDeleteModal.classList.add('open');
+  }
+
+  var cmDeleteCloseBtn = document.getElementById('cmDeleteCloseBtn');
+  var cmDeleteCancelBtn = document.getElementById('cmDeleteCancelBtn');
+  var cmDeleteConfirmBtn = document.getElementById('cmDeleteConfirmBtn');
+  if (cmDeleteCloseBtn) cmDeleteCloseBtn.onclick = function() { cmDeleteModal.classList.remove('open'); };
+  if (cmDeleteCancelBtn) cmDeleteCancelBtn.onclick = function() { cmDeleteModal.classList.remove('open'); };
+  if (cmDeleteConfirmBtn) {
+    cmDeleteConfirmBtn.onclick = function() {
+      if (pendingDeleteCategoryId !== null) {
+        categoryDataset = categoryDataset.filter(function(c) { return c.id !== pendingDeleteCategoryId; });
+        pendingDeleteCategoryId = null;
+        cmDeleteModal.classList.remove('open');
+        renderCategoryManagement();
+      }
+    };
+  }
+  if (cmDeleteModal) {
+    cmDeleteModal.addEventListener('click', function(e) {
+      if (e.target === cmDeleteModal) cmDeleteModal.classList.remove('open');
+    });
+  }
+
+  // Search & Filter listeners
+  var cmSearchInput = document.getElementById('cmSearchInput');
+  var cmSortSelect = document.getElementById('cmSortSelect');
+  var btnResetCmFilters = document.getElementById('btnResetCmFilters');
+
+  if (cmSearchInput) {
+    cmSearchInput.addEventListener('input', function() {
+      cmSearch = cmSearchInput.value;
+      cmCurrentPage = 1;
+      renderCategoryManagement();
+    });
+  }
+  if (cmSortSelect) {
+    cmSortSelect.addEventListener('change', function() {
+      cmSort = cmSortSelect.value;
+      renderCategoryManagement();
+    });
+  }
+  if (btnResetCmFilters) {
+    btnResetCmFilters.onclick = function() {
+      cmSearch = '';
+      cmSort = 'order';
+      cmCurrentPage = 1;
+      if (cmSearchInput) cmSearchInput.value = '';
+      if (cmSortSelect) cmSortSelect.value = 'order';
+      renderCategoryManagement();
     };
   }
 
