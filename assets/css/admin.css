@@ -1159,3 +1159,241 @@ body::after {
     padding: 20px;
   }
 }
+
+
+/* ==========================================================================
+   Analytics & Reports Sub-View Styles
+   Seamlessly integrated into Continuum Admin Design System
+   ========================================================================== */
+
+.admin-view-pane {
+  display: none;
+  animation: fadeInPane 0.25s ease forwards;
+}
+
+.admin-view-pane.active {
+  display: block;
+}
+
+@keyframes fadeInPane {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Page Header Controls */
+.reports-header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 22px 26px;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, rgba(10, 27, 51, 0.72) 0%, rgba(5, 14, 26, 0.82) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.reports-header-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--azure-bright), transparent 60%);
+  opacity: 0.8;
+}
+
+.reports-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.date-filter-select {
+  padding: 8px 14px;
+  background: rgba(10, 27, 51, 0.85);
+  border: 1px solid var(--border-glass);
+  border-radius: 9px;
+  color: #FFF;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.date-filter-select:focus {
+  border-color: var(--azure-bright);
+  box-shadow: 0 0 12px rgba(0, 127, 255, 0.3);
+}
+
+.export-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+}
+
+.compact-btn:hover {
+  background: rgba(0, 127, 255, 0.14);
+  border-color: var(--azure-border);
+  color: #FFF;
+}
+
+.compact-btn.primary {
+  background: linear-gradient(135deg, var(--azure) 0%, var(--azure-bright) 100%);
+  border-color: var(--azure-bright);
+  color: #FFF;
+  box-shadow: 0 4px 14px rgba(0, 127, 255, 0.3);
+}
+
+.compact-btn.primary:hover {
+  box-shadow: 0 6px 20px rgba(0, 127, 255, 0.45);
+}
+
+/* 4 Compact Stat Cards */
+.compact-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Analytics Chart Container */
+.chart-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.svg-chart-wrap {
+  width: 100%;
+  height: 220px;
+  position: relative;
+}
+
+.svg-chart-wrap svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* 2-Column Sub-Grid for Top Videos & Student Activity */
+.reports-grid-two {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* Top Performing Videos Compact List */
+.rank-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(0, 127, 255, 0.15);
+  color: var(--azure-bright);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.video-stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+/* Export Bottom Toolbar */
+.export-toolbar-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 22px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1100px) {
+  .compact-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .reports-grid-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .compact-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .reports-header-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .export-toolbar-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
