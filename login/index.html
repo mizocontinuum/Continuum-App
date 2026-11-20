@@ -4,23 +4,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#03080E">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description"
+    content="Sign in to Continuum Academy — the executive learning cockpit for entrepreneurs, marketers and leaders.">
   <title>Continuum Academy - Login</title>
-  <link rel="manifest" href="../manifest.json">
-  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
-  <link rel="shortcut icon" href="../favicon.ico">
-  <link rel="apple-touch-icon" href="../assets/images/icon-circle-192.png">
 
-  <!-- Auth screens share the login card language -->
-  <link rel="stylesheet" href="../assets/css/base/auth.css">
+  <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+  <link rel="apple-touch-icon" href="../assets/images/icon-circle-512.png">
 
+  <!-- 2026 Cinematic Dark Azure Auth Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 
 <body>
+  <!-- Ambient Spline 3D Holographic Glass Core in Background -->
+  <div class="auth-spline-stage" aria-hidden="true">
+    <canvas id="authSplineCanvas" width="600" height="600"></canvas>
+  </div>
+
   <!-- Toast feedback notification -->
   <div class="toast-msg" id="loginToast" role="status"></div>
 
@@ -28,17 +32,16 @@
 
     <!-- Top Brand Header with Continuum Logo (left) and Powered By Mansmith (right) -->
     <header class="brand-header">
-      <a href="../home/" class="brand-link" aria-label="Continuum Academy Home">
+      <a href="../index.html" class="brand-link" aria-label="Continuum Academy Home">
         <img src="../assets/images/logo.png" alt="Continuum Academy Inc." class="brand-logo-img">
       </a>
-      <div class="brand-divider"></div>
       <div class="powered-badge">
         <span class="powered-text">POWERED BY</span>
         <img src="../assets/images/mansmith.png" alt="Mansmith and Fielders, Inc." class="mansmith-logo-img">
       </div>
     </header>
 
-    <!-- Main Login Card (Glassmorphism rounded border card) -->
+    <!-- Main Login Card (Steady, Balanced 3D Glass Holographic Cockpit) -->
     <main class="login-card">
       <h1 class="headline" id="loginHeading">Welcome back</h1>
       <p class="subheadline" id="loginSubheading">Enter your credentials to access your executive learning cockpit</p>
@@ -75,9 +78,6 @@
             autocomplete="current-password"
           >
         </div>
-
-        <!-- Cloudflare Turnstile renders here when a site key is configured -->
-        <div id="turnstileSlot" hidden></div>
 
         <!-- Where a rejected sign-in lands -->
         <p class="form-error" id="loginError" role="alert"></p>
@@ -117,7 +117,7 @@
         </button>
       </form>
 
-      <!-- Social sign-in. The server builds the provider URL; the page redirects. -->
+      <!-- Social sign-in options -->
       <div id="altOptions">
         <div class="auth-divider">or continue with</div>
 
@@ -156,9 +156,10 @@
 
   </div>
 
-  <script type="module" src="../assets/js/pages/auth.js"></script>
-  <!-- PWA Service Worker Registration -->
-  <script type="module" src="../assets/js/pwa.js"></script>
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Auth Shared Animations (Consistent & Zero-lag) -->
+  <script src="../assets/js/auth-animations.js"></script>
 
 </body>
 

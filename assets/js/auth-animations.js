@@ -1,6 +1,6 @@
 /**
- * Continuum Academy - Signup GSAP & Spline 3D Choreography Engine
- * Consistent with Landing Page aesthetics and 60fps performance.
+ * Continuum Academy - Auth (Login & Signup) GSAP & Spline 3D Choreography Engine
+ * Consistent, clean, steady, zero-lag 60fps performance.
  */
 (() => {
   'use strict';
@@ -12,7 +12,7 @@
   const hasGSAP = typeof gsap !== 'undefined';
 
   /* ──────────────────────────────────────────────────────────────────────────
-   * 1. GSAP ENTRANCE & CARD PHYSICS
+   * 1. FAST, FLUID GSAP ENTRANCE (Clean & Steady Card)
    * ────────────────────────────────────────────────────────────────────────── */
   if (hasGSAP) {
     const easeSmooth = 'power2.out';
@@ -20,39 +20,19 @@
 
     // Initial state sets
     gsap.set('.brand-header', { opacity: 0, y: -20 });
-    gsap.set('.login-card', { opacity: 0, y: 30, scale: 0.95 });
-    gsap.set('.auth-spline-stage', { opacity: 0, scale: 0.85 });
-    gsap.set('.form-group', { opacity: 0, y: 15 });
-    gsap.set('.btn-submit', { opacity: 0, y: 10 });
+    gsap.set('.login-card', { opacity: 0, y: 25, scale: 0.96 });
+    gsap.set('.auth-spline-stage', { opacity: 0, scale: 0.88 });
+    gsap.set('.form-group', { opacity: 0, y: 12 });
+    gsap.set('.btn-submit, .oauth-row', { opacity: 0, y: 10 });
     gsap.set('.login-footer', { opacity: 0 });
 
     tl
-      .to('.auth-spline-stage', { opacity: 0.65, scale: 1, duration: 0.6 }, 0)
-      .to('.brand-header', { opacity: 1, y: 0, duration: 0.5 }, 0.1)
-      .to('.login-card', { opacity: 1, y: 0, scale: 1, duration: 0.6 }, 0.2)
-      .to('.form-group', { opacity: 1, y: 0, stagger: 0.05, duration: 0.4 }, 0.35)
-      .to('.btn-submit', { opacity: 1, y: 0, duration: 0.4 }, 0.55)
-      .to('.login-footer', { opacity: 1, duration: 0.5 }, 0.65);
-
-    // Interactive 3D Card Tilt on Cursor Move
-    const card = document.querySelector('.login-card');
-    if (card) {
-      window.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const cardCenterX = rect.left + rect.width / 2;
-        const cardCenterY = rect.top + rect.height / 2;
-        const deltaX = (e.clientX - cardCenterX) / (window.innerWidth / 2);
-        const deltaY = (e.clientY - cardCenterY) / (window.innerHeight / 2);
-
-        gsap.to(card, {
-          rotationY: deltaX * 6,
-          rotationX: -deltaY * 6,
-          duration: 0.4,
-          ease: 'power1.out',
-          transformPerspective: 1200
-        });
-      }, { passive: true });
-    }
+      .to('.auth-spline-stage', { opacity: 0.65, scale: 1, duration: 0.55 }, 0)
+      .to('.brand-header', { opacity: 1, y: 0, duration: 0.45 }, 0.08)
+      .to('.login-card', { opacity: 1, y: 0, scale: 1, duration: 0.5 }, 0.16)
+      .to('.form-group', { opacity: 1, y: 0, stagger: 0.04, duration: 0.35 }, 0.3)
+      .to('.btn-submit, .oauth-row', { opacity: 1, y: 0, stagger: 0.05, duration: 0.35 }, 0.45)
+      .to('.login-footer', { opacity: 1, duration: 0.45 }, 0.55);
   }
 
   /* ──────────────────────────────────────────────────────────────────────────

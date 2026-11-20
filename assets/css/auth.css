@@ -105,7 +105,6 @@ body::after {
   align-items: center;
   justify-content: space-between;
   padding: 36px 24px 28px;
-  perspective: 1200px;
 }
 
 /* ── Brand Header Bar ───────────────────────────────────────────────────── */
@@ -178,7 +177,6 @@ body::after {
     0 0 35px rgba(0, 127, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.15),
     inset 0 0 20px rgba(0, 59, 115, 0.2);
-  transform-style: preserve-3d;
   position: relative;
   margin: auto 0;
   overflow: hidden;
@@ -429,6 +427,105 @@ body::after {
 .dot {
   color: rgba(108, 139, 168, 0.4);
   font-size: 0.75rem;
+}
+
+
+/* ── Sign In Additions: Label Row & Forgot Password ─────────────────────── */
+.form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.forgot-link {
+  font-size: 0.78rem;
+  color: var(--azure-bright);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.forgot-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Divider & OAuth Social Row ─────────────────────────────────────────── */
+.auth-divider {
+  position: relative;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 22px 0 16px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 75px);
+  height: 1px;
+  background: rgba(0, 127, 255, 0.2);
+}
+
+.auth-divider::before { left: 0; }
+.auth-divider::after { right: 0; }
+
+.oauth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.oauth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(3, 8, 14, 0.7);
+  border: 1px solid rgba(0, 127, 255, 0.22);
+  border-radius: 12px;
+  color: var(--text-white);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out-expo);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.oauth-btn:hover {
+  background: rgba(7, 18, 37, 0.9);
+  border-color: var(--azure-bright);
+  box-shadow: 0 4px 16px rgba(0, 127, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ── Sign Up Prompt on Login Card ───────────────────────────────────────── */
+.signup-hint {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.signup-link {
+  color: var(--azure-bright);
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.signup-link:hover {
+  color: #FFFFFF;
+  text-shadow: 0 0 12px rgba(0, 127, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* ── Responsive Mobile Refinement ───────────────────────────────────────── */
