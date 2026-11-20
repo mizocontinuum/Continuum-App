@@ -268,6 +268,32 @@ main {
   opacity: 0.6;
 }
 
+/* ── Spline-Inspired 3D Interactive Holographic Glass Core ───────────────── */
+.hero-spline-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 580px;
+  height: 580px;
+  max-width: 90vw;
+  max-height: 90vw;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#heroSplineCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 45px rgba(0, 127, 255, 0.45));
+}
+
+
 /* Animated radial light pulse behind hero */
 .landing-hero::before {
   content: "";
