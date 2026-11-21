@@ -1,0 +1,19 @@
+:root {
+  --continuum-accent: #4cc3e0;
+  --continuum-accent-strong: #3aa9c6;
+}
+
+/* Primary buttons / focus accents follow the Continuum cyan. */
+[data-theme] {
+  --theme-success-500: var(--continuum-accent);
+}
+
+.btn--style-primary {
+  --theme-elevation-800: var(--continuum-accent-strong);
+  --theme-elevation-850: var(--continuum-accent-strong);
+}
+
+.nav__link:hover,
+.nav__link:focus-visible {
+  color: var(--continuum-accent);
+}
