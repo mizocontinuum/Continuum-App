@@ -561,6 +561,85 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="assets/js/landing-animations.js"></script>
+
+  <!-- CMS-driven hero / branding / footer — reads Payload "Site Settings".
+       Same origin as /admin and /api, so this works on localhost and Vercel.
+       Runs after the localStorage block above, so CMS values take priority. -->
+  <script type="module">
+    import { configure, getSiteSettings, getMediaUrl } from '/assets/js/lib/cms.js'
+
+    configure({ baseUrl: window.location.origin, timeout: 8000 })
+
+    /** Convert a #rgb / #rrggbb string into an rgba() value. */
+    const hexToRgba = (hex, alpha) => {
+      const h = String(hex || '').replace('#', '')
+      const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h
+      const n = parseInt(full, 16)
+      if (full.length !== 6 || Number.isNaN(n)) return `rgba(0,127,255,${alpha})`
+      return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`
+    }
+
+    const setText = (selector, value) => {
+      if (!value) return
+      const el = document.querySelector(selector)
+      if (el) el.textContent = value
+    }
+
+    try {
+      const s = await getSiteSettings({ depth: 1 })
+
+      if (s) {
+        // SEO defaults
+        if (s.metaTitle) document.title = s.metaTitle
+        if (s.metaDescription) {
+          const meta = document.querySelector('meta[name="description"]')
+          if (meta) meta.setAttribute('content', s.metaDescription)
+        }
+
+        // Branding — logo, favicon, accent colour
+        const logoUrl = getMediaUrl(s.logo)
+        if (logoUrl) document.querySelectorAll('.landing-logo').forEach((img) => { img.src = logoUrl })
+
+        const faviconUrl = getMediaUrl(s.favicon)
+        if (faviconUrl) {
+          document
+            .querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]')
+            .forEach((link) => { link.href = faviconUrl })
+        }
+
+        if (s.accentColor) {
+          const root = document.documentElement.style
+          root.setProperty('--azure', s.accentColor)
+          root.setProperty('--azure-bright', s.accentColor)
+          root.setProperty('--azure-vivid', s.accentColor)
+          root.setProperty('--azure-glow', hexToRgba(s.accentColor, 0.45))
+        }
+
+        // Hero
+        if (s.heroTitle) {
+          const title = document.querySelector('.landing-title')
+          if (title) title.innerHTML = s.heroTitle
+        }
+        setText('.landing-lede', s.heroSubtitle)
+        setText('#enterAcademyBtn', s.heroCtaLabel)
+
+        const heroUrl = getMediaUrl(s.heroImage)
+        if (heroUrl) {
+          const bg = document.querySelector('.hero-bg-layer')
+          if (bg) {
+            bg.style.backgroundImage = `url("${heroUrl}")`
+            bg.style.backgroundSize = 'cover'
+            bg.style.backgroundPosition = 'center'
+          }
+        }
+
+        // Footer
+        setText('.landing-footer span', s.footerNote)
+      }
+    } catch (err) {
+      console.warn('[cms] landing settings not applied:', err)
+    }
+  </script>
 </body>
 
 </html>
