@@ -1935,43 +1935,55 @@
           <!-- TAB 4: Email & Notification Settings -->
           <div class="settings-tab-pane" id="setNotifications">
             <div class="settings-card">
-              <h2 class="settings-section-title">Automated Student Alerts & Email Dispatch Center</h2>
-              <p class="settings-section-desc">Transactional notifications at direktang magpadala ng mensahe o alerto sa mga mag-aaral pagkatapos nilang mag-login.</p>
-
-              <!-- Section 1: Direct Broadcast & Student Message Composer -->
-              <div style="margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle);">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">
-                    1. Direct Student Message & Alert Dispatcher
-                  </h3>
-                  <span style="font-size: 11.5px; background: rgba(0, 127, 255, 0.18); color: var(--azure-bright); border: 1px solid rgba(0, 127, 255, 0.3); padding: 4px 10px; border-radius: 20px; font-weight: 600;">
-                    Instant In-App & Email
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+                <div>
+                  <h2 class="settings-section-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--azure-bright);">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span>Automated Student Alerts & Email Dispatch Center</span>
+                  </h2>
+                  <p class="settings-section-desc" style="margin-bottom: 0;">Magpadala ng direktang anunsyo, student advisory, at i-manage ang mga automated transactional email triggers.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="settings-studio-badge" style="background: rgba(0, 229, 153, 0.12); color: #00E599; border-color: rgba(0, 229, 153, 0.3);">
+                    ● SMTP & In-App Service Active
                   </span>
                 </div>
-                <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">
-                  Pumili ng partikular na student o ipadala sa lahat ng active learners. Mababasa agad ng student ang custom alert na ito pagka-login nila sa kanilang Learning Cockpit.
-                </p>
+              </div>
+
+              <!-- Dispatcher Section: Executive Two-Column Studio Layout -->
+              <div class="settings-studio-block">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">01</span>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                      <h3 class="settings-studio-title">Direct Student Message & Alert Dispatcher</h3>
+                      <span style="font-size: 11px; background: rgba(0, 127, 255, 0.18); color: var(--azure-bright); border: 1px solid rgba(0, 127, 255, 0.35); padding: 3px 10px; border-radius: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
+                        Instant In-App Cockpit & Email
+                      </span>
+                    </div>
+                    <p class="settings-studio-sub">Pumili ng recipient at mag-draft ng personalized advisory o batch announcement na lilitaw agad sa Student Cockpit pagka-login.</p>
+                  </div>
+                </div>
 
                 <form id="formDirectDispatch" onsubmit="event.preventDefault();">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label for="dispatchRecipient">Recipient Student</label>
+                  <!-- Row 1: Target Recipient & Priority Level -->
+                  <div class="dispatch-form-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label for="dispatchRecipient">Target Recipient Student</label>
                       <select id="dispatchRecipient" class="form-select">
-                        <option value="all">Broadcast to All Active Students (8 Students)</option>
-                        <option value="m.rodriguez@executive.ph">Marcus Rodriguez (m.rodriguez@executive.ph)</option>
-                        <option value="alysia.tan@innovate.co">Alysia Tan (alysia.tan@innovate.co)</option>
-                        <option value="danilo.m@mendoza-holdings.com">Danilo Mendoza (danilo.m@mendoza-holdings.com)</option>
-                        <option value="claurel@apexretail.org">Christine Laurel (claurel@apexretail.org)</option>
-                        <option value="custom">Specific Custom Email Address...</option>
+                        <option value="all">📢 Broadcast to All Active Students (8 Students)</option>
+                        <option value="m.rodriguez@executive.ph">👤 Marcus Rodriguez (m.rodriguez@executive.ph)</option>
+                        <option value="alysia.tan@innovate.co">👤 Alysia Tan (alysia.tan@innovate.co)</option>
+                        <option value="danilo.m@mendoza-holdings.com">👤 Danilo Mendoza (danilo.m@mendoza-holdings.com)</option>
+                        <option value="claurel@apexretail.org">👤 Christine Laurel (claurel@apexretail.org)</option>
+                        <option value="custom">✉️ Specific Custom Email Address...</option>
                       </select>
                     </div>
 
-                    <div class="form-group" id="customEmailGroup" style="display: none;">
-                      <label for="dispatchCustomEmail">Custom Email Address</label>
-                      <input type="email" id="dispatchCustomEmail" class="form-input" placeholder="e.g. learner@company.com">
-                    </div>
-
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 0;">
                       <label for="dispatchNoticeType">Notification Urgency / Priority</label>
                       <select id="dispatchNoticeType" class="form-select">
                         <option value="announcement" selected>Standard Academy Announcement</option>
@@ -1982,18 +1994,38 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  <!-- Dynamic Custom Email Input (Hidden unless Custom is selected) -->
+                  <div class="form-group" id="customEmailGroup" style="display: none; margin-bottom: 16px; padding: 14px 16px; background: rgba(0, 127, 255, 0.06); border: 1px dashed rgba(0, 127, 255, 0.35); border-radius: 10px;">
+                    <label for="dispatchCustomEmail" style="color: var(--azure-bright);">Specify Custom Student Email</label>
+                    <input type="email" id="dispatchCustomEmail" class="form-input" placeholder="e.g. executive.learner@company.com">
+                  </div>
+
+                  <!-- Row 2: Subject Headline -->
+                  <div class="form-group" style="margin-bottom: 16px;">
                     <label for="dispatchSubject">Email Subject / Banner Headline</label>
                     <input type="text" id="dispatchSubject" class="form-input" value="Welcome to Continuum Executive Academy — Your Masterclass Access is Ready!" placeholder="Enter message subject...">
                   </div>
 
-                  <div class="form-group">
-                    <label for="dispatchBody">Message Content (Appears in Student Cockpit upon Login)</label>
-                    <textarea id="dispatchBody" class="form-textarea" rows="4" placeholder="Type your custom announcement, curriculum note, or personal message to the student here...">Greetings Leader! Your executive masterclass library across 7 core disciplines is now accessible. Stream your first masterclass from Josiah Go and track your milestone progress.</textarea>
+                  <!-- Row 3: Message Body -->
+                  <div class="form-group" style="margin-bottom: 18px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                      <label for="dispatchBody" style="margin-bottom: 0;">Message Content (Appears in Student Cockpit upon Login)</label>
+                      <span style="font-size: 11px; color: var(--text-dim);">HTML & Plain Text Supported</span>
+                    </div>
+                    <textarea id="dispatchBody" class="form-textarea" rows="4" placeholder="Type your custom announcement, curriculum note, or personal message to the student here..." style="resize: vertical; min-height: 95px;">Greetings Leader! Your executive masterclass library across 7 core disciplines is now accessible. Stream your first masterclass from Josiah Go and track your milestone progress.</textarea>
                   </div>
 
-                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 14px;">
-                    <button type="button" class="topbar-btn primary-cta" id="btnSendStudentMessage" style="padding: 10px 22px;">
+                  <!-- Row 4: Dispatch Action Toolbar with Live Preview Status -->
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.06); flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted);">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--azure-bright);">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      <span>Delivered instantly upon next login session</span>
+                    </div>
+
+                    <button type="button" class="topbar-btn primary-cta" id="btnSendStudentMessage" style="padding: 10px 24px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
                       <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
                         <line x1="22" y1="2" x2="11" y2="13"></line>
                         <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -2005,10 +2037,14 @@
               </div>
 
               <!-- Section 2: Automated Transactional Email Triggers -->
-              <div>
-                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-                  2. Automated Transactional Email Triggers
-                </h3>
+              <div class="settings-studio-block" style="border-bottom: none; margin-bottom: 0;">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">02</span>
+                  <div>
+                    <h3 class="settings-studio-title">Automated Transactional Email Triggers</h3>
+                    <p class="settings-studio-sub">Awtomatikong system emails na ipinapadala sa lifecycle events ng mag-aaral</p>
+                  </div>
+                </div>
 
                 <div class="settings-toggle-row">
                   <div>

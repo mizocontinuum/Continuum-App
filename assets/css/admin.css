@@ -1968,6 +1968,12 @@ input:checked + .toggle-slider:before {
   margin: 0;
 }
 
+@media (max-width: 860px) {
+  .dispatch-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* ── Live Toast Notification Feedback ───────────────────────────────────── */
 .admin-toast-feedback {
   position: fixed;
