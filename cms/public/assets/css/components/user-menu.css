@@ -1,0 +1,316 @@
+/* ---------- CONTINUUM ACADEMY — USER MENU ---------- */
+/* Navbar avatar dropdown. Panel stays dark navy in both themes, like the
+   rest of the app's sheets; theme.css handles everything else. */
+
+/* Gradient avatar — the blue-to-purple mark from the design */
+/* restyle */
+.top-bar .avatar-btn {
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 55%, var(--accent-active) 100%);
+  border: none;
+  color: var(--ink);
+  font-weight: 700;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* restyle */
+.top-bar .avatar-btn:hover,
+.top-bar .avatar-btn:focus-visible {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* restyle */
+.top-bar .avatar-btn.menu-active {
+  box-shadow: 0 0 0 3px var(--accent-line);
+}
+
+.top-bar .avatar-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Anchor the panel to the right edge of the action cluster */
+.top-actions.has-user-menu {
+  position: relative;
+}
+
+/* ---------- PANEL ---------- */
+/* restyle */
+.user-menu-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 280px;
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 6px;
+  z-index: 160;
+
+  /* Closed: faded, lifted, click-through */
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  transform-origin: top right;
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.18, 0.89, 0.32, 1),
+    visibility 0s linear 0.18s;
+}
+
+.user-menu-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.18, 0.89, 0.32, 1),
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user-menu-panel,
+  .user-menu-panel.open {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ---------- HEADER ---------- */
+/* restyle */
+.user-menu-header {
+  padding: 14px 12px 12px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}
+
+/* restyle */
+.user-menu-name {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  overflow-wrap: anywhere;
+}
+
+/* restyle */
+.user-menu-email {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- ITEMS ---------- */
+.user-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* restyle */
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+/* restyle */
+.user-menu-item:hover,
+.user-menu-item:focus-visible {
+  background: var(--surface-raised);
+  color: var(--accent);
+}
+
+.user-menu-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.user-menu-item .menu-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* restyle */
+.tint-teal .menu-icon   { color: var(--accent); }
+.tint-yellow .menu-icon { color: var(--accent); }
+.tint-purple .menu-icon { color: var(--accent); }
+
+/* restyle */
+.tint-red,
+.tint-red .menu-icon {
+  color: var(--text-sub);
+}
+
+/* Divider before Log Out */
+.user-menu-divider {
+  margin-top: 6px;
+  padding-top: 12px;
+  position: relative;
+}
+
+/* restyle */
+.user-menu-divider::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  right: 8px;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 380px) {
+  .user-menu-panel {
+    right: -6px;
+  }
+}
+
+/* ---------- NOTIFICATION BELL ---------- */
+/* restyle */
+.bell-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 16px;
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--bg-page);
+}
+
+/* Panel shares the avatar menu's sheet styling and open/close motion. */
+/* restyle */
+.notif-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 320px;
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 6px;
+  z-index: 160;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  transform-origin: top right;
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.18, 0.89, 0.32, 1),
+    visibility 0s linear 0.18s;
+}
+
+.notif-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.18, 0.89, 0.32, 1),
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notif-panel,
+  .notif-panel.open {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* restyle */
+.notif-head {
+  padding: 12px 12px 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* restyle */
+.notif-item {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* restyle */
+.notif-item.unread {
+  background: var(--accent-soft);
+}
+
+/* restyle */
+.notif-title {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* restyle */
+.notif-body {
+  margin-top: 3px;
+  color: var(--text-sub);
+  font-size: 12.5px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* restyle */
+.notif-time {
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* restyle */
+.notif-empty {
+  padding: 22px 12px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}

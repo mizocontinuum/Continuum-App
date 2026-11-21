@@ -486,6 +486,46 @@ body::after {
   display: none;
 }
 
+/* Revealed by the auth scripts: login uses `.active`, signup/forgot/reset use
+   `.show`. Both share the same entrance so every auth screen behaves alike. */
+.toast-msg.active,
+.toast-msg.show {
+  display: block;
+  animation: toastIn 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.toast-msg.error {
+  border-color: #FF5C7A;
+  box-shadow: 0 8px 32px rgba(255, 92, 122, 0.4);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Back link (forgot / reset password screens) ────────────────────────── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 18px;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--azure-bright);
+}
+
+.back-link svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* ── Footer ─────────────────────────────────────────────────────────────── */
 .login-footer {
   width: 100%;

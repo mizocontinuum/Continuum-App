@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-requires-auth data-requires-admin>
 
 <head>
   <meta charset="utf-8">
@@ -136,7 +136,7 @@
             <div class="user-name">Executive Admin</div>
             <div class="user-role-badge">Super Administrator</div>
           </div>
-          <a href="../login/" class="logout-icon-btn" title="Sign out">
+          <a href="../login/" class="logout-icon-btn" data-logout title="Sign out">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
               <polyline points="16 17 21 12 16 7"></polyline>
@@ -2590,6 +2590,14 @@
       </div>
     </div>
   </div>
+
+  <!-- Admin guard + consistent sign-out. Shares the same session guard as the
+       member pages, so /dashboard/ is admin-only and "Sign out" clears the
+       session before returning to the sign-in screen. -->
+  <script type="module">
+    import { initPageChrome } from '../assets/js/user-menu.js';
+    initPageChrome();
+  </script>
 
 </body>
 

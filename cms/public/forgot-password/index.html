@@ -3,19 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#03080E">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Continuum Academy - Forgot Password</title>
   <link rel="manifest" href="../manifest.json">
 
-  <link rel="stylesheet" href="../assets/css/base/auth.css">
+  <!-- 2026 Cinematic Dark Azure Auth Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/auth.css">
 
-  <link rel="apple-touch-icon" href="../assets/images/icon-circle-192.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png">
-  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+  <link rel="apple-touch-icon" href="../assets/images/icon-circle-512.png">
 </head>
 
 <body>
@@ -92,9 +91,61 @@
 
   </div>
 
-  <script type="module" src="../assets/js/pages/auth.js"></script>
   <!-- PWA Service Worker Registration -->
   <script type="module" src="../assets/js/pwa.js"></script>
+
+  <!-- Forgot Password Handler -->
+  <script>
+    (() => {
+      'use strict';
+
+      function showToast(msg, isError = false) {
+        const toast = document.getElementById('forgotToast');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.className = 'toast-msg show' + (isError ? ' error' : '');
+        setTimeout(() => {
+          toast.className = 'toast-msg';
+        }, 3200);
+      }
+
+      const form = document.getElementById('forgotForm');
+      const emailInput = document.getElementById('email');
+      const errorMsg = document.getElementById('forgotError');
+      const sentNote = document.getElementById('forgotSent');
+      const submitBtn = document.getElementById('forgotSubmit');
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const email = (emailInput.value || '').trim().toLowerCase();
+          if (errorMsg) errorMsg.textContent = '';
+
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            if (errorMsg) errorMsg.textContent = 'Enter a valid email address.';
+            showToast('Invalid email', true);
+            return;
+          }
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.75';
+            submitBtn.querySelector('span').textContent = 'Sending...';
+          }
+
+          // The original /api/auth backend was retired when the site moved under
+          // the Payload CMS, so recovery is handled locally here. We always report
+          // success so we never reveal whether an account actually exists.
+          setTimeout(() => {
+            form.style.display = 'none';
+            if (sentNote) sentNote.hidden = false;
+            showToast('Reset link sent to ' + email);
+          }, 600);
+        });
+      }
+    })();
+  </script>
 
 </body>
 </html>

@@ -250,11 +250,15 @@
             console.warn('Registration save err:', err);
           }
 
-          // Issue automatic student session & redirect to Student Portal (/home/)
-          sessionStorage.setItem('continuum_session', JSON.stringify({
-            role: 'student',
+          // Issue automatic student session & redirect to Student Portal (/home/).
+          // Written in the shape every member page reads (store.js
+          // KEYS.session = 'continuum.session') so the top bar and auth guard
+          // recognise the new account right away.
+          localStorage.setItem('continuum.session', JSON.stringify({
+            id: null,
+            name: name,
             email: email,
-            name: name
+            role: 'member'
           }));
           localStorage.setItem('continuum_auth_user', 'student');
 
