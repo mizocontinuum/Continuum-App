@@ -1683,18 +1683,31 @@
             </div>
           </div>
 
-              </form>
-            </div>
-          </div>
-
           <!-- TAB 2: Video & Streaming CDN Settings -->
           <div class="settings-tab-pane" id="setVideoDelivery">
             <div class="settings-card">
-              <h2 class="settings-section-title">Adaptive Video Streaming CDN (HLS/DASH)</h2>
-              <p class="settings-section-desc">I-configure ang video ingestion engine, custom stream domain, player settings, at anti-piracy protection.</p>
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+                <div>
+                  <h2 class="settings-section-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--azure-bright);">
+                      <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                      <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                    </svg>
+                    <span>Adaptive Video Streaming CDN Studio (HLS / DASH)</span>
+                  </h2>
+                  <p class="settings-section-desc" style="margin-bottom: 0;">I-configure ang video ingestion engine, custom stream domain, player settings, at dynamic DRM anti-piracy protection.</p>
+                </div>
+              </div>
 
               <!-- 1. Video Engine & Resolution -->
-              <div class="form-row">
+              <div class="settings-studio-block">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">01</span>
+                  <div>
+                    <h3 class="settings-studio-title">Video Ingestion Engine & Quality Output</h3>
+                    <p class="settings-studio-sub">Primary cloud provider at adaptive stream bitrate limit</p>
+                  </div>
+                </div>
                 <div class="form-group">
                   <label for="setVideoProvider">Video Delivery Engine</label>
                   <select id="setVideoProvider" class="form-select">
@@ -1715,7 +1728,14 @@
               </div>
 
               <!-- 2. Stream Delivery Domain & API Configuration -->
-              <div class="form-row">
+              <div class="settings-studio-block">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">02</span>
+                  <div>
+                    <h3 class="settings-studio-title">CDN Infrastructure & API Security Token</h3>
+                    <p class="settings-studio-sub">Custom CNAME edge routing at cryptographic access credentials</p>
+                  </div>
+                </div>
                 <div class="form-group">
                   <label for="setStreamDomain">Custom Streaming Domain / CDN URL</label>
                   <input type="text" id="setStreamDomain" class="form-input" value="https://stream.continuum.academy" placeholder="e.g. https://videocdn.continuum.academy">
@@ -1726,8 +1746,15 @@
                 </div>
               </div>
 
-              <!-- 3. Player Experience Settings -->
-              <div class="form-row">
+              <!-- 3. Player Experience & Buffer Cache Settings -->
+              <div class="settings-studio-block">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">03</span>
+                  <div>
+                    <h3 class="settings-studio-title">Player Controls & Buffer Optimization</h3>
+                    <p class="settings-studio-sub">Preload cache behavior at default playback speed availability</p>
+                  </div>
+                </div>
                 <div class="form-group">
                   <label for="setDefaultPlaybackRate">Default Playback Speed Options</label>
                   <select id="setDefaultPlaybackRate" class="form-select">
@@ -1745,8 +1772,16 @@
                 </div>
               </div>
 
-              <!-- 4. Watermark & Security Toggles -->
-              <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+              <!-- 4. Watermark & Security Policies -->
+              <div class="settings-studio-block" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">04</span>
+                  <div>
+                    <h3 class="settings-studio-title">Anti-Piracy Watermarking & Session Security</h3>
+                    <p class="settings-studio-sub">Dynamic DRM, encrypted tokens, at automated chapter indexing</p>
+                  </div>
+                </div>
+
                 <div class="settings-toggle-row">
                   <div>
                     <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Dynamic Anti-Piracy Watermark</div>
