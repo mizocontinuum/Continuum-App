@@ -1,0 +1,2596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#03080E">
+  <title>Admin Dashboard — Continuum Academy</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core Admin Styles -->
+  <link rel="stylesheet" href="../assets/css/admin.css">
+
+  <link rel="shortcut icon" href="../assets/images/favicon.ico">
+  <link rel="icon" type="image/png" href="../assets/images/icon-circle-512.png">
+</head>
+
+<body>
+  <!-- Floating Live Toast Notification for Settings & Actions Feedback -->
+  <div id="adminToast" class="admin-toast-feedback"></div>
+
+  <!-- Backdrop for Mobile Sidebar Drawer -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="admin-shell">
+
+    <!-- --------------------------------------------------------------------------
+         Sidebar
+         -------------------------------------------------------------------------- -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <a href="../home/" class="brand-link">
+          <img src="../assets/images/logo-icon.png" alt="Continuum" class="brand-logo-img">
+          <div class="brand-meta">
+            <span class="brand-title">CONTINUUM</span>
+            <span class="brand-badge">ADMIN CONSOLE</span>
+          </div>
+        </a>
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div>
+          <p class="nav-group-label">Overview</p>
+          <ul class="nav-list">
+            <li>
+              <button class="nav-item-btn active" data-view="dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                  <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                  <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                  <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                </svg>
+                <span>Dashboard</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-item-btn" data-view="analytics">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Analytics & Reports</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="nav-group-label">Management</p>
+          <ul class="nav-list">
+            <li>
+              <button class="nav-item-btn" data-view="videos">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+                <span>Video Management</span>
+                <span class="nav-badge-pill">42</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-item-btn" data-view="students">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Students</span>
+                <span class="nav-badge-pill">1,280</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-item-btn" data-view="categories">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Categories</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="nav-group-label">System</p>
+          <ul class="nav-list">
+            <li>
+              <button class="nav-item-btn" data-view="settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                  </path>
+                </svg>
+                <span>Platform Settings</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar-hex">AD</div>
+          <div class="user-meta">
+            <div class="user-name">Executive Admin</div>
+            <div class="user-role-badge">Super Administrator</div>
+          </div>
+          <a href="../login/" class="logout-icon-btn" title="Sign out">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- --------------------------------------------------------------------------
+         Main App View
+         -------------------------------------------------------------------------- -->
+    <div class="admin-main-wrap">
+
+      <!-- Topbar Header -->
+      <header class="admin-topbar">
+        <div class="topbar-left-group">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="topbar-actions">
+          <a href="../home/" class="topbar-btn view-site" target="_blank">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            <span>Preview Student App</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Dashboard View Content -->
+      <main class="admin-content">
+
+        <!-- ==================== VIEW 1: DASHBOARD OVERVIEW ==================== -->
+        <div class="admin-view-pane active" id="dashboardView">
+
+          <!-- Header Hero Wrap with Integrated 3D Spline Canvas -->
+          <div class="header-hero-wrap">
+            <div class="header-text-block">
+              <p class="page-eyebrow">CONTINUUM EXECUTIVE ACADEMY</p>
+              <h1 class="page-title">Platform Performance & Operations</h1>
+              <p class="page-subtitle">Real-time overview of student progress, video streams, and learning metrics.</p>
+            </div>
+
+            <!-- Holographic 3D Polyhedron Embedded Canvas (Balanced, no overlap) -->
+            <div class="admin-spline-stage">
+              <canvas id="adminSplineCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- 5 Key Metric Stat Cards -->
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Students</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">1,280</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span>+14.2% this month</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Published Videos</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">42</div>
+              <div class="stat-delta neutral">
+                <span>8 categories active</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Video Views</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">38,420</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span>+28.5% weekly</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Active Learners</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">648</div>
+              <div class="stat-delta positive">
+                <span>Active in last 24h</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Avg. Completion</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">76.4%</div>
+              <div class="stat-delta positive">
+                <span>High engagement</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Two Column Main Workspace Grid -->
+          <div class="dashboard-grid">
+
+            <!-- Left Column: Student Viewing Activity & Management -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h2 class="panel-title">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                  <span>Student Watch Activity & Progress</span>
+                </h2>
+                <a href="#students" class="panel-action-link">View all 1,280 students &rarr;</a>
+              </div>
+
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Current Lesson</th>
+                      <th>Progress</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar">MR</div>
+                          <div>
+                            <div class="student-meta-name">Marcus Rodriguez</div>
+                            <div class="student-meta-email">m.rodriguez@executive.ph</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Brand Strategy Masterclass</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 32m of 45m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 71%;"></div>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 600;">71%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">AT
+                          </div>
+                          <div>
+                            <div class="student-meta-name">Alysia Tan</div>
+                            <div class="student-meta-email">alysia.tan@innovate.co</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Disruptive Venture Scaling</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 48m of 50m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 96%;"></div>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 600;">96%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);">DM
+                          </div>
+                          <div>
+                            <div class="student-meta-name">Danilo Mendoza</div>
+                            <div class="student-meta-email">danilo.m@mendoza-holdings.com</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Marketing Blue Ocean Shift</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 15m of 60m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 25%;"></div>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 600;">25%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="student-cell">
+                          <div class="student-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">CL
+                          </div>
+                          <div>
+                            <div class="student-meta-name">Christine Laurel</div>
+                            <div class="student-meta-email">claurel@apexretail.org</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style="font-weight: 500;">Executive Crisis Communication</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Watched 38m of 38m</div>
+                      </td>
+                      <td>
+                        <div class="progress-bar-wrap">
+                          <div class="progress-bar-fill" style="width: 100%;"></div>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 600;">100%</span>
+                      </td>
+                      <td>
+                        <span class="status-badge active">Active</span>
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="action-icon-btn" title="View Student History">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </button>
+                          <button class="action-icon-btn danger" title="Suspend Account">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right Column: Video Library & Category Highlights -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h2 class="panel-title">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                  <span>Recently Uploaded Videos</span>
+                </h2>
+                <a href="#videos" class="panel-action-link">Manage library &rarr;</a>
+              </div>
+
+              <div class="recent-video-list">
+
+                <div class="video-row-card">
+                  <img src="../assets/images/card-1.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Josiah Go: The Marketing Discipline</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Marketing</span>
+                      <span>42m</span>
+                      <span>948 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="video-row-card">
+                  <img src="../assets/images/card-2.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Executive Venture Acceleration 2026</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Leadership</span>
+                      <span>58m</span>
+                      <span>1,240 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="video-row-card">
+                  <img src="../assets/images/card-3.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Omnichannel Retail Transformation</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Retail</span>
+                      <span>35m</span>
+                      <span>810 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="video-row-card">
+                  <img src="../assets/images/card-4.png" alt="Card" class="video-thumb-preview">
+                  <div class="video-details">
+                    <h4 class="video-card-title">Closing the Executive Strategy Action Gap</h4>
+                    <div class="video-card-meta">
+                      <span class="video-tag-pill">Strategy</span>
+                      <span>49m</span>
+                      <span>2,105 views</span>
+                    </div>
+                  </div>
+                  <div class="row-actions">
+                    <button class="action-icon-btn" title="Edit video">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div><!-- /#dashboardView -->
+
+        <!-- ==================== VIEW 2: ANALYTICS & REPORTS ==================== -->
+        <div class="admin-view-pane" id="analyticsView">
+
+          <!-- 1. Page Header with Title, Description, Date Filter, & Export Actions -->
+          <div class="reports-header-card">
+            <div>
+              <p class="page-eyebrow">CONTINUUM INTELLIGENCE</p>
+              <h1 class="page-title">Analytics & Reports</h1>
+              <p class="page-subtitle">Real-time educational metrics, video engagement, student completion, and
+                exportable reports.</p>
+            </div>
+
+            <div class="reports-controls">
+              <select class="date-filter-select" id="analyticsDateFilter" aria-label="Select analytics date range">
+                <option value="7d">Last 7 Days</option>
+                <option value="30d" selected>Last 30 Days</option>
+                <option value="90d">Last Quarter (90 Days)</option>
+                <option value="12m">Past 12 Months</option>
+              </select>
+
+              <div class="export-btn-group">
+                <button class="compact-btn" id="btnExportCsv" title="Export data to CSV spreadsheet">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Export CSV</span>
+                </button>
+
+                <button class="compact-btn" id="btnExportPdf" title="Generate PDF Report">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                  </svg>
+                  <span>PDF Report</span>
+                </button>
+
+                <button class="compact-btn" id="btnPrintReport" title="Print Report">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                  </svg>
+                  <span>Print</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Four Compact Statistics Cards -->
+          <div class="compact-stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Video Views</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statTotalViews">38,420</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span id="deltaViews">+28.5% vs previous period</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Active Students</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statActiveStudents">1,280</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span id="deltaStudents">+14.2% monthly growth</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Watch Time</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statTotalWatchTime">2,450 hrs</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span id="deltaWatchTime">+19.8% engagement</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Video Completion Rate</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statCompletionRate">76.4%</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span id="deltaCompletion">+4.1% higher retention</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. Video Views Analytics Chart (Interactive SVG / Recharts Inspired) -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h2 class="panel-title">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                  </svg>
+                  <span>Video Views Analytics</span>
+                </h2>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Daily streaming volume and
+                  executive engagement</p>
+              </div>
+
+              <div class="chart-legend">
+                <span><i class="legend-dot" style="background: #1EA0FF;"></i> Video Views</span>
+                <span><i class="legend-dot" style="background: #00E599;"></i> Completions</span>
+              </div>
+            </div>
+
+            <!-- Responsive Interactive Vector Trend Chart -->
+            <div class="svg-chart-wrap" id="analyticsChartContainer">
+              <!-- Rendered dynamically by admin-animations.js based on selected date filter -->
+            </div>
+          </div>
+
+          <!-- 4 & 5. Two-Column Row: Top Performing Videos + Student Activity -->
+          <div class="reports-grid-two">
+
+            <!-- Section 4: Top 5 Performing Videos -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h2 class="panel-title">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon
+                      points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                    </polygon>
+                  </svg>
+                  <span>Top Performing Videos (Top 5)</span>
+                </h2>
+                <span style="font-size: 11.5px; color: var(--azure-bright); font-weight: 600;">Ranked by Views</span>
+              </div>
+
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;">#</th>
+                      <th>Video</th>
+                      <th>Views</th>
+                      <th>Likes</th>
+                      <th>Completion</th>
+                    </tr>
+                  </thead>
+                  <tbody id="topVideosTableBody">
+                    <!-- Rendered dynamically from mock data -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Section 5: Student Activity Overview & Compact Table -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h2 class="panel-title">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                  <span>Recently Active Students</span>
+                </h2>
+                <span style="font-size: 11.5px; color: var(--status-active); font-weight: 600;">Live Monitoring</span>
+              </div>
+
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Lesson Watched</th>
+                      <th>Time</th>
+                      <th>Progress</th>
+                    </tr>
+                  </thead>
+                  <tbody id="studentActivityTableBody">
+                    <!-- Rendered dynamically from mock data -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Section 6: Reports & Export Quick Toolbar -->
+          <div class="export-toolbar-card">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--azure-bright)" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <div>
+                <div style="font-weight: 600; color: #FFF; font-size: 13px;">Comprehensive Analytics Export</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Download raw CSV activity logs, formatted
+                  executive PDF reports, or print preview.</div>
+              </div>
+            </div>
+
+            <div class="export-btn-group">
+              <button class="compact-btn" id="btnToolbarCsv">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Export CSV</span>
+              </button>
+              <button class="compact-btn primary" id="btnToolbarPdf">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <span>Download Executive PDF</span>
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /#analyticsView -->
+        <!-- ==================== VIEW 3: VIDEO MANAGEMENT ==================== -->
+        <div class="admin-view-pane" id="videosView">
+
+          <!-- 1. Page Header -->
+          <div class="reports-header-card">
+            <div>
+              <p class="page-eyebrow">EDUCATIONAL CURRICULUM</p>
+              <h1 class="page-title">Video Management</h1>
+              <p class="page-subtitle">Manage, organize, publish, and monitor all educational masterclasses and video
+                lessons.</p>
+            </div>
+
+            <div class="reports-controls">
+              <button class="topbar-btn primary-cta" id="btnUploadFromVideoMgmt">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Upload New Video</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Four Compact Video Statistics Cards -->
+          <div class="compact-stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Videos</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statVmTotalVideos">42</div>
+              <div class="stat-delta neutral">
+                <span>Across 8 active categories</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Published Videos</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statVmPublished">38</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span>Live for students</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Draft Videos</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statVmDrafts">4</div>
+              <div class="stat-delta neutral">
+                <span>Pending curriculum review</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Video Views</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statVmViews">38,420</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span>+28.5% weekly streams</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. Search and Filtering Bar -->
+          <div class="filter-bar-card">
+            <div class="filter-left-group">
+
+              <div class="filter-search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type=text id="vmSearchInput" placeholder="Search by title or speaker...">
+              </div>
+
+              <select class="filter-select" id="vmCategoryFilter" aria-label="Filter by category">
+                <option value="all">All Categories</option>
+                <option value="Marketing">Marketing Discipline</option>
+                <option value="Leadership">Executive Leadership</option>
+                <option value="Strategy">Strategic Formulation</option>
+                <option value="Retail">Omnichannel Retail</option>
+                <option value="Finance">Corporate Finance</option>
+              </select>
+
+              <select class="filter-select" id="vmStatusFilter" aria-label="Filter by status">
+                <option value="all">All Status</option>
+                <option value="published">Published Only</option>
+                <option value="draft">Draft Only</option>
+              </select>
+
+              <select class="filter-select" id="vmSortSelect" aria-label="Sort videos">
+                <option value="newest">Sort by: Newest</option>
+                <option value="oldest">Sort by: Oldest</option>
+                <option value="views">Sort by: Most Viewed</option>
+              </select>
+
+            </div>
+
+            <div>
+              <button class="compact-btn" id="btnResetVmFilters">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>Reset Filters</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Complete Video Management Table -->
+          <div class="panel-card" style="padding: 0; overflow: hidden;">
+            <div
+              style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+              <h2 class="panel-title">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+                <span>All Masterclasses & Video Lessons</span>
+              </h2>
+              <span id="vmTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5
+                of 42 videos</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 100px;">Thumbnail</th>
+                    <th>Video Title & Speaker</th>
+                    <th>Category</th>
+                    <th>Upload Date</th>
+                    <th>Total Views</th>
+                    <th>Total Likes</th>
+                    <th>Status</th>
+                    <th style="text-align: right; padding-right: 20px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="vmTableBody">
+                  <!-- Rendered dynamically by admin-animations.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 7. Pagination Controls -->
+            <div class="pagination-wrap">
+              <div class="pagination-info" id="vmPaginationInfo">Showing 1-5 of 42 videos</div>
+              <div class="pagination-pages" id="vmPaginationButtons">
+                <!-- Generated dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+        </div><!-- /#videosView -->
+        <!-- ==================== VIEW 4: STUDENTS MANAGEMENT ==================== -->
+        <div class="admin-view-pane" id="studentsView">
+
+          <!-- 1. Page Header -->
+          <div class="reports-header-card">
+            <div>
+              <p class="page-eyebrow">EXECUTIVE LEARNER DIRECTORY</p>
+              <h1 class="page-title">Students Management</h1>
+              <p class="page-subtitle">Manage student accounts, track lesson progress, monitor engagement, and oversee
+                enrollments.</p>
+            </div>
+
+            <div class="reports-controls">
+              <button class="compact-btn" id="btnExportStudentsCsv" title="Export student directory to CSV">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Export Students</span>
+              </button>
+              <button class="topbar-btn primary-cta" id="btnAddStudentModalBtn">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Student</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Four Compact Student Statistics Cards -->
+          <div class="compact-stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Students</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statSmTotalStudents">1,280</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span>+14.2% registered accounts</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Active Students</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statSmActive">1,242</div>
+              <div class="stat-delta positive">
+                <span>97.0% active status</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Suspended Accounts</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statSmSuspended">38</div>
+              <div class="stat-delta neutral">
+                <span>Access temporarily restricted</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">New Students (30d)</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statSmNew">160</div>
+              <div class="stat-delta positive">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                <span>Joined this month</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. Search and Filtering Bar -->
+          <div class="filter-bar-card">
+            <div class="filter-left-group">
+
+              <div class="filter-search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="smSearchInput" placeholder="Search by name or email...">
+              </div>
+
+              <select class="filter-select" id="smStatusFilter" aria-label="Filter by account status">
+                <option value="all">All Status</option>
+                <option value="active">Active Only</option>
+                <option value="suspended">Suspended Only</option>
+              </select>
+
+              <select class="filter-select" id="smDateFilter" aria-label="Filter by registration date">
+                <option value="all">All Registration Dates</option>
+                <option value="30d">Registered in Last 30 Days</option>
+                <option value="90d">Registered in Last 90 Days</option>
+              </select>
+
+              <select class="filter-select" id="smSortSelect" aria-label="Sort students">
+                <option value="newest">Sort by: Newest Registration</option>
+                <option value="oldest">Sort by: Oldest Registration</option>
+                <option value="active">Sort by: Most Active</option>
+              </select>
+
+            </div>
+
+            <div>
+              <button class="compact-btn" id="btnResetSmFilters">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>Reset Filters</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Students Management Table -->
+          <div class="panel-card" style="padding: 0; overflow: hidden;">
+            <div
+              style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+              <h2 class="panel-title">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                <span>All Enrolled Students</span>
+              </h2>
+              <span id="smTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5
+                of 1,280 students</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Profile & Student</th>
+                    <th>Email Address</th>
+                    <th>Registration Date</th>
+                    <th>Status</th>
+                    <th>Videos Watched</th>
+                    <th>Last Active</th>
+                    <th style="text-align: right; padding-right: 20px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="smTableBody">
+                  <!-- Rendered dynamically by admin-animations.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 6. Pagination Controls -->
+            <div class="pagination-wrap">
+              <div class="pagination-info" id="smPaginationInfo">Showing 1-5 of 1,280 students</div>
+              <div class="pagination-pages" id="smPaginationButtons">
+                <!-- Generated dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+        </div><!-- /#studentsView -->
+        <!-- ==================== VIEW 5: CATEGORIES MANAGEMENT ==================== -->
+        <div class="admin-view-pane" id="categoriesView">
+
+          <!-- 1. Page Header -->
+          <div class="reports-header-card">
+            <div>
+              <p class="page-eyebrow">CURRICULUM DISCIPLINES</p>
+              <h1 class="page-title">Category Management</h1>
+              <p class="page-subtitle">Organize masterclasses by discipline, manage category metadata, and monitor
+                learning catalog distribution.</p>
+            </div>
+
+            <div class="reports-controls">
+              <button class="topbar-btn primary-cta" id="btnAddCategoryBtn">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Category</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Four Compact Statistics Cards -->
+          <div class="compact-stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Categories</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statCmTotal">8</div>
+              <div class="stat-delta positive">
+                <span>Active learning domains</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Active Masterclasses</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statCmTotalVideos">42</div>
+              <div class="stat-delta positive">
+                <span>Assigned to categories</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Top Category</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                    </path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statCmTopName" style="font-size: 20px; line-height: 1.3;">Marketing</div>
+              <div class="stat-delta positive">
+                <span id="statCmTopCount">14 masterclasses</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Catalog Coverage</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="statCmCoverage">100%</div>
+              <div class="stat-delta positive">
+                <span>All videos categorized</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. Search and Filtering Bar -->
+          <div class="filter-bar-card">
+            <div class="filter-left-group">
+
+              <div class="filter-search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="cmSearchInput" placeholder="Search category by name or keyword...">
+              </div>
+
+              <select class="filter-select" id="cmSortSelect" aria-label="Sort categories">
+                <option value="order">Sort by: Display Order</option>
+                <option value="name">Sort by: Name (A-Z)</option>
+                <option value="videos">Sort by: Most Videos</option>
+              </select>
+
+            </div>
+
+            <div>
+              <button class="compact-btn" id="btnResetCmFilters">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>Reset</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Categories Management Table -->
+          <div class="panel-card" style="padding: 0; overflow: hidden;">
+            <div
+              style="padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+              <h2 class="panel-title">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Curriculum Disciplines</span>
+              </h2>
+              <span id="cmTableCount" style="font-size: 12px; color: var(--azure-bright); font-weight: 600;">Showing 5
+                of 8 categories</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 60px;">Order</th>
+                    <th>Category Name</th>
+                    <th>Description</th>
+                    <th>Slug / Identifier</th>
+                    <th>Videos Count</th>
+                    <th>Status</th>
+                    <th style="text-align: right; padding-right: 20px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cmTableBody">
+                  <!-- Rendered dynamically by admin-animations.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 5. Pagination Controls -->
+            <div class="pagination-wrap">
+              <div class="pagination-info" id="cmPaginationInfo">Showing 1-5 of 8 categories</div>
+              <div class="pagination-pages" id="cmPaginationButtons">
+                <!-- Generated dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+        </div><!-- /#categoriesView -->
+              <!-- ==================== VIEW 6: PLATFORM SETTINGS ==================== -->
+        <div class="admin-view-pane" id="settingsView">
+          
+          <!-- 1. Page Header -->
+          <div class="reports-header-card">
+            <div>
+              <p class="page-eyebrow">SYSTEM CONFIGURATION</p>
+              <h1 class="page-title">Platform Settings</h1>
+              <p class="page-subtitle">Configure branding, streaming integrations, access controls, email notifications, and admin security.</p>
+            </div>
+
+            <div class="reports-controls">
+              <button class="topbar-btn primary-cta" id="btnSaveAllSettings">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                <span>Save All Changes</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Four Compact Settings Statistics / System Health Cards -->
+          <div class="compact-stats-grid">
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">System Status</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="color: var(--status-active); font-size: 22px;">Operational</div>
+              <div class="stat-delta positive">
+                <span>99.98% uptime SLA</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Video CDN Status</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="font-size: 22px;">Mux / HLS</div>
+              <div class="stat-delta positive">
+                <span>Global edge caching active</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Security & Auth</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="font-size: 22px;">reCAPTCHA v3</div>
+              <div class="stat-delta positive">
+                <span>Bot protection enabled</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Database Engine</span>
+                <div class="stat-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" style="font-size: 22px;">PostgreSQL</div>
+              <div class="stat-delta neutral">
+                <span>Supabase RLS active</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. Settings Navigation Tabs -->
+          <div class="settings-nav-pills">
+            <button class="settings-pill-btn active" data-settab="setGeneral">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>General & Branding</span>
+            </button>
+
+            <button class="settings-pill-btn" data-settab="setVideoDelivery">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+              <span>Video & Streaming CDN</span>
+            </button>
+
+            <button class="settings-pill-btn" data-settab="setSecurity">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Security & Roles</span>
+            </button>
+
+            <button class="settings-pill-btn" data-settab="setNotifications">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span>Email & Notifications</span>
+            </button>
+          </div>
+
+          <!-- TAB 1: General & Branding Settings -->
+          <div class="settings-tab-pane active" id="setGeneral">
+            <div class="settings-card">
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+                <div>
+                  <h2 class="settings-section-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--azure-bright);">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span>Landing Page Visual Content & Brand Customizer</span>
+                  </h2>
+                  <p class="settings-section-desc" style="margin-bottom: 0;">Live content studio: i-customize ang teksto, headlines, buttons, at live preview ng Academy Landing Page.</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <a href="../" target="_blank" class="compact-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    <span>Open Live Landing Page</span>
+                  </a>
+                </div>
+              </div>
+
+              <form id="formSetGeneral" onsubmit="event.preventDefault();">
+                <!-- 1. Platform Identity & Header -->
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">01</span>
+                    <div>
+                      <h3 class="settings-studio-title">Brand Identity & Navigation</h3>
+                      <p class="settings-studio-sub">Pangalan ng platform, contact channels, at header navigation</p>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setSiteName">Platform Name</label>
+                      <input type="text" id="setSiteName" class="form-input" value="Continuum Academy">
+                    </div>
+                    <div class="form-group">
+                      <label for="setSupportEmail">Support Contact Email</label>
+                      <input type="email" id="setSupportEmail" class="form-input" value="support@continuum.academy">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. Hero Section Content -->
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">02</span>
+                    <div>
+                      <h3 class="settings-studio-title">Hero Section (Main Banner)</h3>
+                      <p class="settings-studio-sub">Ang unang nakikita ng executive visitors pagkabukas ng website</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="setHeroEyebrow">Hero Badge / Eyebrow Text</label>
+                    <input type="text" id="setHeroEyebrow" class="form-input" value="The Performance Learning Academy">
+                  </div>
+                  <div class="form-group">
+                    <label for="setHeroTitle">Hero Main Headline Title</label>
+                    <input type="text" id="setHeroTitle" class="form-input" value="Learn how the best lead, build and grow.">
+                  </div>
+                  <div class="form-group">
+                    <label for="setHeroLede">Hero Subheadline / Executive Description</label>
+                    <textarea id="setHeroLede" class="form-textarea" rows="3">Stream masterclasses from founders and operators who have done it before. One discipline at a time, built for the decisions you face this quarter.</textarea>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setHeroPrimaryCta">Primary Button Text</label>
+                      <input type="text" id="setHeroPrimaryCta" class="form-input" value="Enter the Academy">
+                    </div>
+                    <div class="form-group">
+                      <label for="setHeroSecondaryCta">Secondary Button Text</label>
+                      <input type="text" id="setHeroSecondaryCta" class="form-input" value="Create a free account">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3. Disciplines Showcase Section -->
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">03</span>
+                    <div>
+                      <h3 class="settings-studio-title">Disciplines Curriculum Showcase</h3>
+                      <p class="settings-studio-sub">Interactive discipline filter pills at course catalog grid</p>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setDiscEyebrow">Section Eyebrow</label>
+                      <input type="text" id="setDiscEyebrow" class="form-input" value="Explore Continuum Curriculum">
+                    </div>
+                    <div class="form-group">
+                      <label for="setDiscTitle">Section Title</label>
+                      <input type="text" id="setDiscTitle" class="form-input" value="Master Executive Disciplines">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="setDiscSubtitle">Curriculum Description</label>
+                    <textarea id="setDiscSubtitle" class="form-textarea" rows="2">Browse world-class masterclasses across all core disciplines. Click any discipline track to explore video masterclasses and syllabus previews.</textarea>
+                  </div>
+                </div>
+
+                <!-- 4. TV Streaming Showcase Section -->
+                <div class="settings-studio-block">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">04</span>
+                    <div>
+                      <h3 class="settings-studio-title">Streaming Spotlight & TV Showcase</h3>
+                      <p class="settings-studio-sub">Device ecosystem compatibility (Smart TVs, Mobile, Apple TV)</p>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="setSpotEyebrow">Spotlight Eyebrow</label>
+                      <input type="text" id="setSpotEyebrow" class="form-input" value="Stream Anywhere">
+                    </div>
+                    <div class="form-group">
+                      <label for="setSpotTitle">Spotlight Headline</label>
+                      <input type="text" id="setSpotTitle" class="form-input" value="Enjoy on your TV">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="setSpotDesc">Spotlight Description</label>
+                    <textarea id="setSpotDesc" class="form-textarea" rows="2">Watch on Smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.</textarea>
+                  </div>
+                </div>
+
+                <!-- 5. Footer Copyright & Attribution -->
+                <div class="settings-studio-block" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                  <div class="settings-studio-header">
+                    <span class="settings-studio-badge">05</span>
+                    <div>
+                      <h3 class="settings-studio-title">Footer Attribution & Legal</h3>
+                      <p class="settings-studio-sub">Copyright notice at corporate governance branding</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="setFooterCopy">Footer Copyright Notice</label>
+                    <input type="text" id="setFooterCopy" class="form-input" value="© Continuum Academy Inc. Powered by Mansmith and Fielders, Inc.">
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB 2: Video & Streaming CDN Settings -->
+          <div class="settings-tab-pane" id="setVideoDelivery">
+            <div class="settings-card">
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+                <div>
+                  <h2 class="settings-section-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--azure-bright);">
+                      <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                      <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                    </svg>
+                    <span>Adaptive Video Streaming CDN Studio (HLS / DASH)</span>
+                  </h2>
+                  <p class="settings-section-desc" style="margin-bottom: 0;">I-configure ang video ingestion engine, custom stream domain, player settings, at dynamic DRM anti-piracy protection.</p>
+                </div>
+              </div>
+
+              <!-- 1. Video Engine & Resolution -->
+              <div class="settings-studio-block">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">01</span>
+                  <div>
+                    <h3 class="settings-studio-title">Video Ingestion Engine & Quality Output</h3>
+                    <p class="settings-studio-sub">Primary cloud provider at adaptive stream bitrate limit</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="setVideoProvider">Video Delivery Engine</label>
+                  <select id="setVideoProvider" class="form-select">
+                    <option value="cloudflare" selected>Cloudflare Stream (Fastest CDN in Manila, Highly Recommended)</option>
+                    <option value="mux">Mux Video (Adaptive HLS Stream)</option>
+                    <option value="bunny">Bunny.net Stream (Low-Cost E-Learning Storage)</option>
+                    <option value="supabase">Direct Storage Streaming</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="setDefaultQuality">Max Allowed Resolution</label>
+                  <select id="setDefaultQuality" class="form-select">
+                    <option value="4k">4K Ultra HD (2160p)</option>
+                    <option value="1080p" selected>Full HD (1080p 60fps - Recommended)</option>
+                    <option value="720p">HD (720p)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- 2. Stream Delivery Domain & API Configuration -->
+              <div class="settings-studio-block">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">02</span>
+                  <div>
+                    <h3 class="settings-studio-title">CDN Infrastructure & API Security Token</h3>
+                    <p class="settings-studio-sub">Custom CNAME edge routing at cryptographic access credentials</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="setStreamDomain">Custom Streaming Domain / CDN URL</label>
+                  <input type="text" id="setStreamDomain" class="form-input" value="https://stream.continuum.academy" placeholder="e.g. https://videocdn.continuum.academy">
+                </div>
+                <div class="form-group">
+                  <label for="setStreamApiKey">CDN / Stream API Access Key</label>
+                  <input type="password" id="setStreamApiKey" class="form-input" value="cf_stream_token_live_94827103" placeholder="Enter API Token or Secret Key">
+                </div>
+              </div>
+
+              <!-- 3. Player Experience & Buffer Cache Settings -->
+              <div class="settings-studio-block">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">03</span>
+                  <div>
+                    <h3 class="settings-studio-title">Player Controls & Buffer Optimization</h3>
+                    <p class="settings-studio-sub">Preload cache behavior at default playback speed availability</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="setDefaultPlaybackRate">Default Playback Speed Options</label>
+                  <select id="setDefaultPlaybackRate" class="form-select">
+                    <option value="all" selected>Full Speed Range (0.75x, 1x, 1.25x, 1.5x, 2x)</option>
+                    <option value="normal">Standard Only (1x, 1.25x, 1.5x)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="setBufferTarget">Preload & Buffer Cache Target</label>
+                  <select id="setBufferTarget" class="form-select">
+                    <option value="aggressive">Aggressive Preload (Instant Play, Higher Bandwidth)</option>
+                    <option value="balanced" selected>Balanced Smart Cache (30s buffer ahead)</option>
+                    <option value="minimal">Minimal Bandwidth (Conserve student mobile data)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- 4. Watermark & Security Policies -->
+              <div class="settings-studio-block" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                <div class="settings-studio-header">
+                  <span class="settings-studio-badge">04</span>
+                  <div>
+                    <h3 class="settings-studio-title">Anti-Piracy Watermarking & Session Security</h3>
+                    <p class="settings-studio-sub">Dynamic DRM, encrypted tokens, at automated chapter indexing</p>
+                  </div>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Dynamic Anti-Piracy Watermark</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Overlay logged-in student email subtly during video playback to prevent illegal screen recordings.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleWatermark" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Auto-Save Playback Position</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Save student progress every 5 seconds for seamless resume on any device.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAutoResume" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Require Signed Stream URLs (DRM-Lite Protection)</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Videos will only play with a temporary expiring cryptographic token (blocks direct file link downloads).</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleSignedUrls" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Auto-Generate Chapter Markers & Transcripts</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Automatically create video syllabus timestamps and AI captions upon upload.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAutoChapters" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Security & Access Control Settings -->
+          <div class="settings-tab-pane" id="setSecurity">
+            <div class="settings-card">
+              <h2 class="settings-section-title">Access Rules, Authentication & Security Policies</h2>
+              <p class="settings-section-desc">Mahigpit na security rules, role permissions, at brute-force defense policies para maprotektahan ang buong academy.</p>
+
+              <!-- Section 1: Authentication & Password Security Parameters -->
+              <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  1. Password Policy & Session Timeout
+                </h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="setMinPassLength">Minimum Password Length</label>
+                    <select id="setMinPassLength" class="form-select">
+                      <option value="8" selected>8 Characters (Standard)</option>
+                      <option value="10">10 Characters (Recommended for Executive Accounts)</option>
+                      <option value="12">12 Characters (High Security)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="setSessionTimeout">Inactivity Session Timeout</label>
+                    <select id="setSessionTimeout" class="form-select">
+                      <option value="30m">30 Minutes (High Security)</option>
+                      <option value="2h" selected>2 Hours of Inactivity (Balanced)</option>
+                      <option value="24h">24 Hours (Standard Student)</option>
+                      <option value="never">Never (Stay signed in)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="setMaxLoginAttempts">Failed Login Lockout Threshold</label>
+                    <select id="setMaxLoginAttempts" class="form-select">
+                      <option value="3">Lock account after 3 failed attempts</option>
+                      <option value="5" selected>Lock account after 5 failed attempts (Recommended)</option>
+                      <option value="10">Lock account after 10 failed attempts</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="setLockoutDuration">Account Lockout Duration</label>
+                    <select id="setLockoutDuration" class="form-select">
+                      <option value="15m" selected>15 Minutes temporary cooldown</option>
+                      <option value="30m">30 Minutes</option>
+                      <option value="manual">Manual Admin Unlock Required</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 2: IP Whitelisting & Admin Perimeter Defense -->
+              <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  2. Admin Perimeter & Access Defense
+                </h3>
+                <div class="form-group">
+                  <label for="setAdminAllowedIps">Admin IP Allowlist (CIDR or Comma-separated IPs)</label>
+                  <input type="text" id="setAdminAllowedIps" class="form-input" placeholder="e.g. 112.198.0.1, 120.29.74.0/24 (Leave blank to allow all IPs)">
+                  <span style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; display: block;">Hahayaan lang ang mga specified IP address na ma-access ang `/admin/` portal.</span>
+                </div>
+              </div>
+
+              <!-- Section 3: Security & Anti-Fraud Toggles -->
+              <div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  3. Identity & Session Enforcement Toggles
+                </h3>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Require Two-Factor Authentication (2FA) for Admins</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Obligatory Time-based OTP (Google Authenticator) before accessing the admin dashboard.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAdmin2FA" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Automatic Student Role Assignment</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">All new self-service registrations receive the Student role automatically.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAutoStudent" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Google reCAPTCHA v3 Protection</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Silent background bot screening on Sign In and Registration forms.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleRecaptcha" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Prevent Concurrent Student Logins (Anti-Account Sharing)</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Awtomatikong i-logout ang lumang session kapag may nag-login na bagong device gamit ang iisang student account.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleConcurrent" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Device Fingerprinting & New Location Alert</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">I-detect kung bago ang device o browser at magpadala ng security verification email sa student.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleDeviceFingerprint" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Admin Activity Audit Logging</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">I-record ang lahat ng video uploads, edit ng categories, pagsuspinde ng account, at delete actions sa security audit log.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAudit" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: Email & Notification Settings -->
+          <div class="settings-tab-pane" id="setNotifications">
+            <div class="settings-card">
+              <h2 class="settings-section-title">Automated Student Alerts & Email Dispatch Center</h2>
+              <p class="settings-section-desc">Transactional notifications at direktang magpadala ng mensahe o alerto sa mga mag-aaral pagkatapos nilang mag-login.</p>
+
+              <!-- Section 1: Direct Broadcast & Student Message Composer -->
+              <div style="margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">
+                    1. Direct Student Message & Alert Dispatcher
+                  </h3>
+                  <span style="font-size: 11.5px; background: rgba(0, 127, 255, 0.18); color: var(--azure-bright); border: 1px solid rgba(0, 127, 255, 0.3); padding: 4px 10px; border-radius: 20px; font-weight: 600;">
+                    Instant In-App & Email
+                  </span>
+                </div>
+                <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">
+                  Pumili ng partikular na student o ipadala sa lahat ng active learners. Mababasa agad ng student ang custom alert na ito pagka-login nila sa kanilang Learning Cockpit.
+                </p>
+
+                <form id="formDirectDispatch" onsubmit="event.preventDefault();">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="dispatchRecipient">Recipient Student</label>
+                      <select id="dispatchRecipient" class="form-select">
+                        <option value="all">Broadcast to All Active Students (8 Students)</option>
+                        <option value="m.rodriguez@executive.ph">Marcus Rodriguez (m.rodriguez@executive.ph)</option>
+                        <option value="alysia.tan@innovate.co">Alysia Tan (alysia.tan@innovate.co)</option>
+                        <option value="danilo.m@mendoza-holdings.com">Danilo Mendoza (danilo.m@mendoza-holdings.com)</option>
+                        <option value="claurel@apexretail.org">Christine Laurel (claurel@apexretail.org)</option>
+                        <option value="custom">Specific Custom Email Address...</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group" id="customEmailGroup" style="display: none;">
+                      <label for="dispatchCustomEmail">Custom Email Address</label>
+                      <input type="email" id="dispatchCustomEmail" class="form-input" placeholder="e.g. learner@company.com">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="dispatchNoticeType">Notification Urgency / Priority</label>
+                      <select id="dispatchNoticeType" class="form-select">
+                        <option value="announcement" selected>Standard Academy Announcement</option>
+                        <option value="urgent">Urgent Advisory / System Update</option>
+                        <option value="welcome">New Learner Welcome & Orientation</option>
+                        <option value="assignment">Course Milestone Recommendation</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dispatchSubject">Email Subject / Banner Headline</label>
+                    <input type="text" id="dispatchSubject" class="form-input" value="Welcome to Continuum Executive Academy — Your Masterclass Access is Ready!" placeholder="Enter message subject...">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dispatchBody">Message Content (Appears in Student Cockpit upon Login)</label>
+                    <textarea id="dispatchBody" class="form-textarea" rows="4" placeholder="Type your custom announcement, curriculum note, or personal message to the student here...">Greetings Leader! Your executive masterclass library across 7 core disciplines is now accessible. Stream your first masterclass from Josiah Go and track your milestone progress.</textarea>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 14px;">
+                    <button type="button" class="topbar-btn primary-cta" id="btnSendStudentMessage" style="padding: 10px 22px;">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                      </svg>
+                      <span>Dispatch Email & Login Alert</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Section 2: Automated Transactional Email Triggers -->
+              <div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--azure-bright); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
+                  2. Automated Transactional Email Triggers
+                </h3>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Student Sign-In / Login Confirmation Email</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Magpadala ng authentication digest o welcome email sa bawat matagumpay na login ng user.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleLoginEmail" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">New Masterclass Announcement</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Notify students when a new video is published in their enrolled disciplines.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleNewVideoEmail" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Course Completion Certificate Email</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Automatically send certificate download link when progress reaches 100%.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleCertEmail" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <div style="font-weight: 600; color: #FFF; font-size: 13.5px;">Weekly Learning Digest</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Weekly summary of watch time and recommendations sent every Monday morning.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggleWeeklyDigest" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div><!-- /#settingsView -->
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Upload Video Modal Dialog (Admin Capability)
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="adminModal">
+    <div class="admin-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Upload Masterclass Video</h3>
+        <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+      </div>
+
+      <form id="uploadVideoForm"
+        onsubmit="event.preventDefault(); alert('Video added to processing queue.'); document.getElementById('adminModal').classList.remove('open');">
+
+        <div class="form-group">
+          <label for="modalVideoTitle">Video Title</label>
+          <input type="text" id="modalVideoTitle" class="form-input" placeholder="e.g. Strategic Brand Positioning"
+            required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modalCategory">Category / Discipline</label>
+            <select id="modalCategory" class="form-select">
+              <option value="marketing">Marketing Discipline</option>
+              <option value="leadership">Executive Leadership</option>
+              <option value="strategy">Strategic Formulation</option>
+              <option value="retail">Omnichannel Retail</option>
+              <option value="finance">Corporate Venture Finance</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="modalDuration">Length (Minutes)</label>
+            <input type="number" id="modalDuration" class="form-input" placeholder="45" min="1">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modalDescription">Description</label>
+          <textarea id="modalDescription" class="form-textarea" rows="3"
+            placeholder="Overview of key concepts and actionable takeaways..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modalThumb">Thumbnail Image File</label>
+            <input type="file" id="modalThumb" class="form-input" accept="image/*">
+          </div>
+          <div class="form-group">
+            <label for="modalVideo">Upload Video File</label>
+            <input type="file" id="modalVideo" class="form-input" accept="video/mp4,video/webm,video/quicktime,video/*">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="topbar-btn view-site" id="modalCancelBtn">Cancel</button>
+          <button type="submit" class="topbar-btn primary-cta">Publish Video</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- CDN Dependencies: GSAP 3.12.5 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Admin Interaction Script -->
+  <script src="../assets/js/admin-animations.js"></script>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Video Details (View Action)
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="vmDetailsModal">
+    <div class="admin-modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="vmDetailsTitle">Masterclass Preview</h3>
+        <button class="modal-close-btn" id="vmDetailsCloseBtn">&times;</button>
+      </div>
+
+      <!-- Video Preview Area -->
+      <div class="video-preview-box">
+        <img id="vmDetailsThumb" src="../assets/images/card-1.png" alt="Preview">
+        <div class="video-preview-play-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="#FFF" stroke="#FFF">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        </div>
+      </div>
+
+      <div class="video-meta-grid">
+        <div class="meta-field-item">
+          <div class="meta-field-label">Discipline / Category</div>
+          <div class="meta-field-value" id="vmDetailsCategory">Marketing Discipline</div>
+        </div>
+        <div class="meta-field-item">
+          <div class="meta-field-label">Duration</div>
+          <div class="meta-field-value" id="vmDetailsDuration">42 Minutes</div>
+        </div>
+        <div class="meta-field-item">
+          <div class="meta-field-label">Upload Date</div>
+          <div class="meta-field-value" id="vmDetailsDate">Nov 14, 2026</div>
+        </div>
+        <div class="meta-field-item">
+          <div class="meta-field-label">Engagement</div>
+          <div class="meta-field-value" id="vmDetailsEngagement">11,480 views · 1,290 likes</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <div class="meta-field-label" style="margin-bottom: 6px;">Description & Key Learning Takeaways</div>
+        <p id="vmDetailsDesc" style="font-size: 13.5px; color: var(--text-muted); line-height: 1.6;"></p>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="topbar-btn view-site" id="vmDetailsCloseActionBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Edit Video (Edit Action)
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="vmEditModal">
+    <div class="admin-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Masterclass Information</h3>
+        <button class="modal-close-btn" id="vmEditCloseBtn">&times;</button>
+      </div>
+
+      <form id="vmEditForm">
+        <input type="hidden" id="vmEditId">
+
+        <div class="form-group">
+          <label for="vmEditTitleInput">Video Title</label>
+          <input type="text" id="vmEditTitleInput" class="form-input" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="vmEditCategorySelect">Category</label>
+            <select id="vmEditCategorySelect" class="form-select">
+              <option value="Marketing">Marketing Discipline</option>
+              <option value="Leadership">Executive Leadership</option>
+              <option value="Strategy">Strategic Formulation</option>
+              <option value="Retail">Omnichannel Retail</option>
+              <option value="Finance">Corporate Finance</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="vmEditStatusSelect">Publish Status</label>
+            <select id="vmEditStatusSelect" class="form-select">
+              <option value="published">Published (Visible)</option>
+              <option value="draft">Draft (Hidden)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="vmEditDescInput">Description</label>
+          <textarea id="vmEditDescInput" class="form-textarea" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="vmEditThumbFile">Thumbnail Image File</label>
+          <input type="file" id="vmEditThumbFile" class="form-input" accept="image/*">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="topbar-btn view-site" id="vmEditCancelBtn">Cancel</button>
+          <button type="submit" class="topbar-btn primary-cta">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Delete Confirmation Dialog (Delete Action)
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="vmDeleteModal">
+    <div class="admin-modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: var(--status-danger)">Confirm Deletion</h3>
+        <button class="modal-close-btn" id="vmDeleteCloseBtn">&times;</button>
+      </div>
+
+      <p style="font-size: 13.5px; color: var(--text-main); margin-bottom: 12px;">
+        Are you sure you want to delete <strong id="vmDeleteVideoTitle" style="color: #FFF;"></strong>?
+      </p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 24px;">
+        This will permanently remove the video from the active catalog and student watch history. This action cannot be
+        undone.
+      </p>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="topbar-btn view-site" id="vmDeleteCancelBtn">Cancel</button>
+        <button type="button" class="compact-btn" id="vmDeleteConfirmBtn"
+          style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
+          Delete Video
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Student Details (View Student Action with Tabs)
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="smDetailsModal">
+    <div class="admin-modal-card" style="max-width: 660px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Student Profile & Learning Analytics</h3>
+        <button class="modal-close-btn" id="smDetailsCloseBtn">&times;</button>
+      </div>
+
+      <!-- Student Profile Header -->
+      <div class="student-profile-header">
+        <div class="student-large-avatar" id="smDetailsAvatar">MR</div>
+        <div style="flex: 1;">
+          <div style="font-size: 16px; font-weight: 700; color: #FFF;" id="smDetailsName">Marcus Rodriguez</div>
+          <div style="font-size: 12px; color: var(--text-muted);" id="smDetailsEmail">m.rodriguez@executive.ph</div>
+          <div style="display: flex; gap: 12px; margin-top: 6px; font-size: 11.5px;">
+            <span id="smDetailsStatusBadge" class="status-badge active">Active</span>
+            <span style="color: var(--text-dim);">Joined: <span id="smDetailsRegDate" style="color:#FFF;">Oct 12,
+                2026</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student 4 Key Stats -->
+      <div class="video-meta-grid" style="margin-bottom: 20px;">
+        <div class="meta-field-item">
+          <div class="meta-field-label">Videos Watched</div>
+          <div class="meta-field-value" id="smDetailsWatchedCount">18 Masterclasses</div>
+        </div>
+        <div class="meta-field-item">
+          <div class="meta-field-label">Total Watch Time</div>
+          <div class="meta-field-value" id="smDetailsWatchTime">14.2 Hours</div>
+        </div>
+        <div class="meta-field-item">
+          <div class="meta-field-label">Completed Lessons</div>
+          <div class="meta-field-value" id="smDetailsCompletedCount">14 Courses</div>
+        </div>
+        <div class="meta-field-item">
+          <div class="meta-field-label">Liked Videos</div>
+          <div class="meta-field-value" id="smDetailsLikedCount">11 Favorites</div>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="student-modal-tabs">
+        <button class="student-tab-btn active" data-tab="tabWatchHistory">Watch History</button>
+        <button class="student-tab-btn" data-tab="tabLikedVideos">Liked Videos</button>
+        <button class="student-tab-btn" data-tab="tabProgress">Completion Progress</button>
+      </div>
+
+      <!-- Tab 1: Watch History -->
+      <div class="student-tab-content active" id="tabWatchHistory">
+        <div class="recent-video-list" id="smHistoryList">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Tab 2: Liked Videos -->
+      <div class="student-tab-content" id="tabLikedVideos">
+        <div class="recent-video-list" id="smLikedList">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Tab 3: Progress -->
+      <div class="student-tab-content" id="tabProgress">
+        <div class="recent-video-list" id="smProgressList">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+        <button type="button" class="topbar-btn view-site" id="smDetailsCloseActionBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Edit Student (Edit Action)
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="smEditModal">
+    <div class="admin-modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Student Account</h3>
+        <button class="modal-close-btn" id="smEditCloseBtn">&times;</button>
+      </div>
+
+      <form id="smEditForm">
+        <input type="hidden" id="smEditId">
+
+        <div class="form-group">
+          <label for="smEditNameInput">Full Name</label>
+          <input type="text" id="smEditNameInput" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="smEditEmailInput">Email Address</label>
+          <input type="email" id="smEditEmailInput" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="smEditStatusSelect">Account Status</label>
+          <select id="smEditStatusSelect" class="form-select">
+            <option value="active">Active (Full Access)</option>
+            <option value="suspended">Suspended (Restricted)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="topbar-btn view-site" id="smEditCancelBtn">Cancel</button>
+          <button type="submit" class="topbar-btn primary-cta">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Suspend / Activate Student Confirmation
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="smStatusConfirmModal">
+    <div class="admin-modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="smStatusModalTitle">Change Account Status</h3>
+        <button class="modal-close-btn" id="smStatusCloseBtn">&times;</button>
+      </div>
+
+      <p style="font-size: 13.5px; color: var(--text-main); margin-bottom: 12px;" id="smStatusModalDesc"></p>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+        <button type="button" class="topbar-btn view-site" id="smStatusCancelBtn">Cancel</button>
+        <button type="button" class="compact-btn primary" id="smStatusConfirmBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Delete Student Confirmation
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="smDeleteModal">
+    <div class="admin-modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: var(--status-danger);">Confirm Deletion</h3>
+        <button class="modal-close-btn" id="smDeleteCloseBtn">&times;</button>
+      </div>
+
+      <p style="font-size: 13.5px; color: var(--text-main); margin-bottom: 12px;">
+        Are you sure you want to permanently delete the account of <strong id="smDeleteStudentName"
+          style="color: #FFF;"></strong>?
+      </p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 24px;">
+        This will delete the student profile, remove viewing records, and invalidate their access. This action cannot be
+        undone.
+      </p>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="topbar-btn view-site" id="smDeleteCancelBtn">Cancel</button>
+        <button type="button" class="compact-btn" id="smDeleteConfirmBtn"
+          style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
+          Delete Student
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Add New Student
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="smAddModal">
+    <div class="admin-modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Register New Student</h3>
+        <button class="modal-close-btn" id="smAddCloseBtn">&times;</button>
+      </div>
+
+      <form id="smAddForm">
+        <div class="form-group">
+          <label for="smAddNameInput">Full Name</label>
+          <input type="text" id="smAddNameInput" class="form-input" placeholder="e.g. Maria Santos" required>
+        </div>
+
+        <div class="form-group">
+          <label for="smAddEmailInput">Email Address</label>
+          <input type="email" id="smAddEmailInput" class="form-input" placeholder="e.g. maria.santos@company.ph"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="smAddCompanyInput">Company / Organization</label>
+          <input type="text" id="smAddCompanyInput" class="form-input" placeholder="e.g. Ayala Corporation">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="topbar-btn view-site" id="smAddCancelBtn">Cancel</button>
+          <button type="submit" class="topbar-btn primary-cta">Create Student Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Add / Edit Category
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="cmModal">
+    <div class="admin-modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cmModalTitle">Create New Discipline Category</h3>
+        <button class="modal-close-btn" id="cmModalCloseBtn">&times;</button>
+      </div>
+
+      <form id="cmForm">
+        <input type="hidden" id="cmEditId">
+
+        <div class="form-group">
+          <label for="cmNameInput">Category / Discipline Name <span style="color:var(--status-danger);">*</span></label>
+          <input type="text" id="cmNameInput" class="form-input" placeholder="e.g. Behavioral Economics" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cmSlugInput">Slug</label>
+            <input type="text" id="cmSlugInput" class="form-input" placeholder="e.g. behavioral-economics" required>
+          </div>
+          <div class="form-group">
+            <label for="cmOrderInput">Display Order</label>
+            <input type="number" id="cmOrderInput" class="form-input" min="1" value="1">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cmDescInput">Description</label>
+          <textarea id="cmDescInput" class="form-textarea" rows="3"
+            placeholder="Brief summary of this learning discipline..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cmColorSelect">Accent Color</label>
+            <select id="cmColorSelect" class="form-select">
+              <option value="#1EA0FF">Azure Blue (#1EA0FF)</option>
+              <option value="#00E599">Emerald Green (#00E599)</option>
+              <option value="#8B5CF6">Purple Amethyst (#8B5CF6)</option>
+              <option value="#F59E0B">Amber Gold (#F59E0B)</option>
+              <option value="#EC4899">Rose Pink (#EC4899)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cmStatusSelect">Visibility</label>
+            <select id="cmStatusSelect" class="form-select">
+              <option value="active">Active (Visible)</option>
+              <option value="inactive">Hidden (Inactive)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="topbar-btn view-site" id="cmModalCancelBtn">Cancel</button>
+          <button type="submit" class="topbar-btn primary-cta" id="cmSubmitBtn">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------------------------
+       Modal: Delete Category Confirmation
+       -------------------------------------------------------------------------- -->
+  <div class="admin-modal-backdrop" id="cmDeleteModal">
+    <div class="admin-modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: var(--status-danger);">Confirm Deletion</h3>
+        <button class="modal-close-btn" id="cmDeleteCloseBtn">&times;</button>
+      </div>
+
+      <p style="font-size: 13.5px; color: var(--text-main); margin-bottom: 12px;">
+        Are you sure you want to delete category <strong id="cmDeleteName" style="color: #FFF;"></strong>?
+      </p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 24px;">
+        Videos belonging to this category will become uncategorized. This action cannot be undone.
+      </p>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="topbar-btn view-site" id="cmDeleteCancelBtn">Cancel</button>
+        <button type="button" class="compact-btn" id="cmDeleteConfirmBtn"
+          style="background: var(--status-danger); color: #FFF; border-color: var(--status-danger); padding: 8px 16px;">
+          Delete Category
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

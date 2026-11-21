@@ -4,6 +4,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 // Payload owns /admin and /api, so those paths are intentionally excluded.
 const STATIC_PAGES = [
   'clips',
+  'dashboard',
   'discipline',
   'disciplines',
   'explore',
@@ -23,7 +24,8 @@ const nextConfig = {
   reactStrictMode: true,
 
   async redirects() {
-    // The static pages link to "/admin/" (trailing slash); Payload lives at "/admin".
+    // Normalise "/admin/" to Payload's "/admin". The mock admin console now
+    // lives at "/dashboard/" (see STATIC_PAGES), so "/admin" stays Payload-only.
     return [{ source: '/admin/', destination: '/admin', permanent: false }]
   },
 
