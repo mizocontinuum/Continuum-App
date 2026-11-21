@@ -18,11 +18,14 @@
     const easeSmooth = 'power2.out';
     const tl = gsap.timeline({ defaults: { ease: easeSmooth } });
 
+    const isSwapped = document.querySelector('.auth-showcase-panel-swapped') !== null;
+    const initialSlideX = isSwapped ? 30 : -30;
+
     // Initial state sets
     gsap.set('.brand-header', { opacity: 0, y: -20 });
-    gsap.set('.auth-showcase-panel', { opacity: 0, x: -30 });
+    gsap.set('.auth-showcase-panel', { opacity: 0, x: initialSlideX });
     gsap.set('.login-card', { opacity: 0, y: 25, scale: 0.96 });
-    gsap.set('.auth-spline-stage', { opacity: 0, scale: 0.88 });
+    gsap.set('.auth-spline-stage', { opacity: 0, scale: 0.9 });
     gsap.set('.form-group', { opacity: 0, y: 12 });
     gsap.set('.btn-submit, .oauth-row', { opacity: 0, y: 10 });
     gsap.set('.login-footer', { opacity: 0 });
@@ -31,10 +34,10 @@
       .to('.brand-header', { opacity: 1, y: 0, duration: 0.45 }, 0.05)
       .to('.auth-showcase-panel', { opacity: 1, x: 0, duration: 0.55 }, 0.1)
       .to('.auth-spline-stage', { opacity: 1, scale: 1, duration: 0.6 }, 0.1)
-      .to('.login-card', { opacity: 1, y: 0, scale: 1, duration: 0.5 }, 0.18)
-      .to('.form-group', { opacity: 1, y: 0, stagger: 0.04, duration: 0.35 }, 0.3)
-      .to('.btn-submit, .oauth-row', { opacity: 1, y: 0, stagger: 0.05, duration: 0.35 }, 0.45)
-      .to('.login-footer', { opacity: 1, duration: 0.45 }, 0.55);
+      .to('.login-card', { opacity: 1, y: 0, scale: 1, duration: 0.5 }, 0.16)
+      .to('.form-group', { opacity: 1, y: 0, stagger: 0.035, duration: 0.35 }, 0.28)
+      .to('.btn-submit, .oauth-row', { opacity: 1, y: 0, stagger: 0.04, duration: 0.35 }, 0.42)
+      .to('.login-footer', { opacity: 1, duration: 0.45 }, 0.52);
   }
 
   /* ──────────────────────────────────────────────────────────────────────────
