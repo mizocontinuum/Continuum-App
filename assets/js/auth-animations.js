@@ -103,47 +103,47 @@
       const cy = height / 2 + floatOffsetY;
 
       // 1. Ambient Hologram Backlight Aura
-      const radGlow = ctx.createRadialGradient(cx, cy, 30, cx, cy, 260);
-      radGlow.addColorStop(0, 'rgba(0, 160, 255, 0.28)');
-      radGlow.addColorStop(0.45, 'rgba(0, 127, 255, 0.1)');
+      const radGlow = ctx.createRadialGradient(cx, cy, 30, cx, cy, 270);
+      radGlow.addColorStop(0, 'rgba(0, 160, 255, 0.32)');
+      radGlow.addColorStop(0.45, 'rgba(0, 127, 255, 0.12)');
       radGlow.addColorStop(1, 'rgba(3, 8, 14, 0)');
       ctx.fillStyle = radGlow;
       ctx.beginPath();
-      ctx.arc(cx, cy, 260, 0, Math.PI * 2);
+      ctx.arc(cx, cy, 270, 0, Math.PI * 2);
       ctx.fill();
 
-      // 2. Dual Gyroscope 3D Orbital Rings
+      // 2. Dual Gyroscope 3D Orbital Rings (Balanced Proportion)
       ctx.save();
       ctx.translate(cx, cy);
 
       // Ring 1 (Azure Dash)
       ctx.beginPath();
-      ctx.ellipse(0, 0, 195, 62, totalYaw * 0.45, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0, 212, 255, 0.25)';
-      ctx.lineWidth = 1.2;
+      ctx.ellipse(0, 0, 215, 70, totalYaw * 0.45, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(0, 212, 255, 0.28)';
+      ctx.lineWidth = 1.4;
       ctx.setLineDash([8, 8]);
       ctx.stroke();
       ctx.setLineDash([]);
 
       // Ring 2 (Outer Deep Azure Solid)
       ctx.beginPath();
-      ctx.ellipse(0, 0, 175, 48, -totalYaw * 0.35 + 0.6, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0, 127, 255, 0.3)';
-      ctx.lineWidth = 1.4;
+      ctx.ellipse(0, 0, 195, 54, -totalYaw * 0.35 + 0.6, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(0, 127, 255, 0.32)';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
       ctx.restore();
 
-      // 3. Render 3D Logo Extrusion with Layered Depth
+      // 3. Render 3D Logo Extrusion with Layered Depth (Clean & Balanced: baseH = 225px)
       const logoAspect = 247 / 292;
-      const baseH = 205;
-      const baseW = baseH * logoAspect; // ~173px
+      const baseH = 225;
+      const baseW = baseH * logoAspect; // ~190px
       const cosY = Math.cos(totalYaw);
       const sinY = Math.sin(totalYaw);
 
       if (logoLoaded) {
-        const depthLayers = 20;
-        const depthSpread = 36; // 3D volume depth
+        const depthLayers = 22;
+        const depthSpread = 40; // Balanced 3D volume depth
 
         for (let l = -depthLayers / 2; l <= depthLayers / 2; l++) {
           const layerZ = (l / depthLayers) * depthSpread;
@@ -164,17 +164,17 @@
           const isCore = Math.abs(l) < 3;
 
           if (isFront) {
-            ctx.globalAlpha = 0.96;
+            ctx.globalAlpha = 0.98;
             ctx.shadowColor = '#00D4FF';
-            ctx.shadowBlur = 18;
+            ctx.shadowBlur = 25;
             ctx.drawImage(logoImg, -w / 2, -h / 2, w, h);
           } else {
-            const layerAlpha = 0.06 + (Math.abs(l) / depthLayers) * 0.18;
+            const layerAlpha = 0.07 + (Math.abs(l) / depthLayers) * 0.18;
             ctx.globalAlpha = layerAlpha;
             ctx.drawImage(logoImg, -w / 2, -h / 2, w, h);
 
             ctx.globalCompositeOperation = 'source-atop';
-            const depthColor = isCore ? 'rgba(0, 127, 255, 0.5)' : 'rgba(51, 181, 255, 0.32)';
+            const depthColor = isCore ? 'rgba(0, 127, 255, 0.52)' : 'rgba(51, 181, 255, 0.35)';
             ctx.fillStyle = depthColor;
             ctx.fillRect(-w / 2, -h / 2, w, h);
           }
@@ -186,10 +186,10 @@
         const faceForward = Math.abs(cosY);
         if (faceForward > 0.35) {
           ctx.save();
-          const shineR = 45 * faceForward;
+          const shineR = 60 * faceForward;
           const shineGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, shineR);
-          shineGrad.addColorStop(0, `rgba(255, 255, 255, ${0.6 * faceForward})`);
-          shineGrad.addColorStop(0.35, `rgba(51, 181, 255, ${0.4 * faceForward})`);
+          shineGrad.addColorStop(0, `rgba(255, 255, 255, ${0.65 * faceForward})`);
+          shineGrad.addColorStop(0.35, `rgba(51, 181, 255, ${0.45 * faceForward})`);
           shineGrad.addColorStop(1, 'rgba(0, 127, 255, 0)');
           ctx.fillStyle = shineGrad;
           ctx.beginPath();

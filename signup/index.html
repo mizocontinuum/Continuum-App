@@ -20,11 +20,6 @@
 </head>
 
 <body>
-  <!-- Ambient Spline 3D Holographic Glass Core in Background -->
-  <div class="auth-spline-stage" aria-hidden="true">
-    <canvas id="authSplineCanvas" width="600" height="600"></canvas>
-  </div>
-
   <!-- Toast feedback notification -->
   <div class="toast-msg" id="signupToast" role="status"></div>
 
@@ -41,89 +36,110 @@
       </div>
     </header>
 
-    <!-- Account creation card (3D Glass Holographic Cockpit) -->
-    <main class="login-card">
-      <h1 class="headline">Create your account</h1>
-      <p class="subheadline">Your executive learning cockpit, across every discipline</p>
+    <!-- Side-by-Side Executive Portal Body (Swapped Layout: Form on Left, 3D Logo on Right) -->
+    <div class="auth-portal-grid auth-portal-grid-swapped">
 
-      <form class="login-form" id="signupForm" autocomplete="on">
+      <!-- Left Column: Account creation card (3D Glass Holographic Cockpit) -->
+      <main class="login-card">
+        <h1 class="headline">Create your account</h1>
+        <p class="subheadline">Join executive founders and leaders across the Academy</p>
 
-        <div class="form-group">
-          <label class="form-label" for="name">FULL NAME</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            class="input-box"
-            placeholder="Maria Santos"
-            required
-            autocomplete="name"
-            minlength="2"
-          >
+        <form class="login-form" id="signupForm" autocomplete="on">
+
+          <div class="form-group">
+            <label class="form-label" for="name">FULL NAME</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="input-box"
+              placeholder="Maria Santos"
+              required
+              autocomplete="name"
+              minlength="2"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">EMAIL ADDRESS</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="input-box"
+              placeholder="name@company.com"
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">PASSWORD</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="input-box"
+              placeholder="At least 8 characters"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            >
+            <p class="field-hint">Use 8 characters or more. A passphrase beats a short password.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="confirm">CONFIRM PASSWORD</label>
+            <input
+              type="password"
+              id="confirm"
+              name="confirm"
+              class="input-box"
+              placeholder="Repeat your password"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            >
+          </div>
+
+          <!-- Where a rejected sign-up lands -->
+          <p class="form-error" id="signupError" role="alert" style="color: #FF4D6D; font-size: 13px; margin: 4px 0 12px; min-height: 18px;"></p>
+
+          <button type="submit" class="btn-submit" id="signupSubmit">
+            <span>Create Account</span>
+            <span class="arrow-icon">➔</span>
+          </button>
+
+        </form>
+
+        <!-- Social signup options -->
+        <div id="altOptions" style="margin-top: 14px;">
+          <div class="auth-divider">or register with</div>
+
+          <div class="oauth-row">
+            <button type="button" class="oauth-btn" data-provider="google">
+              <span>Google</span>
+            </button>
+
+            <button type="button" class="oauth-btn" data-provider="azure">
+              <span>Microsoft</span>
+            </button>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="email">EMAIL ADDRESS</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="input-box"
-            placeholder="name@company.com"
-            required
-            autocomplete="email"
-          >
+        <p class="auth-alt" style="margin-top: 20px; font-size: 13.5px; text-align: center; color: var(--text-muted);">
+          Already have an account? <a href="../login/" style="color: var(--azure-bright); font-weight: 600; text-decoration: none;">Sign in</a>
+        </p>
+      </main>
+
+      <!-- Right Column: 3D Holographic Showcase Logo (Clean & Pure) -->
+      <div class="auth-showcase-panel auth-showcase-panel-swapped">
+        <div class="auth-spline-stage" aria-hidden="true">
+          <canvas id="authSplineCanvas" width="600" height="600"></canvas>
         </div>
-
-        <div class="form-group">
-          <label class="form-label" for="password">PASSWORD</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            class="input-box"
-            placeholder="At least 8 characters"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          >
-          <p class="field-hint">Use 8 characters or more. A passphrase beats a short password.</p>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="confirm">CONFIRM PASSWORD</label>
-          <input
-            type="password"
-            id="confirm"
-            name="confirm"
-            class="input-box"
-            placeholder="Repeat your password"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          >
-        </div>
-
-        <!-- Where a rejected sign-up lands, e.g. the email is already taken -->
-        <p class="form-error" id="signupError" role="alert"></p>
-
-        <button type="submit" class="btn-submit" id="signupSubmit">
-          <span>Create Account</span>
-          <span class="arrow-icon">➔</span>
-        </button>
-
-      </form>
-
-      <!-- Shown when email confirmation is on and no session is issued yet -->
-      <div class="auth-note" id="signupSent" hidden>
-        <strong>Almost there.</strong> We sent a confirmation link to your inbox.
-        Open it to activate your account, then sign in.
       </div>
 
-      <p class="auth-alt">
-        Already have an account? <a href="../login/">Sign in</a>
-      </p>
-    </main>
+    </div><!-- /auth-portal-grid -->
 
     <!-- Footer Links -->
     <footer class="login-footer">
@@ -147,6 +163,109 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <!-- Auth Shared Animations (Consistent & Zero-lag) -->
   <script src="../assets/js/auth-animations.js"></script>
+
+  <!-- Client-side Registration & Immediate Auto-Login Script -->
+  <script>
+    (() => {
+      'use strict';
+
+      function showToast(msg, isError = false) {
+        const toast = document.getElementById('signupToast');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.className = 'toast-msg show' + (isError ? ' error' : '');
+        setTimeout(() => {
+          toast.className = 'toast-msg';
+        }, 3200);
+      }
+
+      const form = document.getElementById('signupForm');
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const passInput = document.getElementById('password');
+      const confirmInput = document.getElementById('confirm');
+      const errorMsg = document.getElementById('signupError');
+      const submitBtn = document.getElementById('signupSubmit');
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const name = (nameInput.value || '').trim();
+          const email = (emailInput.value || '').trim().toLowerCase();
+          const pass = (passInput.value || '').trim();
+          const confirm = (confirmInput.value || '').trim();
+
+          if (errorMsg) errorMsg.textContent = '';
+
+          // Validation
+          if (!name || name.length < 2) {
+            if (errorMsg) errorMsg.textContent = 'Please provide your full legal name.';
+            showToast('Invalid name', true);
+            return;
+          }
+
+          if (pass.length < 8) {
+            if (errorMsg) errorMsg.textContent = 'Password must be at least 8 characters.';
+            showToast('Password too short', true);
+            return;
+          }
+
+          if (pass !== confirm) {
+            if (errorMsg) errorMsg.textContent = 'Passwords do not match.';
+            showToast('Passwords do not match', true);
+            return;
+          }
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.75';
+            submitBtn.querySelector('span').textContent = 'Creating Account...';
+          }
+
+          // Register in localStorage student users list
+          try {
+            let registeredUsers = JSON.parse(localStorage.getItem('continuum_registered_users') || '[]');
+            const existing = registeredUsers.find(u => u.email === email);
+            if (existing) {
+              if (errorMsg) errorMsg.textContent = 'An account with this email already exists. Please sign in.';
+              showToast('Account already exists', true);
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '';
+                submitBtn.querySelector('span').textContent = 'Create Account';
+              }
+              return;
+            }
+
+            registeredUsers.push({
+              name: name,
+              email: email,
+              password: pass,
+              role: 'student',
+              createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('continuum_registered_users', JSON.stringify(registeredUsers));
+          } catch (err) {
+            console.warn('Registration save err:', err);
+          }
+
+          // Issue automatic student session & redirect to Student Portal (/home/)
+          sessionStorage.setItem('continuum_session', JSON.stringify({
+            role: 'student',
+            email: email,
+            name: name
+          }));
+          localStorage.setItem('continuum_auth_user', 'student');
+
+          showToast('Account created successfully! Welcome to the Academy...');
+          setTimeout(() => {
+            window.location.href = '../home/';
+          }, 700);
+        });
+      }
+    })();
+  </script>
 
 </body>
 

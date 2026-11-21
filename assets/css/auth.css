@@ -103,8 +103,8 @@ body::after {
 
 .auth-spline-stage {
   position: relative;
-  width: 580px;
-  height: 580px;
+  width: 640px;
+  height: 640px;
   max-width: 100%;
   max-height: 100%;
   pointer-events: none;
@@ -114,8 +114,14 @@ body::after {
   justify-content: center;
   opacity: 1;
   margin-left: auto;
-  margin-right: 50px;
+  margin-right: 30px;
   transform: translateY(-135px);
+}
+
+/* Swapped variant for Signup (Form on Left, 3D Logo on Right) */
+.auth-showcase-panel-swapped .auth-spline-stage {
+  margin-left: 30px;
+  margin-right: auto;
 }
 
 #authSplineCanvas {
@@ -259,11 +265,11 @@ body::after {
 /* ── Cinematic 3D Glass Card (Right Column) ──────────────────────────────── */
 .login-card {
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   background: var(--bg-card);
   border: 1.5px solid var(--bg-card-border);
-  border-radius: 24px;
-  padding: 40px 36px;
+  border-radius: 20px;
+  padding: 30px 28px;
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   box-shadow:
@@ -288,41 +294,41 @@ body::after {
 }
 
 .headline {
-  font-size: clamp(1.6rem, 2.5vw, 2rem);
-  font-weight: 900;
+  font-size: clamp(1.4rem, 2vw, 1.65rem);
+  font-weight: 850;
   letter-spacing: -0.025em;
   color: var(--text-white);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-align: center;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
 }
 
 .subheadline {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
   text-align: center;
-  margin-bottom: 28px;
-  line-height: 1.45;
+  margin-bottom: 20px;
+  line-height: 1.4;
 }
 
 /* ── Form Controls & Floating Glowing Inputs ────────────────────────────── */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 13px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   position: relative;
 }
 
 .form-label {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
   color: var(--azure-bright);
   text-shadow: 0 0 10px rgba(0, 127, 255, 0.35);
@@ -332,10 +338,10 @@ body::after {
   width: 100%;
   background: rgba(3, 8, 14, 0.7);
   border: 1px solid rgba(0, 127, 255, 0.25);
-  border-radius: 12px;
-  padding: 14px 18px;
+  border-radius: 10px;
+  padding: 11px 15px;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: var(--text-white);
   outline: none;
   transition: all 0.3s var(--ease-out-expo);
@@ -356,9 +362,10 @@ body::after {
 }
 
 .field-hint {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-dim);
   margin-top: 2px;
+  line-height: 1.35;
 }
 
 /* ── Form Error & Notifications ─────────────────────────────────────────── */
@@ -384,16 +391,16 @@ body::after {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  padding: 16px 28px;
-  margin-top: 8px;
+  padding: 13px 24px;
+  margin-top: 6px;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.94rem;
   font-weight: 800;
   letter-spacing: 0.5px;
   color: #FFFFFF;
   background: linear-gradient(135deg, var(--azure-bright) 0%, var(--azure) 100%);
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   box-shadow:
     0 8px 28px rgba(0, 127, 255, 0.6),

@@ -251,6 +251,27 @@
             return;
           }
 
+          // 2.1 Check newly registered user from /signup/ (Stored in continuum_registered_users)
+          try {
+            const registeredUsers = JSON.parse(localStorage.getItem('continuum_registered_users') || '[]');
+            const matchedUser = registeredUsers.find(u => u.email === email && u.password === pass);
+            if (matchedUser) {
+              sessionStorage.setItem('continuum_session', JSON.stringify({
+                role: matchedUser.role || 'student',
+                email: matchedUser.email,
+                name: matchedUser.name || 'Executive Student'
+              }));
+              localStorage.setItem('continuum_auth_user', matchedUser.role || 'student');
+              showToast(`Welcome ${matchedUser.name}! Logging in...`);
+              setTimeout(() => {
+                window.location.href = '../home/';
+              }, 600);
+              return;
+            }
+          } catch (e) {
+            console.warn('Registered check error:', e);
+          }
+
           // 3. Fallback invalid credentials
           setTimeout(() => {
             if (errorMsg) {
