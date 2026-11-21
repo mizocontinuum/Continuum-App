@@ -38,6 +38,19 @@ if (process.env.BLOB_READ_WRITE_TOKEN) {
   )
 }
 
+// Supabase's pooler presents a certificate chain that Node's pg library treats
+// as self-signed when sslmode=require is used. Adding uselibpqcompat=true makes
+// pg use standard libpq SSL semantics (require, not verify-full) so the
+// connection succeeds without needing a CA bundle. We inject it automatically
+// so the DATABASE_URI env var does not need to be edited by hand.
+const baseDatabaseUri = process.env.DATABASE_URI || ''
+const databaseUri =
+  baseDatabaseUri && !baseDatabaseUri.includes('uselibpqcompat')
+    ? baseDatabaseUri +
+      (baseDatabaseUri.includes('?') ? '&' : '?') +
+      'uselibpqcompat=true'
+    : baseDatabaseUri
+
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
 
@@ -68,7 +81,7 @@ export default buildConfig({
 
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: databaseUri,
     },
     // Auto-create / sync tables on first boot so a fresh deploy is immediately
     // usable for testing. Once the schema is stable, turn this off and use
