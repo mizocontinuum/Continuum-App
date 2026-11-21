@@ -237,12 +237,13 @@ main {
   position: absolute;
   inset: -6%;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 45%, rgba(0, 59, 115, 0.35) 0%, rgba(3, 8, 14, 0.94) 85%),
-    linear-gradient(to top, var(--bg-black) 0%, rgba(0, 27, 54, 0.5) 45%, rgba(3, 8, 14, 0.85) 100%),
-    url("../images/landing-background.jpg") center 30%/cover no-repeat;
-  transform: translateZ(-50px) scale(1.1);
+    radial-gradient(ellipse 90% 70% at 25% 45%, rgba(3, 8, 14, 0.75) 0%, rgba(3, 8, 14, 0.45) 55%, rgba(3, 8, 14, 0.2) 100%),
+    linear-gradient(to top, var(--bg-black) 0%, rgba(3, 8, 14, 0.3) 30%, transparent 60%),
+    linear-gradient(to right, rgba(3, 8, 14, 0.85) 0%, rgba(3, 8, 14, 0.5) 40%, transparent 75%),
+    url("../images/hero-glass-emblem.png") center right/cover no-repeat;
+  transform: translateZ(-50px) scale(1.08);
   transform-origin: center center;
-  filter: contrast(1.08) brightness(0.95);
+  filter: contrast(1.12) brightness(0.92);
   pointer-events: none;
   z-index: 0;
   will-change: transform;
