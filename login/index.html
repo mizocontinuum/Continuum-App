@@ -20,11 +20,6 @@
 </head>
 
 <body>
-  <!-- Ambient Spline 3D Holographic Glass Core in Background -->
-  <div class="auth-spline-stage" aria-hidden="true">
-    <canvas id="authSplineCanvas" width="600" height="600"></canvas>
-  </div>
-
   <!-- Toast feedback notification -->
   <div class="toast-msg" id="loginToast" role="status"></div>
 
@@ -41,8 +36,38 @@
       </div>
     </header>
 
-    <!-- Main Login Card (Steady, Balanced 3D Glass Holographic Cockpit) -->
-    <main class="login-card">
+    <!-- Side-by-Side Executive Portal Body -->
+    <div class="auth-portal-grid">
+
+      <!-- Left Column: 3D Holographic Showcase & Academy Identity -->
+      <div class="auth-showcase-panel">
+        <div class="auth-spline-stage" aria-hidden="true">
+          <canvas id="authSplineCanvas" width="600" height="600"></canvas>
+        </div>
+        <div class="showcase-content">
+          <div class="showcase-pill">
+            <span class="pulse-dot"></span>
+            <span>EXECUTIVE LEARNING COCKPIT</span>
+          </div>
+          <h2 class="showcase-title">Lead with Strategic Clarity.</h2>
+          <p class="showcase-desc">
+            Stream high-impact executive masterclasses from veteran founders, enterprise leaders, and operators who have navigated the inflection points you face today.
+          </p>
+          <div class="showcase-features">
+            <div class="showcase-feature-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Multi-device synchronization</span>
+            </div>
+            <div class="showcase-feature-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Quarterly executive frameworks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Main Login Card -->
+      <main class="login-card">
       <h1 class="headline" id="loginHeading">Welcome back</h1>
       <p class="subheadline" id="loginSubheading">Enter your credentials to access your executive learning cockpit</p>
 
@@ -136,6 +161,8 @@
         Don't have an account ? <a href="../signup/" class="signup-link">Start Free</a>
       </p>
     </main>
+
+    </div><!-- /auth-portal-grid -->
 
     <!-- Footer Links -->
     <footer class="login-footer">
