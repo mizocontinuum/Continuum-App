@@ -174,8 +174,7 @@
   padding: 7px 8px;
 }
 
-.result-thumb .thumb-top-logos,
-.result-thumb .speaker-avatar-wrap {
+.result-thumb .thumb-top-logos {
   display: none;
 }
 
@@ -266,8 +265,7 @@
   padding: 8px 9px;
 }
 
-.grid-thumb .thumb-top-logos,
-.grid-thumb .speaker-avatar-wrap {
+.grid-thumb .thumb-top-logos {
   display: none;
 }
 

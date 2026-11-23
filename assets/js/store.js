@@ -22,7 +22,6 @@ import {
   PROFILE,
   SEED_FAVORITES,
   SEED_PROGRESS,
-  findDiscipline,
   videosFor,
   bySortOrder
 } from './mock-data.js';
@@ -79,25 +78,6 @@ export function getSession() {
 }
 
 /**
- * Replace the cached session from a server user object
- * ({ id, email, full_name, role }). Pass null to drop it.
- */
-export function cacheSession(user) {
-  if (!user) {
-    remove(KEYS.session);
-    return null;
-  }
-  const session = {
-    id: user.id || null,
-    name: String(user.full_name || user.email || 'Member').trim(),
-    email: String(user.email || '').trim(),
-    role: user.role === 'admin' ? 'admin' : 'member'
-  };
-  write(KEYS.session, session);
-  return session;
-}
-
-/**
  * Local-only mirror update, used by the profile screen's role preview. It never
  * grants access - the guard checks the server, not this cache.
  */
@@ -111,7 +91,7 @@ export function setSession({ name, email, role = 'member' } = {}) {
   return session;
 }
 
-export function clearSession() {
+function clearSession() {
   remove(KEYS.session);
 }
 
@@ -353,34 +333,6 @@ export function markAllRead() {
 
 /* ---------------------------- admin console ----------------------------- */
 
-export function saveDiscipline(payload = {}) {
-  const disciplines = listDisciplines();
-  const title = String(payload.title || '').trim();
-  if (!title) throw new Error('A discipline needs a title.');
-
-  const record = {
-    id: payload.id || `d-${Date.now().toString(36)}`,
-    slug: payload.slug || slugify(title),
-    title,
-    name: title,
-    goal: payload.goal || '',
-    blurb: payload.blurb || '',
-    sort_order: Number(payload.sort_order) || disciplines.length + 1
-  };
-
-  const index = disciplines.findIndex((d) => d.id === record.id);
-  if (index === -1) disciplines.push(record);
-  else disciplines[index] = { ...disciplines[index], ...record };
-
-  write(KEYS.disciplines, disciplines);
-  return record;
-}
-
-export function deleteDiscipline(id) {
-  write(KEYS.disciplines, listDisciplines().filter((d) => d.id !== id));
-  write(KEYS.videos, listVideos().filter((v) => v.discipline_id !== id));
-}
-
 export function saveVideo(payload = {}) {
   const videos = listVideos();
   const title = String(payload.title || '').trim();
@@ -438,14 +390,6 @@ export function assetUrl(path = '') {
   return siteUrl(String(path).replace(/^\//, ''));
 }
 
-export function slugify(value) {
-  return String(value || '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') || `discipline-${Date.now().toString(36)}`;
-}
-
 export function formatClock(totalSeconds) {
   const seconds = Math.max(0, Math.floor(Number(totalSeconds) || 0));
   const hrs = Math.floor(seconds / 3600);
@@ -472,5 +416,3 @@ export function showToast(message, isError = false) {
   window.clearTimeout(showToast._timer);
   showToast._timer = window.setTimeout(() => toast.classList.remove('show'), 3200);
 }
-
-export { findDiscipline, videosFor };

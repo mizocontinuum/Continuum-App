@@ -70,42 +70,6 @@
   line-height: 1.45;
 }
 
-/* Section header with a trailing "Explore all" action */
-.section-header.split {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.section-heading {
-  min-width: 0;
-}
-
-.explore-link {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 1px;
-  margin-top: 4px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.2s ease;
-}
-
-.explore-link:hover,
-.explore-link:active {
-  color: var(--accent);
-}
-
-.explore-link svg {
-  width: 14px;
-  height: 14px;
-}
-
 /* Section eyebrow: one badge style for every row, stacked above the title */
 /* restyle */
 .section-badge {
@@ -128,13 +92,6 @@
 .section-badge svg {
   width: 11px;
   height: 11px;
-}
-
-/* Forthcoming rows carry the golden orange instead of the accent */
-.section-badge.gold {
-  background: rgba(230, 162, 60, 0.12);
-  border-color: rgba(230, 162, 60, 0.32);
-  color: var(--gold);
 }
 
 /* Horizontal Scroll Carousels */
@@ -180,8 +137,7 @@
 }
 
 .video-card:hover .thumb-container,
-.ranked-video-card:hover .thumb-container,
-.landing-card:hover .thumb-container {
+.ranked-video-card:hover .thumb-container {
   transform: scale(1.06);
   border-color: var(--accent);
   box-shadow: var(--shadow-md), var(--glow-accent);

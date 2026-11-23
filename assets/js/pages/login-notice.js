@@ -71,7 +71,7 @@ function dismissBanner(banner, notice) {
   }, 320);
 }
 
-export function initLoginNotice() {
+function initLoginNotice() {
   let notice;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);

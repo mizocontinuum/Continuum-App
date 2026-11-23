@@ -8,7 +8,7 @@
  */
 import { watchLink } from './store.js';
 
-export const CARD_BACKGROUNDS = ['bg-slate-a', 'bg-slate-b', 'bg-slate-c'];
+const CARD_BACKGROUNDS = ['bg-slate-a', 'bg-slate-b', 'bg-slate-c'];
 
 /** Watch-page URL for a video id, resolved from the current page. */
 export function watchUrl(videoId) {

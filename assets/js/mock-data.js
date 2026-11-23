@@ -753,11 +753,6 @@ export const SEED_PROGRESS = {
 };
 
 /** Look-ups used by the store and the page modules. */
-export function findDiscipline(idOrSlug) {
-  const key = String(idOrSlug || '').toLowerCase();
-  return DISCIPLINES.find((d) => d.id === idOrSlug || d.slug === key) || null;
-}
-
 export function videosFor(disciplineId) {
   return VIDEOS.filter((v) => v.discipline_id === disciplineId).sort(bySortOrder);
 }

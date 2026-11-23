@@ -124,81 +124,6 @@ body::after {
   filter: drop-shadow(0 0 55px rgba(0, 127, 255, 0.6));
 }
 
-.showcase-content {
-  position: relative;
-  z-index: 2;
-  max-width: 460px;
-  pointer-events: none;
-}
-
-.showcase-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 30px;
-  background: rgba(0, 127, 255, 0.12);
-  border: 1px solid rgba(0, 127, 255, 0.35);
-  box-shadow: 0 0 16px rgba(0, 127, 255, 0.25);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #33B5FF;
-  margin-bottom: 20px;
-}
-
-.showcase-pill .pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #00E599;
-  box-shadow: 0 0 10px #00E599;
-  animation: pulseDot 2s infinite ease-in-out;
-}
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.8); }
-}
-
-.showcase-title {
-  font-size: 2.35rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  line-height: 1.18;
-  letter-spacing: -0.03em;
-  margin-bottom: 16px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-}
-
-.showcase-desc {
-  font-size: 14px;
-  line-height: 1.65;
-  color: rgba(220, 235, 255, 0.75);
-  margin-bottom: 28px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
-}
-
-.showcase-features {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.showcase-feature-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.showcase-feature-item svg {
-  color: #00D4FF;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
-}
-
 /* ── Brand Header Bar ───────────────────────────────────────────────────── */
 .brand-header {
   width: 100%;
@@ -683,24 +608,6 @@ body::after {
     height: 260px;
     margin-bottom: -10px;
   }
-
-  .showcase-content {
-    max-width: 520px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .showcase-title {
-    font-size: 1.85rem;
-  }
-
-  .showcase-features {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-  }
 }
 
 @media (max-width: 540px) {
@@ -727,10 +634,6 @@ body::after {
   }
 
   .headline {
-    font-size: 1.5rem;
-  }
-
-  .showcase-title {
     font-size: 1.5rem;
   }
 

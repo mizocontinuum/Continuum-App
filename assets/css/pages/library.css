@@ -335,8 +335,7 @@
   padding: 8px 9px;
 }
 
-.lib-thumb .thumb-top-logos,
-.lib-thumb .speaker-avatar-wrap {
+.lib-thumb .thumb-top-logos {
   display: none;
 }
 

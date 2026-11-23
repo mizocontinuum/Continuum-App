@@ -136,7 +136,7 @@ function wireLogoutButtons() {
  * Avatar dropdown, built once per page.
  * @param {object|null} session - already-resolved session from initPageChrome()
  */
-export function initUserMenu(session = getSession()) {
+function initUserMenu(session = getSession()) {
   initNotificationBell();
 
   const profileBtn = document.getElementById('profileBtn');
@@ -247,7 +247,7 @@ export function initUserMenu(session = getSession()) {
 /* --------------------------- notification bell --------------------------- */
 
 /** Wire #bellBtn (present in every top bar) to the static notification feed. */
-export function initNotificationBell() {
+function initNotificationBell() {
   const bellBtn = document.getElementById('bellBtn');
   if (!bellBtn) return;
 

@@ -101,7 +101,7 @@
 
 /* nav-update: Hide bottom bar while modal or full-screen video player is open (STEP 5) */
 body:has(.video-modal.active) .bottom-nav-container,
-body:has(.landscape-player-active) .bottom-nav-container,
+body:has(#landscapePlayerModal.open) .bottom-nav-container,
 body:has(dialog[open]) .bottom-nav-container {
   display: none !important;
 }
