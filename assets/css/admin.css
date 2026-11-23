@@ -1,13 +1,6 @@
 /* ---------- CONTINUUM ADMIN STUDIO ---------- */
-:root {
-  color-scheme: dark;
-  --admin-bg: #080e14;
-  --admin-panel: #0e1720;
-  --admin-line: rgba(180, 211, 229, 0.1);
-  --admin-line-strong: rgba(180, 211, 229, 0.17);
-  --admin-text: #edf5fa;
-  --admin-accent: #007fff;
-}
+/* Admin design tokens live in the "CINEMATIC SPATIAL ADMIN STUDIO" :root block
+   at the bottom of this file; the dark color scheme is set by foundation.css. */
 
 html {
   scroll-behavior: smooth;
