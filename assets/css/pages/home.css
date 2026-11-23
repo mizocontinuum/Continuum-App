@@ -150,19 +150,21 @@
   opacity: 0.12;
 }
 
-/* restyle — left-anchored dark fade keeps the hero copy readable */
+/* Netflix-style cinematic overlay: strong dark fade on the copy side + bottom
+   vignette so the title, description and CTA always read over the backdrop. */
 .hero-overlay {
   position: absolute;
   inset: 0;
   background:
     linear-gradient(
       90deg,
-      rgba(4, 9, 13, 0.94) 0%,
-      rgba(4, 9, 13, 0.72) 38%,
-      rgba(4, 9, 13, 0.18) 68%,
-      rgba(4, 9, 13, 0) 88%
+      rgba(3, 8, 14, 0.97) 0%,
+      rgba(3, 8, 14, 0.82) 32%,
+      rgba(3, 8, 14, 0.42) 58%,
+      rgba(3, 8, 14, 0.08) 82%,
+      rgba(3, 8, 14, 0) 100%
     ),
-    linear-gradient(180deg, rgba(4, 9, 13, 0) 42%, rgba(4, 9, 13, 0.88) 100%);
+    linear-gradient(180deg, rgba(3, 8, 14, 0.35) 0%, rgba(3, 8, 14, 0) 38%, rgba(3, 8, 14, 0) 55%, rgba(3, 8, 14, 0.92) 100%);
   z-index: 3;
   pointer-events: none;
 }
@@ -217,10 +219,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 680px;
-  /* Float the copy block forward for a 3D pop over the stage */
-  transform: translateZ(36px);
-  transform-style: preserve-3d;
+  max-width: 640px;
 }
 
 /* Carousel Indicator Dashes — segmented progress bars above the title */
@@ -250,24 +249,67 @@
 /* restyle — big, bold, tight letter-spacing */
 .hero-title {
   max-width: 22ch;
-  font-size: clamp(26px, 4vw, 44px);
-  line-height: 1.04;
+  font-size: clamp(28px, 4.4vw, 52px);
+  line-height: 1.02;
   font-weight: 900;
-  letter-spacing: -1.1px;
+  letter-spacing: -1.4px;
   color: #ffffff;
-  margin-bottom: 20px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  margin-bottom: 14px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.72);
   text-wrap: balance;
   overflow-wrap: break-word;
+}
+
+/* Short synopsis / description — Netflix-style body copy */
+.hero-desc {
+  max-width: 46ch;
+  font-size: clamp(13px, 1.4vw, 16px);
+  line-height: 1.55;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 14px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Meta row: discipline · duration · match */
+.hero-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.hero-meta-chip {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.2px;
+}
+
+.hero-meta-chip#heroMetaMatch {
+  color: var(--accent-hi, #46a3ff);
+}
+
+.hero-meta-dot {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+}
+
+/* CTA row: primary play button + secondary more info */
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 /* Primary Play Button — azure gradient, tactile 3D depth, glow, shine sweep */
 /* restyle */
 .btn-play {
   position: relative;
-  width: 100%;
   min-height: 50px;
-  max-width: 520px;
+  padding: 0 26px;
   background: linear-gradient(135deg, var(--accent-hi) 0%, var(--accent) 55%, var(--accent-active) 100%);
   color: #ffffff;
   border: none;
@@ -286,7 +328,7 @@
     0 13px 28px rgba(0, 83, 223, 0.36),
     inset 0 1px 0 rgba(255, 255, 255, 0.38);
   transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.25s ease;
-  margin-bottom: 12px;
+  white-space: nowrap;
 }
 
 /* Play icon inside a translucent circle */
@@ -375,6 +417,13 @@
 
 .btn-secondary:active {
   transform: scale(0.98);
+}
+
+/* Inside the hero CTA row, the secondary button is auto-width (not stretched) */
+.hero-cta-row .btn-secondary {
+  flex: none;
+  min-height: 50px;
+  padding: 0 22px;
 }
 
 /* Saved / pressed state reads as azure */

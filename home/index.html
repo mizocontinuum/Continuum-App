@@ -70,100 +70,46 @@
     <!-- Main Scrollable Content -->
     <main class="main-content">
       
-      <!-- Hero / Featured Trailer Section -->
+      <!-- Hero / Featured Section (Netflix-style cinematic structure) -->
       <section class="hero-section" id="heroSection">
-        
-        <!-- Live trailer: muted, looping ambient playback (started by home.js so
-             it can respect prefers-reduced-motion and fall back gracefully) -->
-        <video class="hero-video" id="heroVideo" muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
-          <source id="heroVideoSource" src="">
-        </video>
 
-        <!-- Ambient lighting tint, layered over the trailer for text contrast -->
+        <!-- Cinematic backdrop: gradient stage (no video yet) -->
         <div class="hero-backdrop" id="heroBackdrop"></div>
         <div class="hero-overlay"></div>
 
-        <!-- Carousel Chevron Arrows -->
-        <button class="chevron-btn chevron-prev" id="prevHero" aria-label="Previous Slide">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <button class="chevron-btn chevron-next" id="nextHero" aria-label="Next Slide">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-
         <!-- Hero Content Area -->
         <div class="hero-details">
-          
-          <!-- Slide Indicator Dashes -->
-          <div class="carousel-indicators" id="carouselIndicators">
-            <span class="dash active"></span>
-            <span class="dash"></span>
-            <span class="dash"></span>
-            <span class="dash"></span>
-            <span class="dash"></span>
-            <span class="dash"></span>
-          </div>
 
           <!-- Featured Headline -->
           <h1 class="hero-title" id="heroTitle">
             Own the Mind: How to Position Your Brand So Customers Choose You First
           </h1>
 
-          <!-- Main CTA: Play Video -->
-          <button class="btn-play" id="playBtn">
-            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            <span>Play Video</span>
-          </button>
+          <!-- Short description -->
+          <p class="hero-desc" id="heroDesc">
+            Learn how to position your brand so customers choose you first — executive masterclass from the Continuum Academy catalogue.
+          </p>
 
-          <!-- Secondary Action Buttons Row -->
-          <div class="btn-row-dual">
+          <!-- Meta row: discipline · duration · match -->
+          <div class="hero-meta" id="heroMeta">
+            <span class="hero-meta-chip" id="heroMetaTag">Marketing</span>
+            <span class="hero-meta-dot">•</span>
+            <span class="hero-meta-chip" id="heroMetaDuration">27m</span>
+            <span class="hero-meta-dot">•</span>
+            <span class="hero-meta-chip" id="heroMetaMatch">89% Match</span>
+          </div>
+
+          <!-- CTA row -->
+          <div class="hero-cta-row">
+            <button class="btn-play" id="playBtn">
+              <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Play Masterclass</span>
+            </button>
             <button class="btn-secondary" id="moreInfoBtn">
               More Info
             </button>
-            <button class="btn-secondary" id="myListBtn">
-              <span class="plus-icon">＋</span> My List
-            </button>
-          </div>
-
-          <!-- Quick Controls & Spotlight Row -->
-          <div class="controls-row">
-            <div class="media-controls">
-              <!-- Thumbs Up / Like -->
-              <button class="circle-btn" id="likeBtn" aria-label="Like video">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                </svg>
-              </button>
-              
-              <!-- Sound Toggle -->
-              <button class="circle-btn" id="soundBtn" aria-label="Toggle audio">
-                <svg class="sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                  <line x1="23" y1="9" x2="17" y2="15"></line>
-                  <line x1="17" y1="9" x2="23" y2="15"></line>
-                </svg>
-              </button>
-
-              <!-- Pause / Play -->
-              <button class="circle-btn" id="pauseBtn" aria-label="Pause playback">
-                <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="6" y="4" width="4" height="16" rx="1"></rect>
-                  <rect x="14" y="4" width="4" height="16" rx="1"></rect>
-                </svg>
-              </button>
-            </div>
-
-            <!-- Spotlight / 1m Clip Badge -->
-            <div class="spotlight-badge" id="spotlightTag">
-              <span class="spotlight-dot"></span>
-              <span class="spotlight-text">1m Highlight</span>
-            </div>
           </div>
 
         </div>

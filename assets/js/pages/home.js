@@ -65,28 +65,9 @@ function buildHero() {
   slides = featuredVideos();
   if (!slides.length) slides = topVideos(6);
 
-  // No trailer file ships with the demo: keep the ambient gradient backdrop
-  // and never hand the <video> a source it cannot play.
+  // No trailer file ships with the demo: keep the ambient gradient backdrop.
   const section = document.getElementById('heroSection');
   if (section) section.classList.add('hero-video-off');
-
-  const indicators = document.getElementById('carouselIndicators');
-  if (indicators) {
-    indicators.replaceChildren(
-      ...slides.map((_, index) => {
-        const dash = makeEl('span', 'dash');
-        if (index === 0) dash.classList.add('active');
-        dash.dataset.index = String(index);
-        return dash;
-      })
-    );
-    indicators.addEventListener('click', (event) => {
-      const dash = event.target.closest('.dash');
-      if (!dash) return;
-      showHero(Number(dash.dataset.index));
-      stopAuto();
-    });
-  }
 
   if (slides.length) showHero(0);
 }
@@ -95,27 +76,24 @@ function showHero(index) {
   if (!slides.length) return;
   heroIndex = (index + slides.length) % slides.length;
   const video = slides[heroIndex];
+  const discipline = getDisciplineOf(video);
 
   const title = document.getElementById('heroTitle');
   if (title) title.textContent = video.title || 'Featured Masterclass';
 
-  const spotlight = document.getElementById('spotlightTag');
-  if (spotlight) {
-    const text = spotlight.querySelector('.spotlight-text');
-    if (text) text.textContent = video.highlight || 'Featured';
-  }
+  const desc = document.getElementById('heroDesc');
+  if (desc) desc.textContent = video.summary || 'Executive masterclass from the Continuum Academy catalogue.';
 
-  document.querySelectorAll('#carouselIndicators .dash').forEach((dash, i) => {
-    dash.classList.toggle('active', i === heroIndex);
-  });
+  const metaTag = document.getElementById('heroMetaTag');
+  if (metaTag) metaTag.textContent = (discipline && discipline.title) || video.tag || 'Masterclass';
 
-  updateHeroListButton(video);
+  const metaDuration = document.getElementById('heroMetaDuration');
+  if (metaDuration) metaDuration.textContent = `${Number(video.minutes) || 30}m`;
+
+  const metaMatch = document.getElementById('heroMetaMatch');
+  if (metaMatch) metaMatch.textContent = `${Number(video.rating) || 90}% Match`;
+
   fillSheet(video);
-}
-
-function stepHero(delta) {
-  showHero(heroIndex + delta);
-  stopAuto();
 }
 
 function startAuto() {
@@ -141,11 +119,6 @@ function wireHeroControls() {
     section.addEventListener('pointerdown', stopAuto, { once: true });
   }
 
-  const prev = document.getElementById('prevHero');
-  const next = document.getElementById('nextHero');
-  if (prev) prev.addEventListener('click', () => stepHero(-1));
-  if (next) next.addEventListener('click', () => stepHero(1));
-
   const play = document.getElementById('playBtn');
   if (play) {
     play.addEventListener('click', () => {
@@ -155,62 +128,6 @@ function wireHeroControls() {
 
   const moreInfo = document.getElementById('moreInfoBtn');
   if (moreInfo) moreInfo.addEventListener('click', openSheet);
-
-  const spotlight = document.getElementById('spotlightTag');
-  if (spotlight) spotlight.addEventListener('click', openSheet);
-
-  const myList = document.getElementById('myListBtn');
-  if (myList) {
-    myList.addEventListener('click', () => {
-      const video = slides[heroIndex];
-      if (!video) return;
-      const saved = toggleFavorite(video.id);
-      updateHeroListButton(video);
-      showToast(saved ? 'Added to My List' : 'Removed from My List');
-    });
-  }
-
-  const like = document.getElementById('likeBtn');
-  if (like) {
-    like.addEventListener('click', () => {
-      const on = like.classList.toggle('active');
-      showToast(on ? 'Saved to your taste profile' : 'Removed your rating');
-    });
-  }
-
-  const sound = document.getElementById('soundBtn');
-  if (sound) {
-    sound.addEventListener('click', () => {
-      const on = sound.classList.toggle('active');
-      sound.setAttribute('aria-label', on ? 'Audio unmuted' : 'Audio muted');
-    });
-  }
-
-  const pause = document.getElementById('pauseBtn');
-  if (pause) {
-    pause.addEventListener('click', () => {
-      stagePaused = !stagePaused;
-      pause.classList.toggle('active', stagePaused);
-      showToast(stagePaused ? 'Carousel paused' : 'Carousel playing');
-    });
-  }
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    const tag = event.target?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-    stepHero(event.key === 'ArrowRight' ? 1 : -1);
-  });
-}
-
-function updateHeroListButton(video) {
-  const btn = document.getElementById('myListBtn');
-  if (!btn) return;
-  const saved = video ? isFavorite(video.id) : false;
-  btn.classList.toggle('active', saved);
-  btn.setAttribute('aria-pressed', String(saved));
-  const icon = btn.querySelector('.plus-icon');
-  if (icon) icon.textContent = saved ? '✓' : '＋';
 }
 
 /* ------------------------------ Catalogue ------------------------------- */
