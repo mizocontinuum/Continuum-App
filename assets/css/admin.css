@@ -1481,10 +1481,10 @@ body.admin-body::before {
   z-index: 0;
   inset: -7% -4% -7% 16%;
   background:
-    linear-gradient(90deg, rgba(3, 8, 14, 0.42), transparent 64%),
-    url("../images/hero-glass-emblem.png") 73% 47% / cover no-repeat;
-  filter: contrast(1.08) brightness(0.76) saturate(1.16);
-  opacity: 0.74;
+    linear-gradient(90deg, rgba(3, 8, 14, 0.55), rgba(3, 8, 14, 0.15) 50%, transparent 72%),
+    url("../images/hero-3d-emblem.jpg") 73% 47% / cover no-repeat;
+  filter: contrast(1.12) brightness(0.92) saturate(1.18);
+  opacity: 0.92;
   pointer-events: none;
   transform: translateZ(-46px) scale(1.07);
   transform-origin: center;
@@ -1968,7 +1968,7 @@ body.admin-body::before {
   .admin-hero-art {
     inset: 0 -18% 0 20%;
     background-position: 67% center;
-    opacity: 0.6;
+    opacity: 0.78;
   }
 
   .admin-grid-floor {
@@ -2036,7 +2036,7 @@ body.admin-body::before {
   .admin-hero-art {
     inset: 0 -30% 12% 9%;
     background-position: 68% 42%;
-    opacity: 0.47;
+    opacity: 0.62;
   }
 
   .admin-grid-floor {
