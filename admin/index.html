@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#080e14">
+  <meta name="theme-color" content="#03080e">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Admin Dashboard - Continuum Academy</title>
@@ -73,11 +73,18 @@
       </header>
 
       <div class="admin-content">
-        <section class="admin-welcome" id="overview">
+        <section class="admin-hero-stage" id="overview" aria-label="Academy operations overview">
+          <div class="admin-hero-art" aria-hidden="true"></div>
+          <div class="admin-grid-floor" aria-hidden="true"></div>
+          <div class="admin-orbit admin-orbit-one" aria-hidden="true"></div>
+          <div class="admin-orbit admin-orbit-two" aria-hidden="true"></div>
+          <div class="admin-stage-glow" aria-hidden="true"></div>
+          <div class="admin-stage-content">
+        <section class="admin-welcome">
           <div>
             <p class="eyebrow"><span class="eyebrow-line"></span> CONTINUUM ACADEMY · ADMIN</p>
-            <h1>Good to see you, <span data-session-name>Admin</span></h1>
-            <p class="welcome-copy">Here’s what’s happening across your learning catalogue.</p>
+                <h1>Good to see you,<br><span data-session-name>Admin</span></h1>
+            <p class="welcome-copy">Your learning catalogue, in orbit.</p>
           </div>
           <button class="button-primary" type="button" data-new-video>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
@@ -87,25 +94,27 @@
 
         <section class="stats-grid" aria-label="Catalogue summary">
           <article class="stat-card">
-            <div class="stat-top"><span class="stat-icon cyan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg></span><span class="stat-caption">TOTAL CONTENT</span></div>
+            <div class="stat-top"><span class="stat-icon electric"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg></span><span class="stat-caption">TOTAL CONTENT</span></div>
             <div class="stat-value" id="statVideos">0</div>
             <div class="stat-foot"><span class="stat-foot-dot"></span> Masterclasses in catalogue</div>
           </article>
           <article class="stat-card">
-            <div class="stat-top"><span class="stat-icon violet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span><span class="stat-caption">DISCIPLINES</span></div>
+<div class="stat-top"><span class="stat-icon royal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span><span class="stat-caption">DISCIPLINES</span></div>
             <div class="stat-value" id="statDisciplines">0</div>
             <div class="stat-foot">Learning paths available</div>
           </article>
           <article class="stat-card">
-            <div class="stat-top"><span class="stat-icon gold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"></path></svg></span><span class="stat-caption">FEATURED</span></div>
+            <div class="stat-top"><span class="stat-icon blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"></path></svg></span><span class="stat-caption">FEATURED</span></div>
             <div class="stat-value" id="statFeatured">0</div>
             <div class="stat-foot">Highlighted on the academy</div>
           </article>
           <article class="stat-card">
-            <div class="stat-top"><span class="stat-icon blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path><path d="M4 5v14"></path></svg></span><span class="stat-caption">QUICK HIGHLIGHTS</span></div>
+            <div class="stat-top"><span class="stat-icon ice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path><path d="M4 5v14"></path></svg></span><span class="stat-caption">QUICK HIGHLIGHTS</span></div>
             <div class="stat-value" id="statClips">0</div>
             <div class="stat-foot">Short-form learning clips</div>
           </article>
+        </section>
+          </div>
         </section>
 
         <section class="insights-grid" id="activity">
@@ -124,7 +133,7 @@
             <p class="spotlight-copy">Shape the learning experience by keeping your catalogue clear, current, and easy to explore.</p>
             <div class="quick-links">
               <a href="#masterclasses"><span class="quick-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg></span><span><strong>Manage masterclasses</strong><small>Review and edit your content</small></span><span class="quick-arrow">↗</span></a>
-              <a href="#disciplines"><span class="quick-link-icon violet-bg"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span><span><strong>Explore disciplines</strong><small>See how the catalogue is organized</small></span><span class="quick-arrow">↗</span></a>
+              <a href="#disciplines"><span class="quick-link-icon electric-bg"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span><span><strong>Explore disciplines</strong><small>See how the catalogue is organized</small></span><span class="quick-arrow">↗</span></a>
             </div>
           </article>
         </section>
