@@ -237,9 +237,9 @@
           // 1. Temporary Admin Account Check (accepts admin@continuum.ph or just admin, and admin123 or admin)
           if ((email === 'admin@continuum.ph' || email === 'admin') && (pass === 'admin123' || pass === 'admin')) {
             writeSession('admin', 'Executive Admin', 'admin@continuum.ph');
-            showToast('Welcome Admin! Redirecting to Home...');
+            showToast('Welcome Admin! Opening the dashboard...');
             setTimeout(() => {
-              window.location.href = '../home/';
+              window.location.href = '../admin/';
             }, 600);
             return;
           }

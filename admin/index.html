@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-requires-admin>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080e14">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Admin Dashboard - Continuum Academy</title>
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/css/base/foundation.css?v=21">
+  <link rel="stylesheet" href="../assets/css/base/theme.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-body">
+  <div class="toast-msg" id="adminToast" role="status" aria-live="polite"></div>
+
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+      <a class="admin-brand" href="../admin/" aria-label="Continuum Academy admin home">
+        <img src="../assets/images/logo.png" alt="Continuum Academy">
+        <span class="admin-brand-tag">ADMIN STUDIO</span>
+      </a>
+
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="admin-nav">
+        <a class="admin-nav-link active" href="#overview" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="8" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="15" width="7" height="6" rx="1.5"></rect></svg>
+          <span>Overview</span>
+        </a>
+        <a class="admin-nav-link" href="#masterclasses">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg>
+          <span>Masterclasses</span>
+          <span class="nav-count" id="navVideoCount">0</span>
+        </a>
+        <a class="admin-nav-link" href="#disciplines">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+          <span>Disciplines</span>
+        </a>
+        <a class="admin-nav-link" href="#activity">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"></path><path d="m7 14 4-4 4 3 6-7"></path></svg>
+          <span>Catalog insights</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-demo-note">
+        <span class="demo-note-dot"></span>
+        <span>Frontend preview<br><strong>Changes stay on this device</strong></span>
+      </div>
+      <a class="admin-nav-link exit-link" href="../home/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path></svg>
+        <span>Back to Academy</span>
+      </a>
+      <button class="admin-nav-link signout-link" type="button" data-logout>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path></svg>
+        <span>Sign out</span>
+      </button>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Toggle navigation" aria-controls="adminSidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-separator">/</span><strong>Overview</strong></div>
+        <div class="topbar-actions">
+          <span class="preview-pill"><span></span> DEMO MODE</span>
+          <a class="admin-avatar" href="../profile/" aria-label="Open admin profile" data-session-initial></a>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <section class="admin-welcome" id="overview">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> CONTINUUM ACADEMY · ADMIN</p>
+            <h1>Good to see you, <span data-session-name>Admin</span></h1>
+            <p class="welcome-copy">Here’s what’s happening across your learning catalogue.</p>
+          </div>
+          <button class="button-primary" type="button" data-new-video>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+            <span>New masterclass</span>
+          </button>
+        </section>
+
+        <section class="stats-grid" aria-label="Catalogue summary">
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-icon cyan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg></span><span class="stat-caption">TOTAL CONTENT</span></div>
+            <div class="stat-value" id="statVideos">0</div>
+            <div class="stat-foot"><span class="stat-foot-dot"></span> Masterclasses in catalogue</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-icon violet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span><span class="stat-caption">DISCIPLINES</span></div>
+            <div class="stat-value" id="statDisciplines">0</div>
+            <div class="stat-foot">Learning paths available</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-icon gold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"></path></svg></span><span class="stat-caption">FEATURED</span></div>
+            <div class="stat-value" id="statFeatured">0</div>
+            <div class="stat-foot">Highlighted on the academy</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-icon blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path><path d="M4 5v14"></path></svg></span><span class="stat-caption">QUICK HIGHLIGHTS</span></div>
+            <div class="stat-value" id="statClips">0</div>
+            <div class="stat-foot">Short-form learning clips</div>
+          </article>
+        </section>
+
+        <section class="insights-grid" id="activity">
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <div><p class="panel-kicker">CATALOGUE BREAKDOWN</p><h2>Content by discipline</h2></div>
+              <span class="live-data-tag">LOCAL DATA</span>
+            </div>
+            <div class="discipline-chart" id="disciplineChart" aria-label="Masterclasses grouped by discipline"></div>
+          </article>
+          <article class="panel spotlight-panel">
+            <div class="panel-heading">
+              <div><p class="panel-kicker">QUICK ACCESS</p><h2>Keep things moving</h2></div>
+              <span class="sparkle-mark" aria-hidden="true">✳</span>
+            </div>
+            <p class="spotlight-copy">Shape the learning experience by keeping your catalogue clear, current, and easy to explore.</p>
+            <div class="quick-links">
+              <a href="#masterclasses"><span class="quick-link-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m10 9 5 3-5 3z"></path></svg></span><span><strong>Manage masterclasses</strong><small>Review and edit your content</small></span><span class="quick-arrow">↗</span></a>
+              <a href="#disciplines"><span class="quick-link-icon violet-bg"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span><span><strong>Explore disciplines</strong><small>See how the catalogue is organized</small></span><span class="quick-arrow">↗</span></a>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel content-panel" id="masterclasses">
+          <div class="panel-heading content-heading">
+            <div><p class="panel-kicker">CONTENT LIBRARY</p><h2>Masterclasses <span class="heading-count" id="contentCount">0</span></h2></div>
+            <button class="button-secondary" type="button" data-new-video>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg> Add content
+            </button>
+          </div>
+          <div class="table-toolbar">
+            <label class="search-field">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+              <input id="contentSearch" type="search" placeholder="Search masterclasses..." aria-label="Search masterclasses">
+            </label>
+            <label class="filter-select-wrap">
+              <span class="sr-only">Filter by discipline</span>
+              <select id="disciplineFilter" aria-label="Filter by discipline"><option value="">All disciplines</option></select>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
+            </label>
+          </div>
+          <div class="table-scroll">
+            <table class="content-table">
+              <thead><tr><th scope="col">MASTERCLASS</th><th scope="col">DISCIPLINE</th><th scope="col">LENGTH</th><th scope="col">STATUS</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody id="contentRows"></tbody>
+            </table>
+          </div>
+          <p class="table-empty" id="tableEmpty" hidden>No masterclasses match your search.</p>
+          <div class="table-footer"><span id="tableSummary">Showing 0 items</span><span class="local-only-label"><span></span> Saved in this browser</span></div>
+        </section>
+
+        <section class="panel discipline-panel" id="disciplines">
+          <div class="panel-heading">
+            <div><p class="panel-kicker">LEARNING PATHS</p><h2>Disciplines</h2></div>
+            <a class="text-link" href="../disciplines/">View learner experience <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="discipline-grid" id="disciplineGrid"></div>
+        </section>
+
+        <footer class="admin-footer"><span>CONTINUUM ACADEMY <i>·</i> ADMIN STUDIO</span><span>Static frontend preview · No data leaves this device</span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+
+  <dialog class="editor-dialog" id="videoEditor" aria-labelledby="editorTitle">
+    <form id="videoForm" class="editor-form">
+      <div class="dialog-heading">
+        <div><p class="panel-kicker">CONTENT LIBRARY</p><h2 id="editorTitle">New masterclass</h2></div>
+        <button class="dialog-close" id="closeEditor" type="button" aria-label="Close editor">×</button>
+      </div>
+      <input type="hidden" id="videoId" name="id">
+      <label class="editor-field"><span>Title <b>*</b></span><input id="videoTitle" name="title" type="text" required maxlength="120" placeholder="e.g. Building a Brand That Lasts"></label>
+      <div class="editor-two-col">
+        <label class="editor-field"><span>Discipline <b>*</b></span><select id="videoDiscipline" name="discipline_id" required></select></label>
+        <label class="editor-field"><span>Speaker</span><input id="videoSpeaker" name="speaker" type="text" maxlength="80" placeholder="Executive Faculty"></label>
+      </div>
+      <div class="editor-two-col">
+        <label class="editor-field"><span>Duration (minutes)</span><input id="videoMinutes" name="minutes" type="number" min="1" max="999" value="30"></label>
+        <label class="editor-field"><span>Content tag</span><input id="videoTag" name="tag" type="text" maxlength="40" placeholder="Leadership"></label>
+      </div>
+      <label class="editor-field"><span>Video URL</span><input id="videoUrl" name="video_url" type="text" maxlength="240" placeholder="/assets/videos/masterclass.mp4"></label>
+      <label class="editor-field"><span>Short description</span><textarea id="videoSummary" name="summary" rows="3" maxlength="500" placeholder="What will learners take away?"></textarea></label>
+      <div class="editor-checks">
+        <label class="editor-check"><input id="videoFeatured" name="featured" type="checkbox"><span>Feature this masterclass on the academy</span></label>
+        <label class="editor-check"><input id="videoClip" name="is_clip" type="checkbox"><span>Mark as a quick highlight clip</span></label>
+      </div>
+      <div class="dialog-actions"><button class="button-secondary" id="cancelEditor" type="button">Cancel</button><button class="button-primary" type="submit">Save masterclass</button></div>
+    </form>
+  </dialog>
+
+  <script type="module" src="../assets/js/pages/admin.js"></script>
+  <script type="module" src="../assets/js/pwa.js"></script>
+</body>
+</html>
