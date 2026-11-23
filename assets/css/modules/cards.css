@@ -165,7 +165,7 @@
   transform: scale(0.97);
 }
 
-/* restyle — rounded thumbnail with gradient art, cyan hover ring + lift */
+/* restyle — rounded thumbnail with gradient art, azure hover ring + lift */
 .thumb-container {
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -289,7 +289,7 @@
   }
 }
 
-/* restyle — cyan filled play chip with a soft glow */
+/* restyle — azure filled play chip with a soft glow */
 .play-pill-icon {
   width: 40px;
   height: 40px;

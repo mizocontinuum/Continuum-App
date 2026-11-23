@@ -6,12 +6,13 @@
 */
 
 /* ---------- HERO / TRAILER SECTION ---------- */
-/* restyle — large rounded card, dark stage in both themes (Netflix-style) */
+/* restyle — 3D cinematic stage matching the landing + admin hero stages:
+   perspective container, glowing grid floor, orbit ring and elevated copy. */
 .hero-section {
   position: relative;
   width: 100%;
   margin-top: clamp(12px, 2vw, 20px);
-  border-radius: var(--radius-xl);
+  border-radius: var(--stage-radius);
   overflow: hidden;
   isolation: isolate;
   display: flex;
@@ -20,9 +21,51 @@
   min-height: clamp(420px, 64vh, 600px);
   min-height: clamp(420px, 64svh, 600px);
   padding: clamp(18px, 3vw, 36px);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--accent-line);
-  background: var(--art);
+  border: 1px solid rgba(0, 127, 255, 0.4);
+  background:
+    linear-gradient(115deg, rgba(3, 8, 14, 0.98) 0%, rgba(3, 11, 26, 0.9) 38%, rgba(3, 21, 51, 0.4) 100%),
+    var(--stage-bg);
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  box-shadow:
+    0 24px 65px rgba(0, 0, 0, 0.42),
+    0 0 38px rgba(0, 82, 255, 0.14),
+    inset 0 1px 0 rgba(183, 216, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 112, 255, 0.2);
+}
+
+/* 3D perspective grid floor glowing across the base of the stage */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  left: -45%;
+  bottom: -30%;
+  width: 190%;
+  height: 68%;
+  background-image:
+    linear-gradient(rgba(0, 127, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 127, 255, 0.22) 1px, transparent 1px);
+  background-size: 56px 56px;
+  transform: rotateX(69deg) translateZ(-18px);
+  transform-origin: 50% 100%;
+  mask-image: radial-gradient(ellipse 62% 62% at 50% 35%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 62% 62% at 50% 35%, #000 0%, transparent 78%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Horizon glow rising from the bottom edge of the stage */
+.hero-section::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  left: -10%;
+  right: -10%;
+  bottom: -92px;
+  height: 165px;
+  background: radial-gradient(55% 100% at 50% 100%, rgba(0, 115, 255, 0.35), rgba(0, 54, 143, 0.12) 48%, transparent 100%);
+  pointer-events: none;
 }
 
 /* ---------- LIVE TRAILER LAYER ---------- */
@@ -51,44 +94,55 @@
   inset: 0;
   background:
     radial-gradient(ellipse at 76% 32%, var(--accent-glow) 0%, transparent 36%),
-    radial-gradient(ellipse at 91% 78%, rgba(93, 92, 214, 0.12) 0%, transparent 35%),
+    radial-gradient(ellipse at 91% 78%, rgba(0, 59, 115, 0.2) 0%, transparent 35%),
     radial-gradient(circle at 50% 25%, var(--accent-soft) 0%, transparent 65%),
     linear-gradient(180deg, var(--art-raised) 0%, var(--art) 100%);
   z-index: 1;
   transition: opacity 0.4s ease, background 0.6s ease;
 }
 
-/* Deliberate artwork for the demo fallback when no trailer is available. */
+/* Orbiting ring: a slow 3D ellipse drifting behind the featured copy. */
 .hero-backdrop::before {
   content: "";
   position: absolute;
-  top: 44%;
-  right: 12%;
-  width: clamp(250px, 36vw, 560px);
-  aspect-ratio: 1;
-  transform: translateY(-50%);
-  border: 1px solid rgba(76, 195, 224, 0.16); /* restyle */
+  top: 42%;
+  right: 6%;
+  width: clamp(260px, 34vw, 520px);
+  height: clamp(170px, 22vw, 340px);
+  transform: translateY(-50%) rotate(-20deg);
+  border: 1px solid rgba(0, 127, 255, 0.28);
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 38% 36%, var(--accent-soft), transparent 42%), /* restyle */
-    radial-gradient(circle, rgba(18, 38, 48, 0.05) 42%, rgba(8, 14, 20, 0.18) 72%);
+  background: radial-gradient(circle at 40% 34%, var(--accent-soft), transparent 60%);
   box-shadow:
-    0 0 0 34px rgba(76, 195, 224, 0.025), /* restyle */
-    0 0 0 72px rgba(76, 195, 224, 0.018), /* restyle */
-    0 0 90px var(--accent-glow); /* restyle */
+    0 0 24px rgba(0, 93, 255, 0.12),
+    inset 0 0 26px rgba(0, 93, 255, 0.08);
+  animation: hero-orbit-drift 18s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
 .hero-backdrop::after {
   content: "";
   position: absolute;
-  top: 44%;
-  right: calc(12% + clamp(72px, 12vw, 186px));
-  width: 1px;
-  height: min(62%, 380px);
-  transform: translateY(-50%) rotate(36deg);
-  background: linear-gradient(transparent, rgba(76, 195, 224, 0.2), transparent); /* restyle */
+  top: 30%;
+  right: 12%;
+  width: clamp(120px, 16vw, 240px);
+  height: clamp(120px, 16vw, 240px);
+  transform: translateY(-50%) rotate(18deg);
+  border: 1px solid rgba(72, 161, 255, 0.24);
+  border-radius: 50%;
+  box-shadow: 0 0 40px var(--accent-glow);
+  animation: hero-orbit-drift 13s ease-in-out infinite alternate-reverse;
   pointer-events: none;
+}
+
+@keyframes hero-orbit-drift {
+  from {
+    transform: translateY(-50%) rotate(-20deg) scale(1);
+  }
+
+  to {
+    transform: translateY(-54%) rotate(-6deg) scale(1.05);
+  }
 }
 
 /* When live video is playing: gently dim backdrop so speaker is bright and clear, without ever going pitch black */
@@ -164,6 +218,9 @@
   flex-direction: column;
   width: 100%;
   max-width: 680px;
+  /* Float the copy block forward for a 3D pop over the stage */
+  transform: translateZ(36px);
+  transform-style: preserve-3d;
 }
 
 /* Carousel Indicator Dashes — segmented progress bars above the title */
@@ -204,15 +261,15 @@
   overflow-wrap: break-word;
 }
 
-/* Primary Play Button — cyan gradient, glow, play icon in a circle, shine sweep */
+/* Primary Play Button — azure gradient, tactile 3D depth, glow, shine sweep */
 /* restyle */
 .btn-play {
   position: relative;
   width: 100%;
   min-height: 50px;
   max-width: 520px;
-  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 55%, var(--accent-active) 100%);
-  color: var(--ink);
+  background: linear-gradient(135deg, var(--accent-hi) 0%, var(--accent) 55%, var(--accent-active) 100%);
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-sm);
   font-size: 16px;
@@ -224,8 +281,11 @@
   justify-content: center;
   gap: 10px;
   overflow: hidden;
-  box-shadow: var(--glow-accent);
-  transition: transform 0.18s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  box-shadow:
+    0 8px 0 #063c9c,
+    0 13px 28px rgba(0, 83, 223, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38);
+  transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.25s ease;
   margin-bottom: 12px;
 }
 
@@ -236,8 +296,8 @@
   height: 28px;
   padding: 6px;
   border-radius: 50%;
-  background: rgba(4, 20, 26, 0.22);
-  color: var(--ink);
+  background: rgba(2, 14, 32, 0.35);
+  color: #ffffff;
   flex-shrink: 0;
 }
 
@@ -263,11 +323,18 @@
 .btn-play:hover {
   filter: brightness(1.06);
   transform: translateY(-1px);
-  box-shadow: var(--glow-accent), 0 10px 28px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 9px 0 #063c9c,
+    0 16px 32px rgba(0, 83, 223, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
 .btn-play:active {
-  transform: translateY(0) scale(0.985);
+  transform: translateY(5px);
+  box-shadow:
+    0 3px 0 #063c9c,
+    0 6px 14px rgba(0, 83, 223, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 /* Secondary Button Row (More Info & + My List) */
@@ -278,7 +345,7 @@
   margin-bottom: 16px;
 }
 
-/* restyle — glass secondary buttons that lift on hover, tint cyan when saved */
+/* restyle — glass secondary buttons that lift on hover, tint azure when saved */
 .btn-secondary {
   flex: 1;
   height: 46px;
@@ -310,12 +377,12 @@
   transform: scale(0.98);
 }
 
-/* Saved / pressed state reads as cyan */
+/* Saved / pressed state reads as azure */
 /* restyle */
 .btn-secondary.active {
   background: var(--accent-soft);
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--accent-hi);
+  color: var(--accent-hi);
   box-shadow: inset 0 0 0 1px var(--accent-line), var(--glow-accent);
 }
 
@@ -340,7 +407,7 @@
   gap: 10px;
 }
 
-/* restyle — round glass icon buttons, cyan filled when active */
+/* restyle — round glass icon buttons, azure filled when active */
 .circle-btn {
   width: 40px;
   height: 40px;
@@ -373,7 +440,7 @@
   transform: scale(0.94);
 }
 
-/* Active: solid cyan fill */
+/* Active: solid azure fill */
 /* restyle */
 .circle-btn.active {
   border-color: transparent;
@@ -473,7 +540,7 @@
   pointer-events: none;
 }
 
-/* restyle — big outlined rank numeral with a cyan rim and heavy drop shadow */
+/* restyle — big outlined rank numeral with an azure rim and heavy drop shadow */
 .rank-num {
   display: block;
   font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -572,5 +639,126 @@
   /* restyle */
   .hero-title {
     font-size: 42px;
+  }
+}
+
+/* ========================================================
+   LOGIN NOTICE BANNER (admin-dispatched academy advisory)
+   Rendered by assets/js/pages/login-notice.js.
+   ======================================================== */
+.notice-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 680px;
+  padding: 18px 22px;
+  z-index: 999999;
+  color: #ffffff;
+  font-family: inherit;
+  border: 1.5px solid var(--accent);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(8, 28, 55, 0.98) 0%, rgba(3, 12, 24, 0.98) 100%);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 127, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: notice-banner-in 0.4s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notice-banner-hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+}
+
+.notice-banner-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.notice-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notice-banner-badge {
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.notice-banner-title h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-hi);
+}
+
+.notice-banner-close {
+  background: none;
+  border: none;
+  color: #aaaaaa;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color 0.2s ease;
+}
+
+.notice-banner-close:hover {
+  color: #ffffff;
+}
+
+.notice-banner-body {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(230, 243, 255, 0.88);
+}
+
+.notice-banner-foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.notice-banner-cta {
+  background: linear-gradient(135deg, var(--accent-hi), var(--accent));
+  border: none;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.notice-banner-cta:hover {
+  filter: brightness(1.08);
+}
+
+.notice-banner-cta:active {
+  transform: scale(0.96);
+}
+
+@keyframes notice-banner-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 }

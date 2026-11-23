@@ -15,7 +15,7 @@
 
 
 /* DESIGN TOKENS — "Continuum" dark-first palette (Netflix-style)
-   Surfaces: page, card, raised · Accent: ONE cyan, never red
+   Surfaces: page, card, raised · Accent: ONE azure, never red
    Text: three levels · everything else is neutral black, white or slate. */
 /* restyle */
 :root {
@@ -27,9 +27,9 @@
   --surface: #1b2631;
   --text: #f1f5f9;
   --muted: #a3b1bf;
-  --accent: #5bc0de;
-  --accent-hi: #7fd0e8;
-  --accent-ink: #06151c;
+  --accent: #007fff;
+  --accent-hi: #33b5ff;
+  --accent-ink: #02182f;
 
   /* Surfaces */
   --bg-page: var(--bg);         /* deep canvas */
@@ -39,10 +39,10 @@
 
   /* One accent */
   --accent-hover: var(--accent-hi);
-  --accent-active: #3a9bb8;
-  --accent-glow: rgba(91, 192, 222, 0.28);
-  --accent-soft: rgba(91, 192, 222, 0.16);
-  --accent-line: rgba(91, 192, 222, 0.32);
+  --accent-active: #0063ce;
+  --accent-glow: rgba(0, 127, 255, 0.34);
+  --accent-soft: rgba(0, 127, 255, 0.16);
+  --accent-line: rgba(0, 127, 255, 0.34);
   --gold: #e6a23c;            /* forthcoming / coming soon only */
   --ink: var(--accent-ink);   /* text that sits on the accent */
 
@@ -50,8 +50,17 @@
   --text-sub: var(--muted);
   --text-muted: var(--muted);
 
-  /* Page depth */
-  --bg-page-gradient: radial-gradient(circle at 85% 0%, rgba(70, 130, 150, 0.24) 0%, transparent 60%), #0b1118;
+  /* Page depth — azure aurora wash, matching the landing + admin stages */
+  --bg-page-gradient:
+    radial-gradient(ellipse 90% 55% at 82% -6%, rgba(0, 127, 255, 0.2) 0%, transparent 58%),
+    radial-gradient(circle 620px at 8% 6%, rgba(0, 59, 115, 0.28) 0%, transparent 72%),
+    linear-gradient(180deg, #070c13 0%, #0b1118 42%, #080d14 100%);
+
+  /* 3D cinematic stage tokens (shared by the hero + member page shells) */
+  --stage-bg: #03080e;
+  --grid-line: rgba(0, 127, 255, 0.24);
+  --stage-glow: rgba(0, 115, 255, 0.32);
+  --stage-radius: 22px;
 
   /* Component surfaces, all derived from the scale above */
   --card-bg: var(--card);
@@ -80,7 +89,7 @@
   --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6);
-  --glow-accent: 0 6px 22px rgba(76, 195, 224, 0.32);
+  --glow-accent: 0 6px 22px rgba(0, 127, 255, 0.38);
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -108,12 +117,12 @@
     --line: rgba(13, 27, 36, 0.1);
     --line-strong: rgba(13, 27, 36, 0.18);
 
-    --accent: #0a8fb0;
-    --accent-hover: #0b9dbd;
-    --accent-active: #077a95;
-    --accent-glow: rgba(10, 143, 176, 0.22);
-    --accent-soft: rgba(10, 143, 176, 0.1);
-    --accent-line: rgba(10, 143, 176, 0.3);
+    --accent: #0a6fdb;
+    --accent-hover: #1c82f0;
+    --accent-active: #0857b0;
+    --accent-glow: rgba(10, 111, 219, 0.24);
+    --accent-soft: rgba(10, 111, 219, 0.1);
+    --accent-line: rgba(10, 111, 219, 0.32);
     --ink: #ffffff;
 
     --text: #0d1b24;
@@ -135,7 +144,7 @@
     --shadow-sm: 0 4px 14px rgba(13, 27, 36, 0.1);
     --shadow-md: 0 12px 30px rgba(13, 27, 36, 0.14);
     --shadow-lg: 0 24px 60px rgba(13, 27, 36, 0.18);
-    --glow-accent: 0 6px 22px rgba(10, 143, 176, 0.24);
+    --glow-accent: 0 6px 22px rgba(10, 111, 219, 0.26);
   }
 }
 

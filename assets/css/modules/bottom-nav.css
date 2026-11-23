@@ -89,16 +89,16 @@
   color: var(--text);
 }
 
-/* Active tab: #5bc0de with pill background rgba(91,192,222,.16) */
+/* Active tab: azure with a soft accent pill background */
 .nav-tab.active,
 .nav-tab[aria-current="page"] {
-  background: rgba(91, 192, 222, 0.16);
-  color: #5bc0de;
+  background: var(--accent-soft);
+  color: var(--accent-hi);
 }
 
 .nav-tab.active .nav-icon-wrap svg,
 .nav-tab[aria-current="page"] .nav-icon-wrap svg {
-  stroke: #5bc0de;
+  stroke: var(--accent-hi);
   stroke-width: 2;
 }
 

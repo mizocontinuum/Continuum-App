@@ -18,12 +18,12 @@ html[data-theme="light"] {
   --line-strong: rgba(13, 27, 36, 0.18);
 
   /* Accent */
-  --accent: #0a8fb0;
-  --accent-hover: #0b9dbd;
-  --accent-active: #077a95;
-  --accent-glow: rgba(10, 143, 176, 0.22);
-  --accent-soft: rgba(10, 143, 176, 0.1);
-  --accent-line: rgba(10, 143, 176, 0.3);
+  --accent: #0a6fdb;
+  --accent-hover: #1c82f0;
+  --accent-active: #0857b0;
+  --accent-glow: rgba(10, 111, 219, 0.24);
+  --accent-soft: rgba(10, 111, 219, 0.1);
+  --accent-line: rgba(10, 111, 219, 0.32);
   --ink: #ffffff;
 
   /* Text */
@@ -47,7 +47,7 @@ html[data-theme="light"] {
   --shadow-sm: 0 4px 14px rgba(13, 27, 36, 0.1);
   --shadow-md: 0 12px 30px rgba(13, 27, 36, 0.14);
   --shadow-lg: 0 24px 60px rgba(13, 27, 36, 0.18);
-  --glow-accent: 0 6px 22px rgba(10, 143, 176, 0.24);
+  --glow-accent: 0 6px 22px rgba(10, 111, 219, 0.26);
 }
 
 /* restyle — chrome specifics that read from a literal rather than a token */

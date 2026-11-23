@@ -19,6 +19,42 @@ body {
   position: relative;
 }
 
+/* Cinematic ambience: a fixed perspective grid floor + horizon glow sitting
+   behind the shell, so every member page shares the landing/admin 3D stage.
+   Scoped away from .admin-body, which paints its own studio grid. */
+body:not(.admin-body)::before {
+  content: "";
+  position: fixed;
+  left: -50%;
+  right: -50%;
+  bottom: -14%;
+  height: 48%;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  transform: perspective(700px) rotateX(70deg);
+  transform-origin: 50% 100%;
+  mask-image: radial-gradient(ellipse 62% 72% at 50% 100%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 62% 72% at 50% 100%, #000 0%, transparent 78%);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body:not(.admin-body)::after {
+  content: "";
+  position: fixed;
+  top: -22%;
+  left: 50%;
+  width: min(1100px, 130vw);
+  height: 620px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(0, 127, 255, 0.16) 0%, rgba(0, 59, 115, 0.08) 46%, transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* App Container: full-width, breathing comfortably with Netflix-style edge gutters */
 .app-container {
   width: 100%;

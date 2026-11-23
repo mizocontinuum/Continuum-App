@@ -33,7 +33,7 @@
 
 
 /* DESIGN TOKENS — "Continuum" dark-first palette (Netflix-style)
-   Surfaces: page, card, raised · Accent: ONE cyan, never red
+   Surfaces: page, card, raised · Accent: ONE azure, never red
    Text: three levels · everything else is neutral black, white or slate. */
 /* restyle */
 :root {
@@ -45,9 +45,9 @@
   --surface: #1b2631;
   --text: #f1f5f9;
   --muted: #a3b1bf;
-  --accent: #5bc0de;
-  --accent-hi: #7fd0e8;
-  --accent-ink: #06151c;
+  --accent: #007fff;
+  --accent-hi: #33b5ff;
+  --accent-ink: #02182f;
 
   /* Surfaces */
   --bg-page: var(--bg);         /* deep canvas */
@@ -57,10 +57,10 @@
 
   /* One accent */
   --accent-hover: var(--accent-hi);
-  --accent-active: #3a9bb8;
-  --accent-glow: rgba(91, 192, 222, 0.28);
-  --accent-soft: rgba(91, 192, 222, 0.16);
-  --accent-line: rgba(91, 192, 222, 0.32);
+  --accent-active: #0063ce;
+  --accent-glow: rgba(0, 127, 255, 0.34);
+  --accent-soft: rgba(0, 127, 255, 0.16);
+  --accent-line: rgba(0, 127, 255, 0.34);
   --gold: #e6a23c;            /* forthcoming / coming soon only */
   --ink: var(--accent-ink);   /* text that sits on the accent */
 
@@ -68,8 +68,17 @@
   --text-sub: var(--muted);
   --text-muted: var(--muted);
 
-  /* Page depth */
-  --bg-page-gradient: radial-gradient(circle at 85% 0%, rgba(70, 130, 150, 0.24) 0%, transparent 60%), #0b1118;
+  /* Page depth — azure aurora wash, matching the landing + admin stages */
+  --bg-page-gradient:
+    radial-gradient(ellipse 90% 55% at 82% -6%, rgba(0, 127, 255, 0.2) 0%, transparent 58%),
+    radial-gradient(circle 620px at 8% 6%, rgba(0, 59, 115, 0.28) 0%, transparent 72%),
+    linear-gradient(180deg, #070c13 0%, #0b1118 42%, #080d14 100%);
+
+  /* 3D cinematic stage tokens (shared by the hero + member page shells) */
+  --stage-bg: #03080e;
+  --grid-line: rgba(0, 127, 255, 0.24);
+  --stage-glow: rgba(0, 115, 255, 0.32);
+  --stage-radius: 22px;
 
   /* Component surfaces, all derived from the scale above */
   --card-bg: var(--card);
@@ -98,7 +107,7 @@
   --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6);
-  --glow-accent: 0 6px 22px rgba(76, 195, 224, 0.32);
+  --glow-accent: 0 6px 22px rgba(0, 127, 255, 0.38);
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -126,12 +135,12 @@
     --line: rgba(13, 27, 36, 0.1);
     --line-strong: rgba(13, 27, 36, 0.18);
 
-    --accent: #0a8fb0;
-    --accent-hover: #0b9dbd;
-    --accent-active: #077a95;
-    --accent-glow: rgba(10, 143, 176, 0.22);
-    --accent-soft: rgba(10, 143, 176, 0.1);
-    --accent-line: rgba(10, 143, 176, 0.3);
+    --accent: #0a6fdb;
+    --accent-hover: #1c82f0;
+    --accent-active: #0857b0;
+    --accent-glow: rgba(10, 111, 219, 0.24);
+    --accent-soft: rgba(10, 111, 219, 0.1);
+    --accent-line: rgba(10, 111, 219, 0.32);
     --ink: #ffffff;
 
     --text: #0d1b24;
@@ -153,7 +162,7 @@
     --shadow-sm: 0 4px 14px rgba(13, 27, 36, 0.1);
     --shadow-md: 0 12px 30px rgba(13, 27, 36, 0.14);
     --shadow-lg: 0 24px 60px rgba(13, 27, 36, 0.18);
-    --glow-accent: 0 6px 22px rgba(10, 143, 176, 0.24);
+    --glow-accent: 0 6px 22px rgba(10, 111, 219, 0.26);
   }
 }
 
@@ -190,6 +199,42 @@ body {
   display: flex;
   justify-content: center;
   position: relative;
+}
+
+/* Cinematic ambience: a fixed perspective grid floor + horizon glow sitting
+   behind the shell, so every member page shares the landing/admin 3D stage.
+   Scoped away from .admin-body, which paints its own studio grid. */
+body:not(.admin-body)::before {
+  content: "";
+  position: fixed;
+  left: -50%;
+  right: -50%;
+  bottom: -14%;
+  height: 48%;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  transform: perspective(700px) rotateX(70deg);
+  transform-origin: 50% 100%;
+  mask-image: radial-gradient(ellipse 62% 72% at 50% 100%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 62% 72% at 50% 100%, #000 0%, transparent 78%);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body:not(.admin-body)::after {
+  content: "";
+  position: fixed;
+  top: -22%;
+  left: 50%;
+  width: min(1100px, 130vw);
+  height: 620px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(0, 127, 255, 0.16) 0%, rgba(0, 59, 115, 0.08) 46%, transparent 72%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* App Container: full-width, breathing comfortably with Netflix-style edge gutters */
@@ -264,6 +309,19 @@ body {
   box-shadow: var(--shadow-md), 0 2px 0 var(--accent-line);
 }
 
+/* Azure command-bar glow line, echoing the landing header */
+.top-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 22%, var(--accent-hi) 50%, var(--accent) 78%, transparent 100%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .brand-link {
   display: flex;
   align-items: center;
@@ -285,7 +343,7 @@ body {
   width: auto;
   object-fit: contain;
   display: block;
-  /* restyle — cyan brand glow */
+  /* restyle — azure brand glow */
   filter: drop-shadow(0 0 10px var(--accent-glow));
 }
 
@@ -383,7 +441,7 @@ body {
   display: block;
 }
 
-/* restyle — rounded-square avatar with a cyan hairline */
+/* restyle — rounded-square avatar with a azure hairline */
 .avatar-btn {
   width: 36px;
   height: 36px;
@@ -511,16 +569,16 @@ body {
   color: var(--text);
 }
 
-/* Active tab: #5bc0de with pill background rgba(91,192,222,.16) */
+/* Active tab: azure with a soft accent pill background */
 .nav-tab.active,
 .nav-tab[aria-current="page"] {
-  background: rgba(91, 192, 222, 0.16);
-  color: #5bc0de;
+  background: var(--accent-soft);
+  color: var(--accent-hi);
 }
 
 .nav-tab.active .nav-icon-wrap svg,
 .nav-tab[aria-current="page"] .nav-icon-wrap svg {
-  stroke: #5bc0de;
+  stroke: var(--accent-hi);
   stroke-width: 2;
 }
 
@@ -691,7 +749,7 @@ body {
   transform: scale(0.97);
 }
 
-/* restyle — rounded thumbnail with gradient art, cyan hover ring + lift */
+/* restyle — rounded thumbnail with gradient art, azure hover ring + lift */
 .thumb-container {
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -815,7 +873,7 @@ body {
   }
 }
 
-/* restyle — cyan filled play chip with a soft glow */
+/* restyle — azure filled play chip with a soft glow */
 .play-pill-icon {
   width: 40px;
   height: 40px;
@@ -933,7 +991,7 @@ body {
   -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
-/* restyle — rounded 22px sheet, gradient header wash, cyan hairline */
+/* restyle — rounded 22px sheet, gradient header wash, azure hairline */
 .video-modal-sheet {
   position: relative;
   z-index: 10;
@@ -1157,7 +1215,7 @@ body {
   line-height: 1;
 }
 
-/* Primary CTA Button — cyan gradient with a glow */
+/* Primary CTA Button — azure gradient with a glow */
 /* restyle */
 .sheet-primary-btn {
   position: relative;
@@ -1750,7 +1808,7 @@ body {
   left: 0;
   bottom: 0;
   width: 0%;
-  background: var(--accent); /* restyle — cyan scrubber, never Netflix red */
+  background: var(--accent); /* restyle — azure scrubber, never Netflix red */
   border-radius: 99px;
 }
 

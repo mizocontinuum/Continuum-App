@@ -32,6 +32,19 @@
   box-shadow: var(--shadow-md), 0 2px 0 var(--accent-line);
 }
 
+/* Azure command-bar glow line, echoing the landing header */
+.top-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 22%, var(--accent-hi) 50%, var(--accent) 78%, transparent 100%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .brand-link {
   display: flex;
   align-items: center;
@@ -53,7 +66,7 @@
   width: auto;
   object-fit: contain;
   display: block;
-  /* restyle — cyan brand glow */
+  /* restyle — azure brand glow */
   filter: drop-shadow(0 0 10px var(--accent-glow));
 }
 
@@ -151,7 +164,7 @@
   display: block;
 }
 
-/* restyle — rounded-square avatar with a cyan hairline */
+/* restyle — rounded-square avatar with a azure hairline */
 .avatar-btn {
   width: 36px;
   height: 36px;

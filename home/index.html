@@ -519,55 +519,10 @@
 
   <!-- Page module: hero carousel, Top 10, Continue Watching, discipline rows -->
   <script type="module" src="../assets/js/pages/home.js"></script>
+  <!-- Login notice banner: shows admin-dispatched academy advisories -->
+  <script type="module" src="../assets/js/pages/login-notice.js"></script>
   <!-- PWA Service Worker Registration -->
   <script type="module" src="../assets/js/pwa.js"></script>
-
-  <!-- Login Notification Modal / Banner Handler (Shows Admin Dispatched Notices) -->
-  <script>
-    (function() {
-      try {
-        var noticeRaw = localStorage.getItem('continuum_active_student_notice');
-        if (noticeRaw) {
-          var notice = JSON.parse(noticeRaw);
-          if (notice && notice.unread) {
-            var banner = document.createElement('div');
-            banner.id = 'studentLoginNoticeBanner';
-            banner.style.cssText = 'position:fixed; top:20px; left:50%; transform:translateX(-50%); width:90%; max-width:680px; background:linear-gradient(135deg, rgba(8,28,55,0.98) 0%, rgba(3,12,24,0.98) 100%); border:1.5px solid #007FFF; box-shadow:0 15px 40px rgba(0,0,0,0.9), 0 0 30px rgba(0,127,255,0.5); border-radius:14px; padding:18px 22px; z-index:999999; color:#FFF; font-family:inherit; backdrop-filter:blur(20px); animation:fadeInSlide 0.4s ease;';
-
-            banner.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">' +
-              '<div style="display:flex; align-items:center; gap:8px;">' +
-                '<span style="background:#007FFF; color:#FFF; font-size:10px; font-weight:800; padding:3px 8px; border-radius:4px; text-transform:uppercase;">ACADEMY ADVISORY</span>' +
-                '<h4 style="margin:0; font-size:15px; font-weight:700; color:#33B5FF;">' + (notice.subject || 'New Message from Administration') + '</h4>' +
-              '</div>' +
-              '<button id="btnCloseNoticeBanner" style="background:none; border:none; color:#AAA; font-size:20px; cursor:pointer; line-height:1;">&times;</button>' +
-            '</div>' +
-            '<p style="margin:0 0 14px 0; font-size:13.5px; line-height:1.6; color:rgba(230,243,255,0.88);">' + notice.body + '</p>' +
-            '<div style="display:flex; justify-content:flex-end;">' +
-              '<button id="btnDismissNotice" style="background:linear-gradient(135deg,#1EA0FF,#007FFF); border:none; color:#FFF; font-size:12px; font-weight:700; padding:6px 16px; border-radius:6px; cursor:pointer;">Acknowledge & Close</button>' +
-            '</div>';
-
-            document.body.appendChild(banner);
-
-            var closeHandler = function() {
-              banner.style.opacity = '0';
-              banner.style.transform = 'translateX(-50%) translateY(-20px)';
-              banner.style.transition = 'all 0.3s ease';
-              notice.unread = false;
-              localStorage.setItem('continuum_active_student_notice', JSON.stringify(notice));
-              setTimeout(function() { if (banner.parentNode) banner.parentNode.removeChild(banner); }, 300);
-            };
-
-            var btnClose = document.getElementById('btnCloseNoticeBanner');
-            var btnDismiss = document.getElementById('btnDismissNotice');
-            if (btnClose) btnClose.onclick = closeHandler;
-            if (btnDismiss) btnDismiss.onclick = closeHandler;
-          }
-        }
-      } catch (err) {
-        console.warn('Notice banner error:', err);
-      }
-    })();
-  </script>
 
 </body>
 </html>

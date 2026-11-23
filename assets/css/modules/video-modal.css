@@ -39,7 +39,7 @@
   -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
-/* restyle — rounded 22px sheet, gradient header wash, cyan hairline */
+/* restyle — rounded 22px sheet, gradient header wash, azure hairline */
 .video-modal-sheet {
   position: relative;
   z-index: 10;
@@ -263,7 +263,7 @@
   line-height: 1;
 }
 
-/* Primary CTA Button — cyan gradient with a glow */
+/* Primary CTA Button — azure gradient with a glow */
 /* restyle */
 .sheet-primary-btn {
   position: relative;
@@ -856,7 +856,7 @@
   left: 0;
   bottom: 0;
   width: 0%;
-  background: var(--accent); /* restyle — cyan scrubber, never Netflix red */
+  background: var(--accent); /* restyle — azure scrubber, never Netflix red */
   border-radius: 99px;
 }
 
