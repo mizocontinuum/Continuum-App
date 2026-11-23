@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Continuum Academy - Home</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Page Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/pages/home.css">
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <header class="hero" id="hero">
+    
+    <!-- Top Navigation Bar -->
+    <nav class="nav">
+      <div class="logo">NETFLIX</div>
+      <ul id="navLinks">
+        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#">Movies</a></li>
+        <li><a href="#">Series</a></li>
+        <li><a href="#">Cartoons</a></li>
+        <li><a href="#mylist" data-target="mylist">My list<span class="badge" id="navCount" hidden></span></a></li>
+      </ul>
+      <div class="icons">
+        <div class="search-wrap">
+          <input id="searchInput" type="text" placeholder="Search a title..." aria-label="Search titles">
+          <button class="search-btn" id="searchBtn" aria-label="Search">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          </button>
+        </div>
+        <div class="avatar" role="img" aria-label="Your profile"></div>
+      </div>
+    </nav>
+
+    <!-- Right-Anchored Cinematic Content Area -->
+    <section class="content" id="content">
+      <h1 class="title" id="title"></h1>
+      <p class="desc" id="desc"></p>
+      <p class="meta" id="meta"></p>
+      <div class="actions">
+        <button class="watch" id="watchBtn">
+          <span class="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><polygon points="8 5 19 12 8 19 8 5"></polygon></svg></span>
+          <span>Watch<br>the Movie</span>
+        </button>
+        <button class="list-btn" id="listBtn" aria-pressed="false">+ My List</button>
+      </div>
+    </section>
+
+    <!-- Bottom Row: Trailers on Left + Movie Switcher Dots on Right -->
+    <div class="hero-bottom-row">
+      <section class="trailers">
+        <div class="thumbs" id="thumbs"></div>
+        <h2>Trailers</h2>
+      </section>
+      <div class="dots" id="dots" aria-label="Choose movie"></div>
+    </div>
+  </header>
+
+  <!-- Categories Section -->
+  <section class="categories" id="categories">
+    <h2>Categories</h2>
+    <div class="cat-row" id="catRow"></div>
+    <p class="cat-info" id="catInfo" aria-live="polite">Pick a category to browse.</p>
+  </section>
+
+  <!-- Trailer Player Modal -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalTitle"></h3>
+        <button class="close" id="closeBtn" aria-label="Close">&times;</button>
+      </div>
+      <div class="player" id="player"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Feedback -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Page Script -->
+  <script src="../assets/js/pages/home.js"></script>
+</body>
+</html>
