@@ -3,14 +3,10 @@
   color-scheme: dark;
   --admin-bg: #080e14;
   --admin-panel: #0e1720;
-  --admin-panel-raised: #121e29;
   --admin-line: rgba(180, 211, 229, 0.1);
   --admin-line-strong: rgba(180, 211, 229, 0.17);
   --admin-text: #edf5fa;
-  --admin-muted: #8398a7;
-  --admin-soft: #b1c0ca;
   --admin-accent: #007fff;
-  --admin-accent-soft: rgba(0, 127, 255, 0.11);
 }
 
 html {
@@ -1254,14 +1250,10 @@ body.admin-body {
 :root {
   --admin-bg: #03080e;
   --admin-panel: #071225;
-  --admin-panel-raised: #0a1a33;
   --admin-line: rgba(67, 145, 255, 0.16);
   --admin-line-strong: rgba(67, 145, 255, 0.3);
   --admin-text: #f5f9ff;
-  --admin-muted: #9cb2cb;
-  --admin-soft: #c4d8f0;
   --admin-accent: #007fff;
-  --admin-accent-soft: rgba(0, 127, 255, 0.16);
 }
 
 body.admin-body {

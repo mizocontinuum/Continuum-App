@@ -36,10 +36,6 @@ html[data-theme="light"] {
   --nav-bg: rgba(248, 251, 252, 0.8);
   --glass-bg: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(13, 27, 36, 0.12);
-  --btn-secondary-bg: rgba(255, 255, 255, 0.72);
-  --btn-secondary-border: rgba(13, 27, 36, 0.14);
-  --topbar-bg: rgba(248, 251, 252, 0.62);
-  --topbar-bg-scrolled: rgba(248, 251, 252, 0.92);
   --overlay-bg: rgba(13, 27, 36, 0.45);
   --sheet-bg: #ffffff;
 

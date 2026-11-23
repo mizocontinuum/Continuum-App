@@ -5,18 +5,13 @@
  * redirects (such as auth middleware sending /home/ to /login/) work normally.
  * The backend under /api/* is also never touched by this worker.
  */
-const CACHE_NAME = 'continuum-cache-v32';
+const CACHE_NAME = 'continuum-cache-v33';
 const PRECACHE_URLS = [
   './manifest.json',
-  './assets/css/base/foundation.css',
-  './assets/css/modules/tokens.css',
-  './assets/css/modules/shell.css',
-  './assets/css/modules/header.css',
-  './assets/css/modules/bottom-nav.css',
-  './assets/css/modules/cards.css',
-  './assets/css/modules/toast.css',
-  './assets/css/modules/video-modal.css',
-  './assets/css/modules/utilities.css',
+  // Pages request the concatenated build (foundation.css?v=21), never the
+  // individual assets/css/modules/*.css sources they are built from, so only
+  // the build is precached — keyed with the same ?v= the HTML asks for.
+  './assets/css/base/foundation.css?v=21',
   './assets/css/base/theme.css',
   './assets/css/base/auth.css',
   './assets/css/landing.css',

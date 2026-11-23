@@ -35,14 +35,9 @@
 
   /* Component surfaces */
   --card-bg: var(--surface);
-  --btn-accent-bg: var(--accent);
-  --btn-secondary-bg: rgba(26, 37, 48, 0.55);
-  --btn-secondary-border: rgba(255, 255, 255, 0.14);
   --nav-bg: rgba(14, 22, 32, 0.72);
   --glass-bg: rgba(14, 22, 32, 0.5);
   --glass-border: rgba(255, 255, 255, 0.12);
-  --topbar-bg: rgba(7, 12, 17, 0.5);
-  --topbar-bg-scrolled: rgba(7, 12, 17, 0.85);
   --overlay-bg: rgba(7, 12, 17, 0.85);
   --sheet-bg: #090e13;
   /* restyle — poster art stays dark in both themes */
@@ -92,13 +87,9 @@
 
     --bg-page-gradient: linear-gradient(180deg, #f5f9fb 0%, #eef3f6 55%, #e7eef3 100%);
 
-    --btn-secondary-bg: rgba(255, 255, 255, 0.72);
-    --btn-secondary-border: rgba(13, 27, 36, 0.14);
     --nav-bg: rgba(248, 251, 252, 0.8);
     --glass-bg: rgba(255, 255, 255, 0.6);
     --glass-border: rgba(13, 27, 36, 0.12);
-    --topbar-bg: rgba(248, 251, 252, 0.62);
-    --topbar-bg-scrolled: rgba(248, 251, 252, 0.92);
     --overlay-bg: rgba(13, 27, 36, 0.45);
     --sheet-bg: #ffffff;
 

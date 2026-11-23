@@ -59,19 +59,13 @@
   /* 3D cinematic stage tokens (shared by the hero + member page shells) */
   --stage-bg: #03080e;
   --grid-line: rgba(0, 127, 255, 0.24);
-  --stage-glow: rgba(0, 115, 255, 0.32);
   --stage-radius: 22px;
 
   /* Component surfaces, all derived from the scale above */
   --card-bg: var(--card);
-  --btn-accent-bg: var(--accent);
-  --btn-secondary-bg: rgba(27, 38, 49, 0.6);
-  --btn-secondary-border: rgba(255, 255, 255, 0.12);
   --nav-bg: rgba(8, 12, 18, 0.78);
   --glass-bg: rgba(17, 25, 34, 0.6);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --topbar-bg: rgba(11, 17, 24, 0.72);
-  --topbar-bg-scrolled: rgba(11, 17, 24, 0.88);
   --overlay-bg: rgba(11, 17, 24, 0.85);
   --sheet-bg: var(--card);
   /* restyle — poster art stays dark in both themes, like streaming thumbnails */
@@ -131,13 +125,9 @@
 
     --bg-page-gradient: linear-gradient(180deg, #f5f9fb 0%, #eef3f6 55%, #e7eef3 100%);
 
-    --btn-secondary-bg: rgba(255, 255, 255, 0.72);
-    --btn-secondary-border: rgba(13, 27, 36, 0.14);
     --nav-bg: rgba(248, 251, 252, 0.8);
     --glass-bg: rgba(255, 255, 255, 0.6);
     --glass-border: rgba(13, 27, 36, 0.12);
-    --topbar-bg: rgba(248, 251, 252, 0.62);
-    --topbar-bg-scrolled: rgba(248, 251, 252, 0.92);
     --overlay-bg: rgba(13, 27, 36, 0.45);
     --sheet-bg: #ffffff;
 
