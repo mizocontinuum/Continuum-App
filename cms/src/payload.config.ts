@@ -43,6 +43,13 @@ export default buildConfig({
 
   admin: {
     user: Users.slug,
+    components: {
+      views: {
+        dashboard: {
+          Component: '/components/VisualEditor',
+        },
+      },
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -76,6 +83,12 @@ export default buildConfig({
         rejectUnauthorized: false,
       },
     },
+    // Keep Payload's tables out of `public`. The Supabase project already
+    // holds the legacy app's tables there (disciplines, videos, ...), some of
+    // which share names with Payload collections — Drizzle's introspection
+    // cannot handle that overlap and crashes during schema push. A dedicated
+    // schema isolates Payload completely and leaves the legacy data untouched.
+    schemaName: 'payload',
     // Auto-create / sync tables on first boot so a fresh deploy is immediately
     // usable for testing. Once the schema is stable, turn this off and use
     // `payload migrate` (see README / scripts) for controlled migrations.

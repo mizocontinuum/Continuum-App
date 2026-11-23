@@ -218,12 +218,12 @@ main {
    ══════════════════════════════════════════════════════════════════════════ */
 .landing-hero {
   position: relative;
-  min-height: 92vh;
+  min-height: var(--hero-height-desktop, 92vh);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: var(--hero-flex-alignment, center);
   justify-content: center;
-  text-align: center;
+  text-align: var(--hero-text-alignment, center);
   padding: 140px 24px 100px;
   background-color: var(--bg-black);
   border-bottom: none;
@@ -237,10 +237,10 @@ main {
   position: absolute;
   inset: -6%;
   background:
-    radial-gradient(ellipse 90% 70% at 25% 45%, rgba(3, 8, 14, 0.75) 0%, rgba(3, 8, 14, 0.45) 55%, rgba(3, 8, 14, 0.2) 100%),
+    radial-gradient(ellipse 90% 70% at 25% 45%, rgba(3, 8, 14, var(--hero-overlay-opacity, 0.75)) 0%, rgba(3, 8, 14, 0.45) 55%, rgba(3, 8, 14, 0.2) 100%),
     linear-gradient(to top, var(--bg-black) 0%, rgba(3, 8, 14, 0.3) 30%, transparent 60%),
     linear-gradient(to right, rgba(3, 8, 14, 0.85) 0%, rgba(3, 8, 14, 0.5) 40%, transparent 75%),
-    url("../images/hero-glass-emblem.png") center right/cover no-repeat;
+    var(--hero-image, url("../images/hero-glass-emblem.png")) var(--hero-image-position, center right)/cover no-repeat;
   transform: translateZ(-50px) scale(1.08);
   transform-origin: center center;
   filter: contrast(1.12) brightness(0.92);
@@ -361,8 +361,9 @@ main {
 .landing-title {
   position: relative;
   z-index: 2;
-  max-width: 860px;
-  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  width: 100%;
+  max-width: min(860px, var(--hero-content-max-width, 1200px));
+  font-size: clamp(2rem, var(--hero-title-size-desktop, 4.2vw), 6rem);
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -0.03em;
@@ -386,7 +387,7 @@ main {
 .landing-lede {
   position: relative;
   z-index: 2;
-  max-width: 640px;
+  max-width: min(640px, var(--hero-content-max-width, 1200px));
   font-size: clamp(0.95rem, 1.4vw, 1.12rem);
   font-weight: 400;
   line-height: 1.65;
@@ -402,7 +403,7 @@ main {
   z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: var(--hero-flex-alignment, center);
   flex-wrap: wrap;
   gap: 18px;
   width: 100%;
@@ -1363,7 +1364,7 @@ main {
     }
 
     .landing-hero {
-      min-height: 78vh;
+      min-height: var(--hero-height-mobile, 78vh);
       padding: 110px 20px 70px;
     }
 
@@ -1426,12 +1427,12 @@ main {
     }
 
     .landing-hero {
-      min-height: 70vh;
+      min-height: var(--hero-height-mobile, 70vh);
       padding: 100px 16px 60px;
     }
 
     .landing-title {
-      font-size: clamp(1.6rem, 7vw, 2.2rem);
+      font-size: clamp(1.6rem, var(--hero-title-size-mobile, 7vw), 3.75rem);
     }
 
     .trending-card {
@@ -1458,6 +1459,10 @@ main {
       height: 200px;
     }
   }
+
+.cms-hidden {
+  display: none !important;
+}
 
   /* ── Reduced Motion ─────────────────────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {

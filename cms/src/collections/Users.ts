@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import type { CollectionBeforeValidateHook } from 'payload'
 import { isAdmin } from '../access/isAdmin'
 import { isAdminFieldLevel } from '../access/isAdminFieldLevel'
 import { isAdminOrSelf } from '../access/isAdminOrSelf'
@@ -22,6 +23,20 @@ export const Users: CollectionConfig = {
     update: isAdminOrSelf,
     delete: isAdmin,
     admin: ({ req: { user } }) => Boolean(user),
+  },
+  hooks: {
+    beforeValidate: [
+      async ({ data, operation, req }) => {
+        if (operation !== 'create' || req.user) return data
+        const existingUsers = await req.payload.find({
+          collection: 'users',
+          depth: 0,
+          limit: 1,
+          overrideAccess: true,
+        })
+        return existingUsers.totalDocs === 0 ? { ...data, role: 'admin' } : data
+      },
+    ] satisfies CollectionBeforeValidateHook[],
   },
   fields: [
     {
