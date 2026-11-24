@@ -1229,20 +1229,36 @@ body::before{background:radial-gradient(ellipse 70% 55% at 22% 38%,rgba(10,108,2
 
 
 <style id="rock-solid-card-stability">
-/* Rock-solid visual stability: Card and 3D logo stay completely anchored */
+/* 
+ * Zero-Jumping Alignment:
+ * Pin both the 3D logo showcase panel and the login-card to the TOP of the grid
+ * and set a locked top-padding on the container.
+ * This guarantees the top of the card and logo stay 100% FROZEN when switching tabs.
+ */
+.login-container {
+  justify-content: flex-start !important;
+  padding-top: max(32px, env(safe-area-inset-top)) !important;
+}
+
 .auth-portal-grid {
-  align-items: center !important;
+  align-items: flex-start !important;
+  margin: 16px auto 32px !important;
+}
+
+.auth-showcase-panel {
+  align-self: flex-start !important;
 }
 
 .login-card {
   position: relative !important;
   transform: none !important;
   will-change: auto !important;
-  align-self: center !important;
-  /* Fixed width & height anchoring to prevent jumping between tabs */
+  align-self: flex-start !important;
   width: 100% !important;
   max-width: 440px !important;
+  min-height: 520px;
   box-sizing: border-box !important;
+  margin-top: 0 !important;
 }
 
 .auth-tab-panel {
@@ -1251,12 +1267,13 @@ body::before{background:radial-gradient(ellipse 70% 55% at 22% 38%,rgba(10,108,2
 
 .auth-tab-panel.active {
   display: block;
-  animation: tabFadeIn 0.2s ease-out forwards;
+  animation: tabFadeIn 0.15s ease-out forwards;
 }
 
-/* Ensure no child elements trigger jumpy layout animations */
+/* Completely eliminate jumpy child animations */
 .login-card .headline,
 .login-card .subheadline,
+.login-card .login-form,
 .login-card .login-form > * {
   animation: none !important;
   transform: none !important;
