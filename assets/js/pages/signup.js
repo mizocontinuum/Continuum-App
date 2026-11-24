@@ -1,112 +1,181 @@
-/**
- * Client-side registration & immediate auto-login.
- *
- * Extracted verbatim from an inline <script> in signup/index.html. Registers
- * the account in `continuum_registered_users`, then issues an automatic student
- * session in the shape every member page reads (store.js KEYS.session =
- * 'continuum.session') and redirects to the Student Portal (/home/).
- */
+(function(){
+  var form = document.getElementById("signupForm");
+  var nameIn = document.getElementById("fullName");
+  var emailIn = document.getElementById("signupEmail");
+  var roleIn = document.getElementById("jobRole");
+  var orgIn = document.getElementById("organization");
+  var passIn = document.getElementById("signupPassword");
+  var confIn = document.getElementById("confirmPassword");
+  var termsIn = document.getElementById("termsCheck");
+  var err = document.getElementById("signupError");
+  var btn = document.getElementById("signupSubmitBtn");
+  var strBar = document.getElementById("strengthBar");
+  var strLbl = document.getElementById("passStrengthLabel");
 
-(() => {
-  'use strict';
+  if(!form || !nameIn || !emailIn || !passIn) return;
 
-  function showToast(msg, isError = false) {
-    const toast = document.getElementById('signupToast');
-    if (!toast) return;
-    toast.textContent = msg;
-    toast.className = 'toast-msg show' + (isError ? ' error' : '');
-    setTimeout(() => {
-      toast.className = 'toast-msg';
-    }, 3200);
+  // Real-time Password Strength Check
+  passIn.addEventListener("input", function(){
+    var v = passIn.value;
+    var score = 0;
+    if(v.length >= 8) score++;
+    if(/[A-Z]/.test(v)) score++;
+    if(/[0-9]/.test(v)) score++;
+    if(/[^A-Za-z0-9]/.test(v)) score++;
+
+    if(v.length === 0){
+      strBar.style.width = "0%";
+      strLbl.textContent = "Min. 8 characters";
+      strLbl.style.color = "var(--text-muted)";
+    } else if(score <= 1){
+      strBar.style.width = "25%";
+      strBar.style.background = "#FF4D6D";
+      strLbl.textContent = "Weak";
+      strLbl.style.color = "#FF4D6D";
+    } else if(score === 2){
+      strBar.style.width = "50%";
+      strBar.style.background = "#FFAA00";
+      strLbl.textContent = "Fair";
+      strLbl.style.color = "#FFAA00";
+    } else if(score === 3){
+      strBar.style.width = "75%";
+      strBar.style.background = "#33B5FF";
+      strLbl.textContent = "Good";
+      strLbl.style.color = "#33B5FF";
+    } else {
+      strBar.style.width = "100%";
+      strBar.style.background = "#00E676";
+      strLbl.textContent = "Strong";
+      strLbl.style.color = "#00E676";
+    }
+  });
+
+  // Password Visibility Toggles
+  var togglePass = document.getElementById("toggleSignupPass");
+  if(togglePass){
+    togglePass.onclick = function(){
+      var isPw = passIn.type === "password";
+      passIn.type = isPw ? "text" : "password";
+      this.textContent = isPw ? "Hide" : "Show";
+      this.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+    };
+  }
+  var toggleConf = document.getElementById("toggleConfirmPass");
+  if(toggleConf){
+    toggleConf.onclick = function(){
+      var isPw = confIn.type === "password";
+      confIn.type = isPw ? "text" : "password";
+      this.textContent = isPw ? "Hide" : "Show";
+      this.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+    };
   }
 
-  const form = document.getElementById('signupForm');
-  const nameInput = document.getElementById('name');
-  const emailInput = document.getElementById('email');
-  const passInput = document.getElementById('password');
-  const confirmInput = document.getElementById('confirm');
-  const errorMsg = document.getElementById('signupError');
-  const submitBtn = document.getElementById('signupSubmit');
-
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const name = (nameInput.value || '').trim();
-      const email = (emailInput.value || '').trim().toLowerCase();
-      const pass = (passInput.value || '').trim();
-      const confirm = (confirmInput.value || '').trim();
-
-      if (errorMsg) errorMsg.textContent = '';
-
-      // Validation
-      if (!name || name.length < 2) {
-        if (errorMsg) errorMsg.textContent = 'Please provide your full legal name.';
-        showToast('Invalid name', true);
-        return;
-      }
-
-      if (pass.length < 8) {
-        if (errorMsg) errorMsg.textContent = 'Password must be at least 8 characters.';
-        showToast('Password too short', true);
-        return;
-      }
-
-      if (pass !== confirm) {
-        if (errorMsg) errorMsg.textContent = 'Passwords do not match.';
-        showToast('Passwords do not match', true);
-        return;
-      }
-
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.75';
-        submitBtn.querySelector('span').textContent = 'Creating Account...';
-      }
-
-      // Register in localStorage student users list
-      try {
-        let registeredUsers = JSON.parse(localStorage.getItem('continuum_registered_users') || '[]');
-        const existing = registeredUsers.find(u => u.email === email);
-        if (existing) {
-          if (errorMsg) errorMsg.textContent = 'An account with this email already exists. Please sign in.';
-          showToast('Account already exists', true);
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '';
-            submitBtn.querySelector('span').textContent = 'Create Account';
-          }
-          return;
-        }
-
-        registeredUsers.push({
-          name: name,
-          email: email,
-          password: pass,
-          role: 'student',
-          createdAt: new Date().toISOString()
-        });
-        localStorage.setItem('continuum_registered_users', JSON.stringify(registeredUsers));
-      } catch (err) {
-        console.warn('Registration save err:', err);
-      }
-
-      // Issue automatic student session & redirect to Student Portal (/home/).
-      // Written in the shape every member page reads (store.js
-      // KEYS.session = 'continuum.session') so the top bar and auth guard
-      // recognise the new account right away.
-      localStorage.setItem('continuum.session', JSON.stringify({
-        id: null,
-        name: name,
-        email: email,
-        role: 'member'
-      }));
-      localStorage.setItem('continuum_auth_user', 'student');
-
-      showToast('Account created successfully! Welcome to the Academy...');
-      setTimeout(() => {
-        window.location.href = '../home/';
-      }, 700);
+  // Clear errors on input
+  [nameIn, emailIn, passIn, confIn].forEach(function(el){
+    if(el) el.addEventListener("input", function(){
+      if(err) err.textContent = "";
+      el.removeAttribute("aria-invalid");
     });
-  }
+  });
+
+  // Handle Form Submission
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if(err) err.textContent = "";
+
+    var nameVal = nameIn.value.trim();
+    var emailVal = emailIn.value.trim().toLowerCase();
+    var passVal = passIn.value.trim();
+    var confVal = confIn.value.trim();
+    var roleVal = roleIn ? roleIn.value : "Student";
+    var orgVal = orgIn ? orgIn.value.trim() : "";
+
+    if(nameVal.length < 2){
+      err.textContent = "Please provide your full legal name.";
+      nameIn.setAttribute("aria-invalid", "true");
+      nameIn.focus();
+      return;
+    }
+
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+      err.textContent = "Please enter a valid work or personal email address.";
+      emailIn.setAttribute("aria-invalid", "true");
+      emailIn.focus();
+      return;
+    }
+
+    if(passVal.length < 8){
+      err.textContent = "Password must be at least 8 characters.";
+      passIn.setAttribute("aria-invalid", "true");
+      passIn.focus();
+      return;
+    }
+
+    if(passVal !== confVal){
+      err.textContent = "Passwords do not match.";
+      confIn.setAttribute("aria-invalid", "true");
+      confIn.focus();
+      return;
+    }
+
+    if(termsIn && !termsIn.checked){
+      err.textContent = "Please accept the Continuum Terms of Service to continue.";
+      termsIn.focus();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.classList.add("loading");
+    var btnSpan = btn.querySelector("span");
+    if(btnSpan) btnSpan.textContent = "Creating Account...";
+
+    try {
+      var registered = JSON.parse(localStorage.getItem("continuum_registered_users") || "[]");
+      var existing = registered.find(function(u){ return u.email === emailVal; });
+      if(existing){
+        err.textContent = "An account with this email already exists. Please sign in.";
+        btn.disabled = false;
+        btn.classList.remove("loading");
+        if(btnSpan) btnSpan.textContent = "Create Account";
+        return;
+      }
+
+      registered.push({
+        name: nameVal,
+        email: emailVal,
+        role: roleVal,
+        organization: orgVal,
+        password: passVal,
+        createdAt: new Date().toISOString()
+      });
+      localStorage.setItem("continuum_registered_users", JSON.stringify(registered));
+
+      // Issue active session
+      localStorage.setItem("continuum.session", JSON.stringify({
+        id: "USR-" + Date.now(),
+        name: nameVal,
+        email: emailVal,
+        role: roleVal
+      }));
+      localStorage.setItem("continuum_auth_user", "student");
+
+      var toastEl = document.getElementById("signupToast");
+      if(toastEl){
+        toastEl.textContent = "Account created successfully! Welcome to Continuum Academy.";
+        toastEl.className = "toast-msg show";
+      }
+
+      setTimeout(function(){
+        window.location.href = "../home/";
+      }, 1100);
+
+    } catch(ex){
+      console.error(ex);
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      if(btnSpan) btnSpan.textContent = "Create Account";
+    }
+  });
+
+  
 })();

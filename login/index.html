@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description"
-    content="Sign in to Continuum Academy — the executive learning cockpit for entrepreneurs, marketers and leaders.">
-  <title>Continuum Academy - Login</title>
+    content="Access or create your executive Continuum Academy account — for entrepreneurs, marketers and leaders.">
+  <title>Continuum Academy - Sign In & Registration</title>
 
 <style>
 /* ==========================================================================
@@ -1094,6 +1094,175 @@ body::before{background:radial-gradient(ellipse 70% 55% at 22% 38%,rgba(10,108,2
 .demo-credentials-box[open] summary{margin-bottom:0}
 .demo-credentials-box[open] .demo-buttons-row{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;padding:10px;background:#0c1b32;border:1px solid rgba(92,192,255,.28);border-radius:12px;box-shadow:0 22px 44px -8px rgba(0,0,0,.6);animation:none}
 </style>
+
+<style id="mobile-logo-refinements">
+/* Mobile responsive enhancements for 3D spinning holographic logo */
+@media (max-width: 960px) {
+  .auth-portal-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 16px !important;
+    margin: 8px auto 20px !important;
+  }
+  .auth-showcase-panel {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    order: -1 !important;
+    margin: 0 auto !important;
+  }
+  .auth-spline-stage {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    width: min(58vw, 240px) !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    margin: 0 auto !important;
+    filter: drop-shadow(0 0 35px rgba(0, 127, 255, 0.55));
+    pointer-events: auto !important;
+  }
+  #authSplineCanvas {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: auto !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .auth-spline-stage {
+    width: min(52vw, 200px) !important;
+    margin: 0 auto 4px !important;
+  }
+  .login-card {
+    padding: 24px 18px 20px !important;
+    border-radius: 20px !important;
+    width: 100% !important;
+    max-width: 440px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-spline-stage {
+    width: min(48vw, 170px) !important;
+  }
+}
+</style>
+
+
+<style id="auth-tab-styles">
+/* Executive Auth Portal: Smooth Pill Tabs */
+.auth-tab-nav {
+  display: flex;
+  align-items: center;
+  background: rgba(4, 14, 30, 0.7);
+  border: 1px solid rgba(0, 127, 255, 0.22);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+.auth-tab-btn {
+  flex: 1;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-dim, #7d9bb9);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.auth-tab-btn:hover {
+  color: #fff;
+}
+.auth-tab-btn.active {
+  background: linear-gradient(135deg, rgba(10, 108, 240, 0.85), rgba(46, 168, 255, 0.85));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 127, 255, 0.45);
+}
+.auth-tab-panel {
+  display: none;
+}
+.auth-tab-panel.active {
+  display: block;
+  animation: tabFadeIn 0.35s ease forwards;
+}
+@keyframes tabFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Custom Styled Select for Signup */
+.select-custom {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--field) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238da2bd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 16px !important;
+  color: #fff !important;
+  cursor: pointer;
+}
+.select-custom option {
+  background: #071225;
+  color: #fff;
+}
+</style>
+
+
+<style id="rock-solid-card-stability">
+/* Rock-solid visual stability: Card and 3D logo stay completely anchored */
+.auth-portal-grid {
+  align-items: center !important;
+}
+
+.login-card {
+  position: relative !important;
+  transform: none !important;
+  will-change: auto !important;
+  align-self: center !important;
+  /* Fixed width & height anchoring to prevent jumping between tabs */
+  width: 100% !important;
+  max-width: 440px !important;
+  box-sizing: border-box !important;
+}
+
+.auth-tab-panel {
+  display: none;
+}
+
+.auth-tab-panel.active {
+  display: block;
+  animation: tabFadeIn 0.2s ease-out forwards;
+}
+
+/* Ensure no child elements trigger jumpy layout animations */
+.login-card .headline,
+.login-card .subheadline,
+.login-card .login-form > * {
+  animation: none !important;
+  transform: none !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -1126,74 +1295,196 @@ body::before{background:radial-gradient(ellipse 70% 55% at 22% 38%,rgba(10,108,2
 
       <!-- Right Column: Main Login Card -->
       <main class="login-card">
-      <h1 class="headline" id="loginHeading">Welcome back</h1>
-      <p class="subheadline" id="loginSubheading">Enter your credentials to access your executive learning cockpit</p>
 
-      <form class="login-form" id="loginForm" autocomplete="on">
-
-        <!-- Email Input Field -->
-        <div class="form-group">
-          <label class="form-label" for="email">EMAIL ADDRESS</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="input-box"
-            placeholder="name@company.com"
-            required
-            autocomplete="email"
-          >
-        </div>
-
-        <!-- Password Input Field -->
-        <div class="form-group">
-          <div class="form-label-row">
-            <label class="form-label" for="password">PASSWORD</label>
-            <a href="../forgot-password/" class="forgot-link">Forgot Password ?</a>
-          </div>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            class="input-box"
-            placeholder="••••••••"
-            required
-            autocomplete="current-password"
-          >
-        </div>
-
-        <!-- Where a rejected sign-in lands -->
-        <p class="form-error" id="loginError" role="alert"></p>
-
-        <!-- Submit Button with reCAPTCHA v3 Verification -->
-        <button type="submit" class="btn-submit" id="loginSubmit">
-          <span>Sign In</span>
-          <span class="arrow-icon">➔</span>
+      <!-- Executive Pill Tab Switcher -->
+      <nav class="auth-tab-nav" role="tablist" aria-label="Authentication Options">
+        <button type="button" class="auth-tab-btn active" id="tabSignIn" role="tab" aria-selected="true" aria-controls="panelSignIn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+          Sign In
         </button>
+        <button type="button" class="auth-tab-btn" id="tabRegister" role="tab" aria-selected="false" aria-controls="panelRegister">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7.5" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+          Create Account
+        </button>
+      </nav>
 
-        <!-- Temporary Admin & Student Demo Quick Fill Helper -->
+      <!-- ==================== TAB 1: SIGN IN ==================== -->
+      <section class="auth-tab-panel active" id="panelSignIn" role="tabpanel" aria-labelledby="tabSignIn">
+        <h1 class="headline" id="loginHeading">Welcome back</h1>
+        <p class="subheadline" id="loginSubheading">Enter your credentials to access your executive learning cockpit</p>
+
+        <form class="login-form" id="loginForm" autocomplete="on" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">EMAIL ADDRESS</label>
+            <input
+              type="email"
+              id="loginEmail"
+              name="email"
+              class="input-box"
+              placeholder="name@company.com"
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-group">
+            <div class="form-label-row">
+              <label class="form-label" for="loginPassword">PASSWORD</label>
+              <a href="#" class="forgot-link" id="forgotPassBtn">Forgot password?</a>
+            </div>
+            <div class="pw-wrap" style="position:relative;">
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                class="input-box"
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+              >
+              <button type="button" class="pw-toggle" id="toggleLoginPass" aria-label="Toggle password visibility">Show</button>
+            </div>
+          </div>
+
+          <p class="form-error" id="loginError" role="alert" style="color:#FF4D6D;font-size:13px;margin:2px 0 6px;min-height:18px;"></p>
+
+          <button type="submit" class="btn-submit" id="loginSubmit">
+            <span>Sign In</span>
+            <span class="arrow-icon">➔</span>
+          </button>
+        </form>
+
         <details class="demo-credentials-box">
-          <summary>
-            
-            <span>Use demo credentials</span>
-          </summary>
+          <summary>Quick Demo Credentials</summary>
           <div class="demo-buttons-row">
-            <button type="button" class="demo-fill-btn admin-badge" id="demoAdminBtn">
-              <strong>Admin:</strong> admin@continuum.ph / admin123
-            </button>
-            <button type="button" class="demo-fill-btn student-badge" id="demoStudentBtn">
-              <strong>Student:</strong> student@continuum.ph / student123
-            </button>
+            <button type="button" class="demo-fill-btn" id="demoAdminBtn">Fill Admin (admin@continuum.ph)</button>
+            <button type="button" class="demo-fill-btn" id="demoStudentBtn">Fill Student (student@continuum.ph)</button>
           </div>
         </details>
 
+        <p class="auth-alt" style="margin-top:16px;font-size:13px;text-align:center;color:var(--text-muted);">
+          New to Continuum? <a href="#register" id="linkToRegister" style="color:var(--azure-bright);font-weight:600;text-decoration:none;">Create an account</a>
+        </p>
+      </section>
 
-      </form>
+      <!-- ==================== TAB 2: CREATE ACCOUNT ==================== -->
+      <section class="auth-tab-panel" id="panelRegister" role="tabpanel" aria-labelledby="tabRegister">
+        <h1 class="headline" id="signupHeading">Create your account</h1>
+        <p class="subheadline" id="signupSubheading">Join verified leaders, founders and business professionals</p>
 
-      <!-- Sign Up Prompt -->
-      <p class="signup-hint">
-        Don't have an account ? <a href="../signup/" class="signup-link">Start Free</a>
-      </p>
+        <form class="login-form" id="signupForm" autocomplete="on" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="fullName">FULL LEGAL NAME</label>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              class="input-box"
+              placeholder="e.g. Maria Santos"
+              required
+              autocomplete="name"
+              minlength="2"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">WORK / PERSONAL EMAIL</label>
+            <input
+              type="email"
+              id="signupEmail"
+              name="signupEmail"
+              class="input-box"
+              placeholder="name@company.com"
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="jobRole">PRIMARY ROLE</label>
+              <select id="jobRole" name="jobRole" class="input-box select-custom">
+                <option value="Executive Leader" style="background:#071225;color:#fff;">Executive Leader</option>
+                <option value="Entrepreneur / Founder" style="background:#071225;color:#fff;">Entrepreneur</option>
+                <option value="Marketing Director" style="background:#071225;color:#fff;">Marketing Director</option>
+                <option value="Business Strategist" style="background:#071225;color:#fff;">Strategist</option>
+                <option value="Student / Fellow" style="background:#071225;color:#fff;">Student / Fellow</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="organization">ORGANIZATION</label>
+              <input
+                type="text"
+                id="organization"
+                name="organization"
+                class="input-box"
+                placeholder="Company / School"
+                autocomplete="organization"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label-row" style="display:flex;justify-content:space-between;align-items:center;">
+              <label class="form-label" for="signupPassword">PASSWORD</label>
+              <span id="passStrengthLabel" style="font-size:0.75rem;font-weight:600;color:var(--text-muted);">Min. 8 characters</span>
+            </div>
+            <div class="pw-wrap" style="position:relative;">
+              <input
+                type="password"
+                id="signupPassword"
+                name="signupPassword"
+                class="input-box"
+                placeholder="At least 8 characters"
+                required
+                minlength="8"
+                autocomplete="new-password"
+              >
+              <button type="button" class="pw-toggle" id="toggleSignupPass" aria-label="Toggle password visibility">Show</button>
+            </div>
+            <div style="height:4px;width:100%;background:rgba(255,255,255,0.08);border-radius:4px;margin-top:6px;overflow:hidden;">
+              <div id="strengthBar" style="height:100%;width:0%;transition:width 0.3s, background 0.3s;"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">CONFIRM PASSWORD</label>
+            <div class="pw-wrap" style="position:relative;">
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                class="input-box"
+                placeholder="Repeat your password"
+                required
+                minlength="8"
+                autocomplete="new-password"
+              >
+              <button type="button" class="pw-toggle" id="toggleConfirmPass" aria-label="Toggle confirm password visibility">Show</button>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-top:2px;">
+            <input type="checkbox" id="termsCheck" required style="margin-top:4px;accent-color:var(--azure-bright);cursor:pointer;">
+            <label for="termsCheck" style="font-size:0.8rem;color:var(--text-muted);line-height:1.4;cursor:pointer;">
+              I agree to the <a href="#" style="color:var(--azure-bright);text-decoration:none;">Continuum Terms</a> and <a href="#" style="color:var(--azure-bright);text-decoration:none;">Privacy Policy</a>.
+            </label>
+          </div>
+
+          <p class="form-error" id="signupError" role="alert" style="color:#FF4D6D;font-size:13px;margin:2px 0 6px;min-height:18px;"></p>
+
+          <button type="submit" class="btn-submit" id="signupSubmitBtn">
+            <span>Create Account</span>
+            <span class="arrow-icon">➔</span>
+          </button>
+        </form>
+
+        <p class="auth-alt" style="margin-top:16px;font-size:13px;text-align:center;color:var(--text-muted);">
+          Already have an account? <a href="#signin" id="linkToSignIn" style="color:var(--azure-bright);font-weight:600;text-decoration:none;">Sign in here</a>
+        </p>
+      </section>
+
+      <p class="recaptcha-badge-note">Protected by Continuum Shield &amp; reCAPTCHA v3. <a href="#" style="color:inherit;">Privacy</a> • <a href="#" style="color:inherit;">Terms</a></p>
     </main>
 
     </div><!-- /auth-portal-grid -->
@@ -1236,33 +1527,112 @@ var still=matchMedia("(prefers-reduced-motion: reduce)").matches;
 var S=[];for(var i=0;i<46;i++)S.push({x:Math.random()*600,y:Math.random()*600,r:.5+Math.random()*1.5,p:Math.random()*6.28});
 var card=document.querySelector(".login-card");
 addEventListener("mousemove",function(e){tmx=e.clientX/innerWidth*2-1;tmy=e.clientY/innerHeight*2-1});
+addEventListener("touchmove",function(e){if(e.touches&&e.touches[0]){tmx=e.touches[0].clientX/innerWidth*2-1;tmy=e.touches[0].clientY/innerHeight*2-1}},{passive:true});
+addEventListener("touchstart",function(e){if(e.touches&&e.touches[0]){tmx=e.touches[0].clientX/innerWidth*2-1;tmy=e.touches[0].clientY/innerHeight*2-1}},{passive:true});
+if(window.DeviceOrientationEvent){
+  window.addEventListener("deviceorientation",function(e){
+    if(e.gamma!==null&&e.beta!==null){
+      // subtle tilt from phone gyroscope
+      tmx=Math.max(-1,Math.min(1,e.gamma/30));
+      tmy=Math.max(-1,Math.min(1,(e.beta-45)/30));
+    }
+  },{passive:true});
+}
 var f=$("loginForm");f.addEventListener("focusin",function(){want=0});f.addEventListener("focusout",function(){want=0});
 var tintKey="";
 function tint(col){if(col===tintKey)return;tintKey=col;tx.globalCompositeOperation="source-over";tx.clearRect(0,0,TS,TS);tx.drawImage(L,0,0,TS,TS);tx.globalCompositeOperation="source-in";tx.fillStyle=col;tx.fillRect(0,0,TS,TS)}
 function rot(p,ax,bz){var y=p[1]*Math.cos(ax)-p[2]*Math.sin(ax),z=p[1]*Math.sin(ax)+p[2]*Math.cos(ax);return[p[0]*Math.cos(bz)-y*Math.sin(bz),p[0]*Math.sin(bz)+y*Math.cos(bz),z]}
-var RG=[{R:272,ax:.27,bz:0,dash:[],col:"46,140,255",w:1.7,a:.75},{R:262,ax:.55,bz:0,dash:[10,9],col:"92,192,255",w:1.6,a:.7}];
-var DOTS=[{r:0,ph:0,sp:1.1,s:5,col:"#2ea8ff"},{r:0,ph:3.3,sp:1.1,s:2.6,col:"#5cc0ff"},{r:1,ph:1.2,sp:-.9,s:4,col:"#5cc0ff"},{r:1,ph:4.4,sp:-.9,s:3,col:"#2ea8ff"}];
-var TH=0,dts=.016;function pos(r,phi){var g=RG[r],a=r?-TH*.75:TH,p=rot([g.R*Math.cos(phi),0,g.R*Math.sin(phi)],g.ax,g.bz),c=Math.cos(a),s=Math.sin(a);return[p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c]}
-function drawRing(r,front,fy){var g=RG[r],N=140,run=false;x.save();x.translate(300,300+fy*.2);x.setLineDash(g.dash);
- x.strokeStyle="rgba("+g.col+","+(front?g.a:g.a*.45)+")";x.lineWidth=g.w;x.beginPath();
- for(var i=0;i<=N;i++){var p=pos(r,i/N*6.2832);if((p[2]>=0)===front){if(!run){x.moveTo(p[0],p[1]);run=true}else x.lineTo(p[0],p[1])}else run=false}
- x.stroke();x.restore()}
+var RG=[
+  {R:272,ax:.28,bz:.18,dash:[],col:"46,140,255",w:1.8,a:.82,speed:.85,wobble:0.6},
+  {R:262,ax:.95,bz:-.52,dash:[],col:"92,192,255",w:1.6,a:.78,speed:-1.15,wobble:0.8},
+  {R:288,ax:-.65,bz:.68,dash:[],col:"140,225,255",w:1.5,a:.85,speed:1.5,wobble:-0.7}
+];
+var DOTS=[
+  {r:0,ph:0,sp:1.1,s:5,col:"#2ea8ff"},
+  {r:0,ph:3.3,sp:1.1,s:2.6,col:"#5cc0ff"},
+  {r:1,ph:1.2,sp:-1.3,s:4,col:"#5cc0ff"},
+  {r:1,ph:4.4,sp:-1.3,s:3,col:"#2ea8ff"},
+  {r:2,ph:2.1,sp:1.8,s:4.2,col:"#a6e3ff"},
+  {r:2,ph:5.2,sp:1.8,s:3.2,col:"#5cc0ff"}
+];
+var TH=0,dts=.016;
+function pos(r,phi){
+  var g=RG[r];
+  // Silky smooth continuous orbital angle
+  var rotAngle = t * g.speed + (r===0?mx*.18:(r===1?-mx*.22:my*.2));
+  // Ultra-gentle natural celestial precessions (no sharp wobble)
+  var curAx = g.ax + Math.sin(t*0.35 + r)*0.06;
+  var curBz = g.bz + Math.cos(t*0.35 + r)*0.06;
+  var p=rot([g.R*Math.cos(phi),0,g.R*Math.sin(phi)], curAx, curBz);
+  var c=Math.cos(rotAngle), s=Math.sin(rotAngle);
+  return [p[0]*c + p[2]*s, p[1], -p[0]*s + p[2]*c];
+}
+function drawRing(r,front,fy){
+  var g=RG[r], N=240, run=false;
+  x.save();
+  x.translate(300, 300+fy*.2);
+  x.setLineDash(g.dash);
+
+  // Outer ambient neon bloom layer
+  if(front){
+    x.shadowColor = "rgba("+g.col+",0.85)";
+    x.shadowBlur = 12 + (boost||0)*6;
+  } else {
+    x.shadowColor = "rgba("+g.col+",0.35)";
+    x.shadowBlur = 4;
+  }
+
+  // Draw smooth glowing orbit arc
+  x.strokeStyle = "rgba("+g.col+","+(front?g.a:g.a*.35)+")";
+  x.lineWidth = front ? g.w * 1.3 : g.w * 0.9;
+  x.lineCap = "round";
+  x.beginPath();
+  for(var i=0; i<=N; i++){
+    var p = pos(r, i/N*6.2832);
+    if((p[2]>=0) === front){
+      if(!run){ x.moveTo(p[0], p[1]); run=true; }
+      else x.lineTo(p[0], p[1]);
+    } else run=false;
+  }
+  x.stroke();
+
+  // Core bright filament pass (pure crystal cyan/white spine)
+  if(front){
+    run = false;
+    x.shadowBlur = 0;
+    x.strokeStyle = "rgba(235,250,255,"+(g.a*0.75)+")";
+    x.lineWidth = Math.max(0.7, g.w * 0.45);
+    x.beginPath();
+    for(var j=0; j<=N; j++){
+      var p2 = pos(r, j/N*6.2832);
+      if(p2[2] >= 0){
+        if(!run){ x.moveTo(p2[0], p2[1]); run=true; }
+        else x.lineTo(p2[0], p2[1]);
+      } else run=false;
+    }
+    x.stroke();
+  }
+  x.restore();
+}
 function drawDots(front,fy){for(var k=0;k<DOTS.length;k++){var d=DOTS[k],p=pos(d.r,d.ph+t*d.sp);if((p[2]>=0)===front){for(var j=1;j<=8;j++){var q=pos(d.r,d.ph+t*d.sp-(d.sp>0?1:-1)*j*.05);x.fillStyle="rgba(150,210,255,"+(.4*(1-j/9))+")";x.beginPath();x.arc(300+q[0],300+q[1]+fy*.2,d.s*(1-j/10),0,6.283);x.fill()}}if((p[2]>=0)!==front)continue;
  var X=300+p[0],Y=300+p[1]+fy*.2,g=x.createRadialGradient(X,Y,0,X,Y,d.s*3.5);g.addColorStop(0,d.col);g.addColorStop(1,"rgba(60,140,255,0)");
  x.fillStyle=g;x.beginPath();x.arc(X,Y,d.s*3.5,0,6.283);x.fill();x.fillStyle="#fff";x.beginPath();x.arc(X,Y,d.s*.6,0,6.283);x.fill()}}
 function draw(now){
- var raw=(now&&last)?Math.min((now-last)/1000,.05):.016;last=now||0;dts+=(raw-dts)*.15;var dt=dts;
- t+=still?0:dt*.84*(1+boost*.8);
- boost+=(want-boost)*(1-Math.exp(-dt*4));
- mx+=(tmx-mx)*(1-Math.exp(-dt*5));my+=(tmy-my)*(1-Math.exp(-dt*5));
+ var raw=(now&&last)?Math.min((now-last)/1000,.033):.016;last=now||0;
+ dts += (raw - dts) * 0.1;
+ var dt = dts;
+ t += still ? 0 : dt * 0.72 * (1 + boost * 0.6);
+ boost += (want - boost) * (1 - Math.exp(-dt * 3.5));
+ mx += (tmx - mx) * (1 - Math.exp(-dt * 3.2));
+ my += (tmy - my) * (1 - Math.exp(-dt * 3.2));
  if(false&&card&&innerWidth>960){var tl="perspective(1200px) rotateY("+(mx*3).toFixed(2)+"deg) rotateX("+(-my*2).toFixed(2)+"deg)";if(tl!==lastTilt){card.style.transform=tl;lastTilt=tl}}
  x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,600,600);
  var fy=Math.sin(t*1.4)*6,k;
- TH=t*.7+mx*.25;RG[0].bz=.18;RG[1].bz=-.5;RG[1].ax=1.0;
+ TH=t*.7+mx*.25;
  var bg=x.createRadialGradient(300,300,10,300,300,260);bg.addColorStop(0,"rgba(90,170,255,"+(.34+.12*boost)+")");bg.addColorStop(1,"rgba(0,80,200,0)");
  x.fillStyle=bg;x.fillRect(0,0,600,600);
  for(k=0;k<S.length;k++){var q=S[k];x.fillStyle="rgba(140,205,255,"+(.25+.35*Math.sin(t*2+q.p))+")";x.beginPath();x.arc(q.x,q.y,q.r,0,6.283);x.fill()}
- drawRing(0,false,fy);drawRing(1,false,fy);drawDots(false,fy);
+ drawRing(0,false,fy);drawRing(1,false,fy);drawRing(2,false,fy);drawDots(false,fy);
  if(L.complete){
   var th=t*.7+mx*.25,ca=Math.cos(th),sa=Math.sin(th),D=44,H=45,dir=ca>=0?1:-1;
   x.save();x.translate(300+mx*8,300+fy+my*6);
@@ -1276,7 +1646,7 @@ function draw(now){
   x.shadowBlur=14;x.drawImage(T,-170,-170,340,340);
   x.restore();
  }
- drawRing(0,true,fy);drawRing(1,true,fy);drawDots(true,fy);
+ drawRing(0,true,fy);drawRing(1,true,fy);drawRing(2,true,fy);drawDots(true,fy);
  if(!still)requestAnimationFrame(draw);else if(!L.complete)L.onload=draw}
 L.onload=function(){if(still)draw()};
 draw();
@@ -1313,38 +1683,294 @@ var c=document.querySelector(".login-card");
 c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--sx",(e.clientX-r.left)+"px");c.style.setProperty("--sy",(e.clientY-r.top)+"px")});
 })();
 </script>
-<script>
-(function(){try{
-var pw=document.getElementById("password");if(true)return;
-var w=document.createElement("div");w.className="pw-wrap";pw.parentNode.insertBefore(w,pw);w.appendChild(pw);
-var eye='<svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
-var off='<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.5 6.6C3.6 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1"/></svg>';
-var b=document.createElement("button");b.type="button";b.className="pw-toggle";b.setAttribute("aria-label","Show password");b.innerHTML=eye;w.appendChild(b);
-b.addEventListener("click",function(){var s=pw.type==="password";pw.type=s?"text":"password";b.innerHTML=s?off:eye;b.setAttribute("aria-label",s?"Hide password":"Show password");pw.focus()});
-var h=document.createElement("p");h.className="caps-hint";h.textContent="Caps Lock is on";w.parentNode.appendChild(h);
-function caps(e){if(e.getModifierState)h.classList.toggle("on",e.getModifierState("CapsLock"))}
-pw.addEventListener("keyup",caps);pw.addEventListener("keydown",caps);pw.addEventListener("blur",function(){h.classList.remove("on")});
-}catch(e){}})();
-</script>
-<script>
-(function(){try{
-var p=document.querySelector(".auth-showcase-panel");
-if(false){var c=document.createElement("div");c.className="showcase-copy";
-c.innerHTML='<span class="eyebrow">EXECUTIVE LEARNING</span><strong>Learn. Lead. Keep moving forward.</strong><span>Your cockpit for programs built for entrepreneurs, marketers and leaders.</span><ul class="feat-list"><li><i>✦</i>Curated programs for real-world leadership</li><li><i>▶</i>Learn at your pace, on any device</li><li><i>✓</i>Progress tracked across every course</li></ul>';
-p.appendChild(c)}
-var h=document.getElementById("loginHeading");
-if(false){h.insertAdjacentHTML("beforebegin",'<div class="secure-badge"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>SECURE SIGN-IN</div>')}
-var n=document.querySelector(".recaptcha-badge-note");
-if(false){n.insertAdjacentHTML("beforebegin",'<div class="trust-line"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"/></svg>Your data is encrypted and protected</div>')}
-}catch(e){}})();
-</script>
-<script>
-(function(){try{var d=document.querySelector(".demo-credentials-box");if(!d)return;
-document.addEventListener("click",function(e){if(d.open&&!d.contains(e.target))d.open=false});
-document.addEventListener("keydown",function(e){if(e.key==="Escape"&&d.open){d.open=false}});
-d.querySelectorAll(".demo-fill-btn").forEach(function(b){b.addEventListener("click",function(){d.open=false})});
-}catch(e){}})();
-</script>
+
+
+
+
+  <!-- Unified Auth Engine (Tabs, Login, Registration) -->
+  <script>
+  (function(){
+    // Tab Switching
+    var tabSignIn = document.getElementById("tabSignIn");
+    var tabRegister = document.getElementById("tabRegister");
+    var panelSignIn = document.getElementById("panelSignIn");
+    var panelRegister = document.getElementById("panelRegister");
+    var linkToRegister = document.getElementById("linkToRegister");
+    var linkToSignIn = document.getElementById("linkToSignIn");
+
+    function switchTab(toRegister){
+      if(toRegister){
+        tabSignIn.classList.remove("active");
+        tabSignIn.setAttribute("aria-selected", "false");
+        tabRegister.classList.add("active");
+        tabRegister.setAttribute("aria-selected", "true");
+        panelSignIn.classList.remove("active");
+        panelRegister.classList.add("active");
+        window.location.hash = "register";
+      } else {
+        tabRegister.classList.remove("active");
+        tabRegister.setAttribute("aria-selected", "false");
+        tabSignIn.classList.add("active");
+        tabSignIn.setAttribute("aria-selected", "true");
+        panelRegister.classList.remove("active");
+        panelSignIn.classList.add("active");
+        window.location.hash = "signin";
+      }
+    }
+
+    if(tabSignIn) tabSignIn.onclick = function(){ switchTab(false); };
+    if(tabRegister) tabRegister.onclick = function(){ switchTab(true); };
+    if(linkToRegister) linkToRegister.onclick = function(e){ e.preventDefault(); switchTab(true); };
+    if(linkToSignIn) linkToSignIn.onclick = function(e){ e.preventDefault(); switchTab(false); };
+
+    // Auto-open Register if URL has #register or query
+    if(window.location.hash === "#register" || window.location.search.indexOf("mode=signup") !== -1){
+      switchTab(true);
+    }
+
+    // Toggle Login Password
+    var loginPw = document.getElementById("loginPassword");
+    var toggleLogin = document.getElementById("toggleLoginPass");
+    if(toggleLogin && loginPw){
+      toggleLogin.onclick = function(){
+        var isPw = loginPw.type === "password";
+        loginPw.type = isPw ? "text" : "password";
+        this.textContent = isPw ? "Hide" : "Show";
+        this.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+      };
+    }
+
+    // Quick Demo Credentials Fill
+    var loginEm = document.getElementById("loginEmail");
+    var demoAdmin = document.getElementById("demoAdminBtn");
+    var demoStudent = document.getElementById("demoStudentBtn");
+    if(demoAdmin && loginEm && loginPw){
+      demoAdmin.onclick = function(){
+        loginEm.value = "admin@continuum.ph";
+        loginPw.value = "admin123";
+        toast("Admin credentials filled");
+      };
+    }
+    if(demoStudent && loginEm && loginPw){
+      demoStudent.onclick = function(){
+        loginEm.value = "student@continuum.ph";
+        loginPw.value = "student123";
+        toast("Student credentials filled");
+      };
+    }
+
+    // Sign In Submission
+    var loginForm = document.getElementById("loginForm");
+    var loginErr = document.getElementById("loginError");
+    var loginBtn = document.getElementById("loginSubmit");
+    if(loginForm){
+      loginForm.onsubmit = function(e){
+        e.preventDefault();
+        loginErr.textContent = "";
+        var em = loginEm.value.trim().toLowerCase();
+        var pw = loginPw.value.trim();
+
+        if(!em){
+          loginErr.textContent = "Please enter your email address.";
+          loginEm.focus();
+          return;
+        }
+        if(!pw){
+          loginErr.textContent = "Please enter your password.";
+          loginPw.focus();
+          return;
+        }
+
+        loginBtn.disabled = true;
+        loginBtn.classList.add("loading");
+        loginBtn.querySelector("span").textContent = "Signing In...";
+
+        // Check Hardcoded Admins / Students or Registered Users
+        setTimeout(function(){
+          var registered = [];
+          try { registered = JSON.parse(localStorage.getItem("continuum_registered_users") || "[]"); } catch(ex){}
+          var userMatch = registered.find(function(u){ return u.email === em && u.password === pw; });
+
+          if(em === "admin@continuum.ph" && pw === "admin123"){
+            localStorage.setItem("continuum.session", JSON.stringify({ name: "System Admin", email: em, role: "admin" }));
+            localStorage.setItem("continuum_auth_user", "admin");
+            toast("Sign in successful! Redirecting to command center...");
+            setTimeout(function(){ window.location.href = "../admin/index.html"; }, 800);
+          } else if((em === "student@continuum.ph" && pw === "student123") || userMatch){
+            var finalName = userMatch ? userMatch.name : "Continuum Student";
+            var finalRole = userMatch ? userMatch.role : "student";
+            localStorage.setItem("continuum.session", JSON.stringify({ name: finalName, email: em, role: finalRole }));
+            localStorage.setItem("continuum_auth_user", "student");
+            toast("Sign in successful! Welcome back...");
+            setTimeout(function(){ window.location.href = "../home/index.html"; }, 800);
+          } else {
+            loginErr.textContent = "Invalid email or password. Please verify your credentials.";
+            loginBtn.disabled = false;
+            loginBtn.classList.remove("loading");
+            loginBtn.querySelector("span").textContent = "Sign In";
+          }
+        }, 750);
+      };
+    }
+
+    // Sign Up Logic
+    var signupForm = document.getElementById("signupForm");
+    var nameIn = document.getElementById("fullName");
+    var signupEmail = document.getElementById("signupEmail");
+    var roleIn = document.getElementById("jobRole");
+    var orgIn = document.getElementById("organization");
+    var signupPw = document.getElementById("signupPassword");
+    var confirmPw = document.getElementById("confirmPassword");
+    var termsIn = document.getElementById("termsCheck");
+    var signupErr = document.getElementById("signupError");
+    var signupBtn = document.getElementById("signupSubmitBtn");
+    var strBar = document.getElementById("strengthBar");
+    var strLbl = document.getElementById("passStrengthLabel");
+
+    // Password strength check
+    if(signupPw && strBar && strLbl){
+      signupPw.addEventListener("input", function(){
+        var v = signupPw.value;
+        var score = 0;
+        if(v.length >= 8) score++;
+        if(/[A-Z]/.test(v)) score++;
+        if(/[0-9]/.test(v)) score++;
+        if(/[^A-Za-z0-9]/.test(v)) score++;
+
+        if(v.length === 0){
+          strBar.style.width = "0%";
+          strLbl.textContent = "Min. 8 characters";
+          strLbl.style.color = "var(--text-muted)";
+        } else if(score <= 1){
+          strBar.style.width = "25%";
+          strBar.style.background = "#FF4D6D";
+          strLbl.textContent = "Weak";
+          strLbl.style.color = "#FF4D6D";
+        } else if(score === 2){
+          strBar.style.width = "50%";
+          strBar.style.background = "#FFAA00";
+          strLbl.textContent = "Fair";
+          strLbl.style.color = "#FFAA00";
+        } else if(score === 3){
+          strBar.style.width = "75%";
+          strBar.style.background = "#33B5FF";
+          strLbl.textContent = "Good";
+          strLbl.style.color = "#33B5FF";
+        } else {
+          strBar.style.width = "100%";
+          strBar.style.background = "#00E676";
+          strLbl.textContent = "Strong";
+          strLbl.style.color = "#00E676";
+        }
+      });
+    }
+
+    // Toggle Signup Passwords
+    var toggleSign = document.getElementById("toggleSignupPass");
+    if(toggleSign && signupPw){
+      toggleSign.onclick = function(){
+        var isPw = signupPw.type === "password";
+        signupPw.type = isPw ? "text" : "password";
+        this.textContent = isPw ? "Hide" : "Show";
+        this.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+      };
+    }
+    var toggleConf = document.getElementById("toggleConfirmPass");
+    if(toggleConf && confirmPw){
+      toggleConf.onclick = function(){
+        var isPw = confirmPw.type === "password";
+        confirmPw.type = isPw ? "text" : "password";
+        this.textContent = isPw ? "Hide" : "Show";
+        this.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+      };
+    }
+
+    // Handle Registration Submission
+    if(signupForm){
+      signupForm.onsubmit = function(e){
+        e.preventDefault();
+        signupErr.textContent = "";
+
+        var nameVal = nameIn.value.trim();
+        var emailVal = signupEmail.value.trim().toLowerCase();
+        var passVal = signupPw.value.trim();
+        var confVal = confirmPw.value.trim();
+        var roleVal = roleIn ? roleIn.value : "Student";
+        var orgVal = orgIn ? orgIn.value.trim() : "";
+
+        if(nameVal.length < 2){
+          signupErr.textContent = "Please provide your full legal name.";
+          nameIn.focus();
+          return;
+        }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+          signupErr.textContent = "Please enter a valid email address.";
+          signupEmail.focus();
+          return;
+        }
+        if(passVal.length < 8){
+          signupErr.textContent = "Password must be at least 8 characters.";
+          signupPw.focus();
+          return;
+        }
+        if(passVal !== confVal){
+          signupErr.textContent = "Passwords do not match.";
+          confirmPw.focus();
+          return;
+        }
+        if(termsIn && !termsIn.checked){
+          signupErr.textContent = "Please accept the Continuum Terms of Service to continue.";
+          termsIn.focus();
+          return;
+        }
+
+        signupBtn.disabled = true;
+        signupBtn.classList.add("loading");
+        signupBtn.querySelector("span").textContent = "Creating Account...";
+
+        try {
+          var registered = JSON.parse(localStorage.getItem("continuum_registered_users") || "[]");
+          var existing = registered.find(function(u){ return u.email === emailVal; });
+          if(existing){
+            signupErr.textContent = "An account with this email already exists. Please sign in.";
+            signupBtn.disabled = false;
+            signupBtn.classList.remove("loading");
+            signupBtn.querySelector("span").textContent = "Create Account";
+            return;
+          }
+
+          registered.push({
+            name: nameVal,
+            email: emailVal,
+            role: roleVal,
+            organization: orgVal,
+            password: passVal,
+            createdAt: new Date().toISOString()
+          });
+          localStorage.setItem("continuum_registered_users", JSON.stringify(registered));
+
+          localStorage.setItem("continuum.session", JSON.stringify({
+            id: "USR-" + Date.now(),
+            name: nameVal,
+            email: emailVal,
+            role: roleVal
+          }));
+          localStorage.setItem("continuum_auth_user", "student");
+
+          toast("Account created successfully! Welcome to Continuum Academy.");
+          setTimeout(function(){
+            window.location.href = "../home/index.html";
+          }, 1000);
+        } catch(ex){
+          console.error(ex);
+          signupBtn.disabled = false;
+          signupBtn.classList.remove("loading");
+          signupBtn.querySelector("span").textContent = "Create Account";
+        }
+      };
+    }
+  })();
+  </script>
 </body>
 
 </html>
