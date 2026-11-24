@@ -105,10 +105,10 @@ const P = {
 
 
   /* CATEGORIES (appears when you scroll) */
-  .categories { padding:56px 5vw 72px; background:linear-gradient(180deg,#03080E,#071225 40%); min-height:60vh; }
+  .categories { padding:56px 6.5vw 72px; background:linear-gradient(180deg,#03080E,#071225 40%); min-height:60vh; }
   .categories h2 { font-size:1.6rem; font-weight:600; margin-bottom:1.6rem; }
   .cat-row {
-    display:flex; align-items:flex-start; gap:1.6rem; overflow-x:auto; padding:6px 4px 18px;
+    display:flex; align-items:flex-start; gap:1.6rem; overflow-x:auto; padding:8px 8px 18px;
     scroll-snap-type:x proximity; scrollbar-width:thin; scrollbar-color:#444 transparent;
   }
   .cat-card {
@@ -153,7 +153,7 @@ const P = {
 
 
   /* CONTINUE WATCHING */
-  .cw { padding:56px 5vw 20px; background:#03080E; }
+  .cw { padding:56px 6.5vw 20px; background:#03080E; }
   .cw[hidden] { display:none; }
   .cw h2 { font-size:1.6rem; font-weight:600; margin-bottom:1.6rem; }
   .cw-row { display:flex; gap:1.6rem; overflow-x:auto; padding:6px 4px 16px; scrollbar-width:thin; scrollbar-color:#444 transparent; }
@@ -224,7 +224,7 @@ const P = {
 
 
   /* MORE MOVIES (same card design as Categories, random order) */
-  .more-movies { background:#071225; min-height:0; padding-top:24px; padding-bottom:90px; }
+  .more-movies { background:#071225; min-height:0; padding:24px 6.5vw 90px; }
   .mm-head { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.6rem; }
   .more-movies h2 { margin:0; }
   .more-movies .cat-card { flex-basis:clamp(230px,22vw,300px); width:clamp(230px,22vw,300px); }
@@ -610,6 +610,14 @@ function updateNavCount() {
   const n = $("navCount");
   n.textContent = list.length;
   n.hidden = list.length === 0;
+}
+
+function updateWatchLabel() {
+  if (typeof cw === "undefined") return;
+  const l = $("watchLabel");
+  if (!l) return;
+  const e = cw.find(x => x.title === movies[current].title);
+  l.innerHTML = e && typeof fmt === "function" ? "Resume <br>at " + fmt(e.sec) : "Watch <br>the Movie";
 }
 
 function updateListBtn() {

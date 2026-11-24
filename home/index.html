@@ -23,7 +23,68 @@
   <div class="tools">
     <input id="q" type="text" placeholder="Search a title..." aria-label="Search titles">
     <button class="icon" id="qb" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
-    <div class="avatar" role="img" aria-label="Your profile"></div>
+    <div class="user-menu" id="userMenu">
+      <div class="avatar" id="avatarBtn" role="button" tabindex="0" aria-label="Account and Settings" aria-expanded="false" aria-haspopup="true">
+        <span class="avatar-badge" title="Active Administrator"></span>
+      </div>
+      <div class="avatar-dropdown" id="avatarDropdown" role="menu" aria-label="User navigation" hidden>
+        <div class="drop-card-glow"></div>
+        <div class="drop-head">
+          <div class="drop-avatar-wrap">
+            <div class="drop-avatar"></div>
+            <span class="drop-online-dot" title="Online"></span>
+          </div>
+          <div class="drop-info">
+            <span class="drop-name">Continuum Admin</span>
+            <span class="drop-role"><i class="role-badge">Super Admin</i> • Online</span>
+          </div>
+        </div>
+
+        <div class="drop-section-label">Management</div>
+        <a class="drop-item drop-admin" href="../admin/index.html" role="menuitem">
+          <div class="drop-icon-box ic-admin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+          </div>
+          <div class="drop-text">
+            <b>Admin Command Center</b>
+            <small>Manage users, content & security</small>
+          </div>
+          <span class="drop-tag">PRO</span>
+        </a>
+
+        <div class="drop-section-label">Personal Space</div>
+        <a class="drop-item" href="#mylist" role="menuitem" id="dropMyList">
+          <div class="drop-icon-box ic-list">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="drop-text">
+            <b>My Watchlist</b>
+            <small>Saved movies & continue watching</small>
+          </div>
+        </a>
+
+        <a class="drop-item" href="#settings" role="menuitem" id="dropSettings">
+          <div class="drop-icon-box ic-settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <div class="drop-text">
+            <b>Preferences & Audio</b>
+            <small>Streaming quality and playback</small>
+          </div>
+        </a>
+
+        <div class="drop-divider"></div>
+        <button class="drop-item drop-logout" id="logoutBtn" role="menuitem">
+          <div class="drop-icon-box ic-logout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </div>
+          <div class="drop-text">
+            <b>Log Out</b>
+            <small>End session and sign out</small>
+          </div>
+        </button>
+      </div>
+    </div>
   </div>
 </nav>
 <iframe id="f" title="Page content"></iframe>

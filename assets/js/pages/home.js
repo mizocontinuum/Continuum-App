@@ -637,15 +637,15 @@ const MOB = `html{-webkit-tap-highlight-color:transparent}
 .list-btn{flex:1;min-height:48px;border-radius:10px;font-size:.9rem}
 .trailers{margin-top:16px}
 .trailers h2{font-size:1.15rem}
-.thumbs{overflow-x:auto;gap:.75rem;margin:0 -20px .7rem;padding:12px 20px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.thumbs{overflow-x:auto;gap:.75rem;margin:0 -24px .7rem;padding:12px 24px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}
 .thumbs::-webkit-scrollbar,.cat-row::-webkit-scrollbar,.top-row::-webkit-scrollbar{display:none}
 .thumb{flex:0 0 min(32vw,140px);width:min(32vw,140px);scroll-snap-align:start}
-.cw,.top10,.categories{padding-left:20px;padding-right:20px}
+.cw,.top10,.categories,.more-movies{padding-left:24px;padding-right:24px}
 .top10{padding-top:32px}
 .categories{padding-top:36px}
 .categories h2,.cw h2,.top10 h2{font-size:1.5rem}
 .cat-group h3{font-size:1.1rem}
-.cat-row,.top-row{gap:.8rem;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cat-row,.top-row{gap:1rem;padding-left:4px;padding-right:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .top-row{gap:1rem}
 .top-num{font-size:7.8rem}
 .top-poster{width:250px}
@@ -679,6 +679,92 @@ f.addEventListener("load", () => {
     );
   } catch (e) {}
 });
+
+
+/* ==========================================================================
+   6. USER PROFILE & AVATAR DROPDOWN CONTROLLER
+   ========================================================================== */
+const avatarBtn = document.getElementById("avatarBtn");
+const avatarDropdown = document.getElementById("avatarDropdown");
+const logoutBtn = document.getElementById("logoutBtn");
+const dropMyList = document.getElementById("dropMyList");
+
+if (avatarBtn && avatarDropdown) {
+  function toggleDropdown(force) {
+    const isClosed = !avatarDropdown.classList.contains("open");
+    const shouldOpen = typeof force === "boolean" ? force : isClosed;
+    avatarDropdown.classList.toggle("open", shouldOpen);
+    if (shouldOpen) {
+      avatarDropdown.removeAttribute("hidden");
+    } else {
+      avatarDropdown.setAttribute("hidden", "");
+    }
+    avatarBtn.setAttribute("aria-expanded", String(shouldOpen));
+  }
+
+  // Support keyboard Enter & Space on div.avatar
+  avatarBtn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleDropdown();
+    }
+  });
+
+  avatarBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleDropdown();
+  });
+
+  document.addEventListener("click", (e) => {
+    if (avatarDropdown.classList.contains("open") && !avatarDropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
+      toggleDropdown(false);
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && avatarDropdown.classList.contains("open")) {
+      toggleDropdown(false);
+      avatarBtn.focus();
+    }
+  });
+
+  if (dropMyList) {
+    dropMyList.addEventListener("click", () => {
+      toggleDropdown(false);
+    });
+  }
+
+  const dropSettings = document.getElementById("dropSettings");
+  if (dropSettings) {
+    dropSettings.addEventListener("click", (e) => {
+      e.preventDefault();
+      toggleDropdown(false);
+      if (typeof window.NFPlay === "function") {
+        // Provide user feedback
+        const toast = document.getElementById("toast");
+        if (toast) {
+          toast.textContent = "Audio & Stream Quality set to Auto 4K HDR";
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 2500);
+        }
+      }
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      // Clear session auth if stored
+      try {
+        sessionStorage.clear();
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("currentUser");
+      } catch (e) {}
+
+      // Redirect to login page
+      window.location.href = "../login/index.html";
+    });
+  }
+}
 
 // Start initial route
 go();
