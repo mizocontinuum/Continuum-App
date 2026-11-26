@@ -18,7 +18,7 @@
 // ---- Canva-style Full Visual Editor (?edit=1) ----
 (function(){
   var EDIT_KEY = "continuum_cms_live_edits";
-  var editableSel = "h1, h2, h3, h4, p, .pill, .btn, .tag, .who, .card, .step";
+  var editableSel = "h1, h2, h3, h4, p, .pill, .btn, .tag, .who, .card, .step, .cap2, .pn, .more li, .banner, .price, .plan li, img";
   var els = Array.prototype.slice.call(document.querySelectorAll(editableSel));
   var secs = Array.prototype.slice.call(document.querySelectorAll("section[id]"));
 
@@ -45,7 +45,7 @@
   if (window.location.search.indexOf("edit=1") === -1) return;
 
   var st = document.createElement("style");
-  st.textContent = ".cms-edit-target{outline:1px dashed rgba(46,168,255,0.35);outline-offset:3px;border-radius:6px;cursor:pointer;}.cms-selected{outline:2px solid #2ea8ff!important;box-shadow:0 0 0 4px rgba(46,168,255,0.2)!important;}.cms-sec-bar{position:absolute;top:14px;right:5vw;z-index:25;display:flex;gap:6px;}.cms-layer-btn{padding:6px 12px;border-radius:999px;border:1px solid rgba(46,168,255,0.45);background:rgba(3,8,14,0.88);color:#fff;font-size:12px;cursor:pointer;}";
+  st.textContent = ".cms-edit-target{outline:1px dashed rgba(46,168,255,0.35);outline-offset:3px;border-radius:6px;cursor:pointer;}.cms-selected{outline:2px solid #2ea8ff!important;box-shadow:0 0 0 4px rgba(46,168,255,0.2)!important;}.cms-sec-bar{position:absolute;top:14px;right:5vw;z-index:25;display:inline-flex;align-items:center;gap:4px;padding:4px;border-radius:999px;background:rgba(5,12,26,0.88);border:1px solid rgba(46,168,255,0.35);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}.cms-layer-btn{height:28px;padding:0 10px;border-radius:999px;border:0;background:transparent;color:#d8ecff;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .2s,color .2s;}.cms-layer-btn:hover{background:rgba(46,168,255,0.22);color:#fff;}";
   document.head.appendChild(st);
 
   var selectedEl = null;
@@ -94,18 +94,22 @@
 
   // Floating Canva-style Toolbar
   var bar = document.createElement("div");
-  bar.style.cssText = "position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:18px;background:rgba(5,12,26,0.94);border:1px solid rgba(46,168,255,0.45);box-shadow:0 16px 40px rgba(0,0,0,0.65);backdrop-filter:blur(12px);color:#fff;font-size:12px;max-width:96vw;";
-  bar.innerHTML = "<strong style='color:#2ea8ff' id='canvaSelLabel'>Canva Mode</strong>"
-    + "<label style='display:flex;align-items:center;gap:4px;'>Size<input type='number' id='canvaSize' value='16' min='10' max='96' style='width:52px;padding:4px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:#091222;color:#fff;'></label>"
-    + "<label style='display:flex;align-items:center;gap:4px;'>Text<input type='color' id='canvaTxtCol' value='#ffffff' style='width:24px;height:24px;border:0;background:transparent;cursor:pointer;'></label>"
-    + "<label style='display:flex;align-items:center;gap:4px;'>Fill<input type='color' id='canvaBgCol' value='#091222' style='width:24px;height:24px;border:0;background:transparent;cursor:pointer;'></label>"
-    + "<button id='canvaBold' style='padding:5px 9px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-weight:700;cursor:pointer;'>B</button>"
-    + "<button id='canvaAlignL' style='padding:5px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;cursor:pointer;'>L</button>"
-    + "<button id='canvaAlignC' style='padding:5px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;cursor:pointer;'>C</button>"
-    + "<button id='canvaHideEl' style='padding:5px 9px;border-radius:6px;border:1px solid rgba(255,80,80,0.4);background:transparent;color:#ff8a8a;cursor:pointer;'>Hide</button>"
-    + "<button id='liveCmsSave' style='padding:7px 14px;border-radius:999px;border:0;background:linear-gradient(135deg,#0a6cf0,#2ea8ff);color:#fff;font-weight:700;cursor:pointer;'>Save & Publish</button>"
-    + "<button id='liveCmsReset' style='padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#b9d3ee;cursor:pointer;'>Reset</button>"
-    + "<a href='index.html' style='padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#fff;text-decoration:none;'>Exit</a>";
+  bar.style.cssText = "position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-wrap:nowrap;overflow-x:auto;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(5,12,26,0.94);border:1px solid rgba(46,168,255,0.4);box-shadow:0 16px 40px rgba(0,0,0,0.65);backdrop-filter:blur(14px);color:#fff;font-size:12px;max-width:95vw;white-space:nowrap;";
+  bar.innerHTML = "<strong style='color:#2ea8ff;padding:0 4px;' id='canvaSelLabel'>Canva Mode</strong>"
+    + "<span style='width:1px;height:18px;background:rgba(255,255,255,0.15);'></span>"
+    + "<label style='display:inline-flex;align-items:center;gap:4px;color:#b9d3ee;'>Size<input type='number' id='canvaSize' value='16' min='10' max='96' style='width:46px;height:28px;padding:0 6px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:#091222;color:#fff;text-align:center;'></label>"
+    + "<label style='display:inline-flex;align-items:center;gap:4px;color:#b9d3ee;'>Text<input type='color' id='canvaTxtCol' value='#ffffff' style='width:24px;height:24px;border:0;background:transparent;cursor:pointer;'></label>"
+    + "<label style='display:inline-flex;align-items:center;gap:4px;color:#b9d3ee;'>Fill<input type='color' id='canvaBgCol' value='#091222' style='width:24px;height:24px;border:0;background:transparent;cursor:pointer;'></label>"
+    + "<button id='canvaBold' style='height:28px;padding:0 9px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#fff;font-weight:700;cursor:pointer;'>B</button>"
+    + "<button id='canvaAlignL' style='height:28px;padding:0 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#fff;cursor:pointer;'>L</button>"
+    + "<button id='canvaAlignC' style='height:28px;padding:0 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#fff;cursor:pointer;'>C</button>"
+    + "<button id='canvaHideEl' style='height:28px;padding:0 10px;border-radius:8px;border:1px solid rgba(255,80,80,0.4);background:transparent;color:#ff8a8a;cursor:pointer;'>Hide</button>"
+    + "<label style='height:28px;padding:0 12px;border-radius:999px;border:1px solid rgba(46,168,255,0.45);background:rgba(10,108,240,0.2);color:#fff;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;'>+ Media<input type='file' id='canvaUpload' accept='image/*,video/*' style='display:none;'></label>"
+    + "<span style='width:1px;height:18px;background:rgba(255,255,255,0.15);'></span>"
+    + "<button id='liveCmsSave' style='height:30px;padding:0 14px;border-radius:999px;border:0;background:linear-gradient(135deg,#0a6cf0,#2ea8ff);color:#fff;font-weight:700;cursor:pointer;'>Save & Publish</button>"
+    + "<button id='liveCmsReset' style='height:28px;padding:0 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#b9d3ee;cursor:pointer;'>Reset</button>"
+    + "<a href='index.html' style='height:28px;padding:0 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#fff;text-decoration:none;display:inline-flex;align-items:center;'>Exit</a>"
+    + "<a href='admin/index.html#cms' style='height:28px;padding:0 11px;border-radius:999px;border:1px solid rgba(46,168,255,0.45);background:rgba(10,108,240,0.18);color:#fff;text-decoration:none;display:inline-flex;align-items:center;font-weight:600;'>← Admin</a>";
   document.body.appendChild(bar);
 
   document.getElementById("canvaSize").oninput = function(){ if (selectedEl) selectedEl.style.fontSize = this.value + "px"; };
@@ -115,6 +119,35 @@
   document.getElementById("canvaAlignL").onclick = function(){ if (selectedEl) selectedEl.style.textAlign = "left"; };
   document.getElementById("canvaAlignC").onclick = function(){ if (selectedEl) selectedEl.style.textAlign = "center"; };
   document.getElementById("canvaHideEl").onclick = function(){ if (selectedEl) selectedEl.style.display = "none"; };
+  document.getElementById("canvaUpload").onchange = function(e){
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    var url = URL.createObjectURL(file);
+    if (file.type.indexOf("image/") === 0) {
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        if (selectedEl && selectedEl.tagName === "IMG") {
+          selectedEl.src = ev.target.result;
+        } else {
+          var img = document.createElement("img");
+          img.src = ev.target.result;
+          img.style.cssText = "max-width:100%;border-radius:16px;margin-top:12px;display:block;";
+          (selectedEl || document.querySelector(".hero-text")).appendChild(img);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else if (file.type.indexOf("video/") === 0) {
+      var vid = document.createElement("video");
+      vid.src = url;
+      vid.controls = true;
+      vid.autoplay = true;
+      vid.muted = true;
+      vid.loop = true;
+      vid.style.cssText = "max-width:100%;border-radius:16px;margin-top:12px;display:block;";
+      (selectedEl || document.querySelector(".hero-text")).appendChild(vid);
+    }
+    this.value = "";
+  };
 
   document.getElementById("liveCmsSave").onclick = function(){
     var hidden = secs.filter(function(s){ return s.dataset.cmsHidden === "1"; }).map(function(s){ return s.id; });
