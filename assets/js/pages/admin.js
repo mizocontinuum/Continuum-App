@@ -9,8 +9,8 @@ import {
   resetLocalData,
   saveVideo,
   showToast
-} from '../store.js?v=4';
-import { initPageChrome } from '../user-menu.js?v=4';
+} from '../store.js?v=6';
+import { initPageChrome } from '../user-menu.js?v=6';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const session = await initPageChrome();
@@ -141,32 +141,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
     window.addEventListener('resize', resize);
     resize();
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let t = 0;
-    (function loop() {
-      t += 0.025;
-      const w = window.innerWidth, h = window.innerHeight;
-      ctx.clearRect(0, 0, w, h);
-      for (let i = 0; i < dots.length; i++) {
-        const d = dots[i];
-        d.x = (d.x + d.vx + 1) % 1;
-        d.y = (d.y + d.vy + 1) % 1;
-        const a = 0.18 + 0.5 * (0.5 + 0.5 * Math.sin(t + d.p));
-        ctx.fillStyle = `rgba(150, 220, 255, ${a.toFixed(2)})`;
-        ctx.beginPath();
-        ctx.arc(d.x * w, d.y * h, d.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      requestAnimationFrame(loop);
-    })();
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let t = 0;
+      (function loop() {
+        t += 0.025;
+        const w = window.innerWidth, h = window.innerHeight;
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < dots.length; i++) {
+          const d = dots[i];
+          d.x = (d.x + d.vx + 1) % 1;
+          d.y = (d.y + d.vy + 1) % 1;
+          const a = 0.18 + 0.5 * (0.5 + 0.5 * Math.sin(t + d.p));
+          ctx.fillStyle = `rgba(150, 220, 255, ${a.toFixed(2)})`;
+          ctx.beginPath();
+          ctx.arc(d.x * w, d.y * h, d.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        requestAnimationFrame(loop);
+      })();
+    }
   }
 
   const resetBtn = document.getElementById('resetAdminDataBtn');
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      if (!window.confirm('Reset all admin catalog edits and restore default data?')) return;
+      if (!window.confirm('Reset catalogue and learner demo data on this device? Account and CMS edits will be kept.')) return;
       resetLocalData();
-      showToast('Admin data reset! Reloading...');
+      showToast('Demo data reset! Reloading...');
       setTimeout(() => window.location.reload(), 600);
     });
   }

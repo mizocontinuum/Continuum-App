@@ -1039,7 +1039,7 @@ const movies = [
 const $ = id => document.getElementById(id);
 const grid = $("grid");
 const state = { genre:"All", q:"", sort:"pop" };
-let current = null;                                   // movie open in the modal
+let current = null, modalTrigger = null;                // movie open in the modal
 
 const KEY = "myList";                                 // same key as the other pages
 let list = [];
@@ -1051,11 +1051,16 @@ const genres = ["All", ...new Set(movies.flatMap(m => m.genres))].sort((a, b) =>
 /* ---------- 3) FILTER CHIPS ---------- */
 genres.forEach(g => {
   const b = document.createElement("button");
+  b.type = "button";
   b.className = "chip" + (g === state.genre ? " on" : "");
   b.textContent = g;
+  b.setAttribute("aria-pressed", String(g === state.genre));
   b.addEventListener("click", () => {
     state.genre = g;
-    document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+    document.querySelectorAll(".chip").forEach(c => {
+      c.classList.toggle("on", c === b);
+      c.setAttribute("aria-pressed", String(c === b));
+    });
     render();
   });
   $("chips").appendChild(b);
@@ -1141,22 +1146,45 @@ function openModal(m) {
   $("mStars").innerHTML = [1,2,3,4,5].map(n => n <= full ? "\\u2605" : '<span class="off">\\u2605</span>').join("");
   $("mStars").setAttribute("aria-label", m.rating + " out of 5");
   paintModalBtn();
+  modalTrigger = document.activeElement;
   $("modal").classList.add("open");
+  document.body.style.overflow = "hidden";
   $("mClose").focus();
 }
-function closeModal() { $("modal").classList.remove("open"); current = null; }
+function closeModal() {
+  $("modal").classList.remove("open");
+  document.body.style.overflow = "";
+  current = null;
+  if (modalTrigger instanceof HTMLElement) modalTrigger.focus();
+  modalTrigger = null;
+}
 $("mClose").addEventListener("click", closeModal);
 $("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
-$("mList").addEventListener("click", () => toggle(current));
-const play = o => { try { parent.NFPlay(o); } catch (e) { toast("Playing \\"" + o.title + "\\"..."); } };
-$("mPlay").addEventListener("click", () => play({ title:current.title, sub:(current.genres||[]).join(", "), bg:current.poster, video:current.video||"", dur:current.time }));
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+$("mList").addEventListener("click", () => { if (current) toggle(current); });
+const play = o => { try { parent.NFPlay(o); } catch (e) { toast("Playing \"" + o.title + "\"..."); } };
+$("mPlay").addEventListener("click", () => {
+  const item = current;
+  if (!item) return;
+  closeModal();
+  play({ title:item.title, sub:(item.genres||[]).join(", "), bg:item.poster, video:item.video||"", dur:item.time });
+});
+document.addEventListener("keydown", e => {
+  const dialog = $("modal");
+  if (!dialog.classList.contains("open")) return;
+  if (e.key === "Escape") { e.preventDefault(); closeModal(); return; }
+  if (e.key !== "Tab") return;
+  const focusable = Array.from(dialog.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter(el => el.getClientRects().length);
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (!dialog.contains(document.activeElement)) { e.preventDefault(); first?.focus(); }
+  else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+});
 
 /* ---------- 7) SEARCH + SORT ---------- */
 $("search").addEventListener("input", e => { state.q = e.target.value.trim(); render(); });
 $("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
 
-function clearFilters(){state.genre='All';state.q='';state.sort='pop';$('search').value='';$('sort').value='pop';document.querySelectorAll('.chip').forEach((c,i)=>c.classList.toggle('on',i===0));render();}
+function clearFilters(){state.genre='All';state.q='';state.sort='pop';$('search').value='';$('sort').value='pop';document.querySelectorAll('.chip').forEach((c,i)=>{c.classList.toggle('on',i===0);c.setAttribute('aria-pressed',String(i===0))});render();}
 /* start */
 render();
 syncList();
@@ -1502,18 +1530,20 @@ const EMPTY={cw:"Nothing in progress yet. Press Play on a title and stop halfway
 const tm=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=n=>String(n).padStart(2,"0");return h?h+":"+p(m)+":"+p(x):m+":"+p(x)};
 function drawTabs(){
   const w=$("tabs");if(!w)return;
-  if(!w.children.length)TABS.forEach(t=>{const b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.innerHTML=t[2]+'<span class="l"></span><span class="n"></span>';b.querySelector(".l").textContent=t[1];b.onclick=()=>{st.tab=t[0];render()};w.appendChild(b)});
-  [...w.children].forEach((b,i)=>{const t=TABS[i],on=st.tab===t[0];b.classList.toggle("on",on);b.setAttribute("aria-selected",on);b.querySelector(".n").textContent=CARTOONS.filter(t[3]).length});
+  if(!w.children.length)TABS.forEach(t=>{const b=document.createElement("button");b.type="button";b.className="tab";b.id="lib-tab-"+t[0];b.setAttribute("role","tab");b.setAttribute("aria-controls","grid");b.innerHTML=t[2]+'<span class="l"></span><span class="n"></span>';b.querySelector(".l").textContent=t[1];b.onclick=()=>{st.tab=t[0];render()};w.appendChild(b)});
+  [...w.children].forEach((b,i)=>{const t=TABS[i],on=st.tab===t[0];b.classList.toggle("on",on);b.setAttribute("aria-selected",String(on));b.tabIndex=on?0:-1;b.querySelector(".n").textContent=CARTOONS.filter(t[3]).length;b.onkeydown=e=>{let n=i;if(e.key==="ArrowRight")n=(i+1)%TABS.length;else if(e.key==="ArrowLeft")n=(i-1+TABS.length)%TABS.length;else if(e.key==="Home")n=0;else if(e.key==="End")n=TABS.length-1;else return;e.preventDefault();w.children[n].click();w.children[n].focus()}});
+  $("grid").setAttribute("role","tabpanel");
+  $("grid").setAttribute("aria-labelledby", "lib-tab-"+st.tab);
 }
 readU();
 /* filters */
-[["All","All"],["Series","Series"],["Movie","Movies"]].forEach(([v,l])=>{const b=document.createElement("button");b.textContent=l;b.className=v==="All"?"on":"";b.onclick=()=>{st.type=v;[...$("seg").children].forEach(x=>x.classList.toggle("on",x===b));render()};$("seg").appendChild(b)});
-["All",...[...new Set(CARTOONS.flatMap(c=>c.g))].sort()].forEach(g=>{const b=document.createElement("button");b.className="chip"+(g==="All"?" on":"");b.textContent=g;b.onclick=()=>{st.genre=g;[...$("chips").children].forEach(x=>x.classList.toggle("on",x===b));render()};$("chips").appendChild(b)});
+[["All","All"],["Series","Series"],["Movie","Movies"]].forEach(([v,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.className=v==="All"?"on":"";b.setAttribute("aria-pressed",String(v==="All"));b.onclick=()=>{st.type=v;[...$("seg").children].forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",String(x===b))});render()};$("seg").appendChild(b)});
+["All",...[...new Set(CARTOONS.flatMap(c=>c.g))].sort()].forEach(g=>{const b=document.createElement("button");b.type="button";b.className="chip"+(g==="All"?" on":"");b.textContent=g;b.setAttribute("aria-pressed",String(g==="All"));b.onclick=()=>{st.genre=g;[...$("chips").children].forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",String(x===b))});render()};$("chips").appendChild(b)});
 $("q").oninput=e=>{st.q=norm(e.target.value);render()};
 $("sort").onchange=e=>{st.sort=e.target.value;render()};
 /* list toggle */
 function toggle(c){const i=list.findIndex(x=>norm(x)===norm(c.t));if(i>=0){list.splice(i,1);toast("Removed from My List")}else{list.push(c.t);toast("Added to My List")}save();if(st.tab==="saved")render();else sync()}
-function sync(){drawTabs();document.querySelectorAll(".add").forEach(b=>{const on=has(b.dataset.t);b.classList.toggle("in",on);b.textContent=on?"\\u2713":"+";b.setAttribute("aria-pressed",on)});if(!$("md").hidden){const on=has(CARTOONS[cur].t);$("mList").textContent=on?"\\u2713 In My List":"+ My List";$("mList").classList.toggle("in",on)}}
+function sync(){drawTabs();document.querySelectorAll(".add").forEach(b=>{const on=has(b.dataset.t),title=b.dataset.t;b.classList.toggle("in",on);b.textContent=on?"\u2713":"+";b.setAttribute("aria-pressed",String(on));b.setAttribute("aria-label",(on?"Remove ":"Add ")+title+(on?" from":" to")+" My List")});if(!$("md").hidden){const on=has(CARTOONS[cur].t);$("mList").textContent=on?"\u2713 In My List":"+ My List";$("mList").classList.toggle("in",on);$("mList").setAttribute("aria-pressed",String(on))}}
 /* grid */
 function render(){
   let L=CARTOONS.map((c,i)=>({c,i})).filter(({c})=>TABS.find(t=>t[0]===st.tab)[3](c)&&(st.type==="All"||c.type===st.type)&&(st.genre==="All"||c.g.includes(st.genre))&&(!st.q||(c.t+" "+c.g.join(" ")+" "+c.d+" "+c.cast.map(x=>x[0]).join(" ")).toLowerCase().includes(st.q)));
@@ -1537,7 +1567,7 @@ function render(){
   $("none").hidden=!!L.length;$("none").textContent=st.tab!=="all"&&!st.q&&st.genre==="All"&&st.type==="All"?EMPTY[st.tab]:"Nothing in the library matches your search.";$("count").textContent=L.length+(L.length===1?" title":" titles");sync();
 }
 /* detail modal */
-let cur=0;
+let cur=0,modalTrigger=null;
 const row=(a,b)=>{const d=document.createElement("div");const s=document.createElement("span");s.textContent=a;const m=document.createElement("small");m.textContent=b;d.append(s,m);return d};
 function openM(i){
   cur=i;const c=CARTOONS[i];
@@ -1549,13 +1579,28 @@ function openM(i){
   const inf=$("mInfo");inf.innerHTML="";inf.style.marginTop="1rem";
   inf.appendChild(row("Studio",c.studio));if(c.director)inf.appendChild(row("Director",c.director));inf.appendChild(row("Language","English"));
   const ser=c.type==="Series";$("mEpsWrap").hidden=!ser;$("mPlayLb").textContent=ser?"Play S1 E1":"Play";
-  if(ser){const w=$("mEps");w.innerHTML="";c.eps.forEach((n,k)=>{const b=document.createElement("button");b.className="ep";b.innerHTML="<b></b><span></span><small></small>";b.children[0].textContent=k+1;b.children[1].textContent=n;b.children[2].textContent=c.len;b.onclick=()=>play(epOpts(c,k));w.appendChild(b)})}
+  if(ser){const w=$("mEps");w.innerHTML="";c.eps.forEach((n,k)=>{const b=document.createElement("button");b.type="button";b.className="ep";b.innerHTML="<b></b><span></span><small></small>";b.children[0].textContent=k+1;b.children[1].textContent=n;b.children[2].textContent=c.len;b.onclick=()=>{closeM();play(epOpts(c,k))};w.appendChild(b)})}
+  modalTrigger=document.activeElement;
   $("md").hidden=false;requestAnimationFrame(()=>$("md").classList.add("open"));document.body.style.overflow="hidden";$("mClose").focus();sync();
 }
-function closeM(){$("md").classList.remove("open");document.body.style.overflow="";setTimeout(()=>{if(!$("md").classList.contains("open"))$("md").hidden=true},220)}
+function closeM(){
+  const dialog=$("md"),trigger=modalTrigger;
+  dialog.classList.remove("open");document.body.style.overflow="";modalTrigger=null;
+  setTimeout(()=>{if(!dialog.classList.contains("open")){dialog.hidden=true;if(trigger instanceof HTMLElement)trigger.focus()}},220)
+}
 $("mClose").onclick=closeM;$("md").addEventListener("click",e=>{if(e.target===$("md"))closeM()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("md").hidden)closeM()});
-$("mPlay").onclick=()=>{const c=CARTOONS[cur];play(c.type==="Series"?epOpts(c,0):{title:c.t,sub:c.g.join(", "),bg:poster(c.h),dur:c.len,onClose:refresh})};
+document.addEventListener("keydown",e=>{
+  const dialog=$("md");
+  if(dialog.hidden)return;
+  if(e.key==="Escape"){e.preventDefault();closeM();return}
+  if(e.key!=="Tab")return;
+  const focusable=Array.from(dialog.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter(el=>el.getClientRects().length);
+  const first=focusable[0],last=focusable[focusable.length-1];
+  if(!dialog.contains(document.activeElement)){e.preventDefault();first?.focus()}
+  else if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}
+});
+$("mPlay").onclick=()=>{const c=CARTOONS[cur];closeM();play(c.type==="Series"?epOpts(c,0):{title:c.t,sub:c.g.join(", "),bg:poster(c.h),dur:c.len,onClose:refresh})};
 $("mList").onclick=()=>toggle(CARTOONS[cur]);
 render();
 </script>
