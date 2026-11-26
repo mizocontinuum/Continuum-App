@@ -371,6 +371,8 @@
         </div>`;
       container.appendChild(footer);
     }
+
+    container.style.opacity = '1';
   }
 
   renderSharedAuthChrome();
