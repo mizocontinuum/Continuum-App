@@ -2108,6 +2108,11 @@ body.admin-body {
   background: transparent;
 }
 
+html[data-access-state="checking"] body,
+html[data-access-state="blocked"] body {
+  visibility: hidden;
+}
+
 .admin-shell {
   position: relative;
   z-index: 1;

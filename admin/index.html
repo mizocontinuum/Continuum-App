@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-requires-admin>
+<html lang="en" data-requires-admin data-access-state="checking">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -11,7 +11,7 @@
   <title>Admin Dashboard - Continuum Academy</title>
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
-  <link rel="stylesheet" href="../assets/css/pages/admin.css?v=4">
+  <link rel="stylesheet" href="../assets/css/pages/admin.css?v=5">
 </head>
 <body class="admin-body">
   <div class="toast-msg" id="adminToast" role="status" aria-live="polite"></div>
@@ -127,6 +127,7 @@
           </article>
         </section>
           </div>
+        </section>
         </section>
 
         <section class="insights-grid" id="activity">
@@ -327,8 +328,8 @@
           </div>
         </section>
 </main>
+    <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
   </div>
-  <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
 
   <dialog class="editor-dialog" id="videoEditor" aria-labelledby="editorTitle">
     <form id="videoForm" class="editor-form">
@@ -356,7 +357,7 @@
     </form>
   </dialog>
 
-  <script src="../assets/js/auth-3d-logo.js?v=4"></script>
-  <script type="module" src="../assets/js/pages/admin.js?v=4"></script>
+  <script src="../assets/js/auth-3d-logo.js?v=5"></script>
+  <script type="module" src="../assets/js/pages/admin.js?v=5"></script>
 </body>
 </html>

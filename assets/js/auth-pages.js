@@ -32,9 +32,15 @@
     };
   }
 
+  function setError(errEl, input, message) {
+    if (errEl) errEl.textContent = message;
+    if (input) input.setAttribute('aria-invalid', 'true');
+  }
+
   function clearErrorOnInput(inputs, errEl) {
     inputs.forEach((el) => {
       if (!el) return;
+      if (errEl?.id) el.setAttribute('aria-describedby', errEl.id);
       el.addEventListener('input', () => {
         if (errEl) errEl.textContent = '';
         el.removeAttribute('aria-invalid');
@@ -54,6 +60,80 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
+  const STORAGE = {
+    users: 'continuum_registered_users',
+    passwords: 'continuum_password_overrides',
+    resets: 'continuum_reset_tokens'
+  };
+
+  function readJson(key, fallback) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || 'null') ?? fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function writeJson(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function demoAccount(email) {
+    if (email === 'admin@continuum.ph') {
+      return { name: 'System Admin', email, role: 'admin', password: 'admin123' };
+    }
+    if (email === 'student@continuum.ph') {
+      return { name: 'Continuum Student', email, role: 'member', password: 'student123' };
+    }
+    return null;
+  }
+
+  function safeRedirect(defaultPath, role = 'member') {
+    const requested = new URLSearchParams(window.location.search).get('redirect');
+    if (!requested) return defaultPath;
+    try {
+      const target = new URL(requested, window.location.href);
+      const path = target.pathname;
+      if (target.origin !== window.location.origin) return defaultPath;
+      if (/\/(login|signup)\//.test(path)) return defaultPath;
+      if (/\/admin\//.test(path) && role !== 'admin') return defaultPath;
+      return target.pathname + target.search + target.hash;
+    } catch (_) {
+      return defaultPath;
+    }
+  }
+
+  function createResetToken(email) {
+    const now = Date.now();
+    const tokens = readJson(STORAGE.resets, []).filter((item) =>
+      Array.isArray(readJson(STORAGE.resets, [])) && item.expiresAt > now && item.email !== email
+    );
+    const bytes = new Uint8Array(32);
+    if (window.crypto?.getRandomValues) window.crypto.getRandomValues(bytes);
+    else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+    const token = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+    tokens.push({ token, email, expiresAt: now + 60 * 60 * 1000 });
+    writeJson(STORAGE.resets, tokens);
+    return token;
+  }
+
+  function findResetToken(token) {
+    if (!token) return null;
+    const tokens = readJson(STORAGE.resets, []);
+    const record = tokens.find((item) => item.token === token);
+    if (!record) return null;
+    if (record.expiresAt <= Date.now()) {
+      writeJson(STORAGE.resets, tokens.filter((item) => item.token !== token));
+      return null;
+    }
+    return record;
+  }
+
+  function consumeResetToken(token) {
+    const tokens = readJson(STORAGE.resets, []);
+    writeJson(STORAGE.resets, tokens.filter((item) => item.token !== token));
+  }
+
   // ── 1. LOGIN PAGE ──────────────────────────────────────────────────────────
   function initLogin() {
     const form = $('loginForm');
@@ -65,6 +145,8 @@
 
     bindPasswordToggle('toggleLoginPass', 'loginPassword');
     clearErrorOnInput([emailIn, passIn], err);
+    const emailParam = new URLSearchParams(window.location.search).get('email');
+    if (emailParam && isValidEmail(emailParam)) emailIn.value = emailParam;
 
     const demoAdmin = $('demoAdminBtn');
     if (demoAdmin) {
@@ -88,15 +170,20 @@
       e.preventDefault();
       if (err) err.textContent = '';
       const em = emailIn.value.trim().toLowerCase();
-      const pw = passIn.value.trim();
+      const pw = passIn.value;
 
       if (!em) {
-        if (err) err.textContent = 'Please enter your email address.';
+        setError(err, emailIn, 'Please enter your email address.');
+        emailIn.focus();
+        return;
+      }
+      if (!isValidEmail(em)) {
+        setError(err, emailIn, 'Please enter a valid email address.');
         emailIn.focus();
         return;
       }
       if (!pw) {
-        if (err) err.textContent = 'Please enter your password.';
+        setError(err, passIn, 'Please enter your password.');
         passIn.focus();
         return;
       }
@@ -104,26 +191,28 @@
       setButtonLoading(btn, true, 'Signing In...', 'Sign In');
 
       setTimeout(() => {
-        let registered = [];
         try {
-          registered = JSON.parse(localStorage.getItem('continuum_registered_users') || '[]');
-        } catch (ex) {}
-        const userMatch = registered.find((u) => u.email === em && u.password === pw);
+          const registered = readJson(STORAGE.users, []);
+          const overrides = readJson(STORAGE.passwords, {});
+          const demo = demoAccount(em);
+          const userMatch = registered.find((u) => u.email === em);
+          const expectedPassword = demo ? (overrides[em] || demo.password) : userMatch?.password;
 
-        if (em === 'admin@continuum.ph' && pw === 'admin123') {
-          localStorage.setItem('continuum.session', JSON.stringify({ name: 'System Admin', email: em, role: 'admin' }));
-          localStorage.setItem('continuum_auth_user', 'admin');
-          showToast('Sign in successful! Redirecting to command center...');
-          setTimeout(() => { window.location.href = '../admin/index.html'; }, 800);
-        } else if ((em === 'student@continuum.ph' && pw === 'student123') || userMatch) {
-          const finalName = userMatch ? userMatch.name : 'Continuum Student';
-          const finalRole = userMatch ? userMatch.role : 'student';
-          localStorage.setItem('continuum.session', JSON.stringify({ name: finalName, email: em, role: finalRole }));
-          localStorage.setItem('continuum_auth_user', 'student');
-          showToast('Sign in successful! Welcome back...');
-          setTimeout(() => { window.location.href = '../home/index.html'; }, 800);
-        } else {
-          if (err) err.textContent = 'Invalid email or password. Please verify your credentials.';
+          if (expectedPassword && pw === expectedPassword) {
+            const finalName = demo?.name || userMatch.name;
+            const finalRole = demo?.role || 'member';
+            localStorage.setItem('continuum.session', JSON.stringify({ name: finalName, email: em, role: finalRole }));
+            localStorage.setItem('continuum_auth_user', finalRole);
+            const destination = safeRedirect(finalRole === 'admin' ? '../admin/index.html' : '../home/index.html', finalRole);
+            showToast('Sign in successful! Redirecting...');
+            setTimeout(() => { window.location.href = destination; }, 800);
+          } else {
+            setError(err, passIn, 'Invalid email or password. Please verify your credentials.');
+            passIn.focus();
+            setButtonLoading(btn, false, 'Signing In...', 'Sign In');
+          }
+        } catch (_) {
+          setError(err, null, 'Sign in is unavailable because browser storage is blocked.');
           setButtonLoading(btn, false, 'Signing In...', 'Sign In');
         }
       }, 750);

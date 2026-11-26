@@ -7,7 +7,8 @@
  *   initNotificationBell() - bell button + drawer, fed by store.js
  *
  * The session lives in the local mock store (store.js) written by the sign-in
- * screens. The catalogue and the bell also read from the static mock data.
+ * screens. This is a frontend demo guard, not a replacement for server-side
+ * authorization. The catalogue and the bell also read from the static mock data.
  */
 
 import {
@@ -25,27 +26,32 @@ import {
 /**
  * Call once per page, after DOMContentLoaded, and await the result.
  * Enforces `data-requires-auth` / `data-requires-admin` on <html> against the
- * server, then fills every [data-session-*] placeholder and wires [data-logout].
+ * local demo session, then fills every [data-session-*] placeholder and wires
+ * [data-logout].
  * @returns {Promise<object|null>} the session when the page may render
  */
 export async function initPageChrome() {
   const root = document.documentElement;
-  const gated = root.hasAttribute('data-requires-auth');
+  const requiresAuth = root.hasAttribute('data-requires-auth') || root.hasAttribute('data-requires-admin');
   const adminOnly = root.hasAttribute('data-requires-admin');
 
+  root.dataset.accessState = 'checking';
   const session = await resolveServerSession();
 
-  if (gated) {
+  if (requiresAuth) {
     if (!session) {
+      root.dataset.accessState = 'blocked';
       redirectToLogin();
       return null;
     }
     if (adminOnly && session.role !== 'admin') {
+      root.dataset.accessState = 'blocked';
       window.location.replace(siteUrl('home/'));
       return null;
     }
   }
 
+  root.dataset.accessState = 'ready';
   paintSession(session);
   wireLogoutButtons();
   initUserMenu(session);
@@ -67,11 +73,7 @@ function initTopBarScroll() {
   onScroll();
 }
 
-/**
- * Resolve the signed-in session from the local mock store written by the
- * sign-in screens (/login, /signup). Reading it directly keeps every page in
- * sync without any network round-trip.
- */
+/** Resolve the signed-in session from the local frontend demo store. */
 async function resolveServerSession() {
   return getSession();
 }

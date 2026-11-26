@@ -8,6 +8,12 @@
  * 5. Iframe Style Injection & Dynamic Padding
  */
 
+import { initPageChrome } from '../user-menu.js?v=5';
+
+async function initHome() {
+  const session = await initPageChrome();
+  if (!session) return;
+
 /* ==========================================================================
    1. NATIVE VIDEO PLAYER CONTROLLER (.np)
    ========================================================================== */
@@ -366,7 +372,23 @@
     (e) => {
       if (!o) return;
       const k = e.key;
-      if (k === "Tab") return;
+      if (k === "Tab") {
+        const focusable = Array.from(np.querySelectorAll('button:not([hidden]), input:not([hidden]), [tabindex]:not([tabindex="-1"])'))
+          .filter((el) => !el.disabled && el.getClientRects().length);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!first) {
+          e.preventDefault();
+        } else if (e.shiftKey && (document.activeElement === first || document.activeElement === np)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+        e.stopImmediatePropagation();
+        return;
+      }
       e.stopImmediatePropagation();
       bump();
 
@@ -439,11 +461,12 @@ let pend = null;
 
 function run() {
   const d = f.contentDocument;
-  const i = d && d.getElementById("searchInput");
+  const i = d && d.getElementById("search");
   if (!pend || !i) return;
   i.value = pend;
   pend = null;
-  i.dispatchEvent(new d.defaultView.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+  i.dispatchEvent(new d.defaultView.Event("input", { bubbles: true }));
+  i.focus();
 }
 
 f.onload = () => {
@@ -460,6 +483,7 @@ qb.onclick = (e) => {
     return;
   }
   const o = q.classList.toggle("open");
+  qb.setAttribute("aria-expanded", String(o));
   if (o) q.focus();
   else {
     q.value = "";
@@ -470,6 +494,7 @@ qb.onclick = (e) => {
 q.onkeydown = (e) => {
   if (e.key === "Escape") {
     q.classList.remove("open");
+    qb.setAttribute("aria-expanded", "false");
     q.value = "";
     return;
   }
@@ -477,10 +502,11 @@ q.onkeydown = (e) => {
   pend = q.value.trim();
   q.value = "";
   q.classList.remove("open");
-  if ((R[location.hash.slice(1)] ? location.hash.slice(1) : "home") === "home") {
+  qb.setAttribute("aria-expanded", "false");
+  if ((R[location.hash.slice(1)] ? location.hash.slice(1) : "home") === "movies") {
     run();
   } else {
-    location.hash = "home";
+    location.hash = "movies";
   }
 };
 
@@ -488,12 +514,14 @@ document.addEventListener("keydown", (e) => {
   if ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey)) {
     e.preventDefault();
     q.classList.add("open");
+    qb.setAttribute("aria-expanded", "true");
     q.focus();
     return;
   }
   if (e.key === "/" && !/input|textarea/i.test(document.activeElement.tagName)) {
     e.preventDefault();
     q.classList.add("open");
+    qb.setAttribute("aria-expanded", "true");
     q.focus();
   }
 });
@@ -501,6 +529,7 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("click", (e) => {
   if (q.classList.contains("open") && !q.contains(e.target) && !qb.contains(e.target)) {
     q.classList.remove("open");
+    qb.setAttribute("aria-expanded", "false");
     q.value = "";
   }
 });
@@ -686,7 +715,6 @@ f.addEventListener("load", () => {
    ========================================================================== */
 const avatarBtn = document.getElementById("avatarBtn");
 const avatarDropdown = document.getElementById("avatarDropdown");
-const logoutBtn = document.getElementById("logoutBtn");
 const dropMyList = document.getElementById("dropMyList");
 
 if (avatarBtn && avatarDropdown) {
@@ -750,38 +778,10 @@ if (avatarBtn && avatarDropdown) {
       }
     });
   }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      // Clear session auth
-      try {
-        sessionStorage.clear();
-        localStorage.removeItem("continuum.session");
-        localStorage.removeItem("continuum_auth_user");
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("currentUser");
-      } catch (e) {}
-
-      // Redirect to login page
-      window.location.href = "../login/index.html";
-    });
-  }
 }
-
-
-// Dynamically reflect active session in dropdown header
-try {
-  const sess = JSON.parse(localStorage.getItem("continuum.session") || "null");
-  if (sess) {
-    const dropName = document.querySelector(".drop-name");
-    const dropRole = document.querySelector(".drop-role");
-    if (dropName && sess.name) dropName.textContent = sess.name;
-    if (dropRole && sess.role) {
-      const isSuper = sess.role.toLowerCase() === "admin";
-      dropRole.innerHTML = `<i class="role-badge">${isSuper ? "Super Admin" : "Member"}</i> • Online`;
-    }
-  }
-} catch(e) {}
 
 // Start initial route
 go();
+}
+
+initHome();

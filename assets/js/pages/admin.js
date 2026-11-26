@@ -6,15 +6,20 @@ import {
   deleteVideo,
   listDisciplines,
   listVideos,
+  resetLocalData,
   saveVideo,
   showToast
 } from '../store.js?v=4';
 import { initPageChrome } from '../user-menu.js?v=4';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Dedicated Sidebar Page Switching (always active)
+  const session = await initPageChrome();
+  if (!session || session.role !== 'admin') return;
+
   const navLinks = Array.from(document.querySelectorAll('.admin-nav .admin-nav-link[href^="#"]'));
   const viewIds = navLinks.map((a) => a.getAttribute('href').slice(1));
+  const breadcrumb = document.querySelector('.breadcrumb strong');
+
   function switchAdminView(targetId) {
     const id = viewIds.includes(targetId) ? targetId : viewIds[0];
     viewIds.forEach((vid) => {
@@ -27,7 +32,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (isMatch) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
+    const activeLink = navLinks.find((a) => a.getAttribute('href') === '#' + id);
+    const label = activeLink?.querySelector('span')?.textContent || 'Overview';
+    if (breadcrumb) breadcrumb.textContent = label;
+    document.title = `${label} · Continuum Admin`;
   }
+
   navLinks.forEach((a) => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
@@ -38,77 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   window.addEventListener('hashchange', () => {
     switchAdminView(window.location.hash ? window.location.hash.slice(1) : viewIds[0]);
-
-  // Canva-style Visual CMS Controller
-  const cmsForm = document.getElementById('cmsForm');
-  if (cmsForm) {
-    const pillIn = document.getElementById('cmsPill');
-    const headIn = document.getElementById('cmsHeadline');
-    const subIn = document.getElementById('cmsSub');
-    const ctaIn = document.getElementById('cmsCta1');
-    const accIn = document.getElementById('cmsAccent');
-    const prevPill = document.getElementById('cmsPrevPill');
-    const prevHead = document.getElementById('cmsPrevHead');
-    const prevSub = document.getElementById('cmsPrevSub');
-    const prevBtn = document.getElementById('cmsPrevBtn');
-
-    const defaults = {
-      pill: '✨ New courses every week',
-      headline: 'Learn without limits, from anywhere.',
-      sub: 'Interactive lessons, expert mentors and a community that keeps you moving. Study on your phone, your laptop, or both.',
-      cta1: 'Start learning free',
-      accent: '#0a6cf0'
-    };
-
-    const loadCms = () => {
-      let saved = {};
-      try { saved = JSON.parse(localStorage.getItem('continuum_cms_landing') || '{}'); } catch (e) {}
-      const d = { ...defaults, ...saved };
-      pillIn.value = d.pill;
-      headIn.value = d.headline;
-      subIn.value = d.sub;
-      ctaIn.value = d.cta1;
-      accIn.value = d.accent;
-      syncPreview();
-    };
-
-    const syncPreview = () => {
-      prevPill.textContent = pillIn.value || defaults.pill;
-      prevPill.style.color = accIn.value;
-      prevHead.textContent = headIn.value || defaults.headline;
-      prevSub.textContent = subIn.value || defaults.sub;
-      prevBtn.textContent = ctaIn.value || defaults.cta1;
-      prevBtn.style.background = accIn.value;
-    };
-
-    [pillIn, headIn, subIn, ctaIn, accIn].forEach((el) => el.addEventListener('input', syncPreview));
-
-    cmsForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      localStorage.setItem('continuum_cms_landing', JSON.stringify({
-        pill: pillIn.value.trim() || defaults.pill,
-        headline: headIn.value.trim() || defaults.headline,
-        sub: subIn.value.trim() || defaults.sub,
-        cta1: ctaIn.value.trim() || defaults.cta1,
-        accent: accIn.value
-      }));
-      showToast('Published! Landing page updated.');
-    });
-
-    const cmsReset = document.getElementById('cmsResetBtn');
-    if (cmsReset) {
-      cmsReset.addEventListener('click', () => {
-        localStorage.removeItem('continuum_cms_landing');
-        loadCms();
-        showToast('CMS reset to default.');
-      });
-    }
-    loadCms();
-  }
   });
   switchAdminView(window.location.hash ? window.location.hash.slice(1) : viewIds[0]);
 
-  // Canva-style Visual CMS Controller
   const cmsForm = document.getElementById('cmsForm');
   if (cmsForm) {
     const pillIn = document.getElementById('cmsPill');
@@ -174,9 +116,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     loadCms();
   }
-
-  const session = await initPageChrome();
-  if (!session || session.role !== 'admin') return;
 
   // Holographic drifting starlight background
   if (!document.getElementById('adminStars')) {
@@ -202,6 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
     window.addEventListener('resize', resize);
     resize();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let t = 0;
     (function loop() {
       t += 0.025;
@@ -225,11 +165,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       if (!window.confirm('Reset all admin catalog edits and restore default data?')) return;
-      const keepSession = window.localStorage.getItem('continuum.session');
-      const keepAuth = window.localStorage.getItem('continuum_auth_user');
-      window.localStorage.clear();
-      if (keepSession) window.localStorage.setItem('continuum.session', keepSession);
-      if (keepAuth) window.localStorage.setItem('continuum_auth_user', keepAuth);
+      resetLocalData();
       showToast('Admin data reset! Reloading...');
       setTimeout(() => window.location.reload(), 600);
     });
@@ -490,29 +426,56 @@ document.addEventListener('DOMContentLoaded', async () => {
   const toggle = document.getElementById('sidebarToggle');
   const scrim = document.getElementById('sidebarScrim');
   const closeBtn = document.getElementById('sidebarClose');
-  const closeSidebar = () => {
+  const mobileSidebar = window.matchMedia('(max-width: 820px)');
+  const syncSidebarAccess = () => {
+    sidebar.inert = mobileSidebar.matches && !sidebar.classList.contains('open');
+  };
+  const closeSidebar = (restoreFocus = false) => {
     sidebar.classList.remove('open');
     scrim.hidden = true;
     toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    syncSidebarAccess();
+    if (restoreFocus) toggle.focus();
   };
 
   toggle.addEventListener('click', () => {
     const isOpen = sidebar.classList.toggle('open');
     scrim.hidden = !isOpen;
     toggle.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    syncSidebarAccess();
+    if (isOpen) sidebar.querySelector('.admin-nav-link')?.focus();
   });
-  scrim.addEventListener('click', closeSidebar);
-  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+  scrim.addEventListener('click', () => closeSidebar(true));
+  if (closeBtn) closeBtn.addEventListener('click', () => closeSidebar(true));
   sidebar.querySelectorAll('a[href^="#"]').forEach((link) => {
-    link.addEventListener('click', () => {
-      closeSidebar();
-      sidebar.querySelectorAll('.admin-nav-link').forEach((item) => item.classList.remove('active'));
-      link.classList.add('active');
-    });
+    link.addEventListener('click', () => closeSidebar());
   });
+  mobileSidebar.addEventListener('change', () => {
+    closeSidebar();
+    syncSidebarAccess();
+  });
+  syncSidebarAccess();
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeSidebar();
+    if (!sidebar.classList.contains('open')) return;
+    if (event.key === 'Escape') {
+      closeSidebar(true);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = Array.from(sidebar.querySelectorAll('a[href], button:not([disabled])'))
+      .filter((el) => el.getClientRects().length);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
   });
 
   render();

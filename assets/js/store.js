@@ -8,7 +8,7 @@
  *
  * It exposes:
  *
- *   session       - a cache of the server session (name/email/role)
+ *   session       - the local frontend demo session (name/email/role)
  *   catalogue     - disciplines + videos (mock-data.js, overlaid with admin edits)
  *   favorites     - My List
  *   progress      - Continue Watching
@@ -22,7 +22,6 @@ import {
   PROFILE,
   SEED_FAVORITES,
   SEED_PROGRESS,
-  videosFor,
   bySortOrder
 } from './mock-data.js';
 
@@ -68,19 +67,14 @@ const clone = (value) => JSON.parse(JSON.stringify(value));
 /* -------------------------------- session ------------------------------- */
 
 /**
- * The cached session - a mirror of the server session, used only to paint the
- * page chrome synchronously. It is never proof of authentication: the page
- * guard in user-menu.js re-verifies against the server on every load.
+ * The local demo session used by the frontend guard and page chrome.
  * @returns {{id:string|null,name:string,email:string,role:string}|null}
  */
 export function getSession() {
   return read(KEYS.session, null);
 }
 
-/**
- * Local-only mirror update, used by the profile screen's role preview. It never
- * grants access - the guard checks the server, not this cache.
- */
+/** Local-only session update used by the profile screen's role preview. */
 export function setSession({ name, email, role = 'member' } = {}) {
   const session = {
     name: (name || PROFILE.full_name || 'Member').trim(),
@@ -174,7 +168,7 @@ export function getDiscipline(idOrSlug) {
     (d) => d.id === idOrSlug || d.slug === String(idOrSlug || '').toLowerCase()
   );
   if (!match) return null;
-  return { ...match, videos: videosFor(match.id) };
+  return { ...match, videos: listVideos().filter((video) => video.discipline_id === match.id) };
 }
 
 export function getVideo(id) {
@@ -335,10 +329,12 @@ export function markAllRead() {
 
 export function saveVideo(payload = {}) {
   const videos = listVideos();
+  const existing = payload.id ? videos.find((video) => video.id === payload.id) : null;
   const title = String(payload.title || '').trim();
   if (!title) throw new Error('A masterclass needs a title.');
 
   const record = {
+    ...(existing || {}),
     id: payload.id || `v-${Date.now().toString(36)}`,
     discipline_id: payload.discipline_id,
     title,

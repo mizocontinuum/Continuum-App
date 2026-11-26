@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-requires-auth data-access-state="checking">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/pages/home.css?v=4">
+  <link rel="stylesheet" href="../assets/css/pages/home.css?v=5">
 </head>
 <body>
 <nav>
@@ -33,26 +33,26 @@
   </ul>
   <div class="tools">
     <input id="q" type="text" placeholder="Search a title..." aria-label="Search titles">
-    <button class="icon" id="qb" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+    <button class="icon" id="qb" aria-label="Search" aria-controls="q" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
     <div class="user-menu" id="userMenu">
       <div class="avatar" id="avatarBtn" role="button" tabindex="0" aria-label="Account and Settings" aria-expanded="false" aria-haspopup="true">
-        <span class="avatar-badge" title="Active Administrator"></span>
+        <span class="avatar-badge" title="Signed in"></span>
       </div>
       <div class="avatar-dropdown" id="avatarDropdown" role="menu" aria-label="User navigation" hidden>
         <div class="drop-card-glow"></div>
         <div class="drop-head">
           <div class="drop-avatar-wrap">
-            <div class="drop-avatar"></div>
+            <div class="drop-avatar" data-session-initial></div>
             <span class="drop-online-dot" title="Online"></span>
           </div>
           <div class="drop-info">
-            <span class="drop-name">Continuum Admin</span>
-            <span class="drop-role"><i class="role-badge">Super Admin</i> • Online</span>
+            <span class="drop-name" data-session-name>Member</span>
+            <span class="drop-role"><i class="role-badge" data-session-role>Member</i> • Online</span>
           </div>
         </div>
 
         <div class="drop-section-label">Management</div>
-        <a class="drop-item drop-admin" href="../admin/index.html" role="menuitem">
+        <a class="drop-item drop-admin admin-only-link" href="../admin/index.html" role="menuitem" hidden>
           <div class="drop-icon-box ic-admin">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
           </div>
@@ -129,7 +129,7 @@
   </div>
 </div>
 
-<script src="../assets/js/pages/home-data.js?v=4"></script>
-<script src="../assets/js/pages/home.js?v=4"></script>
+<script src="../assets/js/pages/home-data.js?v=5"></script>
+<script type="module" src="../assets/js/pages/home.js?v=5"></script>
 </body>
 </html>
