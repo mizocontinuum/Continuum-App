@@ -373,6 +373,49 @@
     }
 
     container.style.opacity = '1';
+
+    if (!document.getElementById('authStars')) {
+      const c = document.createElement('canvas');
+      c.id = 'authStars';
+      c.className = 'auth-stars';
+      c.setAttribute('aria-hidden', 'true');
+      document.body.insertBefore(c, document.body.firstChild);
+
+      const ctx = c.getContext('2d');
+      const dots = Array.from({ length: 90 }, () => ({
+        x: Math.random(),
+        y: Math.random(),
+        vx: (Math.random() - 0.5) * 0.0004,
+        vy: (Math.random() - 0.5) * 0.0004,
+        r: 0.6 + Math.random() * 1.6,
+        p: Math.random() * 6.28
+      }));
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        c.width = window.innerWidth * dpr;
+        c.height = window.innerHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      window.addEventListener('resize', resize);
+      resize();
+      let t = 0;
+      (function loop() {
+        t += 0.025;
+        const w = window.innerWidth, h = window.innerHeight;
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < dots.length; i++) {
+          const d = dots[i];
+          d.x = (d.x + d.vx + 1) % 1;
+          d.y = (d.y + d.vy + 1) % 1;
+          const a = 0.2 + 0.55 * (0.5 + 0.5 * Math.sin(t + d.p));
+          ctx.fillStyle = `rgba(150, 220, 255, ${a.toFixed(2)})`;
+          ctx.beginPath();
+          ctx.arc(d.x * w, d.y * h, d.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        requestAnimationFrame(loop);
+      })();
+    }
   }
 
   renderSharedAuthChrome();
