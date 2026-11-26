@@ -3,44 +3,19 @@
  * Shared across Login and Signup pages for 100% consistency and zero lag.
  */
 
-// 1. Demo Credentials (for Login page)
-
-(function(){
-  var adminBtn = document.getElementById("demoAdminBtn");
-  if(adminBtn){
-    adminBtn.onclick = function(){
-      var em = document.getElementById("loginEmail");
-      var pw = document.getElementById("loginPassword");
-      if(em) em.value = "admin@continuum.ph";
-      if(pw) pw.value = "admin123";
-    };
-  }
-  var studentBtn = document.getElementById("demoStudentBtn");
-  if(studentBtn){
-    studentBtn.onclick = function(){
-      var em = document.getElementById("loginEmail");
-      var pw = document.getElementById("loginPassword");
-      if(em) em.value = "student@continuum.ph";
-      if(pw) pw.value = "student123";
-    };
-  }
-})();
-
-
-// 2. 3D Holographic Spline Canvas with Glowing Energy Beams
+// 1. 3D Holographic Spline Canvas with Glowing Energy Beams
 (function(){
 var $=function(i){return document.getElementById(i)};
 
 
-function toast(m){
-  var t = document.getElementById("loginToast") || document.getElementById("signupToast");
+var toast = window.toast || function(m){
+  var t = document.querySelector(".toast-msg");
   if(!t) return;
   t.textContent = m;
   t.className = "toast-msg show";
   clearTimeout(window._toastTimer);
   window._toastTimer = setTimeout(function(){ t.className = "toast-msg"; }, 2600);
-}
-window.toast = toast;
+};
 document.querySelectorAll(".oauth-btn").forEach(function(b){b.onclick=function(){toast("Preview only: "+b.dataset.provider+" sign-in not connected")}});
 
 // True 3D logo: solid extrusion that turns edge-on and back, with tilting orbit rings and orbiting dots

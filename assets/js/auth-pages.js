@@ -78,6 +78,32 @@
     localStorage.setItem(key, JSON.stringify(value));
   }
 
+  function readUsers() {
+    const stored = readJson(STORAGE.users, []);
+    if (!Array.isArray(stored)) return [];
+    return stored.filter((user) => user && typeof user.email === 'string').map((user) => {
+      const legacyRole = typeof user.role === 'string' && !['admin', 'member'].includes(user.role) ? user.role : '';
+      return {
+        ...user,
+        role: user.role === 'admin' ? 'admin' : 'member',
+        job_role: user.job_role || legacyRole
+      };
+    });
+  }
+
+  function readPasswords() {
+    const stored = readJson(STORAGE.passwords, {});
+    return stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
+  }
+
+  function readResetTokens() {
+    const stored = readJson(STORAGE.resets, []);
+    if (!Array.isArray(stored)) return [];
+    return stored.filter((item) =>
+      item && typeof item.token === 'string' && typeof item.email === 'string' && Number.isFinite(item.expiresAt)
+    );
+  }
+
   function demoAccount(email) {
     if (email === 'admin@continuum.ph') {
       return { name: 'System Admin', email, role: 'admin', password: 'admin123' };
@@ -95,19 +121,36 @@
       const target = new URL(requested, window.location.href);
       const path = target.pathname;
       if (target.origin !== window.location.origin) return defaultPath;
-      if (/\/(login|signup)\//.test(path)) return defaultPath;
-      if (/\/admin\//.test(path) && role !== 'admin') return defaultPath;
+      if (/\/(login|signup)(?:\/|$)/.test(path)) return defaultPath;
+      if (/\/admin(?:\/|$)/.test(path) && role !== 'admin') return defaultPath;
       return target.pathname + target.search + target.hash;
     } catch (_) {
       return defaultPath;
     }
   }
 
+  function currentDemoPassword(email) {
+    return readPasswords()[email] || demoAccount(email)?.password;
+  }
+
+  function accountExists(email) {
+    return Boolean(demoAccount(email) || readUsers().some((user) => user.email === email));
+  }
+
+  function invalidateSessionForEmail(email) {
+    try {
+      const session = readJson('continuum.session', null);
+      if (session?.email !== email) return;
+      localStorage.removeItem('continuum.session');
+      localStorage.removeItem('continuum_auth_user');
+      sessionStorage.removeItem('continuum_session');
+      sessionStorage.removeItem('continuum_auth_user');
+    } catch (_) {}
+  }
+
   function createResetToken(email) {
     const now = Date.now();
-    const tokens = readJson(STORAGE.resets, []).filter((item) =>
-      Array.isArray(readJson(STORAGE.resets, [])) && item.expiresAt > now && item.email !== email
-    );
+    const tokens = readResetTokens().filter((item) => item.expiresAt > now && item.email !== email);
     const bytes = new Uint8Array(32);
     if (window.crypto?.getRandomValues) window.crypto.getRandomValues(bytes);
     else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
@@ -119,18 +162,17 @@
 
   function findResetToken(token) {
     if (!token) return null;
-    const tokens = readJson(STORAGE.resets, []);
-    const record = tokens.find((item) => item.token === token);
-    if (!record) return null;
-    if (record.expiresAt <= Date.now()) {
-      writeJson(STORAGE.resets, tokens.filter((item) => item.token !== token));
-      return null;
+    const now = Date.now();
+    const tokens = readResetTokens();
+    const active = tokens.filter((item) => item.expiresAt > now);
+    if (active.length !== tokens.length) {
+      try { writeJson(STORAGE.resets, active); } catch (_) {}
     }
-    return record;
+    return active.find((item) => item.token === token) || null;
   }
 
   function consumeResetToken(token) {
-    const tokens = readJson(STORAGE.resets, []);
+    const tokens = readResetTokens();
     writeJson(STORAGE.resets, tokens.filter((item) => item.token !== token));
   }
 
@@ -152,8 +194,8 @@
     if (demoAdmin) {
       demoAdmin.onclick = () => {
         emailIn.value = 'admin@continuum.ph';
-        passIn.value = 'admin123';
-        showToast('Admin credentials filled');
+        passIn.value = currentDemoPassword(emailIn.value);
+        showToast('Admin demo credentials filled');
       };
     }
 
@@ -161,13 +203,14 @@
     if (demoStudent) {
       demoStudent.onclick = () => {
         emailIn.value = 'student@continuum.ph';
-        passIn.value = 'student123';
-        showToast('Student credentials filled');
+        passIn.value = currentDemoPassword(emailIn.value);
+        showToast('Student demo credentials filled');
       };
     }
 
     form.onsubmit = (e) => {
       e.preventDefault();
+      if (btn?.disabled) return;
       if (err) err.textContent = '';
       const em = emailIn.value.trim().toLowerCase();
       const pw = passIn.value;
@@ -192,16 +235,15 @@
 
       setTimeout(() => {
         try {
-          const registered = readJson(STORAGE.users, []);
-          const overrides = readJson(STORAGE.passwords, {});
+          const registered = readUsers();
           const demo = demoAccount(em);
           const userMatch = registered.find((u) => u.email === em);
-          const expectedPassword = demo ? (overrides[em] || demo.password) : userMatch?.password;
+          const expectedPassword = demo ? currentDemoPassword(em) : userMatch?.password;
 
           if (expectedPassword && pw === expectedPassword) {
             const finalName = demo?.name || userMatch.name;
             const finalRole = demo?.role || 'member';
-            localStorage.setItem('continuum.session', JSON.stringify({ name: finalName, email: em, role: finalRole }));
+            writeJson('continuum.session', { name: finalName, email: em, role: finalRole });
             localStorage.setItem('continuum_auth_user', finalRole);
             const destination = safeRedirect(finalRole === 'admin' ? '../admin/index.html' : '../home/index.html', finalRole);
             showToast('Sign in successful! Redirecting...');
@@ -239,6 +281,18 @@
     bindPasswordToggle('toggleConfirmPass', 'confirmPassword');
     clearErrorOnInput([nameIn, emailIn, passIn, confIn], err);
 
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('email') && isValidEmail(params.get('email'))) emailIn.value = params.get('email');
+
+    if (termsIn) {
+      termsIn.addEventListener('change', () => {
+        if (termsIn.checked) {
+          termsIn.removeAttribute('aria-invalid');
+          if (err) err.textContent = '';
+        }
+      });
+    }
+
     if (strBar && strLbl) {
       passIn.addEventListener('input', () => {
         const v = passIn.value;
@@ -265,43 +319,44 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (btn?.disabled) return;
       if (err) err.textContent = '';
 
       const nameVal = nameIn.value.trim();
       const emailVal = emailIn.value.trim().toLowerCase();
-      const passVal = passIn.value.trim();
-      const confVal = confIn ? confIn.value.trim() : passVal;
-      const roleVal = roleIn ? roleIn.value : 'Student';
+      const passVal = passIn.value;
+      const confVal = confIn ? confIn.value : passVal;
+      const jobRole = roleIn ? roleIn.value : 'Student / Fellow';
       const orgVal = orgIn ? orgIn.value.trim() : '';
+      const plan = params.get('plan') || '';
 
       if (nameVal.length < 2) {
-        if (err) err.textContent = 'Please provide your full legal name.';
-        nameIn.setAttribute('aria-invalid', 'true');
+        setError(err, nameIn, 'Please provide your full legal name.');
         nameIn.focus();
         return;
       }
       if (!isValidEmail(emailVal)) {
-        if (err) err.textContent = 'Please enter a valid work or personal email address.';
-        emailIn.setAttribute('aria-invalid', 'true');
+        setError(err, emailIn, 'Please enter a valid work or personal email address.');
+        emailIn.focus();
+        return;
+      }
+      if (demoAccount(emailVal)) {
+        setError(err, emailIn, 'This email is reserved for a demo account. Please use the sign-in screen.');
         emailIn.focus();
         return;
       }
       if (passVal.length < 8) {
-        if (err) err.textContent = 'Password must be at least 8 characters.';
-        passIn.setAttribute('aria-invalid', 'true');
+        setError(err, passIn, 'Password must be at least 8 characters.');
         passIn.focus();
         return;
       }
       if (passVal !== confVal) {
-        if (err) err.textContent = 'Passwords do not match.';
-        if (confIn) {
-          confIn.setAttribute('aria-invalid', 'true');
-          confIn.focus();
-        }
+        setError(err, confIn, 'Passwords do not match.');
+        if (confIn) confIn.focus();
         return;
       }
       if (termsIn && !termsIn.checked) {
-        if (err) err.textContent = 'Please accept the Continuum Terms of Service to continue.';
+        setError(err, termsIn, 'Please accept the Continuum demo terms to continue.');
         termsIn.focus();
         return;
       }
@@ -309,34 +364,33 @@
       setButtonLoading(btn, true, 'Creating Account...', 'Create Account');
 
       try {
-        const registered = JSON.parse(localStorage.getItem('continuum_registered_users') || '[]');
-        if (registered.some((u) => u.email === emailVal)) {
-          if (err) err.textContent = 'An account with this email already exists. Please sign in.';
+        const registered = readUsers();
+        if (registered.some((user) => user.email === emailVal)) {
+          setError(err, emailIn, 'An account with this email already exists. Please sign in.');
           setButtonLoading(btn, false, 'Creating Account...', 'Create Account');
+          emailIn.focus();
           return;
         }
 
         registered.push({
-          name: nameVal,
-          email: emailVal,
-          role: roleVal,
-          organization: orgVal,
-          password: passVal,
-          createdAt: new Date().toISOString()
-        });
-        localStorage.setItem('continuum_registered_users', JSON.stringify(registered));
-        localStorage.setItem('continuum.session', JSON.stringify({
           id: 'USR-' + Date.now(),
           name: nameVal,
           email: emailVal,
-          role: roleVal
-        }));
-        localStorage.setItem('continuum_auth_user', 'student');
+          role: 'member',
+          job_role: jobRole,
+          organization: orgVal,
+          plan,
+          password: passVal,
+          createdAt: new Date().toISOString()
+        });
+        writeJson(STORAGE.users, registered);
+        writeJson('continuum.session', { name: nameVal, email: emailVal, role: 'member', plan });
+        localStorage.setItem('continuum_auth_user', 'member');
 
         showToast('Account created successfully! Welcome to Continuum Academy.');
-        setTimeout(() => { window.location.href = '../home/index.html'; }, 1100);
-      } catch (ex) {
-        console.error(ex);
+        setTimeout(() => { window.location.href = safeRedirect('../home/index.html', 'member'); }, 1100);
+      } catch (_) {
+        setError(err, null, 'Account creation is unavailable because browser storage is blocked.');
         setButtonLoading(btn, false, 'Creating Account...', 'Create Account');
       }
     });
@@ -348,28 +402,53 @@
     const emailIn = $('email');
     const err = $('forgotError');
     const sentNote = $('forgotSent');
+    const resetLink = $('forgotResetLink');
     const btn = $('forgotSubmit');
     if (!form || !emailIn) return;
 
     clearErrorOnInput([emailIn], err);
+    const emailParam = new URLSearchParams(window.location.search).get('email');
+    if (emailParam && isValidEmail(emailParam)) emailIn.value = emailParam;
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (btn?.disabled) return;
       const email = emailIn.value.trim().toLowerCase();
       if (err) err.textContent = '';
 
       if (!isValidEmail(email)) {
-        if (err) err.textContent = 'Enter a valid email address.';
+        setError(err, emailIn, 'Enter a valid email address.');
         showToast('Invalid email', true);
+        emailIn.focus();
         return;
       }
 
-      setButtonLoading(btn, true, 'Sending...', 'Send Reset Link');
+      setButtonLoading(btn, true, 'Creating Link...', 'Create Reset Link');
 
       setTimeout(() => {
-        form.style.display = 'none';
-        if (sentNote) sentNote.hidden = false;
-        showToast('Reset link sent to ' + email);
+        try {
+          if (!accountExists(email)) {
+            setError(err, emailIn, 'No local demo account was found for that email.');
+            setButtonLoading(btn, false, 'Creating Link...', 'Create Reset Link');
+            emailIn.focus();
+            return;
+          }
+
+          const token = createResetToken(email);
+          const target = new URL('../reset-password/index.html', window.location.href);
+          target.searchParams.set('token', token);
+          target.searchParams.set('email', email);
+          const redirect = new URLSearchParams(window.location.search).get('redirect');
+          if (redirect) target.searchParams.set('redirect', redirect);
+          if (resetLink) resetLink.href = target.href;
+          form.hidden = true;
+          if (sentNote) sentNote.hidden = false;
+          showToast('Local reset link created for ' + email);
+          resetLink?.focus();
+        } catch (_) {
+          setError(err, null, 'A reset link cannot be created because browser storage is blocked.');
+          setButtonLoading(btn, false, 'Creating Link...', 'Create Reset Link');
+        }
       }, 600);
     });
   }
@@ -380,31 +459,129 @@
     const passIn = $('password');
     const confIn = $('confirm');
     const err = $('resetError');
+    const expired = $('resetExpired');
     const btn = $('resetSubmit');
     if (!form || !passIn || !confIn) return;
 
+    bindPasswordToggle('toggleResetPass', 'password');
+    bindPasswordToggle('toggleResetConfirm', 'confirm');
     clearErrorOnInput([passIn, confIn], err);
+    const token = new URLSearchParams(window.location.search).get('token');
+
+    const rejectInvalidLink = () => {
+      form.hidden = true;
+      if (expired) {
+        expired.hidden = false;
+        expired.setAttribute('tabindex', '-1');
+        expired.focus();
+      }
+    };
+
+    if (!findResetToken(token)) rejectInvalidLink();
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const pass = passIn.value.trim();
-      const confirm = confIn.value.trim();
+      if (btn?.disabled) return;
       if (err) err.textContent = '';
 
+      const record = findResetToken(token);
+      if (!record || !accountExists(record.email)) {
+        rejectInvalidLink();
+        return;
+      }
+
+      const pass = passIn.value;
+      const confirm = confIn.value;
       if (pass.length < 8) {
-        if (err) err.textContent = 'Password must be at least 8 characters.';
+        setError(err, passIn, 'Password must be at least 8 characters.');
         showToast('Password too short', true);
+        passIn.focus();
         return;
       }
       if (pass !== confirm) {
-        if (err) err.textContent = 'Passwords do not match.';
+        setError(err, confIn, 'Passwords do not match.');
         showToast('Passwords do not match', true);
+        confIn.focus();
         return;
       }
 
       setButtonLoading(btn, true, 'Saving...', 'Save Password');
-      showToast('Password updated! Redirecting to sign in...');
-      setTimeout(() => { window.location.href = '../login/index.html'; }, 900);
+
+      try {
+        if (demoAccount(record.email)) {
+          const overrides = readPasswords();
+          overrides[record.email] = pass;
+          writeJson(STORAGE.passwords, overrides);
+        } else {
+          const users = readUsers();
+          const user = users.find((item) => item.email === record.email);
+          if (!user) {
+            rejectInvalidLink();
+            return;
+          }
+          user.password = pass;
+          writeJson(STORAGE.users, users);
+        }
+
+        invalidateSessionForEmail(record.email);
+        consumeResetToken(token);
+        showToast('Password updated! Redirecting to sign in...');
+        setTimeout(() => {
+          window.location.href = '../login/index.html?email=' + encodeURIComponent(record.email);
+        }, 900);
+      } catch (_) {
+        setError(err, null, 'The password could not be saved because browser storage is blocked.');
+        setButtonLoading(btn, false, 'Saving...', 'Save Password');
+      }
+    });
+  }
+
+  function initLegalDialog() {
+    const content = {
+      terms: {
+        title: 'Continuum demo terms',
+        body: 'This site is a frontend demonstration. Accounts and learning progress are stored only in this browser. No paid service, subscription, or formal service agreement is activated by creating an account.'
+      },
+      privacy: {
+        title: 'Local demo privacy notice',
+        body: 'This demo does not send your name, email, password, or learning activity to a server. Browser storage can be cleared through your browser settings. Production privacy and data-retention policies must be configured before launch.'
+      },
+      recurring: {
+        title: 'Recurring billing demo notice',
+        body: 'No payment method is collected and no recurring charge is created. Pricing shown on the landing page is illustrative until a payment provider and billing terms are connected.'
+      },
+      refund: {
+        title: 'Refund policy demo notice',
+        body: 'No purchase or charge is made in this frontend demo, so there is no payment to refund. A formal refund policy must be supplied before paid plans launch.'
+      },
+      contact: {
+        title: 'Contact',
+        body: 'A support inbox or contact endpoint is not connected to this demo. Add verified support details before publishing the site.'
+      }
+    };
+    const dialog = document.createElement('dialog');
+    dialog.className = 'legal-dialog';
+    dialog.setAttribute('aria-labelledby', 'legalDialogTitle');
+    dialog.innerHTML = `
+      <h2 id="legalDialogTitle"></h2>
+      <p id="legalDialogBody"></p>
+      <button type="button" class="legal-dialog-close">Close</button>`;
+    document.body.appendChild(dialog);
+
+    document.querySelectorAll('[data-legal]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const item = content[button.dataset.legal];
+        if (!item) return;
+        dialog.querySelector('h2').textContent = item.title;
+        dialog.querySelector('p').textContent = item.body;
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        else dialog.setAttribute('open', '');
+      });
+    });
+
+    dialog.querySelector('.legal-dialog-close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
     });
   }
 
@@ -447,20 +624,21 @@
       footer.className = 'login-footer';
       footer.innerHTML = `
         <div class="footer-row">
-          <a href="#" class="footer-link">Terms &amp; Conditions</a>
+          <button type="button" class="footer-link" data-legal="terms">Terms &amp; Conditions</button>
           <span class="dot">•</span>
-          <a href="#" class="footer-link">Privacy Policy</a>
+          <button type="button" class="footer-link" data-legal="privacy">Privacy Policy</button>
           <span class="dot">•</span>
-          <a href="#" class="footer-link">Recurring Terms</a>
+          <button type="button" class="footer-link" data-legal="recurring">Recurring Terms</button>
         </div>
         <div class="footer-row">
-          <a href="#" class="footer-link">Refund Policy</a>
+          <button type="button" class="footer-link" data-legal="refund">Refund Policy</button>
           <span class="dot">•</span>
-          <a href="#" class="footer-link">Contact</a>
+          <button type="button" class="footer-link" data-legal="contact">Contact</button>
         </div>`;
       container.appendChild(footer);
     }
 
+    initLegalDialog();
     container.style.opacity = '1';
 
     if (!document.getElementById('authStars')) {
@@ -488,8 +666,9 @@
       window.addEventListener('resize', resize);
       resize();
       let t = 0;
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       (function loop() {
-        t += 0.025;
+        t += still ? 0 : 0.025;
         const w = window.innerWidth, h = window.innerHeight;
         ctx.clearRect(0, 0, w, h);
         for (let i = 0; i < dots.length; i++) {
@@ -502,7 +681,7 @@
           ctx.arc(d.x * w, d.y * h, d.r, 0, Math.PI * 2);
           ctx.fill();
         }
-        requestAnimationFrame(loop);
+        if (!still) requestAnimationFrame(loop);
       })();
     }
   }

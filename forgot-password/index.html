@@ -13,7 +13,7 @@
   <!-- Google Font Sora for Crisp Modern UI -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&display=swap">
   <!-- 2026 Unified Cinematic Dark Azure Auth Stylesheet -->
-  <link rel="stylesheet" href="../assets/css/auth.css?v=4">
+  <link rel="stylesheet" href="../assets/css/auth.css?v=5">
 
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
   <link rel="apple-touch-icon" href="../assets/images/icon-circle-512.png">
@@ -34,7 +34,7 @@
       </a>
 
       <h1 class="headline">Forgot password</h1>
-      <p class="subheadline" id="forgotSubhead">Enter the email on your account and we will send a reset link</p>
+      <p class="subheadline" id="forgotSubhead">For this local demo, enter your account email to create a one-time reset link</p>
 
       <form class="login-form" id="forgotForm" autocomplete="on">
 
@@ -54,7 +54,7 @@
         <p class="form-error" id="forgotError" role="alert"></p>
 
         <button type="submit" class="btn-submit" id="forgotSubmit">
-          <span>Send Reset Link</span>
+          <span>Create Reset Link</span>
           <span class="arrow-icon">➔</span>
         </button>
 
@@ -62,8 +62,9 @@
 
       <!-- Shown after a successful request, replaces the form -->
       <div class="auth-note" id="forgotSent" hidden>
-        <strong>Check your inbox.</strong> If an account exists for that address, a reset
-        link is on its way. The link expires in one hour.
+        <strong>Local reset link created.</strong> No email is sent in this demo.
+        The link expires in one hour and can be used once.
+        <p><a id="forgotResetLink" href="../reset-password/index.html">Open local reset link</a></p>
       </div>
 
       <p class="auth-alt">
@@ -75,8 +76,8 @@
   </div>
 
   <!-- Unified 3D Holographic Canvas & Aura Engine -->
-  <script src="../assets/js/auth-pages.js?v=4"></script>
-  <script src="../assets/js/auth-3d-logo.js?v=4"></script>
+  <script src="../assets/js/auth-pages.js?v=5"></script>
+  <script src="../assets/js/auth-3d-logo.js?v=5"></script>
 
 </body>
 </html>

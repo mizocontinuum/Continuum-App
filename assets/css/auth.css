@@ -412,14 +412,57 @@ body::after {
   text-align: center;
   color: var(--text-muted);
 }
-.recaptcha-badge-note {
+.recaptcha-badge-note,
+.auth-demo-note {
   margin-top: 14px;
   font-size: 0.68rem;
   color: var(--text-dim);
   text-align: center;
 }
-.recaptcha-badge-note a {
+.recaptcha-badge-note a,
+.auth-demo-note a {
   color: inherit;
+}
+[hidden] { display: none !important; }
+.legal-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--azure-bright);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.signup-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.legal-dialog {
+  width: min(520px, calc(100vw - 32px));
+  padding: 28px;
+  border: 1px solid rgba(51, 181, 255, 0.35);
+  border-radius: 18px;
+  background: #071225;
+  color: #eef6ff;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
+}
+.legal-dialog::backdrop {
+  background: rgba(1, 6, 14, 0.78);
+  backdrop-filter: blur(6px);
+}
+.legal-dialog h2 { font-size: 1.35rem; margin-bottom: 12px; }
+.legal-dialog p { color: #b9d3ee; line-height: 1.7; }
+.legal-dialog-close {
+  min-height: 42px;
+  margin-top: 20px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #0a6cf0;
+  color: #fff;
+  font: 600 0.9rem/1 system-ui, sans-serif;
+  cursor: pointer;
 }
 
 /* Page Footer */
@@ -439,8 +482,13 @@ body::after {
   font-size: 0.74rem;
 }
 .footer-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--text-dim);
+  font: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 .footer-link:hover {
   color: #fff;
@@ -450,6 +498,10 @@ body::after {
 }
 
 /* ==================== RESPONSIVE BREAKPOINTS ==================== */
+@media (max-width: 560px) {
+  .signup-details { grid-template-columns: 1fr; gap: 0; }
+}
+
 @media (max-width: 960px) {
   .auth-portal-grid {
     grid-template-columns: 1fr;

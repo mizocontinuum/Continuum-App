@@ -21,7 +21,7 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&display=swap">
   <!-- 2026 Clean Consolidated Dark Azure Stylesheet -->
-  <link rel="stylesheet" href="../assets/css/auth.css?v=4">
+  <link rel="stylesheet" href="../assets/css/auth.css?v=5">
 </head>
 
 <body>
@@ -71,7 +71,7 @@
             >
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="signup-details">
             <div class="form-group">
               <label class="form-label" for="jobRole">PRIMARY ROLE</label>
               <select id="jobRole" name="jobRole" class="input-box select-custom">
@@ -138,7 +138,7 @@
           <div style="display:flex;align-items:flex-start;gap:10px;margin-top:2px;">
             <input type="checkbox" id="termsCheck" required style="margin-top:4px;accent-color:var(--azure-bright);cursor:pointer;">
             <label for="termsCheck" style="font-size:0.8rem;color:var(--text-muted);line-height:1.4;cursor:pointer;">
-              I agree to the <a href="#" style="color:var(--azure-bright);text-decoration:none;">Continuum Terms</a> and <a href="#" style="color:var(--azure-bright);text-decoration:none;">Privacy Policy</a>.
+              I agree to the <button type="button" class="legal-link" data-legal="terms">Continuum Demo Terms</button> and <button type="button" class="legal-link" data-legal="privacy">Privacy Policy</button>.
             </label>
           </div>
 
@@ -156,7 +156,7 @@
 
 
 
-      <p class="recaptcha-badge-note">Protected by Continuum Shield &amp; reCAPTCHA v3. <a href="#" style="color:inherit;">Privacy</a> • <a href="#" style="color:inherit;">Terms</a></p>
+      <p class="auth-demo-note">Local demo: credentials stay in this browser. Email delivery and reCAPTCHA are not connected. <button type="button" class="legal-link" data-legal="privacy">Privacy</button> • <button type="button" class="legal-link" data-legal="terms">Terms</button></p>
     </main>
 
     </div><!-- /auth-portal-grid -->
@@ -166,8 +166,8 @@
   </div>
 
   <!-- Auth Shared Animations (Consistent & Zero-lag) -->
-<script src="../assets/js/auth-pages.js?v=4"></script>
-  <script src="../assets/js/auth-3d-logo.js?v=4"></script>
+<script src="../assets/js/auth-pages.js?v=5"></script>
+  <script src="../assets/js/auth-3d-logo.js?v=5"></script>
 
 
   <!-- Signup Script -->

@@ -13,7 +13,7 @@
   <!-- Google Font Sora for Crisp Modern UI -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&display=swap">
   <!-- 2026 Unified Cinematic Dark Azure Auth Stylesheet -->
-  <link rel="stylesheet" href="../assets/css/auth.css?v=4">
+  <link rel="stylesheet" href="../assets/css/auth.css?v=5">
 
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
   <link rel="apple-touch-icon" href="../assets/images/icon-circle-512.png">
@@ -40,30 +40,36 @@
 
         <div class="form-group">
           <label class="form-label" for="password">NEW PASSWORD</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            class="input-box"
-            placeholder="At least 8 characters"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          >
+          <div class="pw-wrap" style="position:relative;">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="input-box"
+              placeholder="At least 8 characters"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            >
+            <button type="button" class="pw-toggle" id="toggleResetPass" aria-label="Toggle password visibility">Show</button>
+          </div>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="confirm">CONFIRM NEW PASSWORD</label>
-          <input
-            type="password"
-            id="confirm"
-            name="confirm"
-            class="input-box"
-            placeholder="Repeat your password"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          >
+          <div class="pw-wrap" style="position:relative;">
+            <input
+              type="password"
+              id="confirm"
+              name="confirm"
+              class="input-box"
+              placeholder="Repeat your password"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            >
+            <button type="button" class="pw-toggle" id="toggleResetConfirm" aria-label="Toggle confirm password visibility">Show</button>
+          </div>
         </div>
 
         <p class="form-error" id="resetError" role="alert"></p>
@@ -75,9 +81,9 @@
 
       </form>
 
-      <!-- A recovery link that already expired lands here -->
+      <!-- Missing, expired, malformed, or already-used recovery links land here -->
       <p class="auth-note" id="resetExpired" hidden>
-        <strong>This link has expired.</strong> Request a new one from the
+        <strong>This reset link is invalid or has expired.</strong> Request a new one from the
         <a href="../forgot-password/index.html" style="color:var(--azure-bright);font-weight:600;text-decoration:none;">forgot password</a> screen.
       </p>
     </main>
@@ -86,8 +92,8 @@
   </div>
 
   <!-- Unified 3D Holographic Canvas & Aura Engine -->
-  <script src="../assets/js/auth-pages.js?v=4"></script>
-  <script src="../assets/js/auth-3d-logo.js?v=4"></script>
+  <script src="../assets/js/auth-pages.js?v=5"></script>
+  <script src="../assets/js/auth-3d-logo.js?v=5"></script>
 
 </body>
 </html>
