@@ -40,6 +40,10 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"></path><path d="m7 14 4-4 4 3 6-7"></path></svg>
           <span>Catalog insights</span>
         </a>
+        <a class="admin-nav-link" href="#cms">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          <span>Visual CMS</span>
+        </a>
       </nav>
 
       <div class="sidebar-spacer"></div>
@@ -47,6 +51,10 @@
         <span class="demo-note-dot"></span>
         <span>Frontend preview<br><strong>Changes stay on this device</strong></span>
       </div>
+      <button class="admin-nav-link" type="button" id="resetAdminDataBtn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>
+        <span>Reset All Data</span>
+      </button>
       <a class="admin-nav-link exit-link" href="../home/">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path></svg>
         <span>Back to Academy</span>
@@ -71,7 +79,9 @@
 
       <div class="admin-content">
         <section class="admin-hero-stage" id="overview" aria-label="Academy operations overview">
-          <div class="admin-hero-art" aria-hidden="true"></div>
+          <div class="admin-hero-art" aria-hidden="true">
+            <canvas id="authSplineCanvas" class="admin-hero-holo"></canvas>
+          </div>
           <div class="admin-grid-floor" aria-hidden="true"></div>
           <div class="admin-orbit admin-orbit-one" aria-hidden="true"></div>
           <div class="admin-orbit admin-orbit-two" aria-hidden="true"></div>
@@ -173,7 +183,55 @@
 
         <footer class="admin-footer"><span>CONTINUUM ACADEMY <i>·</i> ADMIN STUDIO</span><span>Static frontend preview · No data leaves this device</span></footer>
       </div>
-    </main>
+    
+        <section class="admin-section" id="cms" aria-labelledby="cmsTitle">
+          <div class="admin-section-head">
+            <div>
+              <p class="admin-eyebrow">CANVA-STYLE LIVE EDITOR</p>
+              <h2 id="cmsTitle">Visual Landing &amp; Brand CMS</h2>
+            </div>
+          </div>
+          <div class="admin-grid" style="display:grid;grid-template-columns:1fr 1.2fr;gap:22px;align-items:start;">
+            <form class="admin-panel" id="cmsForm" style="padding:24px;display:grid;gap:14px;">
+              <label style="display:grid;gap:6px;font-size:0.82rem;color:#b9d3ee;">
+                HERO PILL BADGE
+                <input type="text" id="cmsPill" placeholder="✨ New courses every week" style="padding:10px 14px;border-radius:10px;border:1px solid rgba(46,168,255,0.25);background:rgba(3,8,14,0.7);color:#fff;">
+              </label>
+              <label style="display:grid;gap:6px;font-size:0.82rem;color:#b9d3ee;">
+                HERO HEADLINE
+                <input type="text" id="cmsHeadline" placeholder="Learn without limits, from anywhere." style="padding:10px 14px;border-radius:10px;border:1px solid rgba(46,168,255,0.25);background:rgba(3,8,14,0.7);color:#fff;">
+              </label>
+              <label style="display:grid;gap:6px;font-size:0.82rem;color:#b9d3ee;">
+                HERO SUBHEADLINE
+                <textarea id="cmsSub" rows="3" placeholder="Interactive lessons, expert mentors..." style="padding:10px 14px;border-radius:10px;border:1px solid rgba(46,168,255,0.25);background:rgba(3,8,14,0.7);color:#fff;resize:vertical;"></textarea>
+              </label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <label style="display:grid;gap:6px;font-size:0.82rem;color:#b9d3ee;">
+                  PRIMARY CTA
+                  <input type="text" id="cmsCta1" placeholder="Start learning free" style="padding:10px 14px;border-radius:10px;border:1px solid rgba(46,168,255,0.25);background:rgba(3,8,14,0.7);color:#fff;">
+                </label>
+                <label style="display:grid;gap:6px;font-size:0.82rem;color:#b9d3ee;">
+                  ACCENT COLOR
+                  <input type="color" id="cmsAccent" value="#0a6cf0" style="width:100%;height:40px;border-radius:10px;border:1px solid rgba(46,168,255,0.25);background:transparent;cursor:pointer;">
+                </label>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+                <button type="submit" style="flex:1;padding:12px;border-radius:10px;border:0;background:linear-gradient(135deg,#0a6cf0,#2ea8ff);color:#fff;font-weight:700;cursor:pointer;">Publish to Landing</button>
+                <a href="../index.html?edit=1" target="_blank" style="padding:12px 16px;border-radius:10px;border:1px solid rgba(46,168,255,0.45);background:rgba(10,108,240,0.15);color:#fff;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;">Edit Live Landing ↗</a>
+                <button type="button" id="cmsResetBtn" style="padding:12px 16px;border-radius:10px;border:1px solid rgba(46,168,255,0.25);background:transparent;color:#b9d3ee;cursor:pointer;">Reset</button>
+              </div>
+            </form>
+            <div class="admin-panel" style="padding:28px;min-height:320px;display:flex;flex-direction:column;justify-content:center;gap:14px;">
+              <span id="cmsPrevPill" style="display:inline-block;width:fit-content;padding:5px 14px;border-radius:999px;border:1px solid rgba(46,168,255,0.35);font-size:0.8rem;color:#2ea8ff;">✨ New courses every week</span>
+              <h3 id="cmsPrevHead" style="font-size:2rem;line-height:1.1;color:#fff;margin:0;">Learn without limits, from anywhere.</h3>
+              <p id="cmsPrevSub" style="color:#b9d3ee;font-size:0.98rem;line-height:1.5;margin:0;">Interactive lessons, expert mentors and a community that keeps you moving.</p>
+              <div style="margin-top:8px;">
+                <span id="cmsPrevBtn" style="display:inline-block;padding:11px 24px;border-radius:999px;background:#0a6cf0;color:#fff;font-weight:600;font-size:0.9rem;">Start learning free</span>
+              </div>
+            </div>
+          </div>
+        </section>
+</main>
   </div>
   <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
 
@@ -203,6 +261,7 @@
     </form>
   </dialog>
 
+  <script src="../assets/js/auth-3d-logo.js"></script>
   <script type="module" src="../assets/js/pages/admin.js"></script>
 </body>
 </html>

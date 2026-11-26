@@ -12,8 +12,228 @@ import {
 import { initPageChrome } from '../user-menu.js?v=21';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Dedicated Sidebar Page Switching (always active)
+  const navLinks = Array.from(document.querySelectorAll('.admin-nav .admin-nav-link[href^="#"]'));
+  const viewIds = navLinks.map((a) => a.getAttribute('href').slice(1));
+  function switchAdminView(targetId) {
+    const id = viewIds.includes(targetId) ? targetId : viewIds[0];
+    viewIds.forEach((vid) => {
+      const sec = document.getElementById(vid);
+      if (sec) sec.classList.toggle('admin-view-hidden', vid !== id);
+    });
+    navLinks.forEach((a) => {
+      const isMatch = a.getAttribute('href') === '#' + id;
+      a.classList.toggle('active', isMatch);
+      if (isMatch) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  navLinks.forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = a.getAttribute('href').slice(1);
+      window.history.replaceState(null, '', '#' + id);
+      switchAdminView(id);
+    });
+  });
+  window.addEventListener('hashchange', () => {
+    switchAdminView(window.location.hash ? window.location.hash.slice(1) : viewIds[0]);
+
+  // Canva-style Visual CMS Controller
+  const cmsForm = document.getElementById('cmsForm');
+  if (cmsForm) {
+    const pillIn = document.getElementById('cmsPill');
+    const headIn = document.getElementById('cmsHeadline');
+    const subIn = document.getElementById('cmsSub');
+    const ctaIn = document.getElementById('cmsCta1');
+    const accIn = document.getElementById('cmsAccent');
+    const prevPill = document.getElementById('cmsPrevPill');
+    const prevHead = document.getElementById('cmsPrevHead');
+    const prevSub = document.getElementById('cmsPrevSub');
+    const prevBtn = document.getElementById('cmsPrevBtn');
+
+    const defaults = {
+      pill: '✨ New courses every week',
+      headline: 'Learn without limits, from anywhere.',
+      sub: 'Interactive lessons, expert mentors and a community that keeps you moving. Study on your phone, your laptop, or both.',
+      cta1: 'Start learning free',
+      accent: '#0a6cf0'
+    };
+
+    const loadCms = () => {
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem('continuum_cms_landing') || '{}'); } catch (e) {}
+      const d = { ...defaults, ...saved };
+      pillIn.value = d.pill;
+      headIn.value = d.headline;
+      subIn.value = d.sub;
+      ctaIn.value = d.cta1;
+      accIn.value = d.accent;
+      syncPreview();
+    };
+
+    const syncPreview = () => {
+      prevPill.textContent = pillIn.value || defaults.pill;
+      prevPill.style.color = accIn.value;
+      prevHead.textContent = headIn.value || defaults.headline;
+      prevSub.textContent = subIn.value || defaults.sub;
+      prevBtn.textContent = ctaIn.value || defaults.cta1;
+      prevBtn.style.background = accIn.value;
+    };
+
+    [pillIn, headIn, subIn, ctaIn, accIn].forEach((el) => el.addEventListener('input', syncPreview));
+
+    cmsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      localStorage.setItem('continuum_cms_landing', JSON.stringify({
+        pill: pillIn.value.trim() || defaults.pill,
+        headline: headIn.value.trim() || defaults.headline,
+        sub: subIn.value.trim() || defaults.sub,
+        cta1: ctaIn.value.trim() || defaults.cta1,
+        accent: accIn.value
+      }));
+      showToast('Published! Landing page updated.');
+    });
+
+    const cmsReset = document.getElementById('cmsResetBtn');
+    if (cmsReset) {
+      cmsReset.addEventListener('click', () => {
+        localStorage.removeItem('continuum_cms_landing');
+        loadCms();
+        showToast('CMS reset to default.');
+      });
+    }
+    loadCms();
+  }
+  });
+  switchAdminView(window.location.hash ? window.location.hash.slice(1) : viewIds[0]);
+
+  // Canva-style Visual CMS Controller
+  const cmsForm = document.getElementById('cmsForm');
+  if (cmsForm) {
+    const pillIn = document.getElementById('cmsPill');
+    const headIn = document.getElementById('cmsHeadline');
+    const subIn = document.getElementById('cmsSub');
+    const ctaIn = document.getElementById('cmsCta1');
+    const accIn = document.getElementById('cmsAccent');
+    const prevPill = document.getElementById('cmsPrevPill');
+    const prevHead = document.getElementById('cmsPrevHead');
+    const prevSub = document.getElementById('cmsPrevSub');
+    const prevBtn = document.getElementById('cmsPrevBtn');
+
+    const defaults = {
+      pill: '✨ New courses every week',
+      headline: 'Learn without limits, from anywhere.',
+      sub: 'Interactive lessons, expert mentors and a community that keeps you moving. Study on your phone, your laptop, or both.',
+      cta1: 'Start learning free',
+      accent: '#0a6cf0'
+    };
+
+    const loadCms = () => {
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem('continuum_cms_landing') || '{}'); } catch (e) {}
+      const d = { ...defaults, ...saved };
+      pillIn.value = d.pill;
+      headIn.value = d.headline;
+      subIn.value = d.sub;
+      ctaIn.value = d.cta1;
+      accIn.value = d.accent;
+      syncPreview();
+    };
+
+    const syncPreview = () => {
+      prevPill.textContent = pillIn.value || defaults.pill;
+      prevPill.style.color = accIn.value;
+      prevHead.textContent = headIn.value || defaults.headline;
+      prevSub.textContent = subIn.value || defaults.sub;
+      prevBtn.textContent = ctaIn.value || defaults.cta1;
+      prevBtn.style.background = accIn.value;
+    };
+
+    [pillIn, headIn, subIn, ctaIn, accIn].forEach((el) => el.addEventListener('input', syncPreview));
+
+    cmsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      localStorage.setItem('continuum_cms_landing', JSON.stringify({
+        pill: pillIn.value.trim() || defaults.pill,
+        headline: headIn.value.trim() || defaults.headline,
+        sub: subIn.value.trim() || defaults.sub,
+        cta1: ctaIn.value.trim() || defaults.cta1,
+        accent: accIn.value
+      }));
+      showToast('Published! Landing page updated.');
+    });
+
+    const cmsReset = document.getElementById('cmsResetBtn');
+    if (cmsReset) {
+      cmsReset.addEventListener('click', () => {
+        localStorage.removeItem('continuum_cms_landing');
+        loadCms();
+        showToast('CMS reset to default.');
+      });
+    }
+    loadCms();
+  }
+
   const session = await initPageChrome();
   if (!session || session.role !== 'admin') return;
+
+  // Holographic drifting starlight background
+  if (!document.getElementById('adminStars')) {
+    const c = document.createElement('canvas');
+    c.id = 'adminStars';
+    c.className = 'admin-stars';
+    c.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(c, document.body.firstChild);
+    const ctx = c.getContext('2d');
+    const dots = Array.from({ length: 75 }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      vx: (Math.random() - 0.5) * 0.00035,
+      vy: (Math.random() - 0.5) * 0.00035,
+      r: 0.6 + Math.random() * 1.4,
+      p: Math.random() * 6.28
+    }));
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      c.width = window.innerWidth * dpr;
+      c.height = window.innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    window.addEventListener('resize', resize);
+    resize();
+    let t = 0;
+    (function loop() {
+      t += 0.025;
+      const w = window.innerWidth, h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
+        d.x = (d.x + d.vx + 1) % 1;
+        d.y = (d.y + d.vy + 1) % 1;
+        const a = 0.18 + 0.5 * (0.5 + 0.5 * Math.sin(t + d.p));
+        ctx.fillStyle = `rgba(150, 220, 255, ${a.toFixed(2)})`;
+        ctx.beginPath();
+        ctx.arc(d.x * w, d.y * h, d.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  const resetBtn = document.getElementById('resetAdminDataBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (!window.confirm('Reset all admin catalog edits and restore default data?')) return;
+      const keepSession = window.localStorage.getItem('continuum.session');
+      const keepAuth = window.localStorage.getItem('continuum_auth_user');
+      window.localStorage.clear();
+      if (keepSession) window.localStorage.setItem('continuum.session', keepSession);
+      if (keepAuth) window.localStorage.setItem('continuum_auth_user', keepAuth);
+      showToast('Admin data reset! Reloading...');
+      setTimeout(() => window.location.reload(), 600);
+    });
+  }
 
   const contentRows = document.getElementById('contentRows');
   const disciplineGrid = document.getElementById('disciplineGrid');

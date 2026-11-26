@@ -224,5 +224,5 @@ var G='<svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path 
 var M='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#F25022" d="M2 2h9.5v9.5H2z"/><path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z"/><path fill="#00A4EF" d="M2 12.5h9.5V22H2z"/><path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z"/></svg>';
 document.querySelectorAll(".oauth-btn").forEach(function(b){b.insertAdjacentHTML("afterbegin",b.dataset.provider==="google"?G:M)});
 var c=document.querySelector(".login-card");
-c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--sx",(e.clientX-r.left)+"px");c.style.setProperty("--sy",(e.clientY-r.top)+"px")});
+if(c)c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--sx",(e.clientX-r.left)+"px");c.style.setProperty("--sy",(e.clientY-r.top)+"px")});
 })();

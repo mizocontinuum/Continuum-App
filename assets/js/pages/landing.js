@@ -1,3 +1,140 @@
+// ---- Apply Admin Visual CMS Edits ----
+(function(){
+  try {
+    var cms = JSON.parse(localStorage.getItem("continuum_cms_landing") || "null");
+    if (!cms) return;
+    var pill = document.querySelector(".hero-text .pill");
+    var h1 = document.querySelector(".hero-text h1");
+    var sub = document.querySelector(".hero-text p");
+    var cta1 = document.querySelector(".hero-text .cta .btn:not(.ghost)");
+    if (pill && cms.pill) pill.textContent = cms.pill;
+    if (h1 && cms.headline) h1.textContent = cms.headline;
+    if (sub && cms.sub) sub.textContent = cms.sub;
+    if (cta1 && cms.cta1) cta1.textContent = cms.cta1;
+    if (cms.accent) document.documentElement.style.setProperty("--accent", cms.accent);
+  } catch (e) {}
+})();
+
+// ---- Canva-style Full Visual Editor (?edit=1) ----
+(function(){
+  var EDIT_KEY = "continuum_cms_live_edits";
+  var editableSel = "h1, h2, h3, h4, p, .pill, .btn, .tag, .who, .card, .step";
+  var els = Array.prototype.slice.call(document.querySelectorAll(editableSel));
+  var secs = Array.prototype.slice.call(document.querySelectorAll("section[id]"));
+
+  // Apply saved live edits
+  try {
+    var saved = JSON.parse(localStorage.getItem(EDIT_KEY) || "null");
+    if (saved) {
+      if (saved.accent) document.documentElement.style.setProperty("--accent", saved.accent);
+      if (Array.isArray(saved.items)) {
+        saved.items.forEach(function(item, i){
+          if (!els[i] || !item) return;
+          if (item.text !== undefined && !els[i].children.length) els[i].textContent = item.text;
+          if (item.style) els[i].setAttribute("style", item.style);
+        });
+      }
+      if (Array.isArray(saved.hidden)) {
+        secs.forEach(function(s){
+          if (saved.hidden.indexOf(s.id) !== -1) s.style.display = "none";
+        });
+      }
+    }
+  } catch (e) {}
+
+  if (window.location.search.indexOf("edit=1") === -1) return;
+
+  var st = document.createElement("style");
+  st.textContent = ".cms-edit-target{outline:1px dashed rgba(46,168,255,0.35);outline-offset:3px;border-radius:6px;cursor:pointer;}.cms-selected{outline:2px solid #2ea8ff!important;box-shadow:0 0 0 4px rgba(46,168,255,0.2)!important;}.cms-sec-bar{position:absolute;top:14px;right:5vw;z-index:25;display:flex;gap:6px;}.cms-layer-btn{padding:6px 12px;border-radius:999px;border:1px solid rgba(46,168,255,0.45);background:rgba(3,8,14,0.88);color:#fff;font-size:12px;cursor:pointer;}";
+  document.head.appendChild(st);
+
+  var selectedEl = null;
+
+  els.forEach(function(el){
+    el.classList.add("cms-edit-target");
+    if (!el.children.length) el.contentEditable = "true";
+    el.addEventListener("click", function(e){
+      if (el.tagName === "A") e.preventDefault();
+      e.stopPropagation();
+      if (selectedEl) selectedEl.classList.remove("cms-selected");
+      selectedEl = el;
+      el.classList.add("cms-selected");
+      var cs = getComputedStyle(el);
+      var lbl = document.getElementById("canvaSelLabel");
+      if (lbl) lbl.textContent = el.tagName.toLowerCase();
+      var fs = document.getElementById("canvaSize");
+      if (fs) fs.value = parseInt(cs.fontSize, 10) || 16;
+    });
+  });
+
+  secs.forEach(function(s){
+    s.style.position = "relative";
+    var bar = document.createElement("div");
+    bar.className = "cms-sec-bar";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "cms-layer-btn";
+    if (s.style.display === "none") { s.style.display = ""; s.style.opacity = "0.35"; s.dataset.cmsHidden = "1"; }
+    btn.textContent = s.dataset.cmsHidden === "1" ? "Show #" + s.id : "Hide #" + s.id;
+    btn.onclick = function(){
+      var hide = s.dataset.cmsHidden !== "1";
+      s.dataset.cmsHidden = hide ? "1" : "0";
+      s.style.opacity = hide ? "0.35" : "1";
+      btn.textContent = hide ? "Show #" + s.id : "Hide #" + s.id;
+    };
+    var up = document.createElement("button");
+    up.type = "button"; up.className = "cms-layer-btn"; up.textContent = "↑";
+    up.onclick = function(){ if (s.previousElementSibling && s.previousElementSibling.tagName === "SECTION") s.parentNode.insertBefore(s, s.previousElementSibling); };
+    var dn = document.createElement("button");
+    dn.type = "button"; dn.className = "cms-layer-btn"; dn.textContent = "↓";
+    dn.onclick = function(){ if (s.nextElementSibling && s.nextElementSibling.tagName === "SECTION") s.parentNode.insertBefore(s.nextElementSibling, s); };
+    bar.appendChild(up); bar.appendChild(dn); bar.appendChild(btn);
+    s.appendChild(bar);
+  });
+
+  // Floating Canva-style Toolbar
+  var bar = document.createElement("div");
+  bar.style.cssText = "position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:18px;background:rgba(5,12,26,0.94);border:1px solid rgba(46,168,255,0.45);box-shadow:0 16px 40px rgba(0,0,0,0.65);backdrop-filter:blur(12px);color:#fff;font-size:12px;max-width:96vw;";
+  bar.innerHTML = "<strong style='color:#2ea8ff' id='canvaSelLabel'>Canva Mode</strong>"
+    + "<label style='display:flex;align-items:center;gap:4px;'>Size<input type='number' id='canvaSize' value='16' min='10' max='96' style='width:52px;padding:4px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:#091222;color:#fff;'></label>"
+    + "<label style='display:flex;align-items:center;gap:4px;'>Text<input type='color' id='canvaTxtCol' value='#ffffff' style='width:24px;height:24px;border:0;background:transparent;cursor:pointer;'></label>"
+    + "<label style='display:flex;align-items:center;gap:4px;'>Fill<input type='color' id='canvaBgCol' value='#091222' style='width:24px;height:24px;border:0;background:transparent;cursor:pointer;'></label>"
+    + "<button id='canvaBold' style='padding:5px 9px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-weight:700;cursor:pointer;'>B</button>"
+    + "<button id='canvaAlignL' style='padding:5px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;cursor:pointer;'>L</button>"
+    + "<button id='canvaAlignC' style='padding:5px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;cursor:pointer;'>C</button>"
+    + "<button id='canvaHideEl' style='padding:5px 9px;border-radius:6px;border:1px solid rgba(255,80,80,0.4);background:transparent;color:#ff8a8a;cursor:pointer;'>Hide</button>"
+    + "<button id='liveCmsSave' style='padding:7px 14px;border-radius:999px;border:0;background:linear-gradient(135deg,#0a6cf0,#2ea8ff);color:#fff;font-weight:700;cursor:pointer;'>Save & Publish</button>"
+    + "<button id='liveCmsReset' style='padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#b9d3ee;cursor:pointer;'>Reset</button>"
+    + "<a href='index.html' style='padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#fff;text-decoration:none;'>Exit</a>";
+  document.body.appendChild(bar);
+
+  document.getElementById("canvaSize").oninput = function(){ if (selectedEl) selectedEl.style.fontSize = this.value + "px"; };
+  document.getElementById("canvaTxtCol").oninput = function(){ if (selectedEl) selectedEl.style.color = this.value; };
+  document.getElementById("canvaBgCol").oninput = function(){ if (selectedEl) selectedEl.style.background = this.value; };
+  document.getElementById("canvaBold").onclick = function(){ if (selectedEl) selectedEl.style.fontWeight = selectedEl.style.fontWeight === "800" ? "400" : "800"; };
+  document.getElementById("canvaAlignL").onclick = function(){ if (selectedEl) selectedEl.style.textAlign = "left"; };
+  document.getElementById("canvaAlignC").onclick = function(){ if (selectedEl) selectedEl.style.textAlign = "center"; };
+  document.getElementById("canvaHideEl").onclick = function(){ if (selectedEl) selectedEl.style.display = "none"; };
+
+  document.getElementById("liveCmsSave").onclick = function(){
+    var hidden = secs.filter(function(s){ return s.dataset.cmsHidden === "1"; }).map(function(s){ return s.id; });
+    var items = els.map(function(el){
+      return {
+        text: !el.children.length ? el.textContent : undefined,
+        style: el.getAttribute("style") || ""
+      };
+    });
+    localStorage.setItem(EDIT_KEY, JSON.stringify({ items: items, hidden: hidden }));
+    this.textContent = "Saved! ✓";
+    var self = this;
+    setTimeout(function(){ self.textContent = "Save & Publish"; }, 1500);
+  };
+  document.getElementById("liveCmsReset").onclick = function(){
+    localStorage.removeItem(EDIT_KEY);
+    window.location.reload();
+  };
+})();
+
 // ---- Full-section twinkling dots for hero ----
 (function(){
   var c = document.getElementById("heroStars");
