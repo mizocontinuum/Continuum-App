@@ -753,9 +753,11 @@ if (avatarBtn && avatarDropdown) {
 
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
-      // Clear session auth if stored
+      // Clear session auth
       try {
         sessionStorage.clear();
+        localStorage.removeItem("continuum.session");
+        localStorage.removeItem("continuum_auth_user");
         localStorage.removeItem("auth_token");
         localStorage.removeItem("currentUser");
       } catch (e) {}
@@ -765,6 +767,21 @@ if (avatarBtn && avatarDropdown) {
     });
   }
 }
+
+
+// Dynamically reflect active session in dropdown header
+try {
+  const sess = JSON.parse(localStorage.getItem("continuum.session") || "null");
+  if (sess) {
+    const dropName = document.querySelector(".drop-name");
+    const dropRole = document.querySelector(".drop-role");
+    if (dropName && sess.name) dropName.textContent = sess.name;
+    if (dropRole && sess.role) {
+      const isSuper = sess.role.toLowerCase() === "admin";
+      dropRole.innerHTML = `<i class="role-badge">${isSuper ? "Super Admin" : "Member"}</i> • Online`;
+    }
+  }
+} catch(e) {}
 
 // Start initial route
 go();

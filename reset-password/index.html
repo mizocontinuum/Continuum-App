@@ -9,7 +9,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Continuum Academy - Choose a New Password</title>
 
-  <!-- 2026 Cinematic Dark Azure Auth Stylesheet -->
+  <!-- Google Font Sora for Crisp Modern UI -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&display=swap">
+  <!-- 2026 Unified Cinematic Dark Azure Auth Stylesheet -->
   <link rel="stylesheet" href="../assets/css/auth.css">
 
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
@@ -22,7 +24,7 @@
   <div class="login-container">
 
     <header class="brand-header">
-      <a href="../home/" class="brand-link" aria-label="Continuum Academy Home">
+      <a href="../home/index.html" class="brand-link" aria-label="Continuum Academy Home">
         <img src="../assets/images/logo.png" alt="Continuum Academy Inc." class="brand-logo-img">
       </a>
       <div class="brand-divider"></div>
@@ -32,8 +34,15 @@
       </div>
     </header>
 
+    <!-- Two-column Unified Layout matching Sign In and Create Account -->
+    <div class="auth-showcase-panel">
+      <div class="auth-spline-stage">
+        <canvas id="authSplineCanvas" class="auth-spline-canvas"></canvas>
+      </div>
+    </div>
+
     <main class="login-card">
-      <a class="back-link" href="../login/">
+      <a class="back-link" href="../login/index.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
@@ -85,7 +94,7 @@
       <!-- A recovery link that already expired lands here -->
       <p class="auth-note" id="resetExpired" hidden>
         <strong>This link has expired.</strong> Request a new one from the
-        <a href="../forgot-password/">forgot password</a> screen.
+        <a href="../forgot-password/index.html" style="color:var(--azure-bright);font-weight:600;text-decoration:none;">forgot password</a> screen.
       </p>
     </main>
 
@@ -95,13 +104,14 @@
         <span class="dot">•</span>
         <a href="#" class="footer-link">Privacy Policy</a>
         <span class="dot">•</span>
-        <a href="../login/" class="footer-link">Contact</a>
+        <a href="../login/index.html" class="footer-link">Contact</a>
       </div>
     </footer>
 
   </div>
 
-
+  <!-- Unified 3D Holographic Canvas & Aura Engine -->
+  <script src="../assets/js/auth-3d-logo.js"></script>
   <!-- Reset Password Handler -->
   <script type="module" src="../assets/js/pages/reset-password.js"></script>
 
