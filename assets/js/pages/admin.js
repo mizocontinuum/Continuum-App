@@ -489,6 +489,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const sidebar = document.getElementById('adminSidebar');
   const toggle = document.getElementById('sidebarToggle');
   const scrim = document.getElementById('sidebarScrim');
+  const closeBtn = document.getElementById('sidebarClose');
   const closeSidebar = () => {
     sidebar.classList.remove('open');
     scrim.hidden = true;
@@ -501,6 +502,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
   scrim.addEventListener('click', closeSidebar);
+  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
   sidebar.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener('click', () => {
       closeSidebar();

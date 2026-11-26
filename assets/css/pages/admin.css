@@ -2047,6 +2047,14 @@ html {
   scroll-padding-top: 92px;
 }
 
+/* Scale the admin studio from the ROOT element. Unlike zoom on <body>, a root
+   zoom changes the CSS pixel size, so media queries re-evaluate with it — the
+   whole structure reflows just like browser zoom, staying balanced on phone,
+   laptop and desktop. Scoped to admin pages only. */
+html[data-requires-admin] {
+  zoom: 1.15;
+}
+
 body.admin-body {
   display: block;
   justify-content: initial;
@@ -2058,6 +2066,46 @@ body.admin-body {
     var(--admin-bg);
   color: var(--admin-text);
   font-family: var(--font-family);
+}
+
+/* ---------- THEMED SCROLLBARS (admin-only, all scroll containers) ---------- */
+/* Firefox: thin bar, Azure thumb on a near-invisible track */
+.admin-body,
+.admin-body * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 127, 255, 0.45) rgba(255, 255, 255, 0.04);
+}
+
+/* WebKit (Chrome / Safari / Edge) — slim, rounded, Azure thumb */
+.admin-body::-webkit-scrollbar,
+.admin-body *::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+.admin-body::-webkit-scrollbar-track,
+.admin-body *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-body::-webkit-scrollbar-thumb,
+.admin-body *::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0, 127, 255, 0.55), rgba(0, 95, 200, 0.4));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.admin-body::-webkit-scrollbar-thumb:hover,
+.admin-body *::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 127, 255, 0.75);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+.admin-body::-webkit-scrollbar-corner,
+.admin-body *::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .admin-shell {
@@ -2074,6 +2122,10 @@ body.admin-body {
   width: 252px;
   flex-direction: column;
   padding: 28px 16px 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
   border-right: 1px solid var(--admin-line);
   background: rgba(9, 15, 21, 0.96);
 }
@@ -2329,8 +2381,32 @@ body.admin-body {
   stroke-linecap: round;
 }
 
+.sidebar-close {
+  position: absolute;
+  top: 18px;
+  right: 14px;
+  z-index: 2;
+  display: none;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid rgba(67, 145, 255, 0.3);
+  border-radius: 9px;
+  background: rgba(7, 20, 43, 0.8);
+  color: #cfe2ff;
+}
+
+.sidebar-close svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
 .admin-content {
-  width: min(100%, 1500px);
+  width: min(100%, 1800px);
   margin: 0 auto;
   padding: 38px clamp(22px, 4vw, 58px) 24px;
 }
@@ -3230,6 +3306,7 @@ body.admin-body {
   .admin-sidebar.open { transform: translateX(0); }
   .admin-main { margin-left: 0; }
   .sidebar-toggle { display: grid; }
+  .sidebar-close { display: grid; }
   .admin-topbar { justify-content: flex-start; gap: 13px; }
   .topbar-actions { margin-left: auto; }
   .insights-grid { grid-template-columns: 1fr; }
@@ -3314,7 +3391,8 @@ body.admin-body::before {
   inset: 14px auto 14px 14px;
   width: 236px;
   padding: 24px 14px 17px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   border: 1px solid rgba(41, 126, 255, 0.23);
   border-radius: 21px;
   background:
@@ -3983,6 +4061,20 @@ body.admin-body::before {
   .admin-sidebar {
     inset: 8px auto 8px 8px;
     width: min(290px, calc(100vw - 54px));
+    /* Solid, opaque panel on mobile so text stays crisp — the blur +
+       semi-transparent gradient was washing nav labels out against the page. */
+    background: linear-gradient(155deg, #0a1830 0%, #050b15 100%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  }
+
+  .admin-sidebar::before {
+    opacity: 0.6;
+  }
+
+  .admin-nav-link {
+    color: #c2d4ec;
   }
 
   .admin-main {
