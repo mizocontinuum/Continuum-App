@@ -8,8 +8,8 @@ import {
   listVideos,
   saveVideo,
   showToast
-} from '../store.js';
-import { initPageChrome } from '../user-menu.js?v=21';
+} from '../store.js?v=4';
+import { initPageChrome } from '../user-menu.js?v=4';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Dedicated Sidebar Page Switching (always active)

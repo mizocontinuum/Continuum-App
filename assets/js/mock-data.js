@@ -95,7 +95,7 @@ export const VIDEOS = [
     summary:
       'Learn how to preserve entrepreneurial agility and overcome internal bottlenecks as your business scales. Discover key strategies to close the action gap and keep a founder\'s mindset through rapid growth.',
     outcomes: ['Grow ventures', 'Close the action gap', 'Keep founder speed'],
-    video_url: '/assets/videos/insight-without-action-fails.mp4',
+    video_url: '',
     is_clip: true,
     featured: true,
     sort_order: 1
@@ -182,7 +182,7 @@ export const VIDEOS = [
     summary:
       'How to position your brand so customers choose you first. A practical framework for claiming a word in the market and defending it.',
     outcomes: ['Claim a market word', 'Sharpen the promise', 'Defend the position'],
-    video_url: '/assets/videos/own-the-mind.mp4',
+    video_url: '',
     is_clip: true,
     featured: true,
     sort_order: 1
@@ -269,7 +269,7 @@ export const VIDEOS = [
     summary:
       'What separates leaders who steady a room from those who add to the noise, and the three habits you can rehearse.',
     outcomes: ['Steady the room', 'Speak in one breath', 'Hold the silence'],
-    video_url: '/assets/videos/executive-presence.mp4',
+    video_url: '',
     is_clip: true,
     featured: true,
     sort_order: 1
@@ -356,7 +356,7 @@ export const VIDEOS = [
     summary:
       'The bigger the business gets, the harder it is to move fast. Diagnose bureaucracy and analysis paralysis before they compound.',
     outcomes: ['Diagnose drag', 'Restore agility', 'Decide faster'],
-    video_url: '/assets/videos/growth-paradox.mp4',
+    video_url: '',
     is_clip: true,
     featured: true,
     sort_order: 1
@@ -443,7 +443,7 @@ export const VIDEOS = [
     summary:
       'Move past the income statement: what the balance sheet is telling you about risk, resilience and real returns.',
     outcomes: ['Read the sheet', 'Spot risk early', 'Judge resilience'],
-    video_url: '/assets/videos/balance-sheet.mp4',
+    video_url: '',
     is_clip: true,
     featured: true,
     sort_order: 1
@@ -530,7 +530,7 @@ export const VIDEOS = [
     summary:
       'A sober filter for choosing the first three AI use cases in your business, and the governance that keeps them safe.',
     outcomes: ['Pick three use cases', 'Set guardrails', 'Measure the gain'],
-    video_url: '/assets/videos/ai-adoption.mp4',
+    video_url: '',
     is_clip: true,
     featured: true,
     sort_order: 1
@@ -617,7 +617,7 @@ export const VIDEOS = [
     summary:
       'Find where your week leaks capacity, and rebuild the calendar around the two hours that decide everything.',
     outcomes: ['Audit the week', 'Protect deep hours', 'Recover deliberately'],
-    video_url: '/assets/videos/energy-audit.mp4',
+    video_url: '',
     is_clip: true,
     featured: false,
     sort_order: 1
