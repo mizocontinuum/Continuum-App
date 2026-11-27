@@ -463,17 +463,21 @@ function buildRouteDoc(route) {
   const cardsHtml = items.length
     ? items
         .map((v) => {
+          const hasThumb = Boolean(v.thumbnail_url);
           const thumb = v.thumbnail_url || '../assets/images/logo.png';
           const disc = discMap[v.discipline_id] || v.discipline_id || 'Masterclass';
           const mins = v.minutes ? `${v.minutes} min` : '';
-          return `<article class="card" data-title="${escapeHtml((v.title || '').toLowerCase())}" data-video-id="${escapeHtml(v.id)}">
-            <div class="thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(v.title)}" loading="lazy"></div>
-            <div class="meta">
-              <span class="badge">${escapeHtml(disc)}</span>
-              ${mins ? `<span class="dur">${escapeHtml(mins)}</span>` : ''}
+          const playUrl = v.video_url || v.trailer_url || '';
+          return `<article class="card" data-title="${escapeHtml((v.title || '').toLowerCase())}" data-video-url="${escapeHtml(playUrl)}" data-video-title="${escapeHtml(v.title)}">
+            <div class="thumb ${hasThumb ? '' : 'thumb--fallback'}"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(v.title)}" loading="lazy"></div>
+            <div class="card-body">
+              <div class="meta">
+                <span class="badge">${escapeHtml(disc)}</span>
+                ${mins ? `<span class="dur">${escapeHtml(mins)}</span>` : ''}
+              </div>
+              <h3>${escapeHtml(v.title)}</h3>
+              <p>${escapeHtml(v.summary || v.speaker || 'Continuum Academy Masterclass')}</p>
             </div>
-            <h3>${escapeHtml(v.title)}</h3>
-            <p>${escapeHtml(v.summary || v.speaker || '')}</p>
           </article>`;
         })
         .join('')
@@ -490,16 +494,23 @@ function buildRouteDoc(route) {
   .head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
   h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.02em; }
   #search { width: 260px; max-width: 100%; padding: 9px 14px; border-radius: 999px; border: 1px solid rgba(130, 175, 225, 0.25); background: rgba(10, 22, 38, 0.75); color: #eef5ff; outline: none; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-  .card { background: rgba(12, 24, 42, 0.72); border: 1px solid rgba(130, 175, 225, 0.16); border-radius: 14px; overflow: hidden; transition: transform .18s ease, border-color .18s ease; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; align-items: stretch; }
+  .card { display: flex; flex-direction: column; height: 100%; cursor: pointer; background: rgba(12, 24, 42, 0.72); border: 1px solid rgba(130, 175, 225, 0.16); border-radius: 14px; overflow: hidden; transition: transform .18s ease, border-color .18s ease; }
   .card:hover { transform: translateY(-3px); border-color: rgba(46, 168, 255, 0.45); }
-  .thumb { aspect-ratio: 16 / 9; background: #07111f; overflow: hidden; }
+  .thumb { aspect-ratio: 16 / 9; background: #07111f; overflow: hidden; flex-shrink: 0; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .meta { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px 4px; font-size: 0.75rem; color: #7fb4eb; }
-  .badge { text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-  h3 { margin: 4px 14px 6px; font-size: 1rem; line-height: 1.3; }
-  p { margin: 0 14px 14px; font-size: 0.84rem; color: rgba(214, 229, 245, 0.72); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .thumb--fallback img { object-fit: contain; padding: 24px; opacity: 0.75; }
+  .card-body { display: flex; flex-direction: column; flex: 1; padding: 12px 14px 14px; }
+  .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; color: #7fb4eb; }
+  .badge { text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
+  h3 { margin: 0 0 6px; font-size: 1rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+  p { margin: 0; font-size: 0.84rem; color: rgba(214, 229, 245, 0.72); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .empty { padding: 48px 24px; text-align: center; color: rgba(214, 229, 245, 0.65); border: 1px dashed rgba(130, 175, 225, 0.22); border-radius: 14px; }
+  dialog.player { border: 1px solid rgba(130, 175, 225, 0.25); border-radius: 16px; background: #06101d; color: #eef5ff; padding: 16px; max-width: 820px; width: 92vw; }
+  dialog.player::backdrop { background: rgba(2, 6, 12, 0.82); backdrop-filter: blur(6px); }
+  .player-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .player-close { background: none; border: 0; color: #eef5ff; font-size: 1.5rem; cursor: pointer; line-height: 1; }
+  video.player-video { width: 100%; border-radius: 10px; background: #000; max-height: 70vh; }
 </style>
 </head>
 <body>
@@ -508,12 +519,29 @@ function buildRouteDoc(route) {
     <input id="search" type="search" placeholder="Filter ${escapeHtml(title.toLowerCase())}...">
   </div>
   <div class="grid" id="grid">${cardsHtml}</div>
+  <dialog class="player" id="playerDialog">
+    <div class="player-head"><strong id="playerTitle"></strong><button class="player-close" id="playerClose" type="button">×</button></div>
+    <video class="player-video" id="playerVideo" controls playsinline></video>
+  </dialog>
   <script>
     const s = document.getElementById('search');
     s.addEventListener('input', () => {
       const q = s.value.trim().toLowerCase();
       document.querySelectorAll('.card').forEach((c) => {
         c.style.display = !q || c.dataset.title.includes(q) ? '' : 'none';
+      });
+    });
+    const dlg = document.getElementById('playerDialog');
+    const vid = document.getElementById('playerVideo');
+    const ttl = document.getElementById('playerTitle');
+    document.getElementById('playerClose').addEventListener('click', () => { vid.pause(); vid.src = ''; dlg.close(); });
+    document.querySelectorAll('.card').forEach((c) => {
+      c.addEventListener('click', () => {
+        if (!c.dataset.videoUrl) return;
+        ttl.textContent = c.dataset.videoTitle || '';
+        vid.src = c.dataset.videoUrl;
+        dlg.showModal();
+        vid.play().catch(() => {});
       });
     });
   </script>
