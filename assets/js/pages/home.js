@@ -487,6 +487,7 @@ function buildRouteDoc(route) {
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="stylesheet" href="../assets/css/pages/home.css?v=5">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; background: #03080e; color: #eef5ff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
