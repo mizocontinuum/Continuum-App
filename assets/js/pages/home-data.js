@@ -1161,7 +1161,7 @@ function closeModal() {
 $("mClose").addEventListener("click", closeModal);
 $("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
 $("mList").addEventListener("click", () => { if (current) toggle(current); });
-const play = o => { try { parent.NFPlay(o); } catch (e) { toast("Playing \"" + o.title + "\"..."); } };
+const play = o => { try { parent.NFPlay(o); } catch (e) { toast('Playing "' + o.title + '"...'); } };
 $("mPlay").addEventListener("click", () => {
   const item = current;
   if (!item) return;

@@ -463,7 +463,8 @@ nav { z-index: 20; }
 /* ── Navigation and keyboard accessibility ── */
 .skip-link{position:fixed;top:12px;left:12px;z-index:100;padding:10px 16px;border-radius:10px;background:#fff;color:#03080e;font-weight:700;text-decoration:none;transform:translateY(-160%);box-shadow:0 10px 30px rgba(0,0,0,.3)}
 .skip-link:focus{transform:none}
-.nav-toggle{display:none;align-items:center;justify-content:center;flex-direction:column;gap:5px;width:42px;height:42px;padding:0;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.nav-toggle{align-items:center;justify-content:center;flex-direction:column;gap:5px;width:42px;height:42px;padding:0;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+@media (min-width:701px){.nav-toggle{display:none}}
 .nav-toggle span{display:block;width:19px;height:2px;border-radius:2px;background:currentColor;transition:transform .2s,opacity .2s}
 .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
