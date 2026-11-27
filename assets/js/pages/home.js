@@ -490,7 +490,7 @@ function buildRouteDoc(route) {
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; background: #03080e; color: #eef5ff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { padding: 28px 36px 64px; }
+  body { padding: 96px 36px 64px; }
   .head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
   h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.02em; }
   #search { width: 260px; max-width: 100%; padding: 9px 14px; border-radius: 999px; border: 1px solid rgba(130, 175, 225, 0.25); background: rgba(10, 22, 38, 0.75); color: #eef5ff; outline: none; }
