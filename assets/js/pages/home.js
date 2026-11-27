@@ -438,6 +438,89 @@ const f = document.getElementById("f");
 
 function count() {}
 
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function buildRouteDoc(route) {
+  const videos = typeof listVideos === 'function' ? listVideos() : [];
+  const disciplines = typeof listDisciplines === 'function' ? listDisciplines() : [];
+  const favs = typeof getFavorites === 'function' ? getFavorites() : [];
+
+  let items = videos;
+  if (route === 'movies') items = videos.filter((v) => v.category === 'movies');
+  else if (route === 'series') items = videos.filter((v) => v.category === 'series');
+  else if (route === 'library') items = videos.filter((v) => v.category === 'library');
+  else if (route === 'mylist') items = videos.filter((v) => favs.includes(v.id));
+
+  const title = R[route] || 'Home';
+  const discMap = Object.fromEntries(disciplines.map((d) => [d.id, d.name || d.id]));
+
+  const cardsHtml = items.length
+    ? items
+        .map((v) => {
+          const thumb = v.thumbnail_url || '../assets/images/logo.png';
+          const disc = discMap[v.discipline_id] || v.discipline_id || 'Masterclass';
+          const mins = v.minutes ? `${v.minutes} min` : '';
+          return `<article class="card" data-title="${escapeHtml((v.title || '').toLowerCase())}" data-video-id="${escapeHtml(v.id)}">
+            <div class="thumb"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(v.title)}" loading="lazy"></div>
+            <div class="meta">
+              <span class="badge">${escapeHtml(disc)}</span>
+              ${mins ? `<span class="dur">${escapeHtml(mins)}</span>` : ''}
+            </div>
+            <h3>${escapeHtml(v.title)}</h3>
+            <p>${escapeHtml(v.summary || v.speaker || '')}</p>
+          </article>`;
+        })
+        .join('')
+    : `<div class="empty">No masterclasses found in ${escapeHtml(title)} yet. Add content in Admin Studio.</div>`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: #03080e; color: #eef5ff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { padding: 28px 36px 64px; }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.02em; }
+  #search { width: 260px; max-width: 100%; padding: 9px 14px; border-radius: 999px; border: 1px solid rgba(130, 175, 225, 0.25); background: rgba(10, 22, 38, 0.75); color: #eef5ff; outline: none; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+  .card { background: rgba(12, 24, 42, 0.72); border: 1px solid rgba(130, 175, 225, 0.16); border-radius: 14px; overflow: hidden; transition: transform .18s ease, border-color .18s ease; }
+  .card:hover { transform: translateY(-3px); border-color: rgba(46, 168, 255, 0.45); }
+  .thumb { aspect-ratio: 16 / 9; background: #07111f; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .meta { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px 4px; font-size: 0.75rem; color: #7fb4eb; }
+  .badge { text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  h3 { margin: 4px 14px 6px; font-size: 1rem; line-height: 1.3; }
+  p { margin: 0 14px 14px; font-size: 0.84rem; color: rgba(214, 229, 245, 0.72); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .empty { padding: 48px 24px; text-align: center; color: rgba(214, 229, 245, 0.65); border: 1px dashed rgba(130, 175, 225, 0.22); border-radius: 14px; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>${escapeHtml(title)}</h1>
+    <input id="search" type="search" placeholder="Filter ${escapeHtml(title.toLowerCase())}...">
+  </div>
+  <div class="grid" id="grid">${cardsHtml}</div>
+  <script>
+    const s = document.getElementById('search');
+    s.addEventListener('input', () => {
+      const q = s.value.trim().toLowerCase();
+      document.querySelectorAll('.card').forEach((c) => {
+        c.style.display = !q || c.dataset.title.includes(q) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>`;
+}
+
 function go() {
   const r = R[location.hash.slice(1)] ? location.hash.slice(1) : "home";
   document.querySelectorAll(".links a").forEach((a) => {
@@ -450,7 +533,7 @@ function go() {
   count();
   f.style.opacity = 0;
   setTimeout(() => {
-    f.srcdoc = P[r];
+    f.srcdoc = buildRouteDoc(r);
   }, 150);
 }
 
