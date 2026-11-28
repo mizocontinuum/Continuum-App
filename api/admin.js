@@ -83,6 +83,14 @@ async function handleUploadUrl(req, res) {
     
     console.log('Creating signed upload URL for:', { path, bucket });
     
+    // Try to create the bucket if it doesn't exist
+    try {
+      await ctx.supabase.storage.createBucket(bucket, { public: true });
+      console.log('Created bucket:', bucket);
+    } catch (bucketError) {
+      console.log('Bucket might already exist:', bucketError.message);
+    }
+    
     const { data, error } = await ctx.supabase.storage.from(bucket).createSignedUploadUrl(path);
     if (error) {
       console.error('Supabase storage error:', error);
