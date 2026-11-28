@@ -1042,9 +1042,23 @@ render(0);
 const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
 const __vids = ((__CAT && __CAT.videos) || []).filter(v => !v.clip).map(v => ({ id:v.id, title:v.title, year:v.year||"", genres:[v.genre || "Masterclass"], time:v.time, minutes:v.minutes, rating:v.rating, pop:v.rawRating || v.pop || 0, tag:String(v.tag || v.genre || "Masterclass"), desc:v.desc, poster:v.poster, bg:v.bg, video:v.video||"", trailer:v.trailer||"", created:v.created||"", sort:v.sort||0, discipline_id:v.discipline_id||"", discipline:v.discipline||"" }));
 
-/* ---------- 1) DATA: add or edit movies here ----------
+/* ---------- 1) DATA: group videos by discipline ----------
    Real posters:  poster: 'url("poster.jpg") center/cover'          */
-const movies = (__vids.length ? __vids : [
+const movies = (__vids.length ? (() => {
+  const byDiscipline = {};
+  __vids.forEach(v => {
+    const disc = v.discipline || v.genre || "Masterclass";
+    (byDiscipline[disc] = byDiscipline[disc] || []).push(v);
+  });
+  return Object.entries(byDiscipline).map(([disc, vids]) => ({
+    title: disc,
+    count: vids.length,
+    desc: `${vids.length} ${vids.length === 1 ? 'masterclass' : 'masterclasses'} in ${disc}`,
+    poster: vids[0]?.poster || `linear-gradient(160deg,${vids[0]?.hue || 200},${vids[0]?.hue - 40 || 160})`,
+    bg: vids[0]?.bg || `linear-gradient(180deg,${vids[0]?.hue || 200},#03080E)`,
+    videos: vids
+  }));
+})() : [
   { title:"Nightfall",    year:2023, genres:["Mystery","Thriller"], time:"1h 55m", rating:4.4, pop:92, tag:"A LIGHTHOUSE MYSTERY",
     desc:"A lighthouse keeper discovers that the storm rolling in each night is trying to tell her something, and the answer lies beneath the waves.", poster:"linear-gradient(160deg,#2a5d8f,#06101c)" },
   { title:"Ember",        year:2022, genres:["Comedy","Drama"], time:"1h 40m", rating:4.1, pop:80, tag:"ONE KITCHEN, ONE WEEK",
@@ -1075,15 +1089,15 @@ const movies = (__vids.length ? __vids : [
 const $ = id => document.getElementById(id);
 const grid = $("grid");
 const state = { genre:"All", q:"", sort:"pop" };
-let current = null, modalTrigger = null;                // movie open in the modal
+let current = null, modalTrigger = null;
 
-const KEY = "continuum.favorites";                       // synced with the other pages
+const KEY = "continuum.favorites";
 let list = [];
 try { list = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
 const saveList = () => { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} };
 const mid = m => m.id || m.title;
 
-const genres = ["All", ...new Set(movies.flatMap(m => m.genres))].sort((a, b) => a === "All" ? -1 : b === "All" ? 1 : a.localeCompare(b));
+const genres = ["All", ...new Set(movies.map(m => m.title))].sort((a, b) => a === "All" ? -1 : b === "All" ? 1 : a.localeCompare(b));
 
 /* ---------- 3) FILTER CHIPS ---------- */
 genres.forEach(g => {
@@ -1107,17 +1121,17 @@ genres.forEach(g => {
 function visible() {
   const q = state.q.toLowerCase();
   const out = movies.filter(m =>
-    (state.genre === "All" || m.genres.includes(state.genre)) &&
-    (!q || m.title.toLowerCase().includes(q) || m.genres.join(" ").toLowerCase().includes(q)));
-  const by = { pop:(a,b)=>b.pop-a.pop, new:(a,b)=>(b.created||"").localeCompare(a.created||"") || (b.sort||0)-(a.sort||0), top:(a,b)=>b.rating-a.rating, az:(a,b)=>a.title.localeCompare(b.title) };
+    (state.genre === "All" || m.title === state.genre) &&
+    (!q || m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q)));
+  const by = { pop:(a,b)=>b.count-a.count, new:(a,b)=>(b.created||"").localeCompare(a.created||""") || (b.sort||0)-(a.sort||0), top:(a,b)=>b.count-a.count, az:(a,b)=>a.title.localeCompare(b.title) };
   return out.sort(by[state.sort]);
 }
 
 function render() {
   const items = visible();
   grid.innerHTML = "";
-  $("count").textContent = items.length + (items.length === 1 ? " movie" : " movies");
-  if (!items.length) { grid.innerHTML = '<p class="empty">No movies match your search. Try another genre or title.<br><button class="browse" onclick="clearFilters()">Clear filters</button></p>'; return; }
+  $("count").textContent = items.length + (items.length === 1 ? " discipline" : " disciplines");
+  if (!items.length) { grid.innerHTML = '<p class="empty">No disciplines match your search.<br><button class="browse" onclick="clearFilters()">Clear filters</button></p>'; return; }
 
   items.forEach(m => {
     const card = document.createElement("article");
@@ -1128,10 +1142,10 @@ function render() {
       '<button class="quick"></button>';
     const poster = card.querySelector(".poster");
     poster.style.background = m.poster;
-    card.querySelector(".rate").textContent = "\\u2605 " + m.rating.toFixed(1);
+    card.querySelector(".rate").textContent = m.count + " items";
     poster.querySelector("b").textContent = m.title;
     card.querySelector(".name").textContent = m.title;
-    card.querySelector(".sub").textContent = [m.year, m.genres[0]].filter(Boolean).join(" \\u00B7 ");
+    card.querySelector(".sub").textContent = m.desc;
     const q = card.querySelector(".quick");
     paintQuick(q, m);
     q.addEventListener("click", () => toggle(m));
@@ -1154,10 +1168,16 @@ function toast(msg) {
   clearTimeout(t); t = setTimeout(() => el.classList.remove("show"), 2200);
 }
 function toggle(m) {
-  const i = list.indexOf(mid(m));
-  if (i >= 0) { list.splice(i, 1); toast("Removed from My List"); }
-  else { list.push(mid(m)); toast("Added to My List"); }
-  saveList(); syncList();
+  const ids = m.videos ? m.videos.map(v => v.id).filter(Boolean) : [m.id || m.title];
+  const all = ids.every(id => list.includes(id));
+  ids.forEach(id => {
+    const i = list.indexOf(id);
+    if (all && i >= 0) list.splice(i, 1);
+    else if (!all && i < 0) list.push(id);
+  });
+  saveList();
+  syncList();
+  toast(all ? "Removed from My List" : "Added to My List");
 }
 function syncList() {
   const shown = visible();
@@ -1166,7 +1186,9 @@ function syncList() {
 }
 /* ---------- 6) DETAILS MODAL ---------- */
 function paintModalBtn() {
-  const on = list.includes(mid(current)), b = $("mList");
+  const ids = current.videos ? current.videos.map(v => v.id).filter(Boolean) : [current.id || current.title];
+  const on = ids.length > 0 && ids.every(id => list.includes(id));
+  const b = $("mList");
   b.textContent = on ? "\\u2713 In My List" : "+ My List";
   b.classList.toggle("saved", on);
 }
@@ -1175,13 +1197,13 @@ function openModal(m) {
   $("mPoster").style.background = m.poster;
   $("mPoster").innerHTML = "<b></b>";
   $("mPoster").firstChild.textContent = m.title;
-  $("mTag").textContent = m.tag;
+  $("mTag").textContent = m.count + " masterclasses";
   $("mTitle").textContent = m.title;
   $("mDesc").textContent = m.desc;
-  $("mInfo").textContent = [m.year, m.genres.join(", "), m.time].filter(Boolean).join("   ");
-  const full = Math.round(m.rating);
+  $("mInfo").textContent = "Browse all videos in this discipline";
+  const full = Math.round(m.rating || 4.0);
   $("mStars").innerHTML = [1,2,3,4,5].map(n => n <= full ? "\\u2605" : '<span class="off">\\u2605</span>').join("");
-  $("mStars").setAttribute("aria-label", m.rating + " out of 5");
+  $("mStars").setAttribute("aria-label", (m.rating || 4.0) + " out of 5");
   paintModalBtn();
   modalTrigger = document.activeElement;
   $("modal").classList.add("open");
@@ -1203,7 +1225,11 @@ $("mPlay").addEventListener("click", () => {
   const item = current;
   if (!item) return;
   closeModal();
-  play({ title:item.title, sub:(item.genres||[]).join(", "), bg:item.poster, video:item.video||"", dur:item.time, id:item.id||null });
+  if (item.videos && item.videos.length) {
+    play({ title:item.videos[0].title, sub:item.title, bg:item.poster, video:item.videos[0].video||"", dur:item.videos[0].time||"30 min", id:item.videos[0].id||null });
+  } else {
+    play({ title:item.title, sub:item.title, bg:item.poster, video:item.video||"", dur:item.time||"30 min", id:item.id||null });
+  }
 });
 document.addEventListener("keydown", e => {
   const dialog = $("modal");
@@ -1335,7 +1361,7 @@ const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; 
 const __vids = (__CAT && __CAT.videos) || [];
 const __discs = (__CAT && __CAT.disciplines) || [];
 const S = (__discs.length ? __discs.map(d => {
-  const vs = __vids.filter(v => v.discipline_id === d.id && !v.clip);
+  const vs = __vids.filter(v => (v.series_id === d.id || v.discipline_id === d.id) && !v.clip);
   if (!vs.length) return null;
   const r = vs.reduce((a,v) => a + v.rating, 0) / vs.length;
   return { id:d.id, t:d.title, g:d.goal || "Masterclass", y:"", s:1, r:r.toFixed(1), h:d.hue, d:d.blurb || "", e:vs.map(v => v.title), vids:vs };
@@ -1550,16 +1576,19 @@ h3{font-size:.72rem;letter-spacing:.2em;color:var(--mute);margin:0 0 .8rem;font-
 const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
 function __buildCat(cat){
   const out=[], vids=cat.videos||[], discs=cat.disciplines||[];
+  /* Group by series_id (Discipline Series) */
   discs.forEach(d=>{
-    const vs=vids.filter(v=>v.discipline_id===d.id&&!v.clip);
+    const vs=vids.filter(v=>(v.series_id===d.id||v.discipline_id===d.id)&&!v.clip);
     if(!vs.length)return;
     out.push({t:d.title,tag:String(d.goal||"Continuum Masterclass"),type:"Series",y:"",age:"",g:[d.title],se:1,ep:vs.length,len:(Math.round(vs.reduce((a,v)=>a+(v.minutes||0),0)/vs.length)||30)+" min",r:+(vs.reduce((a,v)=>a+v.rating,0)/vs.length).toFixed(1),studio:"Continuum Academy",h:d.hue,d:d.blurb||"",cast:[],eps:vs.map(v=>v.title),vids:vs});
   });
+  /* Highlight clips still shown as individual items */
   vids.filter(v=>v.clip).forEach(v=>{
     out.push({t:v.title,tag:String(v.tag||"Highlight Clip"),type:"Movie",y:"",age:"",g:[v.discipline||v.genre||"Clip"],se:0,ep:0,len:v.time||"30 min",r:v.rating,studio:"Continuum Academy",h:v.hue,d:v.desc,cast:[],eps:[],vids:[v]});
   });
+  /* Videos without series_id shown by discipline as fallback */
   const byG={};
-  vids.filter(v=>!v.clip&&!discs.some(d=>d.id===v.discipline_id)).forEach(v=>{const g=v.discipline||v.genre||"Masterclass";(byG[g]=byG[g]||[]).push(v)});
+  vids.filter(v=>!v.clip&&!discs.some(d=>d.id===v.series_id||d.id===v.discipline_id)).forEach(v=>{const g=v.discipline||v.genre||"Masterclass";(byG[g]=byG[g]||[]).push(v)});
   Object.keys(byG).forEach(g=>{
     const vs=byG[g];
     out.push({t:g,tag:"Continuum Masterclass",type:"Series",y:"",age:"",g:[g],se:1,ep:vs.length,len:(Math.round(vs.reduce((a,v)=>a+(v.minutes||0),0)/vs.length)||30)+" min",r:+(vs.reduce((a,v)=>a+v.rating,0)/vs.length).toFixed(1),studio:"Continuum Academy",h:vs[0].hue,d:"",cast:[],eps:vs.map(v=>v.title),vids:vs});
