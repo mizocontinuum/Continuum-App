@@ -1049,28 +1049,32 @@ const __vids = ((__CAT && __CAT.videos) || []).filter(v => !v.clip).map(v => ({ 
 
 /* ---------- 1) DATA: group videos by discipline ----------
    Real posters:  poster: 'url("poster.jpg") center/cover'          */
-const movies = (__vids.length ? (() => {
+const __groupedDisciplines = [];
+if (__vids.length) {
   const byDiscipline = {};
   __vids.forEach(v => {
     const disc = v.discipline || v.genre || "Masterclass";
     (byDiscipline[disc] = byDiscipline[disc] || []).push(v);
   });
-  return Object.entries(byDiscipline).map(([disc, vids]) => ({
-    title: disc,
-    year: "",
-    genres: [disc],
-    time: vids.length + " videos",
-    rating: vids.reduce((a, v) => a + (v.rating || 0), 0) / vids.length,
-    pop: vids.length,
-    tag: disc,
-    desc: vids.length + " " + (vids.length === 1 ? 'masterclass' : 'masterclasses') + " in " + disc,
-    poster: vids[0]?.poster || "linear-gradient(160deg," + (vids[0]?.hue || 200) + "," + (vids[0]?.hue - 40 || 160) + ")",
-    bg: vids[0]?.bg || "linear-gradient(180deg," + (vids[0]?.hue || 200) + ",#03080E)",
-    created: vids[0]?.created || "",
-    sort: 0,
-    videos: vids
-  }));
-})() : [
+  Object.entries(byDiscipline).forEach(([disc, vids]) => {
+    __groupedDisciplines.push({
+      title: disc,
+      year: "",
+      genres: [disc],
+      time: vids.length + " videos",
+      rating: vids.reduce((a, v) => a + (v.rating || 0), 0) / vids.length,
+      pop: vids.length,
+      tag: disc,
+      desc: vids.length + " " + (vids.length === 1 ? 'masterclass' : 'masterclasses') + " in " + disc,
+      poster: vids[0]?.poster || "linear-gradient(160deg," + (vids[0]?.hue || 200) + "," + (vids[0]?.hue - 40 || 160) + ")",
+      bg: vids[0]?.bg || "linear-gradient(180deg," + (vids[0]?.hue || 200) + ",#03080E)",
+      created: vids[0]?.created || "",
+      sort: 0,
+      videos: vids
+    });
+  });
+}
+const movies = __groupedDisciplines.length ? __groupedDisciplines : [
   { title:"Nightfall",    year:2023, genres:["Mystery","Thriller"], time:"1h 55m", rating:4.4, pop:92, tag:"A LIGHTHOUSE MYSTERY",
     desc:"A lighthouse keeper discovers that the storm rolling in each night is trying to tell her something, and the answer lies beneath the waves.", poster:"linear-gradient(160deg,#2a5d8f,#06101c)" },
   { title:"Ember",        year:2022, genres:["Comedy","Drama"], time:"1h 40m", rating:4.1, pop:80, tag:"ONE KITCHEN, ONE WEEK",
