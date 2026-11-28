@@ -446,9 +446,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     videoFile.addEventListener('change', async () => {
       const file = videoFile.files && videoFile.files[0];
       if (!file) return;
+      
+      // Check file size (Supabase free tier limit is ~50MB)
+      const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+      if (file.size > maxSize) {
+        showToast(`File too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum size is 50MB. Please use a smaller file or contact support to increase limits.`, true);
+        videoFile.value = '';
+        return;
+      }
+      
       try {
         showToast('Uploading video…');
-        console.log('Requesting upload URL for:', file.name);
+        console.log('Requesting upload URL for:', file.name, 'Size:', (file.size / 1024 / 1024).toFixed(1) + 'MB');
         const up = await api(`/api/admin?action=upload-url&filename=${encodeURIComponent(file.name)}&folder=videos`);
         console.log('Upload URL response:', up);
         
@@ -465,6 +474,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!res.ok) {
           const errorText = await res.text();
           console.error('Storage upload failed:', errorText);
+          
+          // Check for specific error types
+          if (errorText.includes('EntityTooLarge') || errorText.includes('Payload too large')) {
+            throw new Error(`File too large. Supabase storage limit is ~50MB. Your file is ${(file.size / 1024 / 1024).toFixed(1)}MB.`);
+          }
           throw new Error(`Storage upload failed: ${errorText}`);
         }
         
