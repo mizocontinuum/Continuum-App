@@ -436,12 +436,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       
       // File upload not available in local-only mode
-      showToast('File upload is not available in local-only mode. Please use external URLs for video files.');
+      showToast('File upload is not available in local-only mode. Please use external URLs for video files.', true);
       fileIn.value = '';
-        showToast(error.message || 'Video upload failed.', true);
-      } finally {
-        videoFile.value = '';
-      }
     });
   }
 
