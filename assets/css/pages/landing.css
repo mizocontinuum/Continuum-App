@@ -12,9 +12,10 @@ nav a:hover{color:var(--fg)}
 #theme{background:var(--card);border:1px solid var(--line);border-radius:50%;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;margin-left:22px;color:var(--fg)}
 #theme:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.1);box-shadow:0 0 20px var(--glow)}
 #theme:active{transform:scale(0.95)}
-#theme svg{transition:transform .3s ease}
+#theme svg{transition:transform .3s ease;fill:currentColor;stroke:currentColor}
 #theme:hover svg{transform:rotate(180deg)}
 #theme[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+#theme[aria-pressed="true"] svg{fill:#fff;stroke:#fff}
 .btn{display:inline-block;padding:14px 28px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff!important;font-weight:600;text-decoration:none;box-shadow:0 10px 30px var(--glow);transition:transform .25s,box-shadow .25s}
 .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px var(--glow)}
 .btn.ghost{background:transparent;color:var(--fg)!important;border:1px solid var(--line);box-shadow:none}
