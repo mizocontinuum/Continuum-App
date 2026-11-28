@@ -1058,9 +1058,9 @@ const movies = (__vids.length ? (() => {
   return Object.entries(byDiscipline).map(([disc, vids]) => ({
     title: disc,
     count: vids.length,
-    desc: `${vids.length} ${vids.length === 1 ? 'masterclass' : 'masterclasses'} in ${disc}`,
-    poster: vids[0]?.poster || `linear-gradient(160deg,${vids[0]?.hue || 200},${vids[0]?.hue - 40 || 160})`,
-    bg: vids[0]?.bg || `linear-gradient(180deg,${vids[0]?.hue || 200},#03080E)`,
+    desc: `\${vids.length} \${vids.length === 1 ? 'masterclass' : 'masterclasses'} in \${disc}`,
+    poster: vids[0]?.poster || `linear-gradient(160deg,\${vids[0]?.hue || 200},\${vids[0]?.hue - 40 || 160})`,
+    bg: vids[0]?.bg || `linear-gradient(180deg,\${vids[0]?.hue || 200},#03080E)`,
     videos: vids
   }));
 })() : [
