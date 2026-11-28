@@ -53,9 +53,9 @@
           <span>Masterclasses</span>
           <span class="nav-count" id="navVideoCount">0</span>
         </a>
-        <a class="admin-nav-link" href="#disciplines">
+        <a class="admin-nav-link" href="#series">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
-          <span>Disciplines</span>
+          <span>Series</span>
         </a>
         <a class="admin-nav-link" href="#activity">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"></path><path d="m7 14 4-4 4 3 6-7"></path></svg>
@@ -283,18 +283,18 @@
           <div class="table-footer"><span id="tableSummary">Showing 0 items</span><span class="local-only-label"><span></span> Saved in this browser</span></div>
         </section>
 
-        <section class="panel discipline-panel" id="disciplines">
+        <section class="panel discipline-panel" id="series">
           <div class="panel-heading">
-            <div><p class="panel-kicker">LEARNING PATHS</p><h2>Disciplines</h2></div>
+            <div><p class="panel-kicker">LEARNING PATHS</p><h2>Series</h2></div>
             <button class="button-secondary" type="button" id="toggleDisciplineFormBtn">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg> Add discipline
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg> Add series
             </button>
           </div>
           <form id="disciplineForm" class="table-toolbar" hidden>
             <label class="search-field">
-              <input id="disciplineNameInput" type="text" required maxlength="80" placeholder="New discipline name (e.g. Leadership &amp; Strategy)">
+              <input id="disciplineNameInput" type="text" required maxlength="80" placeholder="New series name (e.g. Leadership &amp; Strategy)">
             </label>
-            <button class="button-primary" type="submit">Save discipline</button>
+            <button class="button-primary" type="submit">Save series</button>
           </form>
           <div class="discipline-grid" id="disciplineGrid"></div>
         </section>
@@ -363,12 +363,12 @@
       <input type="hidden" id="videoId" name="id">
       <label class="editor-field"><span>Title <b>*</b></span><input id="videoTitle" name="title" type="text" required maxlength="120" placeholder="e.g. Building a Brand That Lasts"></label>
       <div class="editor-two-col">
-        <label class="editor-field"><span>Discipline <b>*</b></span><select id="videoDiscipline" name="discipline_id" required></select></label>
-        <label class="editor-field"><span>Speaker</span><input id="videoSpeaker" name="speaker" type="text" maxlength="80" placeholder="Executive Faculty"></label>
+        <label class="editor-field"><span>Series <b>*</b></span><select id="videoSeries" name="series_id" required></select></label>
+        <label class="editor-field"><span>Discipline <b>*</b></span><input id="videoDiscipline" name="discipline" type="text" required maxlength="60" placeholder="e.g. Web Development, UI/UX"></label>
       </div>
       <div class="editor-two-col">
+        <label class="editor-field"><span>Speaker</span><input id="videoSpeaker" name="speaker" type="text" maxlength="80" placeholder="Executive Faculty"></label>
         <label class="editor-field"><span>Duration (minutes)</span><input id="videoMinutes" name="minutes" type="number" min="1" max="999" value="30"></label>
-        <label class="editor-field"><span>Content tag</span><input id="videoTag" name="tag" type="text" maxlength="40" placeholder="Leadership"></label>
       </div>
       <label class="editor-field"><span>Upload Video (.mp4)</span><input id="videoFile" type="file" accept="video/*"><input id="videoUrl" name="video_url" type="hidden"></label>
       <label class="editor-field"><span>Short description</span><textarea id="videoSummary" name="summary" rows="3" maxlength="500" placeholder="What will learners take away?"></textarea></label>

@@ -44,10 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       e.preventDefault();
       const name = (discNameIn?.value || '').trim();
       if (!name) return;
-      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `disc-${Date.now()}`;
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `series-${Date.now()}`;
       try {
         const token = localStorage.getItem('continuum_auth_token') || '';
-        const res = await fetch('/api/admin?action=disciplines', {
+        const res = await fetch('/api/admin?action=series', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -55,13 +55,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           },
           body: JSON.stringify({ id: slug, name, slug, sort_order: 0 })
         });
-        if (!res.ok) throw new Error('Could not save discipline');
+        if (!res.ok) throw new Error('Could not save series');
         if (discNameIn) discNameIn.value = '';
         discForm.hidden = true;
-        showToast(`Discipline "${name}" added.`);
+        showToast(`Series "${name}" added.`);
         window.location.reload();
       } catch (err) {
-        showToast(err.message || 'Failed to add discipline', true);
+        showToast(err.message || 'Failed to add series', true);
       }
     });
   }
@@ -244,7 +244,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fields = {
     id: document.getElementById('videoId'),
     title: document.getElementById('videoTitle'),
-    discipline: videoDiscipline,
+    series: document.getElementById('videoSeries'),
+    discipline: document.getElementById('videoDiscipline'),
     speaker: document.getElementById('videoSpeaker'),
     minutes: document.getElementById('videoMinutes'),
     tag: document.getElementById('videoTag'),
@@ -274,18 +275,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   function refreshDisciplineOptions() {
     const disciplines = listDisciplines();
     const selectedFilter = disciplineFilter.value;
-    const selectedEditor = videoDiscipline.value;
+    const selectedEditor = fields.series?.value;
 
-    disciplineFilter.replaceChildren(new Option('All disciplines', ''));
-    videoDiscipline.replaceChildren(new Option('Choose a discipline', ''));
+    disciplineFilter.replaceChildren(new Option('All series', ''));
+    fields.series?.replaceChildren(new Option('Choose a series', ''));
 
     disciplines.forEach((discipline) => {
       disciplineFilter.add(new Option(discipline.title, discipline.id));
-      videoDiscipline.add(new Option(discipline.title, discipline.id));
+      fields.series?.add(new Option(discipline.title, discipline.id));
     });
 
     disciplineFilter.value = disciplines.some((item) => item.id === selectedFilter) ? selectedFilter : '';
-    videoDiscipline.value = disciplines.some((item) => item.id === selectedEditor) ? selectedEditor : '';
+    if (fields.series) fields.series.value = disciplines.some((item) => item.id === selectedEditor) ? selectedEditor : '';
   }
 
   function renderStats(videos, disciplines) {
@@ -379,7 +380,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       titleWrap.append(art, info);
       titleCell.append(titleWrap);
 
-      const disciplineCell = node('td', 'discipline-cell', getDisciplineName(video.discipline_id));
+      const disciplineCell = node('td', 'discipline-cell', video.discipline || getDisciplineName(video.series_id || video.discipline_id));
       const lengthCell = node('td', '', `${Number(video.minutes) || 0} min`);
       const statusCell = document.createElement('td');
       const badge = node('span', `status-badge${video.featured ? ' featured' : ''}`);
@@ -418,7 +419,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     videoForm.reset();
     fields.id.value = video?.id || '';
     fields.title.value = video?.title || '';
-    fields.discipline.value = video?.discipline_id || listDisciplines()[0]?.id || '';
+    fields.series.value = video?.series_id || video?.discipline_id || listDisciplines()[0]?.id || '';
+    fields.discipline.value = video?.discipline || video?.tag || '';
     fields.speaker.value = video?.speaker || '';
     fields.minutes.value = String(video?.minutes || 30);
     fields.tag.value = video?.tag || '';
@@ -472,7 +474,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       ...(existing || {}),
       id: newId,
       title: fields.title.value,
-      discipline_id: fields.discipline.value,
+      series_id: fields.series.value,
+      discipline: fields.discipline.value.trim(),
       speaker: fields.speaker.value.trim(),
       minutes: Number(fields.minutes.value) || 30,
       tag: fields.tag.value.trim(),

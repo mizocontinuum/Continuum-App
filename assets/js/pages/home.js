@@ -479,8 +479,8 @@ function cataloguePayload() {
   const discMap = {};
   discs.forEach((d) => { discMap[d.id] = d; });
   const videos = listVideos().map((v) => {
-    const d = discMap[v.discipline_id] || null;
-    const genre = d ? (d.title || d.name || d.id) : (v.category || v.tag || 'Masterclass');
+    const d = discMap[v.series_id || v.discipline_id] || null;
+    const genre = v.discipline || (d ? (d.title || d.name || d.id) : (v.category || v.tag || 'Masterclass'));
     const h = hueOf(v.title || genre);
     const thumb = mediaUrl(v.thumbnail_url);
     const minutes = Number(v.minutes) || 0;
@@ -507,7 +507,8 @@ function cataloguePayload() {
       trailer: mediaUrl(v.trailer_url),
       speaker: v.speaker || '',
       outcomes: Array.isArray(v.outcomes) ? v.outcomes : [],
-      discipline_id: v.discipline_id || ''
+      discipline_id: v.series_id || v.discipline_id || '',
+      discipline: v.discipline || ''
     };
   });
   return {

@@ -384,7 +384,7 @@ const P = {
 const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
 const __vids = (__CAT && __CAT.videos) || [];
 const __discs = (__CAT && __CAT.disciplines) || [];
-const __pool = __vids.map(v => ({ id:v.id, title:v.title, desc:v.desc, tag:v.tag, genre:v.genre, year:v.year||"", time:v.time, minutes:v.minutes, rating:v.rating, rawRating:v.rawRating, pop:v.pop, sort:v.sort, created:v.created, featured:v.featured, clip:v.clip, hue:v.hue, poster:v.poster, bg:v.bg, video:v.video||"", trailer:v.trailer||"", speaker:v.speaker||"", outcomes:v.outcomes||[], discipline_id:v.discipline_id||"" }));
+const __pool = __vids.map(v => ({ id:v.id, title:v.title, desc:v.desc, tag:v.tag, genre:v.genre, year:v.year||"", time:v.time, minutes:v.minutes, rating:v.rating, rawRating:v.rawRating, pop:v.pop, sort:v.sort, created:v.created, featured:v.featured, clip:v.clip, hue:v.hue, poster:v.poster, bg:v.bg, video:v.video||"", trailer:v.trailer||"", speaker:v.speaker||"", outcomes:v.outcomes||[], discipline_id:v.discipline_id||"", discipline:v.discipline||"" }));
 const __nonClip = __pool.filter(v => !v.clip);
 const __byId = {}; __pool.forEach(v => { __byId[v.id] = v; });
 
@@ -557,7 +557,7 @@ document.addEventListener("keydown", e => {
       Edit the titles below. Real posters: replace the generated
       gradient with  poster: 'url("poster.jpg") center/cover'
    --------------------------------------------------------- */
-const categoryData = __discs.length ? Object.fromEntries(__discs.map(d => [d.title, __pool.filter(v => v.discipline_id === d.id && !v.clip).map(v => ({ id:v.id, title:v.title, genre:d.title, video:v.video, trailer:v.trailer, minutes:v.minutes, rating:v.rating, poster:v.poster, bg:v.bg, desc:v.desc, time:v.time }))]).filter(([,a]) => a.length)) : {
+const categoryData = __discs.length ? Object.fromEntries(__discs.map(d => [d.title, __pool.filter(v => v.discipline_id === d.id && !v.clip).map(v => ({ id:v.id, title:v.title, genre:v.discipline || d.title, video:v.video, trailer:v.trailer, minutes:v.minutes, rating:v.rating, poster:v.poster, bg:v.bg, desc:v.desc, time:v.time }))]).filter(([,a]) => a.length)) : {
   "Feature Film":        ["The Quiet Orchard", "Salt and Iron", "Harbor Lights", "A Winter Promise", "Crimson Hours"],
   "Feature Documentary": ["Oceans Beyond Us", "The Last Glacier", "Voices of the Valley", "Inside the Hive", "Roots of the Forest"],
   "Short Film":          ["Paper Moon", "Ten Minutes Left", "The Red Door", "Lantern", "Small Hours"],
@@ -1040,7 +1040,7 @@ render(0);
 <script>
 /* Shared catalogue payload injected by the parent page (window.__CONTINUUM_CATALOGUE__). */
 const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
-const __vids = ((__CAT && __CAT.videos) || []).filter(v => !v.clip).map(v => ({ id:v.id, title:v.title, year:v.year||"", genres:[v.genre || "Masterclass"], time:v.time, minutes:v.minutes, rating:v.rating, pop:v.rawRating || v.pop || 0, tag:String(v.tag || v.genre || "Masterclass"), desc:v.desc, poster:v.poster, bg:v.bg, video:v.video||"", trailer:v.trailer||"", created:v.created||"", sort:v.sort||0, discipline_id:v.discipline_id||"" }));
+const __vids = ((__CAT && __CAT.videos) || []).filter(v => !v.clip).map(v => ({ id:v.id, title:v.title, year:v.year||"", genres:[v.genre || "Masterclass"], time:v.time, minutes:v.minutes, rating:v.rating, pop:v.rawRating || v.pop || 0, tag:String(v.tag || v.genre || "Masterclass"), desc:v.desc, poster:v.poster, bg:v.bg, video:v.video||"", trailer:v.trailer||"", created:v.created||"", sort:v.sort||0, discipline_id:v.discipline_id||"", discipline:v.discipline||"" }));
 
 /* ---------- 1) DATA: add or edit movies here ----------
    Real posters:  poster: 'url("poster.jpg") center/cover'          */
@@ -1556,10 +1556,10 @@ function __buildCat(cat){
     out.push({t:d.title,tag:String(d.goal||"Continuum Masterclass"),type:"Series",y:"",age:"",g:[d.title],se:1,ep:vs.length,len:(Math.round(vs.reduce((a,v)=>a+(v.minutes||0),0)/vs.length)||30)+" min",r:+(vs.reduce((a,v)=>a+v.rating,0)/vs.length).toFixed(1),studio:"Continuum Academy",h:d.hue,d:d.blurb||"",cast:[],eps:vs.map(v=>v.title),vids:vs});
   });
   vids.filter(v=>v.clip).forEach(v=>{
-    out.push({t:v.title,tag:String(v.tag||"Highlight Clip"),type:"Movie",y:"",age:"",g:[v.genre||"Clip"],se:0,ep:0,len:v.time||"30 min",r:v.rating,studio:"Continuum Academy",h:v.hue,d:v.desc,cast:[],eps:[],vids:[v]});
+    out.push({t:v.title,tag:String(v.tag||"Highlight Clip"),type:"Movie",y:"",age:"",g:[v.discipline||v.genre||"Clip"],se:0,ep:0,len:v.time||"30 min",r:v.rating,studio:"Continuum Academy",h:v.hue,d:v.desc,cast:[],eps:[],vids:[v]});
   });
   const byG={};
-  vids.filter(v=>!v.clip&&!discs.some(d=>d.id===v.discipline_id)).forEach(v=>{const g=v.genre||"Masterclass";(byG[g]=byG[g]||[]).push(v)});
+  vids.filter(v=>!v.clip&&!discs.some(d=>d.id===v.discipline_id)).forEach(v=>{const g=v.discipline||v.genre||"Masterclass";(byG[g]=byG[g]||[]).push(v)});
   Object.keys(byG).forEach(g=>{
     const vs=byG[g];
     out.push({t:g,tag:"Continuum Masterclass",type:"Series",y:"",age:"",g:[g],se:1,ep:vs.length,len:(Math.round(vs.reduce((a,v)=>a+(v.minutes||0),0)/vs.length)||30)+" min",r:+(vs.reduce((a,v)=>a+v.rating,0)/vs.length).toFixed(1),studio:"Continuum Academy",h:vs[0].hue,d:"",cast:[],eps:vs.map(v=>v.title),vids:vs});

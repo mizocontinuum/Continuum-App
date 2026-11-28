@@ -112,7 +112,9 @@ function normalizeDiscipline(row) {
 function normalizeVideo(row) {
   return {
     id: row.id,
-    discipline_id: row.discipline_id || '',
+    series_id: row.series_id || row.discipline_id || '',
+    discipline_id: row.discipline_id || row.series_id || '',
+    discipline: row.discipline || row.tag || '',
     title: row.title || '',
     speaker: row.speaker || 'Executive Faculty',
     minutes: Number(row.minutes) || 30,
@@ -338,7 +340,7 @@ export function listCatalogue() {
   const videos = listVideos();
   return listDisciplines().map((discipline) => ({
     ...discipline,
-    videos: videos.filter((video) => video.discipline_id === discipline.id)
+    videos: videos.filter((video) => video.series_id === discipline.id || video.discipline_id === discipline.id)
   }));
 }
 
@@ -347,7 +349,7 @@ export function getDiscipline(idOrSlug) {
     (d) => d.id === idOrSlug || d.slug === String(idOrSlug || '').toLowerCase()
   );
   if (!match) return null;
-  return { ...match, videos: listVideos().filter((video) => video.discipline_id === match.id) };
+  return { ...match, videos: listVideos().filter((video) => video.series_id === match.id || video.discipline_id === match.id) };
 }
 
 export function getVideo(id) {
@@ -356,10 +358,10 @@ export function getVideo(id) {
 
 export function getDisciplineOf(video) {
   if (!video) return null;
-  return listDisciplines().find((d) => d.id === video.discipline_id) || null;
+  return listDisciplines().find((d) => d.id === video.series_id || d.id === video.discipline_id) || null;
 }
 
-/** Case-insensitive search across title, speaker, tag and discipline title. */
+/** Case-insensitive search across title, speaker, tag, discipline and series title. */
 export function searchCatalog(rawQuery) {
   const q = String(rawQuery || '').trim().toLowerCase();
   if (!q) return { query: '', disciplines: listCatalogue(), videos: listVideos() };
@@ -372,7 +374,7 @@ export function searchCatalog(rawQuery) {
   const videos = listVideos().filter((video) => {
     if (videoMatches(video, q)) return true;
     const discipline = getDisciplineOf(video);
-    return matches(discipline?.title, q);
+    return matches(discipline?.title, q) || matches(video.discipline, q);
   });
 
   return { query: q, disciplines, videos };
@@ -383,7 +385,7 @@ function matches(value, q) {
 }
 
 function videoMatches(video, q) {
-  return matches(video.title, q) || matches(video.speaker, q) || matches(video.tag, q) || matches(video.highlight, q);
+  return matches(video.title, q) || matches(video.speaker, q) || matches(video.tag, q) || matches(video.highlight, q) || matches(video.discipline, q);
 }
 
 /** Highest-rated masterclasses, used by the Home "Top 10" row. */
