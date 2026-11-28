@@ -954,6 +954,10 @@ render(0);
   .play { background:var(--red); border-radius:6px 0 0 6px; }
   .list { background:#7a7a7a; border-radius:0 6px 6px 0; }
   .list.saved { background:#3d3d3d; }
+  .videos-list { margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--line); }
+  .videos-list h3 { font-size:1rem; font-weight:600; margin-bottom:1rem; color:#8DA2BD; }
+  .videos-list button { display:block; width:100%; text-align:left; background:none; border:0; color:#fff; padding:8px 0; cursor:pointer; transition:color .2s; }
+  .videos-list button:hover { color:var(--gold); }
 
   .toast { position:fixed; bottom:24px; left:50%; transform:translate(-50%,40px); background:#26262c; padding:12px 22px; border-radius:999px; font-size:.85rem; opacity:0; transition:all .3s; z-index:20; }
   .toast.show { opacity:1; transform:translate(-50%,0); }
@@ -1032,6 +1036,7 @@ render(0);
         <button class="btn play" id="mPlay">Play</button>
         <button class="btn list" id="mList">+ My List</button>
       </div>
+      <div class="videos-list" id="mVideosList" hidden><h3>Videos in this discipline</h3><div id="mVideos"></div></div>
     </div>
   </div>
 </div>
@@ -1204,6 +1209,26 @@ function openModal(m) {
   const full = Math.round(m.rating || 4.0);
   $("mStars").innerHTML = [1,2,3,4,5].map(n => n <= full ? "\\u2605" : '<span class="off">\\u2605</span>').join("");
   $("mStars").setAttribute("aria-label", (m.rating || 4.0) + " out of 5");
+  
+  // Show videos list if available
+  const videosList = $("mVideosList");
+  const videosContainer = $("mVideos");
+  if (m.videos && m.videos.length) {
+    videosList.hidden = false;
+    videosContainer.innerHTML = "";
+    m.videos.forEach(v => {
+      const btn = document.createElement("button");
+      btn.textContent = v.title;
+      btn.addEventListener("click", () => {
+        closeModal();
+        play({ title:v.title, sub:m.title, bg:m.poster, video:v.video||"", dur:v.time||"30 min", id:v.id||null });
+      });
+      videosContainer.appendChild(btn);
+    });
+  } else {
+    videosList.hidden = true;
+  }
+  
   paintModalBtn();
   modalTrigger = document.activeElement;
   $("modal").classList.add("open");
