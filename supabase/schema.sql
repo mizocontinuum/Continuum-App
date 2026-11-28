@@ -16,6 +16,7 @@ create table if not exists public.videos (
   title text not null,
   category text not null default 'movies',
   discipline_id text references public.disciplines(id) on delete set null,
+  discipline text,
   season integer,
   episode integer,
   speaker text,
@@ -79,7 +80,7 @@ create table if not exists public.password_reset_tokens (
 --
 -- alter table public.disciplines add column if not exists goal text;
 -- alter table public.disciplines add column if not exists blurb text;
--- alter table public.videos add column if not exists tag text;
+-- alter table public.videos add column if not exists discipline text;
 -- alter table public.videos add column if not exists highlight text;
 -- alter table public.videos add column if not exists rating integer;
 -- alter table public.videos add column if not exists outcomes jsonb default '[]'::jsonb;

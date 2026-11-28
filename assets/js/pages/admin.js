@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       ...(existing || {}),
       id: newId,
       title: fields.title.value,
-      series_id: fields.series.value,
+      discipline_id: fields.series.value,
       discipline: fields.discipline.value.trim(),
       speaker: fields.speaker.value.trim(),
       minutes: Number(fields.minutes.value) || 30,

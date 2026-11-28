@@ -22,10 +22,18 @@ async function handleVideos(req, res) {
     try {
       const payload = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
       if (!payload.id || !payload.title) return res.status(400).json({ error: 'Missing required fields: id, title' });
+      
+      // Log the payload for debugging
+      console.log('Video payload:', JSON.stringify(payload, null, 2));
+      
       const { data, error } = await ctx.supabase.from('videos').upsert(payload, { onConflict: 'id' }).select().single();
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase videos error:', error);
+        throw new Error(`Database error: ${error.message || 'Failed to save video'}`);
+      }
       return res.status(200).json({ ok: true, video: data });
     } catch (err) {
+      console.error('Save video error:', err);
       return res.status(500).json({ error: err.message || 'Failed to save video' });
     }
   } else if (req.method === 'DELETE') {
