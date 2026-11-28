@@ -457,32 +457,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       try {
         showToast('Uploading video…');
-        console.log('Requesting upload URL for:', file.name, 'Size:', (file.size / 1024 / 1024).toFixed(1) + 'MB');
-        const up = await api(`/api/admin?action=upload-url&filename=${encodeURIComponent(file.name)}&folder=videos`);
-        console.log('Upload URL response:', up);
+        console.log('Uploading to Vercel Blob:', file.name, 'Size:', (file.size / 1024 / 1024).toFixed(1) + 'MB');
         
-        // Use PUT method for Supabase storage signed URLs
-        const res = await fetch(up.signedUrl, {
-          method: 'PUT',
-          body: file,
-          headers: { 
-            'Content-Type': file.type || 'application/octet-stream',
-            'x-upsert': 'false'
+        // Upload directly to Vercel Blob
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const res = await fetch('/api/blob-upload', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('continuum_auth_token')}`
           }
         });
         
         if (!res.ok) {
           const errorText = await res.text();
-          console.error('Storage upload failed:', errorText);
-          
-          // Check for specific error types
-          if (errorText.includes('EntityTooLarge') || errorText.includes('Payload too large')) {
-            throw new Error(`File too large for Supabase storage. Your file is ${(file.size / 1024 / 1024).toFixed(1)}MB. Supabase storage has limits based on your plan. Consider using external storage for large files.`);
-          }
-          throw new Error(`Storage upload failed: ${errorText}`);
+          console.error('Vercel Blob upload failed:', errorText);
+          throw new Error(`Upload failed: ${errorText}`);
         }
         
-        fields.videoUrl.value = up.publicUrl;
+        const result = await res.json();
+        fields.videoUrl.value = result.url;
         showToast('Video uploaded — save the masterclass to publish it.');
       } catch (error) {
         console.error('Upload error:', error);
