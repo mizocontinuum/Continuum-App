@@ -56,11 +56,23 @@ async function handleUploadUrl(req, res) {
     const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
     const path = `${folder}/${Date.now()}-${safeName}`;
     const bucket = process.env.SUPABASE_STORAGE_BUCKET || 'media';
+    
+    // Check if Supabase storage is configured
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return res.status(500).json({ 
+        error: 'Supabase storage is not configured. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.' 
+      });
+    }
+    
     const { data, error } = await ctx.supabase.storage.from(bucket).createSignedUploadUrl(path);
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase storage error:', error);
+      throw new Error(`Storage error: ${error.message || 'Failed to create upload URL'}`);
+    }
     const { data: pub } = ctx.supabase.storage.from(bucket).getPublicUrl(path);
     return res.status(200).json({ signedUrl: data.signedUrl, token: data.token, path, publicUrl: pub.publicUrl });
   } catch (err) {
+    console.error('Upload URL error:', err);
     return res.status(500).json({ error: err.message || 'Failed to create upload URL' });
   }
 }
