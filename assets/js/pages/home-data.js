@@ -557,7 +557,7 @@ document.addEventListener("keydown", e => {
       Edit the titles below. Real posters: replace the generated
       gradient with  poster: 'url("poster.jpg") center/cover'
    --------------------------------------------------------- */
-const categoryData = __discs.length ? Object.fromEntries(__discs.map(d => [d.title, __pool.filter(v => v.discipline_id === d.id && !v.clip).map(v => ({ id:v.id, title:v.title, genre:v.discipline || d.title, video:v.video, trailer:v.trailer, minutes:v.minutes, rating:v.rating, poster:v.poster, bg:v.bg, desc:v.desc, time:v.time }))]).filter(([,a]) => a.length)) : {
+const categoryData = __discs.length ? Object.fromEntries(__discs.map(d => [d.title, __pool.filter(v => v.discipline_id === d.id && !v.clip).map(v => ({ id:v.id, title:v.title, genre:v.discipline || v.genre || d.title, video:v.video, trailer:v.trailer, minutes:v.minutes, rating:v.rating, poster:v.poster, bg:v.bg, desc:v.desc, time:v.time }))]).filter(([,a]) => a.length)) : {
   "Feature Film":        ["The Quiet Orchard", "Salt and Iron", "Harbor Lights", "A Winter Promise", "Crimson Hours"],
   "Feature Documentary": ["Oceans Beyond Us", "The Last Glacier", "Voices of the Valley", "Inside the Hive", "Roots of the Forest"],
   "Short Film":          ["Paper Moon", "Ten Minutes Left", "The Red Door", "Lantern", "Small Hours"],
@@ -1400,8 +1400,9 @@ const S = (__discs.length ? __discs.map(d => {
   const vs = __vids.filter(v => (v.series_id === d.id || v.discipline_id === d.id) && !v.clip);
   if (!vs.length) return null;
   const r = vs.reduce((a,v) => a + v.rating, 0) / vs.length;
-  return { id:d.id, t:d.title, g:d.goal || "Masterclass", y:"", s:1, r:r.toFixed(1), h:d.hue, d:d.blurb || "", e:vs.map(v => v.title), vids:vs };
-}).filter(Boolean) : [
+  const hueVal = d.hue !== undefined ? d.hue : (vs[0]?.hue || 200);
+  return { id:d.id, t:d.title, g:d.goal || "Masterclass", y:"", s:1, r:r.toFixed(1), h:hueVal, d:d.blurb || "", e:vs.map(v => v.title), vids:vs };
+}).filter(Boolean)) : [
 {t:"The Hollow Crown",g:"Drama",y:2025,s:3,r:"9.1",h:352,d:"When a king dies without naming an heir, three siblings fight for a throne that is already hollow.",e:["The Last Heir","Ash and Salt","A Quiet Coup","The Crown’s Debt","Winter Court"]},
 {t:"Salt Road",g:"Crime",y:2024,s:2,r:"8.8",h:42,d:"A retired customs officer is pulled back in when a smuggling route she once closed quietly reopens.",e:["Border Lights","The Manifest","Dry Dock","Lowball","Night Freight"]},
 {t:"Low Orbit",g:"Sci-Fi",y:2026,s:1,r:"8.6",h:210,d:"Six engineers on a failing station have nine days to fix it, and one of them is lying about why.",e:["Day One","Pressure","Dead Air","The Seventh Seat","Reentry"]},
