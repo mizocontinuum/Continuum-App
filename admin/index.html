@@ -362,7 +362,7 @@
         <label class="editor-field"><span>Duration (minutes)</span><input id="videoMinutes" name="minutes" type="number" min="1" max="999" value="30"></label>
         <label class="editor-field"><span>Content tag</span><input id="videoTag" name="tag" type="text" maxlength="40" placeholder="Leadership"></label>
       </div>
-      <label class="editor-field"><span>Video URL</span><input id="videoUrl" name="video_url" type="text" maxlength="240" placeholder="/assets/videos/masterclass.mp4"></label>
+      <label class="editor-field"><span>Upload Video (.mp4)</span><input id="videoFile" type="file" accept="video/*"><input id="videoUrl" name="video_url" type="hidden"></label>
       <label class="editor-field"><span>Short description</span><textarea id="videoSummary" name="summary" rows="3" maxlength="500" placeholder="What will learners take away?"></textarea></label>
       <div class="editor-checks">
         <label class="editor-check"><input id="videoFeatured" name="featured" type="checkbox"><span>Feature this masterclass on the academy</span></label>
