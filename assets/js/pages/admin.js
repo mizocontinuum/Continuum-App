@@ -448,7 +448,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!file) return;
       try {
         showToast('Uploading video…');
+        console.log('Requesting upload URL for:', file.name);
         const up = await api(`/api/admin?action=upload-url&filename=${encodeURIComponent(file.name)}&folder=videos`);
+        console.log('Upload URL response:', up);
         const res = await fetch(up.signedUrl, {
           method: 'POST',
           body: file,
@@ -458,6 +460,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         fields.videoUrl.value = up.publicUrl;
         showToast('Video uploaded — save the masterclass to publish it.');
       } catch (error) {
+        console.error('Upload error:', error);
         showToast(error.message || 'Video upload failed.', true);
       } finally {
         videoFile.value = '';
