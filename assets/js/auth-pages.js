@@ -235,7 +235,7 @@
 
       (async () => {
         try {
-          const resp = await fetch('/api/auth/login', {
+          const resp = await fetch('/api/auth?action=login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: em, password: pw })
@@ -370,7 +370,7 @@
 
       (async () => {
         try {
-          const resp = await fetch('/api/auth/signup', {
+          const resp = await fetch('/api/auth?action=signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: nameVal, email: emailVal, password: passVal, job_role: jobRole, organization: orgVal, plan })
@@ -384,7 +384,7 @@
 
           // The signup endpoint creates the user without a session — sign in
           // immediately so the new member lands on Home authenticated.
-          const loginResp = await fetch('/api/auth/login', {
+          const loginResp = await fetch('/api/auth?action=login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: emailVal, password: passVal })
@@ -442,7 +442,7 @@
 
       (async () => {
         try {
-          const resp = await fetch('/api/auth/forgot', {
+          const resp = await fetch('/api/auth?action=forgot', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -524,7 +524,7 @@
 
       (async () => {
         try {
-          const resp = await fetch('/api/auth/reset', {
+          const resp = await fetch('/api/auth?action=reset', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, token, password: pass })

@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `disc-${Date.now()}`;
       try {
         const token = localStorage.getItem('continuum_auth_token') || '';
-        const res = await fetch('/api/admin/disciplines', {
+        const res = await fetch('/api/admin?action=disciplines', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!file) return;
       try {
         showToast('Uploading video…');
-        const up = await api(`/api/admin/upload-url?filename=${encodeURIComponent(file.name)}&folder=videos`);
+        const up = await api(`/api/admin?action=upload-url&filename=${encodeURIComponent(file.name)}&folder=videos`);
         const res = await fetch(up.signedUrl, {
           method: 'POST',
           body: file,
@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       is_clip: fields.clip.checked
     };
     try {
-      const result = await api('/api/admin/videos', { method: 'POST', body: payload });
+      const result = await api('/api/admin?action=videos', { method: 'POST', body: payload });
       const saved = { ...payload, ...(result?.video || {}) };
       saveVideo(saved);
       videoEditor.close();
@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (button.dataset.action === 'delete' && window.confirm(`Remove "${video.title}" from the catalogue?`)) {
       (async () => {
         try {
-          await api(`/api/admin/videos/${encodeURIComponent(video.id)}`, { method: 'DELETE' });
+          await api(`/api/admin?action=videos&id=${encodeURIComponent(video.id)}`, { method: 'DELETE' });
         } catch (error) {
           showToast(error.message || 'Could not delete this masterclass.', true);
           return;

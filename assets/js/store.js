@@ -144,7 +144,7 @@ export async function syncFromServer() {
 
   let me = null;
   try {
-    me = await apiFetch('/api/auth/me');
+    me = await apiFetch('/api/auth?action=me');
     if (me?.email) {
       const session = getSession();
       write(KEYS.session, {
