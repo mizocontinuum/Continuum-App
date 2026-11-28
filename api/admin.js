@@ -57,13 +57,16 @@ async function handleUploadUrl(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   
   // Check environment variables first
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  const hasUrl = !!process.env.SUPABASE_URL;
+  const hasKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!hasUrl || !hasKey) {
     console.error('Missing environment variables:', {
-      SUPABASE_URL: !!process.env.SUPABASE_URL,
-      SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY
+      SUPABASE_URL: hasUrl,
+      SUPABASE_SERVICE_ROLE_KEY: hasKey,
+      allEnvVars: Object.keys(process.env).filter(k => k.startsWith('SUPABASE'))
     });
     return res.status(500).json({ 
-      error: 'Supabase is not configured. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables in Vercel.' 
+      error: `Supabase is not configured. Missing: ${!hasUrl ? 'SUPABASE_URL' : ''} ${!hasKey ? 'SUPABASE_SERVICE_ROLE_KEY' : ''}`.trim() 
     });
   }
   
