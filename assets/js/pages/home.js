@@ -8,7 +8,14 @@
  * 5. Iframe Style Injection & Dynamic Padding
  */
 
-import { initPageChrome } from '../user-menu.js?v=5';
+import { initPageChrome } from '../user-menu.js?v=6';
+import {
+  listVideos,
+  listDisciplines,
+  getProgressMap,
+  reconcileRemote,
+  saveProgress
+} from '../store.js?v=3';
 
 async function initHome() {
   const session = await initPageChrome();
@@ -105,6 +112,11 @@ async function initHome() {
       L.splice(i, 1);
     }
     wr(L);
+    if (o.id) {
+      try {
+        saveProgress(o.id, t, t >= total * 0.95, total);
+      } catch (e) {}
+    }
   }
 
   function paint() {
@@ -199,7 +211,15 @@ async function initHome() {
 
     const key = opts.key || opts.title;
     const sv = rd().find((x) => x.title === key);
-    t = opts.start != null ? opts.start : opts.key === null || !sv ? 0 : sv.sec;
+    let resume = 0;
+    if (opts.key !== null) {
+      if (sv) resume = sv.sec;
+      else if (opts.id) {
+        const pe = getProgressMap()[opts.id];
+        if (pe && !pe.completed && pe.position > 5) resume = pe.position;
+      }
+    }
+    t = opts.start != null ? opts.start : resume;
     if (t >= total - 5) t = 0;
 
     speed = 1;
@@ -428,126 +448,78 @@ async function initHome() {
    ========================================================================== */
 const R = {
   home: "Home",
-  movies: "Movies",
-  series: "Series",
-  cartoons: "Library",
-  mylist: "My list",
+  movies: "Masterclasses",
+  series: "Disciplines",
+  cartoons: "Clips",
+  mylist: "My List",
 };
 
 const f = document.getElementById("f");
 
-function count() {}
+const hueOf = (s) => [...String(s || 'x')].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7);
+const fmtMinutes = (m) => {
+  m = Number(m) || 0;
+  const h = Math.floor(m / 60);
+  const r = m % 60;
+  return h ? h + 'h' + (r ? ' ' + r + 'm' : '') : m + ' min';
+};
+const grad = (h) => 'linear-gradient(160deg,hsl(' + h + ',55%,42%),hsl(' + ((h + 30) % 360) + ',60%,8%))';
+const bgGrad = (h) => 'radial-gradient(circle at 60% 35%,hsla(' + h + ',70%,55%,.5),transparent 55%),' + grad(h);
 
-function escapeHtml(str) {
-  return String(str ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+function mediaUrl(u) {
+  u = String(u || '');
+  if (!u) return '';
+  if (/^(https?:)?\/\//.test(u) || u.startsWith('data:') || u.startsWith('blob:')) return u;
+  return u.startsWith('/') ? u : '../' + u;
 }
 
-function buildRouteDoc(route) {
-  const videos = typeof listVideos === 'function' ? listVideos() : [];
-  const disciplines = typeof listDisciplines === 'function' ? listDisciplines() : [];
-  const favs = typeof getFavorites === 'function' ? getFavorites() : [];
-
-  let items = videos;
-  if (route === 'movies') items = videos.filter((v) => v.category === 'movies');
-  else if (route === 'series') items = videos.filter((v) => v.category === 'series');
-  else if (route === 'library') items = videos.filter((v) => v.category === 'library');
-  else if (route === 'mylist') items = videos.filter((v) => favs.includes(v.id));
-
-  const title = R[route] || 'Home';
-  const discMap = Object.fromEntries(disciplines.map((d) => [d.id, d.name || d.id]));
-
-  const cardsHtml = items.length
-    ? items
-        .map((v) => {
-          const hasThumb = Boolean(v.thumbnail_url);
-          const thumb = v.thumbnail_url || '../assets/images/logo.png';
-          const disc = discMap[v.discipline_id] || v.discipline_id || 'Masterclass';
-          const mins = v.minutes ? `${v.minutes} min` : '';
-          const playUrl = v.video_url || v.trailer_url || '';
-          return `<article class="card" data-title="${escapeHtml((v.title || '').toLowerCase())}" data-video-url="${escapeHtml(playUrl)}" data-video-title="${escapeHtml(v.title)}">
-            <div class="thumb ${hasThumb ? '' : 'thumb--fallback'}"><img src="${escapeHtml(thumb)}" alt="${escapeHtml(v.title)}" loading="lazy"></div>
-            <div class="card-body">
-              <div class="meta">
-                <span class="badge">${escapeHtml(disc)}</span>
-                ${mins ? `<span class="dur">${escapeHtml(mins)}</span>` : ''}
-              </div>
-              <h3>${escapeHtml(v.title)}</h3>
-              <p>${escapeHtml(v.summary || v.speaker || 'Continuum Academy Masterclass')}</p>
-            </div>
-          </article>`;
-        })
-        .join('')
-    : `<div class="empty">No masterclasses found in ${escapeHtml(title)} yet. Add content in Admin Studio.</div>`;
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="../assets/css/pages/home.css?v=5">
-<style>
-  * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; background: #03080e; color: #eef5ff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { padding: 96px 36px 64px; }
-  .head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.02em; }
-  #search { width: 260px; max-width: 100%; padding: 9px 14px; border-radius: 999px; border: 1px solid rgba(130, 175, 225, 0.25); background: rgba(10, 22, 38, 0.75); color: #eef5ff; outline: none; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; align-items: stretch; }
-  .card { display: flex; flex-direction: column; height: 100%; cursor: pointer; background: rgba(12, 24, 42, 0.72); border: 1px solid rgba(130, 175, 225, 0.16); border-radius: 14px; overflow: hidden; transition: transform .18s ease, border-color .18s ease; }
-  .card:hover { transform: translateY(-3px); border-color: rgba(46, 168, 255, 0.45); }
-  .thumb { aspect-ratio: 16 / 9; background: #07111f; overflow: hidden; flex-shrink: 0; }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .thumb--fallback img { object-fit: contain; padding: 24px; opacity: 0.75; }
-  .card-body { display: flex; flex-direction: column; flex: 1; padding: 12px 14px 14px; }
-  .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.75rem; color: #7fb4eb; }
-  .badge { text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
-  h3 { margin: 0 0 6px; font-size: 1rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
-  p { margin: 0; font-size: 0.84rem; color: rgba(214, 229, 245, 0.72); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .empty { padding: 48px 24px; text-align: center; color: rgba(214, 229, 245, 0.65); border: 1px dashed rgba(130, 175, 225, 0.22); border-radius: 14px; }
-  dialog.player { border: 1px solid rgba(130, 175, 225, 0.25); border-radius: 16px; background: #06101d; color: #eef5ff; padding: 16px; max-width: 820px; width: 92vw; }
-  dialog.player::backdrop { background: rgba(2, 6, 12, 0.82); backdrop-filter: blur(6px); }
-  .player-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .player-close { background: none; border: 0; color: #eef5ff; font-size: 1.5rem; cursor: pointer; line-height: 1; }
-  video.player-video { width: 100%; border-radius: 10px; background: #000; max-height: 70vh; }
-</style>
-</head>
-<body>
-  <div class="head">
-    <h1>${escapeHtml(title)}</h1>
-    <input id="search" type="search" placeholder="Filter ${escapeHtml(title.toLowerCase())}...">
-  </div>
-  <div class="grid" id="grid">${cardsHtml}</div>
-  <dialog class="player" id="playerDialog">
-    <div class="player-head"><strong id="playerTitle"></strong><button class="player-close" id="playerClose" type="button">×</button></div>
-    <video class="player-video" id="playerVideo" controls playsinline></video>
-  </dialog>
-  <script>
-    const s = document.getElementById('search');
-    s.addEventListener('input', () => {
-      const q = s.value.trim().toLowerCase();
-      document.querySelectorAll('.card').forEach((c) => {
-        c.style.display = !q || c.dataset.title.includes(q) ? '' : 'none';
-      });
-    });
-    const dlg = document.getElementById('playerDialog');
-    const vid = document.getElementById('playerVideo');
-    const ttl = document.getElementById('playerTitle');
-    document.getElementById('playerClose').addEventListener('click', () => { vid.pause(); vid.src = ''; dlg.close(); });
-    document.querySelectorAll('.card').forEach((c) => {
-      c.addEventListener('click', () => {
-        if (!c.dataset.videoUrl) return;
-        ttl.textContent = c.dataset.videoTitle || '';
-        vid.src = c.dataset.videoUrl;
-        dlg.showModal();
-        vid.play().catch(() => {});
-      });
-    });
-  </script>
-</body>
-</html>`;
+/** Catalogue payload shared with the iframe templates via window.__CONTINUUM_CATALOGUE__. */
+function cataloguePayload() {
+  const discs = listDisciplines();
+  const discMap = {};
+  discs.forEach((d) => { discMap[d.id] = d; });
+  const videos = listVideos().map((v) => {
+    const d = discMap[v.discipline_id] || null;
+    const genre = d ? (d.title || d.name || d.id) : (v.category || v.tag || 'Masterclass');
+    const h = hueOf(v.title || genre);
+    const thumb = mediaUrl(v.thumbnail_url);
+    const minutes = Number(v.minutes) || 0;
+    return {
+      id: v.id,
+      title: v.title || 'Untitled',
+      desc: v.summary || v.highlight || '',
+      tag: v.tag || '',
+      genre: genre,
+      year: '',
+      time: fmtMinutes(minutes),
+      minutes: minutes,
+      rating: Math.round(((Number(v.rating) || 0) / 20) * 10) / 10,
+      rawRating: Number(v.rating) || 0,
+      pop: Number(v.rating) || 0,
+      sort: Number(v.sort_order) || 0,
+      created: v.created_at || '',
+      featured: !!v.featured,
+      clip: !!v.is_clip,
+      hue: h,
+      poster: thumb ? 'url("' + thumb + '") center/cover' : grad(h),
+      bg: thumb ? 'url("' + thumb + '") center/cover, #071225' : bgGrad(h),
+      video: mediaUrl(v.video_url),
+      trailer: mediaUrl(v.trailer_url),
+      speaker: v.speaker || '',
+      outcomes: Array.isArray(v.outcomes) ? v.outcomes : [],
+      discipline_id: v.discipline_id || ''
+    };
+  });
+  return {
+    videos: videos,
+    disciplines: discs.map((d) => ({
+      id: d.id,
+      title: d.title || d.name || d.id,
+      goal: d.goal || '',
+      blurb: d.blurb || '',
+      hue: hueOf(d.title || d.name || d.id)
+    }))
+  };
 }
 
 function go() {
@@ -559,10 +531,10 @@ function go() {
     else a.removeAttribute("aria-current");
   });
   document.title = R[r] + " – Continuum";
-  count();
+  window.__CONTINUUM_CATALOGUE__ = cataloguePayload();
   f.style.opacity = 0;
   setTimeout(() => {
-    f.srcdoc = buildRouteDoc(r);
+    f.srcdoc = (typeof P !== "undefined" && (P[r] || P.home)) || "";
   }, 150);
 }
 
@@ -573,11 +545,16 @@ let pend = null;
 
 function run() {
   const d = f.contentDocument;
-  const i = d && d.getElementById("search");
+  const i = d && (d.getElementById("search") || d.getElementById("searchInput"));
   if (!pend || !i) return;
   i.value = pend;
   pend = null;
-  i.dispatchEvent(new d.defaultView.Event("input", { bubbles: true }));
+  if (i.id === "searchInput") {
+    i.dispatchEvent(new d.defaultView.KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    i.dispatchEvent(new d.defaultView.Event("input", { bubbles: true }));
+  } else {
+    i.dispatchEvent(new d.defaultView.Event("input", { bubbles: true }));
+  }
   i.focus();
 }
 
@@ -615,7 +592,9 @@ q.onkeydown = (e) => {
   q.value = "";
   q.classList.remove("open");
   qb.setAttribute("aria-expanded", "false");
-  if ((R[location.hash.slice(1)] ? location.hash.slice(1) : "home") === "movies") {
+  const d = f.contentDocument;
+  const hasSearch = d && (d.getElementById("search") || d.getElementById("searchInput"));
+  if (hasSearch) {
     run();
   } else {
     location.hash = "movies";
@@ -647,7 +626,9 @@ document.addEventListener("click", (e) => {
 });
 
 addEventListener("hashchange", go);
-addEventListener("storage", count);
+addEventListener("storage", (e) => {
+  if (e.key === "continuum.favorites" || e.key === "continuum.progress") reconcileRemote();
+});
 
 /* ==========================================================================
    4. NAVIGATION SLIDER INDICATOR

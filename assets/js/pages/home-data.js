@@ -350,7 +350,7 @@ const P = {
 <!-- More movies: same design as Categories, random order -->
 <section class="categories more-movies" id="moreMovies">
   <div class="mm-head">
-    <h2>Coming Soon</h2>
+    <h2>More Masterclasses</h2>
   </div>
   <div class="cat-row" id="moreRow"></div>
 </section>
@@ -379,13 +379,22 @@ const P = {
 <div class="toast" id="toast"></div>
 
 <script>
+/* Shared catalogue payload injected by the parent page (window.__CONTINUUM_CATALOGUE__).
+   When empty, every section falls back to the built-in demo data below. */
+const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
+const __vids = (__CAT && __CAT.videos) || [];
+const __discs = (__CAT && __CAT.disciplines) || [];
+const __pool = __vids.map(v => ({ id:v.id, title:v.title, desc:v.desc, tag:v.tag, genre:v.genre, year:v.year||"", time:v.time, minutes:v.minutes, rating:v.rating, rawRating:v.rawRating, pop:v.pop, sort:v.sort, created:v.created, featured:v.featured, clip:v.clip, hue:v.hue, poster:v.poster, bg:v.bg, video:v.video||"", trailer:v.trailer||"", speaker:v.speaker||"", outcomes:v.outcomes||[], discipline_id:v.discipline_id||"" }));
+const __nonClip = __pool.filter(v => !v.clip);
+const __byId = {}; __pool.forEach(v => { __byId[v.id] = v; });
+
 /* ---------------------------------------------------------
    1) DATA — add or edit movies here. Everything on the page
       is built from this array.
       Use real images:  bg: 'url("hero.jpg") center/cover'
       Use real videos:  video: "trailer1.mp4"
    --------------------------------------------------------- */
-const movies = [
+const movies = (__nonClip.length ? __nonClip.filter(v => v.featured).concat(__nonClip.filter(v => !v.featured).sort((a,b) => b.rawRating - a.rawRating)).slice(0,10).map(v => ({ id:v.id, title:v.title, desc:v.desc, meta:(v.genre || "") + (v.time ? " · " + v.time : ""), bg:v.bg, video:v.video, trailer:v.trailer, minutes:v.minutes, genre:v.genre, poster:v.poster, trailers:[{ name:"Masterclass", color:"linear-gradient(135deg,#007FFF,#33B5FF)", video:v.video || "" }, { name:"Trailer", color:"linear-gradient(135deg,#16283d,#3f7cac)", video:v.trailer || "" }] })) : [
   {
     title: "MULAN",
     desc: "A fearless young woman risks everything out of love for her family and her country, and rises to become one of the greatest warriors her homeland has ever known.",
@@ -419,7 +428,7 @@ const movies = [
       { name: "Clip",             color: "linear-gradient(135deg,#f2cf8b,#b6451c)", video: "" }
     ]
   }
-];
+]);
 
 /* ---------------------------------------------------------
    2) GRAB ELEMENTS
@@ -528,7 +537,7 @@ document.querySelectorAll("#navLinks a").forEach(link => {
     document.querySelectorAll("#navLinks a").forEach(l => l.classList.remove("active"));
     link.classList.add("active");
     const target = link.dataset.target;
-    if (target === "mylist") showToast(list.length ? "My list: " + list.join(", ") : "Your list is empty");
+    if (target === "mylist") showToast(list.length ? "My list: " + list.map(titleOf).join(", ") : "Your list is empty");
     else window.scrollTo({ top: 0, behavior: "smooth" });
   });
 });
@@ -548,7 +557,7 @@ document.addEventListener("keydown", e => {
       Edit the titles below. Real posters: replace the generated
       gradient with  poster: 'url("poster.jpg") center/cover'
    --------------------------------------------------------- */
-const categoryData = {
+const categoryData = __discs.length ? Object.fromEntries(__discs.map(d => [d.title, __pool.filter(v => v.discipline_id === d.id && !v.clip).map(v => ({ id:v.id, title:v.title, genre:d.title, video:v.video, trailer:v.trailer, minutes:v.minutes, rating:v.rating, poster:v.poster, bg:v.bg, desc:v.desc, time:v.time }))]).filter(([,a]) => a.length)) : {
   "Feature Film":        ["The Quiet Orchard", "Salt and Iron", "Harbor Lights", "A Winter Promise", "Crimson Hours"],
   "Feature Documentary": ["Oceans Beyond Us", "The Last Glacier", "Voices of the Valley", "Inside the Hive", "Roots of the Forest"],
   "Short Film":          ["Paper Moon", "Ten Minutes Left", "The Red Door", "Lantern", "Small Hours"],
@@ -558,6 +567,7 @@ const categoryData = {
   "Student Film":        ["First Draft", "Campus at Dawn", "The Borrowed Camera", "Thesis", "Rooftop Tales"],
   "LGBT Feature":        ["Summer of Colors", "Letters to Sam", "Two Rooms", "Parade Night", "The Open Door"]
 };
+
 
 const hue = str => [...str].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7);
 const categoryMovies = [];                        // flat list, used by the player + Continue Watching
@@ -570,10 +580,12 @@ Object.entries(categoryData).forEach(([category, titles]) => {
   group.querySelector("h3").textContent = category;
   const row = group.querySelector(".cat-row");
 
-  titles.forEach((title, i) => {
+  titles.forEach((item, i) => {
+    const isObj = item && typeof item === "object";
+    const title = isObj ? item.title : item;
     const h = hue(title);
-    const poster = "linear-gradient(160deg,hsl(" + h + ",55%,42%),hsl(" + ((h + 30) % 360) + ",60%,8%))";
-    const m = { title, genre: category, poster, bg: poster };
+    const poster = (isObj && item.poster) || "linear-gradient(160deg,hsl(" + h + ",55%,42%),hsl(" + ((h + 30) % 360) + ",60%,8%))";
+    const m = isObj ? { ...item, genre: item.genre || category, bg: item.bg || item.poster || poster, video: item.video || "", minutes: item.minutes || 0 } : { title, genre: category, poster, bg: poster };
     categoryMovies.push(m);
 
     const card = document.createElement("button");
@@ -599,10 +611,16 @@ Object.entries(categoryData).forEach(([category, titles]) => {
 /* ---------------------------------------------------------
    10) MY LIST — saved in the browser (localStorage)
    --------------------------------------------------------- */
-const KEY = "myList";
-let list = [];                                  // saved movie titles
+const KEY = "continuum.favorites";
+let list = [];                                  // saved video ids (or demo titles)
 try { list = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { list = []; }
 const saveList = () => { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} };
+const mid = m => (m && (m.id || m.title)) || "";
+const titleOf = k => {
+  const all = movies.concat(top10, extraMovies, categoryMovies);
+  const f = all.find(x => (x.id || x.title) === k || x.title === k);
+  return f ? f.title : k;
+};
 
 const listBtn = $("listBtn");
 
@@ -623,7 +641,7 @@ function updateWatchLabel() {
 function updateListBtn() {
   updateWatchLabel();
   updateNavCount();
-  const saved = list.includes(movies[current].title);
+  const saved = list.includes(mid(movies[current]));
   listBtn.textContent = saved ? "\\u2713 In My List" : "+ My List";
   listBtn.classList.toggle("in-list", saved);
   listBtn.setAttribute("aria-pressed", saved);
@@ -636,14 +654,14 @@ function toggleList(title) {
   saveList();
   updateListBtn();
 }
-listBtn.addEventListener("click", () => toggleList(movies[current].title));
+listBtn.addEventListener("click", () => toggleList(mid(movies[current])));
 
 /* ---------------------------------------------------------
    10b) TOP 10 MOVIES — edit this array (keep it in rank order)
         Real posters:  poster: 'url("poster.jpg") center/cover'
         Click a card to play it (it also feeds Continue Watching)
    --------------------------------------------------------- */
-const top10 = [
+const top10 = (__nonClip.length ? __nonClip.slice().sort((a,b) => b.rawRating - a.rawRating).slice(0,10).map(v => ({ id:v.id, title:v.title, genre:v.genre, rating:v.rating, poster:v.poster, bg:v.bg || v.poster, video:v.video, minutes:v.minutes, desc:v.desc, time:v.time })) : [
   { title:"STARLESS",     genre:"Sci-Fi",   rating:4.8, poster:"linear-gradient(160deg,#5b48c9,#0a0724)" },
   { title:"IRON TIDE",    genre:"Action",   rating:4.7, poster:"linear-gradient(160deg,#59606e,#0a0b0e)" },
   { title:"HOLLOW PINES", genre:"Horror",   rating:4.5, poster:"linear-gradient(160deg,#b52323,#140303)" },
@@ -654,16 +672,17 @@ const top10 = [
   { title:"EMBER",        genre:"Comedy",   rating:4.1, poster:"linear-gradient(160deg,#d9782b,#2a0f06)" },
   { title:"NEON RUN",     genre:"Sci-Fi",   rating:4.0, poster:"linear-gradient(160deg,#e0359b,#14062a)" },
   { title:"VELVET ROAD",  genre:"Romance",  rating:4.0, poster:"linear-gradient(160deg,#c24d86,#1a0714)" }
-].map(m => ({ ...m, bg: m.poster }));            // the player uses bg as its backdrop
+]).map(m => ({ ...m, bg: m.bg || m.poster }));            // the player uses bg as its backdrop
 
-const extraMovies = [
+const __t10 = new Set(top10.map(m => m.id).filter(Boolean));
+const extraMovies = (__nonClip.length ? __nonClip.filter(v => !v.featured && !__t10.has(v.id)).sort((a,b) => (a.sort - b.sort) || a.title.localeCompare(b.title)).slice(0,8).map(v => ({ id:v.id, title:v.title, genre:v.genre, poster:v.poster, bg:v.bg || v.poster, video:v.video, minutes:v.minutes, desc:v.desc, time:v.time, rating:v.rating })) : [
   { title:"SILENT HARBOR",  genre:"Drama",     poster:"linear-gradient(160deg,#4d7a8c,#0b161b)" },
   { title:"GLASS GARDEN",   genre:"Romance",   poster:"linear-gradient(160deg,#7bc47f,#0d2412)" },
   { title:"COPPER SKY",     genre:"Adventure", poster:"linear-gradient(160deg,#d4703a,#1d0e2e)" },
   { title:"THE LONG WAY",   genre:"Drama",     poster:"linear-gradient(160deg,#8c8c5a,#1a1a0d)" },
   { title:"MIDNIGHT CHOIR", genre:"Musical",   poster:"linear-gradient(160deg,#6a3fa0,#0d0618)" },
   { title:"WILD HEARTS",    genre:"Adventure", poster:"linear-gradient(160deg,#3fa06a,#06180f)" }
-].map(m => ({ ...m, bg: m.poster }));
+]).map(m => ({ ...m, bg: m.bg || m.poster }));
 
 const catalog = () => [...movies, ...top10, ...extraMovies, ...categoryMovies];      // everything that can be played
 
@@ -696,6 +715,16 @@ const catalog = () => [...movies, ...top10, ...extraMovies, ...categoryMovies]; 
 const CW_KEY = "continueWatching";
 let cw = [];                                     // [{title, sec, total, at}]
 try { cw = JSON.parse(localStorage.getItem(CW_KEY)) || []; } catch (e) {}
+try {                                            // merge server-synced progress (continuum.progress)
+  const pm = JSON.parse(localStorage.getItem("continuum.progress")) || {};
+  Object.keys(pm).forEach(id => {
+    const p = pm[id];
+    if (!p || p.completed || !(p.position > 10)) return;
+    const v = __byId[id];
+    if (!v || cw.some(x => x.title === v.title)) return;
+    cw.push({ title: v.title, sec: Math.floor(p.position || 0), total: Math.floor(p.duration || (v.minutes || 30) * 60), at: p.updated_at ? (Date.parse(p.updated_at) || Date.now()) : Date.now() });
+  });
+} catch (e) {}
 const saveCW = () => { try { localStorage.setItem(CW_KEY, JSON.stringify(cw)); } catch (e) {} };
 
 const fmt = s => {
@@ -727,7 +756,7 @@ function seek(sec) {
 }
 
 function openPlayer(m, start) {
-  try { parent.NFPlay({ title:m.title, sub:m.genre||"", bg:m.bg||m.poster, video:m.video||"", total:(m.minutes||120)*60, start:start||0, onClose:() => window.refreshCW && window.refreshCW() }); }
+  try { parent.NFPlay({ title:m.title, sub:m.genre||"", bg:m.bg||m.poster, video:m.video||"", total:(m.minutes||120)*60, start:start||0, id:m.id||null, onClose:() => window.refreshCW && window.refreshCW() }); }
   catch (e) { showToast("Playing " + m.title); }
 }
 
@@ -814,9 +843,12 @@ function renderMore() {
     c.querySelector(".poster").style.background = m.poster || m.bg;
     c.querySelector(".cat-name").textContent = name;
     const info = c.querySelector(".cat-info");
-    info.textContent = "Coming " + date;
+    info.textContent = m.time ? m.genre + " · " + m.time : "Coming " + date;
     info.style.marginTop = ".1rem";
-    c.addEventListener("click", () => showToast(name + " is coming " + date));
+    c.addEventListener("click", () => {
+      if (m.video !== undefined) { const e2 = cw.find(x => x.title === m.title); openPlayer(m, e2 ? e2.sec : 0); }
+      else showToast(name + " is coming " + date);
+    });
     moreRow.appendChild(c);
   });
   moreRow.scrollLeft = 0;
@@ -1006,9 +1038,13 @@ render(0);
 <div class="toast" id="toast"></div>
 
 <script>
+/* Shared catalogue payload injected by the parent page (window.__CONTINUUM_CATALOGUE__). */
+const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
+const __vids = ((__CAT && __CAT.videos) || []).filter(v => !v.clip).map(v => ({ id:v.id, title:v.title, year:v.year||"", genres:[v.genre || "Masterclass"], time:v.time, minutes:v.minutes, rating:v.rating, pop:v.rawRating || v.pop || 0, tag:String(v.tag || v.genre || "Masterclass"), desc:v.desc, poster:v.poster, bg:v.bg, video:v.video||"", trailer:v.trailer||"", created:v.created||"", sort:v.sort||0, discipline_id:v.discipline_id||"" }));
+
 /* ---------- 1) DATA: add or edit movies here ----------
    Real posters:  poster: 'url("poster.jpg") center/cover'          */
-const movies = [
+const movies = (__vids.length ? __vids : [
   { title:"Nightfall",    year:2023, genres:["Mystery","Thriller"], time:"1h 55m", rating:4.4, pop:92, tag:"A LIGHTHOUSE MYSTERY",
     desc:"A lighthouse keeper discovers that the storm rolling in each night is trying to tell her something, and the answer lies beneath the waves.", poster:"linear-gradient(160deg,#2a5d8f,#06101c)" },
   { title:"Ember",        year:2022, genres:["Comedy","Drama"], time:"1h 40m", rating:4.1, pop:80, tag:"ONE KITCHEN, ONE WEEK",
@@ -1033,7 +1069,7 @@ const movies = [
     desc:"A botanist and a stubborn florist compete to save the last greenhouse in town, and keep running out of reasons to stay rivals.", poster:"linear-gradient(160deg,#7bc47f,#0d2412)" },
   { title:"Dust & Thunder",year:2024, genres:["Action","Drama"], time:"2h 15m", rating:4.1, pop:75, tag:"THE LAST RIDE",
     desc:"A marshal and a runaway bride cross a dry desert with a storm behind them and a gang ahead of them.", poster:"linear-gradient(160deg,#b8793c,#241408)" }
-];
+]);
 
 /* ---------- 2) STATE + ELEMENTS ---------- */
 const $ = id => document.getElementById(id);
@@ -1041,10 +1077,11 @@ const grid = $("grid");
 const state = { genre:"All", q:"", sort:"pop" };
 let current = null, modalTrigger = null;                // movie open in the modal
 
-const KEY = "myList";                                 // same key as the other pages
+const KEY = "continuum.favorites";                       // synced with the other pages
 let list = [];
 try { list = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
 const saveList = () => { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} };
+const mid = m => m.id || m.title;
 
 const genres = ["All", ...new Set(movies.flatMap(m => m.genres))].sort((a, b) => a === "All" ? -1 : b === "All" ? 1 : a.localeCompare(b));
 
@@ -1072,7 +1109,7 @@ function visible() {
   const out = movies.filter(m =>
     (state.genre === "All" || m.genres.includes(state.genre)) &&
     (!q || m.title.toLowerCase().includes(q) || m.genres.join(" ").toLowerCase().includes(q)));
-  const by = { pop:(a,b)=>b.pop-a.pop, new:(a,b)=>b.year-a.year, top:(a,b)=>b.rating-a.rating, az:(a,b)=>a.title.localeCompare(b.title) };
+  const by = { pop:(a,b)=>b.pop-a.pop, new:(a,b)=>(b.created||"").localeCompare(a.created||"") || (b.sort||0)-(a.sort||0), top:(a,b)=>b.rating-a.rating, az:(a,b)=>a.title.localeCompare(b.title) };
   return out.sort(by[state.sort]);
 }
 
@@ -1094,7 +1131,7 @@ function render() {
     card.querySelector(".rate").textContent = "\\u2605 " + m.rating.toFixed(1);
     poster.querySelector("b").textContent = m.title;
     card.querySelector(".name").textContent = m.title;
-    card.querySelector(".sub").textContent = m.year + " \\u00B7 " + m.genres[0];
+    card.querySelector(".sub").textContent = [m.year, m.genres[0]].filter(Boolean).join(" \\u00B7 ");
     const q = card.querySelector(".quick");
     paintQuick(q, m);
     q.addEventListener("click", () => toggle(m));
@@ -1104,7 +1141,7 @@ function render() {
 }
 
 function paintQuick(q, m) {
-  const on = list.includes(m.title);
+  const on = list.includes(mid(m));
   q.textContent = on ? "\\u2713" : "+";
   q.classList.toggle("saved", on);
   q.setAttribute("aria-label", (on ? "Remove " : "Add ") + m.title + (on ? " from" : " to") + " My List");
@@ -1117,9 +1154,9 @@ function toast(msg) {
   clearTimeout(t); t = setTimeout(() => el.classList.remove("show"), 2200);
 }
 function toggle(m) {
-  const i = list.indexOf(m.title);
+  const i = list.indexOf(mid(m));
   if (i >= 0) { list.splice(i, 1); toast("Removed from My List"); }
-  else { list.push(m.title); toast("Added to My List"); }
+  else { list.push(mid(m)); toast("Added to My List"); }
   saveList(); syncList();
 }
 function syncList() {
@@ -1129,7 +1166,7 @@ function syncList() {
 }
 /* ---------- 6) DETAILS MODAL ---------- */
 function paintModalBtn() {
-  const on = list.includes(current.title), b = $("mList");
+  const on = list.includes(mid(current)), b = $("mList");
   b.textContent = on ? "\\u2713 In My List" : "+ My List";
   b.classList.toggle("saved", on);
 }
@@ -1141,7 +1178,7 @@ function openModal(m) {
   $("mTag").textContent = m.tag;
   $("mTitle").textContent = m.title;
   $("mDesc").textContent = m.desc;
-  $("mInfo").textContent = m.year + "   " + m.genres.join(", ") + "   " + m.time;
+  $("mInfo").textContent = [m.year, m.genres.join(", "), m.time].filter(Boolean).join("   ");
   const full = Math.round(m.rating);
   $("mStars").innerHTML = [1,2,3,4,5].map(n => n <= full ? "\\u2605" : '<span class="off">\\u2605</span>').join("");
   $("mStars").setAttribute("aria-label", m.rating + " out of 5");
@@ -1166,7 +1203,7 @@ $("mPlay").addEventListener("click", () => {
   const item = current;
   if (!item) return;
   closeModal();
-  play({ title:item.title, sub:(item.genres||[]).join(", "), bg:item.poster, video:item.video||"", dur:item.time });
+  play({ title:item.title, sub:(item.genres||[]).join(", "), bg:item.poster, video:item.video||"", dur:item.time, id:item.id||null });
 });
 document.addEventListener("keydown", e => {
   const dialog = $("modal");
@@ -1293,7 +1330,16 @@ h1{font:600 clamp(3.4rem,9.5vw,8rem)/.92 var(--serif);letter-spacing:-.02em;text
 <div class="toast" id="toast" role="status"></div>
 
 <script>
-const S=[
+/* Shared catalogue payload injected by the parent page (window.__CONTINUUM_CATALOGUE__). */
+const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
+const __vids = (__CAT && __CAT.videos) || [];
+const __discs = (__CAT && __CAT.disciplines) || [];
+const S = (__discs.length ? __discs.map(d => {
+  const vs = __vids.filter(v => v.discipline_id === d.id && !v.clip);
+  if (!vs.length) return null;
+  const r = vs.reduce((a,v) => a + v.rating, 0) / vs.length;
+  return { id:d.id, t:d.title, g:d.goal || "Masterclass", y:"", s:1, r:r.toFixed(1), h:d.hue, d:d.blurb || "", e:vs.map(v => v.title), vids:vs };
+}).filter(Boolean) : [
 {t:"The Hollow Crown",g:"Drama",y:2025,s:3,r:"9.1",h:352,d:"When a king dies without naming an heir, three siblings fight for a throne that is already hollow.",e:["The Last Heir","Ash and Salt","A Quiet Coup","The Crown’s Debt","Winter Court"]},
 {t:"Salt Road",g:"Crime",y:2024,s:2,r:"8.8",h:42,d:"A retired customs officer is pulled back in when a smuggling route she once closed quietly reopens.",e:["Border Lights","The Manifest","Dry Dock","Lowball","Night Freight"]},
 {t:"Low Orbit",g:"Sci-Fi",y:2026,s:1,r:"8.6",h:210,d:"Six engineers on a failing station have nine days to fix it, and one of them is lying about why.",e:["Day One","Pressure","Dead Air","The Seventh Seat","Reentry"]},
@@ -1302,19 +1348,22 @@ const S=[
 {t:"The Cartographer",g:"Fantasy",y:2024,s:2,r:"8.7",h:270,d:"A mapmaker discovers that the places she draws begin to exist, including the ones she fears.",e:["Blank Margins","North of Nowhere","Ink","The Second Coast","Scale"]},
 {t:"Static",g:"Sci-Fi",y:2022,s:3,r:"8.5",h:150,d:"A radio operator in a sealed bunker keeps hearing broadcasts from a year that hasn’t happened yet.",e:["Signal","Dial Tone","Echo Chamber","Frequency","Blackout"]},
 {t:"Fault Line",g:"Crime",y:2026,s:1,r:"8.3",h:120,d:"After an earthquake exposes a body in a sealed tunnel, two detectives trace a crime to the city’s founding.",e:["Aftershock","Load Bearing","Dust","The Old Quarter","Bedrock"]}
-];
+]);
 const $=id=>document.getElementById(id);
 const bg=h=>\`radial-gradient(circle at 72% 28%,hsla(\${h},70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(\${h},42%,20%),hsl(\${(h+25)%360},38%,9%) 60%,#03080E)\`;
 const tile=h=>\`linear-gradient(160deg,hsl(\${h},50%,38%),hsl(\${(h+30)%360},55%,8%))\`;
 const plural=(n,w)=>n+" "+w+(n>1?"s":"");
 let cur=0,filter="All",list=[];
-try{list=JSON.parse(localStorage.getItem("seriesList"))||[]}catch(e){}
-const save=()=>{try{localStorage.setItem("seriesList",JSON.stringify(list))}catch(e){}};
+try{list=JSON.parse(localStorage.getItem("continuum.favorites"))||[]}catch(e){}
+const save=()=>{try{localStorage.setItem("continuum.favorites",JSON.stringify(list))}catch(e){}};
+const sIds=s=>(s.vids&&s.vids.length?s.vids.map(v=>v.id).filter(Boolean):[s.t]);
+const sHas=s=>{const ids=sIds(s);return ids.length>0&&ids.every(id=>list.includes(id))};
+const sToggle=s=>{const ids=sIds(s),all=ids.every(id=>list.includes(id));ids.forEach(id=>{const i=list.indexOf(id);if(all&&i>=0)list.splice(i,1);else if(!all&&i<0)list.push(id)});save()};
 let tt;const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200)};
 
 const play=o=>{try{parent.NFPlay(o)}catch(e){toast("Playing "+o.title)}};
-const epOpts=(s,k)=>({title:s.t,sub:"S1:E"+(k+1)+" \\u201C"+s.e[k]+"\\u201D",bg:tile(s.h),dur:"45 min",key:s.t+" S1E"+(k+1),next:k+1<s.e.length?epOpts(s,k+1):null});
-function listBtn(){const on=list.includes(S[cur].t),b=$("lb");b.textContent=on?"\\u2713 In My List":"+ My List";b.classList.toggle("in",on);b.setAttribute("aria-pressed",on)}
+const epOpts=(s,k)=>{const v=(s.vids&&s.vids[k])||null,nm=v?v.title:s.e[k];return{title:nm,sub:s.t+" \u00B7 "+nm,bg:tile(s.h),dur:v&&v.time||"45 min",key:s.t+" S1E"+(k+1),id:v&&v.id||null,video:v&&v.video||"",next:k+1<s.e.length?epOpts(s,k+1):null}};
+function listBtn(){const on=sHas(S[cur]),b=$("lb");b.textContent=on?"\\u2713 In My List":"+ My List";b.classList.toggle("in",on);b.setAttribute("aria-pressed",on)}
 
 function render(i){
   cur=i;const s=S[i];
@@ -1362,9 +1411,9 @@ function grid(){
 });
 $("pb").onclick=()=>play(epOpts(S[cur],0));
 $("lb").onclick=()=>{
-  const t=S[cur].t,i=list.indexOf(t);
-  if(i>=0){list.splice(i,1);toast("Removed from My List")}else{list.push(t);toast("Added to My List")}
-  save();listBtn();
+  sToggle(S[cur]);
+  toast(sHas(S[cur])?"Added to My List":"Removed from My List");
+  listBtn();
 };
 grid();render(0);
 </script>
@@ -1497,11 +1546,33 @@ h3{font-size:.72rem;letter-spacing:.2em;color:var(--mute);margin:0 0 .8rem;font-
 </div></div>
 <div class="toast" id="toast" role="status"></div>
 <script>
-const CARTOONS=[{"t":"Pip & the Lantern Kingdom","tag":"Light the way home.","type":"Series","y":2023,"age":"TV-Y7","g":["Adventure","Fantasy"],"se":2,"ep":26,"len":"24 min","r":4.8,"studio":"Little Ember Studio","h":38,"d":"A tiny firefly named Pip discovers that every lantern in the Lantern Kingdom is going dark, one by one. With a grumpy moth and a very brave snail, Pip sets out to relight the realm before the long night falls.","cast":[["Pip","Mara Ellis"],["Mothra Grumbles","Dev Okafor"],["Sir Shell","Lena Park"]],"eps":["The First Flicker","The Moth Who Hated Night","Snail Mail","The Glass Bridge","Hush of the Dark Wood"]},{"t":"Captain Marshmallow","tag":"Soft on the outside. Brave on the inside.","type":"Series","y":2022,"age":"TV-Y7","g":["Comedy","Action"],"se":3,"ep":39,"len":"22 min","r":4.5,"studio":"Fluff & Thunder","h":330,"d":"When the Candy Coast is threatened by the sour pirates of Lemon Bay, a squishy captain and his crew of snack-sized heroes sail into action, and usually get stuck to the deck.","cast":[["Captain Marshmallow","Theo Brandt"],["First Mate Gummi","Aya Nishida"],["Dr. Crunch","Omar Haddad"]],"eps":["Sail of the Century","Lemon Bay Blues","The Great Sprinkle Heist","Storm in a Teacup"]},{"t":"The Cloud Bakery","tag":"Every loaf has a little sky in it.","type":"Series","y":2024,"age":"TV-Y","g":["Family","Comedy"],"se":1,"ep":13,"len":"11 min","r":4.7,"studio":"Pillow Pictures","h":200,"d":"Nimbus the baker and her sleepy cloud-pup deliver warm bread to the villages below, and learn that kindness is the secret ingredient in every recipe.","cast":[["Nimbus","Ivy Castellano"],["Pudge the Cloud-Pup","Noah Reyes"],["Old Mr. Gale","Hugo Lindqvist"]],"eps":["Sunrise Sourdough","The Rainy Day Roll","Wind Delivery","Snowflake Surprise"]},{"t":"Robo Rascals","tag":"Charged up and out of control.","type":"Series","y":2021,"age":"TV-Y7","g":["Sci-Fi","Comedy"],"se":4,"ep":52,"len":"22 min","r":4.4,"studio":"Gearbox Animation","h":190,"d":"Four mischievous maintenance bots on a space station keep breaking things while trying to fix them, and keep saving everyone by accident.","cast":[["Bolt","Jonah Pierce"],["Nutsy","Kira Dolan"],["Zed","Sam Adeyemi"]],"eps":["Loose Screws","Beep Beep Boom","The Vacuum Incident","Zero-G Birthday"]},{"t":"Moonlit Mischief","tag":"Some secrets only wake at night.","type":"Movie","y":2025,"age":"TV-G","g":["Fantasy","Mystery"],"len":"1h 28m","r":4.6,"studio":"Silver Paper Films","director":"Ana Valdez","h":265,"d":"On the night of a rare blue moon, a curious girl follows a trail of glowing paw prints into a hidden world where all of the city's lost things are kept.","cast":[["Luna","Elsie Marlowe"],["Mister Whisk","Callum Reyes"],["The Keeper","Priya Nair"]]},{"t":"Tiny Tides","tag":"Big adventures in small pools.","type":"Series","y":2020,"age":"TV-Y","g":["Adventure","Family"],"se":2,"ep":26,"len":"11 min","r":4.3,"studio":"Pebble & Pearl","h":175,"d":"Life in a tide pool is anything but quiet. A crab, a starfish, and a shy seahorse explore the wide world one wave at a time.","cast":[["Clem the Crab","Ben Okoro"],["Stella","Hana Kimura"],["Sky the Seahorse","Mei Tan"]],"eps":["Low Tide, High Hopes","The Great Shell Swap","Moonlight Swim","Message in a Bottle"]},{"t":"Dino Diner","tag":"Prehistoric food, modern chaos.","type":"Series","y":2023,"age":"TV-Y","g":["Comedy","Family"],"se":2,"ep":26,"len":"11 min","r":4.2,"studio":"Rocky Road Studio","h":25,"d":"Rex runs the only diner in Pebble Valley. Every dinosaur has an opinion about the menu, and none of them can fit through the door.","cast":[["Rex","Barry Quill"],["Trixie","Dani Moreau"],["Stego","Luis Ferrer"]],"eps":["Lunch Rush","The Tiny Table","Egg Special","Meteor Monday"]},{"t":"Skyfarers of Nimbus","tag":"The sky is the only map.","type":"Series","y":2024,"age":"TV-PG","g":["Adventure","Sci-Fi"],"se":2,"ep":20,"len":"26 min","r":4.9,"studio":"Aurora Works","h":215,"d":"In a world of floating islands, a young mapmaker joins an airship crew in search of the legendary island that holds the sky together.","cast":[["Wren","Tessa Holloway"],["Captain Orrin","Marcus Bell"],["Juno","Camille Dufour"]],"eps":["Cast Off","The Map That Moves","Storm Gate","Island of Echoes","The Keystone"]},{"t":"The Paper Dragon","tag":"Fold. Wish. Fly.","type":"Movie","y":2022,"age":"TV-PG","g":["Fantasy","Drama"],"len":"1h 42m","r":4.8,"studio":"Origami Lane","director":"Mika Sato","h":12,"d":"A lonely boy folds a paper dragon from his late grandfather's letters. When it comes alive, they must cross three kingdoms before the last page crumbles.","cast":[["Kenji","Ryo Takeda"],["Ember the Dragon","Sasha Volkov"],["Grandfather","Hiroshi Mori"]]},{"t":"Detective Doodle","tag":"Every clue leaves a mark.","type":"Series","y":2022,"age":"TV-Y7","g":["Mystery","Comedy"],"se":3,"ep":36,"len":"22 min","r":4.5,"studio":"Inkwell Pictures","h":300,"d":"A pencil-drawn detective can erase and redraw anything, which makes solving crimes easy and keeping them solved very hard.","cast":[["Doodle","Felix Aranda"],["Inspector Eraser","Nadia Ross"],["Penny","Lola Brightman"]],"eps":["The Missing Margin","Smudge","Case of the Blank Page","Red Pen Rising"]},{"t":"Starlight Academy","tag":"Magic is a team sport.","type":"Series","y":2025,"age":"TV-G","g":["Fantasy","Family"],"se":1,"ep":12,"len":"24 min","r":4.6,"studio":"Moonbeam Studio","h":280,"d":"Five first-year students at a school in the clouds learn spellcasting, friendship, and why you should never feed a comet after midnight.","cast":[["Nova","Zara Whitfield"],["Pocket","Eli Navarro"],["Professor Quill","Margaret Obi"]],"eps":["Orientation Day","The Comet Problem","Broomstick Blues","Midterm Magic"]},{"t":"Turbo Turtles","tag":"Slow and steady? Not today.","type":"Series","y":2021,"age":"TV-Y7","g":["Action","Comedy"],"se":3,"ep":39,"len":"22 min","r":4.1,"studio":"Shellshock Media","h":135,"d":"Four racing turtles protect Sandy Bay from a gang of speed-obsessed hares, with questionable stunts and a lot of snacks.","cast":[["Rocket","Andre Mills"],["Zippy","Sora Ito"],["Big Shell","Tomas Vega"]],"eps":["Ready, Set, Slow","The Hare Gang","Snack Attack","Photo Finish"]},{"t":"Orchard Spirits","tag":"Where the apples remember.","type":"Movie","y":2023,"age":"TV-G","g":["Fantasy","Family"],"len":"1h 35m","r":4.7,"studio":"Sunday Light","director":"Elena Rowe","h":95,"d":"Every autumn, the spirits of an old orchard wake to guard the last harvest. One summer, a city kid arrives and accidentally wakes them early.","cast":[["Wren","Ada Lindgren"],["Old Bough","Pete Sorensen"],["Blossom","Ayo Bankole"]]},{"t":"Galaxy Grandpa","tag":"Retired. Not tired.","type":"Series","y":2024,"age":"TV-PG","g":["Sci-Fi","Comedy"],"se":2,"ep":22,"len":"24 min","r":4.4,"studio":"Nebula Nine","h":245,"d":"A retired starship captain moves in with his grandkids, and the galaxy keeps calling him back for just one more mission.","cast":[["Grandpa Cosmo","Walter Briggs"],["Mia","Tali Okonkwo"],["Beep","Jun Park"]],"eps":["One Last Flight","Moon Dust Allergy","The Garage Warp","Family Dinner at Mach 5"]}];
+/* Shared catalogue payload injected by the parent page (window.__CONTINUUM_CATALOGUE__). */
+const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
+function __buildCat(cat){
+  const out=[], vids=cat.videos||[], discs=cat.disciplines||[];
+  discs.forEach(d=>{
+    const vs=vids.filter(v=>v.discipline_id===d.id&&!v.clip);
+    if(!vs.length)return;
+    out.push({t:d.title,tag:String(d.goal||"Continuum Masterclass"),type:"Series",y:"",age:"",g:[d.title],se:1,ep:vs.length,len:(Math.round(vs.reduce((a,v)=>a+(v.minutes||0),0)/vs.length)||30)+" min",r:+(vs.reduce((a,v)=>a+v.rating,0)/vs.length).toFixed(1),studio:"Continuum Academy",h:d.hue,d:d.blurb||"",cast:[],eps:vs.map(v=>v.title),vids:vs});
+  });
+  vids.filter(v=>v.clip).forEach(v=>{
+    out.push({t:v.title,tag:String(v.tag||"Highlight Clip"),type:"Movie",y:"",age:"",g:[v.genre||"Clip"],se:0,ep:0,len:v.time||"30 min",r:v.rating,studio:"Continuum Academy",h:v.hue,d:v.desc,cast:[],eps:[],vids:[v]});
+  });
+  const byG={};
+  vids.filter(v=>!v.clip&&!discs.some(d=>d.id===v.discipline_id)).forEach(v=>{const g=v.genre||"Masterclass";(byG[g]=byG[g]||[]).push(v)});
+  Object.keys(byG).forEach(g=>{
+    const vs=byG[g];
+    out.push({t:g,tag:"Continuum Masterclass",type:"Series",y:"",age:"",g:[g],se:1,ep:vs.length,len:(Math.round(vs.reduce((a,v)=>a+(v.minutes||0),0)/vs.length)||30)+" min",r:+(vs.reduce((a,v)=>a+v.rating,0)/vs.length).toFixed(1),studio:"Continuum Academy",h:vs[0].hue,d:"",cast:[],eps:vs.map(v=>v.title),vids:vs});
+  });
+  return out;
+}
+const CARTOONS=((__CAT && __CAT.videos && __CAT.videos.length) ? __buildCat(__CAT) : [{"t":"Pip & the Lantern Kingdom","tag":"Light the way home.","type":"Series","y":2023,"age":"TV-Y7","g":["Adventure","Fantasy"],"se":2,"ep":26,"len":"24 min","r":4.8,"studio":"Little Ember Studio","h":38,"d":"A tiny firefly named Pip discovers that every lantern in the Lantern Kingdom is going dark, one by one. With a grumpy moth and a very brave snail, Pip sets out to relight the realm before the long night falls.","cast":[["Pip","Mara Ellis"],["Mothra Grumbles","Dev Okafor"],["Sir Shell","Lena Park"]],"eps":["The First Flicker","The Moth Who Hated Night","Snail Mail","The Glass Bridge","Hush of the Dark Wood"]},{"t":"Captain Marshmallow","tag":"Soft on the outside. Brave on the inside.","type":"Series","y":2022,"age":"TV-Y7","g":["Comedy","Action"],"se":3,"ep":39,"len":"22 min","r":4.5,"studio":"Fluff & Thunder","h":330,"d":"When the Candy Coast is threatened by the sour pirates of Lemon Bay, a squishy captain and his crew of snack-sized heroes sail into action, and usually get stuck to the deck.","cast":[["Captain Marshmallow","Theo Brandt"],["First Mate Gummi","Aya Nishida"],["Dr. Crunch","Omar Haddad"]],"eps":["Sail of the Century","Lemon Bay Blues","The Great Sprinkle Heist","Storm in a Teacup"]},{"t":"The Cloud Bakery","tag":"Every loaf has a little sky in it.","type":"Series","y":2024,"age":"TV-Y","g":["Family","Comedy"],"se":1,"ep":13,"len":"11 min","r":4.7,"studio":"Pillow Pictures","h":200,"d":"Nimbus the baker and her sleepy cloud-pup deliver warm bread to the villages below, and learn that kindness is the secret ingredient in every recipe.","cast":[["Nimbus","Ivy Castellano"],["Pudge the Cloud-Pup","Noah Reyes"],["Old Mr. Gale","Hugo Lindqvist"]],"eps":["Sunrise Sourdough","The Rainy Day Roll","Wind Delivery","Snowflake Surprise"]},{"t":"Robo Rascals","tag":"Charged up and out of control.","type":"Series","y":2021,"age":"TV-Y7","g":["Sci-Fi","Comedy"],"se":4,"ep":52,"len":"22 min","r":4.4,"studio":"Gearbox Animation","h":190,"d":"Four mischievous maintenance bots on a space station keep breaking things while trying to fix them, and keep saving everyone by accident.","cast":[["Bolt","Jonah Pierce"],["Nutsy","Kira Dolan"],["Zed","Sam Adeyemi"]],"eps":["Loose Screws","Beep Beep Boom","The Vacuum Incident","Zero-G Birthday"]},{"t":"Moonlit Mischief","tag":"Some secrets only wake at night.","type":"Movie","y":2025,"age":"TV-G","g":["Fantasy","Mystery"],"len":"1h 28m","r":4.6,"studio":"Silver Paper Films","director":"Ana Valdez","h":265,"d":"On the night of a rare blue moon, a curious girl follows a trail of glowing paw prints into a hidden world where all of the city's lost things are kept.","cast":[["Luna","Elsie Marlowe"],["Mister Whisk","Callum Reyes"],["The Keeper","Priya Nair"]]},{"t":"Tiny Tides","tag":"Big adventures in small pools.","type":"Series","y":2020,"age":"TV-Y","g":["Adventure","Family"],"se":2,"ep":26,"len":"11 min","r":4.3,"studio":"Pebble & Pearl","h":175,"d":"Life in a tide pool is anything but quiet. A crab, a starfish, and a shy seahorse explore the wide world one wave at a time.","cast":[["Clem the Crab","Ben Okoro"],["Stella","Hana Kimura"],["Sky the Seahorse","Mei Tan"]],"eps":["Low Tide, High Hopes","The Great Shell Swap","Moonlight Swim","Message in a Bottle"]},{"t":"Dino Diner","tag":"Prehistoric food, modern chaos.","type":"Series","y":2023,"age":"TV-Y","g":["Comedy","Family"],"se":2,"ep":26,"len":"11 min","r":4.2,"studio":"Rocky Road Studio","h":25,"d":"Rex runs the only diner in Pebble Valley. Every dinosaur has an opinion about the menu, and none of them can fit through the door.","cast":[["Rex","Barry Quill"],["Trixie","Dani Moreau"],["Stego","Luis Ferrer"]],"eps":["Lunch Rush","The Tiny Table","Egg Special","Meteor Monday"]},{"t":"Skyfarers of Nimbus","tag":"The sky is the only map.","type":"Series","y":2024,"age":"TV-PG","g":["Adventure","Sci-Fi"],"se":2,"ep":20,"len":"26 min","r":4.9,"studio":"Aurora Works","h":215,"d":"In a world of floating islands, a young mapmaker joins an airship crew in search of the legendary island that holds the sky together.","cast":[["Wren","Tessa Holloway"],["Captain Orrin","Marcus Bell"],["Juno","Camille Dufour"]],"eps":["Cast Off","The Map That Moves","Storm Gate","Island of Echoes","The Keystone"]},{"t":"The Paper Dragon","tag":"Fold. Wish. Fly.","type":"Movie","y":2022,"age":"TV-PG","g":["Fantasy","Drama"],"len":"1h 42m","r":4.8,"studio":"Origami Lane","director":"Mika Sato","h":12,"d":"A lonely boy folds a paper dragon from his late grandfather's letters. When it comes alive, they must cross three kingdoms before the last page crumbles.","cast":[["Kenji","Ryo Takeda"],["Ember the Dragon","Sasha Volkov"],["Grandfather","Hiroshi Mori"]]},{"t":"Detective Doodle","tag":"Every clue leaves a mark.","type":"Series","y":2022,"age":"TV-Y7","g":["Mystery","Comedy"],"se":3,"ep":36,"len":"22 min","r":4.5,"studio":"Inkwell Pictures","h":300,"d":"A pencil-drawn detective can erase and redraw anything, which makes solving crimes easy and keeping them solved very hard.","cast":[["Doodle","Felix Aranda"],["Inspector Eraser","Nadia Ross"],["Penny","Lola Brightman"]],"eps":["The Missing Margin","Smudge","Case of the Blank Page","Red Pen Rising"]},{"t":"Starlight Academy","tag":"Magic is a team sport.","type":"Series","y":2025,"age":"TV-G","g":["Fantasy","Family"],"se":1,"ep":12,"len":"24 min","r":4.6,"studio":"Moonbeam Studio","h":280,"d":"Five first-year students at a school in the clouds learn spellcasting, friendship, and why you should never feed a comet after midnight.","cast":[["Nova","Zara Whitfield"],["Pocket","Eli Navarro"],["Professor Quill","Margaret Obi"]],"eps":["Orientation Day","The Comet Problem","Broomstick Blues","Midterm Magic"]},{"t":"Turbo Turtles","tag":"Slow and steady? Not today.","type":"Series","y":2021,"age":"TV-Y7","g":["Action","Comedy"],"se":3,"ep":39,"len":"22 min","r":4.1,"studio":"Shellshock Media","h":135,"d":"Four racing turtles protect Sandy Bay from a gang of speed-obsessed hares, with questionable stunts and a lot of snacks.","cast":[["Rocket","Andre Mills"],["Zippy","Sora Ito"],["Big Shell","Tomas Vega"]],"eps":["Ready, Set, Slow","The Hare Gang","Snack Attack","Photo Finish"]},{"t":"Orchard Spirits","tag":"Where the apples remember.","type":"Movie","y":2023,"age":"TV-G","g":["Fantasy","Family"],"len":"1h 35m","r":4.7,"studio":"Sunday Light","director":"Elena Rowe","h":95,"d":"Every autumn, the spirits of an old orchard wake to guard the last harvest. One summer, a city kid arrives and accidentally wakes them early.","cast":[["Wren","Ada Lindgren"],["Old Bough","Pete Sorensen"],["Blossom","Ayo Bankole"]]},{"t":"Galaxy Grandpa","tag":"Retired. Not tired.","type":"Series","y":2024,"age":"TV-PG","g":["Sci-Fi","Comedy"],"se":2,"ep":22,"len":"24 min","r":4.4,"studio":"Nebula Nine","h":245,"d":"A retired starship captain moves in with his grandkids, and the galaxy keeps calling him back for just one more mission.","cast":[["Grandpa Cosmo","Walter Briggs"],["Mia","Tali Okonkwo"],["Beep","Jun Park"]],"eps":["One Last Flight","Moon Dust Allergy","The Garage Warp","Family Dinner at Mach 5"]}]);
 const $=id=>document.getElementById(id);
-const KEY="myList";let list=[];try{list=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){}
+const KEY="continuum.favorites";let list=[];try{list=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(list))}catch(e){}};
-const norm=s=>String(s).trim().toLowerCase(),has=t=>list.some(x=>norm(x)===norm(t));
+const norm=s=>String(s).trim().toLowerCase();
+const favIdsOf=c=>c.vids?c.vids.map(v=>v.id||v.title).filter(Boolean):[(c.id||c.t)];
+const hasC=c=>{const ids=favIdsOf(c);return ids.length>0&&ids.every(id=>list.includes(id))};
 const poster=h=>"linear-gradient(160deg,hsl("+h+",60%,44%),hsl("+((h+35)%360)+",62%,10%))";
 const banner=h=>"radial-gradient(circle at 78% 18%,hsla("+h+",85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl("+h+",50%,24%),#071225)";
 const STAR='<svg viewBox="0 0 24 24"><path d="M12 2l3 7 7.5.6-5.7 4.9 1.8 7.3L12 17.8 5.4 21.8l1.8-7.3L1.5 9.6 9 9z"/></svg>';
@@ -1509,7 +1580,7 @@ const stars=r=>[1,2,3,4,5].map(n=>n<=Math.round(r)?STAR:STAR.replace("<svg","<sv
 const meta=c=>c.type==="Series"?c.se+" Season"+(c.se>1?"s":"")+" \\u00B7 "+c.ep+" eps":c.len;
 let tt;const toast=m=>{const e=$("toast");e.textContent=m;e.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("show"),2200)};
 const play=o=>{try{parent.NFPlay(o)}catch(e){toast("Playing \\""+o.title+"\\"...")}};
-const epOpts=(c,k)=>({title:c.t,sub:"S1:E"+(k+1)+" \\u201C"+c.eps[k]+"\\u201D",bg:poster(c.h),dur:c.len,key:c.t+" S1E"+(k+1),next:k+1<c.eps.length?epOpts(c,k+1):null,onClose:refresh});
+const epOpts=(c,k)=>{const v=(c.vids&&c.vids[k])||null,nm=v?v.title:c.eps[k];return{title:nm,sub:c.t+" \u00B7 "+nm,bg:poster(c.h),dur:v&&v.time||c.len,key:c.t+" S1E"+(k+1),id:v&&v.id||null,video:v&&v.video||"",next:k+1<c.eps.length?epOpts(c,k+1):null,onClose:refresh}};
 const st={type:"All",genre:"All",q:"",sort:"featured",tab:"all"};
 const rl=k=>{try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}};
 let U={cw:{},done:new Set(),hist:new Set()};
@@ -1518,6 +1589,13 @@ function readU(){
   const cw=rl("continueWatching"),done=rl("completedTitles").map(norm),hist=rl("watchHistory").map(norm);
   U.cw={};cw.forEach(e=>CARTOONS.forEach(c=>{if(e.title===c.t||String(e.title).startsWith(c.t+" S1E")){const p=U.cw[c.t];if(!p||e.at>p.at)U.cw[c.t]=e}}));
   U.done=new Set(done);U.hist=new Set([...hist,...done,...Object.keys(U.cw).map(norm)]);
+  const pm=rl("continuum.progress");
+  CARTOONS.forEach(c=>{const ids=favIdsOf(c);let best=null,doneAll=ids.length>0;
+    ids.forEach(id=>{const p=pm[id];if(!p)return;
+      if(!p.completed&&p.position>10){const e={title:c.t,sec:Math.floor(p.position||0),total:Math.floor(p.duration||((c.vids&&c.vids[0]&&c.vids[0].minutes||30)*60)),at:p.updated_at?Date.parse(p.updated_at)||0:0};if(!best||e.at>best.at)best=e}
+      if(!p.completed)doneAll=false});
+    if(best){const ex=U.cw[c.t];if(!ex||best.at>ex.at)U.cw[c.t]=best}
+    if(doneAll){U.done.add(norm(c.t));U.hist.add(norm(c.t))}});
 }
 const refresh=()=>{readU();render()};
 const IC={all:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>',
@@ -1525,7 +1603,7 @@ const IC={all:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" r
  done:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/></svg>',
  saved:'<svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>',
  hist:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'};
-const TABS=[["all","All",IC.all,c=>true],["cw","Continue Watching",IC.cw,c=>!!U.cw[c.t]],["done","Completed",IC.done,c=>U.done.has(norm(c.t))],["saved","Saved Watchlist",IC.saved,c=>has(c.t)],["hist","All Watch History",IC.hist,c=>U.hist.has(norm(c.t))]];
+const TABS=[["all","All",IC.all,c=>true],["cw","Continue Watching",IC.cw,c=>!!U.cw[c.t]],["done","Completed",IC.done,c=>U.done.has(norm(c.t))],["saved","Saved Watchlist",IC.saved,c=>hasC(c)],["hist","All Watch History",IC.hist,c=>U.hist.has(norm(c.t))]];
 const EMPTY={cw:"Nothing in progress yet. Press Play on a title and stop halfway, and it will wait for you here.",done:"No finished titles yet. Watch one to the end and it will show up here.",saved:"Your watchlist is empty. Tap the + on any title to save it.",hist:"Your watch history will appear here once you start watching."};
 const tm=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=n=>String(n).padStart(2,"0");return h?h+":"+p(m)+":"+p(x):m+":"+p(x)};
 function drawTabs(){
@@ -1542,8 +1620,8 @@ readU();
 $("q").oninput=e=>{st.q=norm(e.target.value);render()};
 $("sort").onchange=e=>{st.sort=e.target.value;render()};
 /* list toggle */
-function toggle(c){const i=list.findIndex(x=>norm(x)===norm(c.t));if(i>=0){list.splice(i,1);toast("Removed from My List")}else{list.push(c.t);toast("Added to My List")}save();if(st.tab==="saved")render();else sync()}
-function sync(){drawTabs();document.querySelectorAll(".add").forEach(b=>{const on=has(b.dataset.t),title=b.dataset.t;b.classList.toggle("in",on);b.textContent=on?"\u2713":"+";b.setAttribute("aria-pressed",String(on));b.setAttribute("aria-label",(on?"Remove ":"Add ")+title+(on?" from":" to")+" My List")});if(!$("md").hidden){const on=has(CARTOONS[cur].t);$("mList").textContent=on?"\u2713 In My List":"+ My List";$("mList").classList.toggle("in",on);$("mList").setAttribute("aria-pressed",String(on))}}
+function toggle(c){const ids=favIdsOf(c),all=ids.length>0&&ids.every(id=>list.includes(id));ids.forEach(id=>{const i=list.findIndex(x=>norm(x)===norm(id));if(all&&i>=0)list.splice(i,1);else if(!all&&i<0)list.push(id)});save();if(st.tab==="saved")render();else sync()}
+function sync(){drawTabs();document.querySelectorAll(".add").forEach(b=>{const c=CARTOONS[+b.dataset.i];if(!c)return;const on=hasC(c),title=c.t;b.classList.toggle("in",on);b.textContent=on?"\u2713":"+";b.setAttribute("aria-pressed",String(on));b.setAttribute("aria-label",(on?"Remove ":"Add ")+title+(on?" from":" to")+" My List")});if(!$("md").hidden){const on=hasC(CARTOONS[cur]);$("mList").textContent=on?"\u2713 In My List":"+ My List";$("mList").classList.toggle("in",on);$("mList").setAttribute("aria-pressed",String(on))}}
 /* grid */
 function render(){
   let L=CARTOONS.map((c,i)=>({c,i})).filter(({c})=>TABS.find(t=>t[0]===st.tab)[3](c)&&(st.type==="All"||c.type===st.type)&&(st.genre==="All"||c.g.includes(st.genre))&&(!st.q||(c.t+" "+c.g.join(" ")+" "+c.d+" "+c.cast.map(x=>x[0]).join(" ")).toLowerCase().includes(st.q)));
@@ -1561,7 +1639,7 @@ function render(){
     if(st.tab==="done")p.insertAdjacentHTML("beforeend",'<i class="bd ok">\\u2713 Watched</i>');
     it.querySelector(".st").innerHTML=stars(c.r);it.querySelector(".rt").lastChild.textContent=c.r.toFixed(1);
     it.querySelector(".card").onclick=()=>openM(i);
-    const a=it.querySelector(".add");a.dataset.t=c.t;a.setAttribute("aria-label","Add "+c.t+" to My List");a.onclick=e=>{e.stopPropagation();toggle(c)};
+    const a=it.querySelector(".add");a.dataset.i=i;a.setAttribute("aria-label","Add "+c.t+" to My List");a.onclick=e=>{e.stopPropagation();toggle(c)};
     g.appendChild(it);
   });
   $("none").hidden=!!L.length;$("none").textContent=st.tab!=="all"&&!st.q&&st.genre==="All"&&st.type==="All"?EMPTY[st.tab]:"Nothing in the library matches your search.";$("count").textContent=L.length+(L.length===1?" title":" titles");sync();
@@ -1600,7 +1678,7 @@ document.addEventListener("keydown",e=>{
   else if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}
   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}
 });
-$("mPlay").onclick=()=>{const c=CARTOONS[cur];closeM();play(c.type==="Series"?epOpts(c,0):{title:c.t,sub:c.g.join(", "),bg:poster(c.h),dur:c.len,onClose:refresh})};
+$("mPlay").onclick=()=>{const c=CARTOONS[cur],v0=c.vids&&c.vids[0];closeM();play(c.type==="Series"?epOpts(c,0):{title:v0?v0.title:c.t,sub:v0?(v0.genre||c.g.join(", ")):c.g.join(", "),bg:v0&&v0.bg||poster(c.h),dur:v0&&v0.time||c.len,video:v0&&v0.video||"",id:v0&&v0.id||null,onClose:refresh})};
 $("mList").onclick=()=>toggle(CARTOONS[cur]);
 render();
 </script>
@@ -1783,15 +1861,18 @@ render();
 
 <script>
 /*CATALOG*/
-const catalog = [{"title":"Paper Kites","tag":"FAMILY ANIMATION","year":2022,"genre":"Animation, Comedy","time":"1h 30m","rating":4,"desc":"On the windiest day of the year, a shy girl and her paper kite set off to deliver a message across the whole town.","poster":"linear-gradient(160deg,#35b5aa,#08201f)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#35b5aa,#08201f)"},{"title":"Nightfall","tag":"A LIGHTHOUSE MYSTERY","year":2023,"genre":"Mystery, Thriller","time":"1h 55m","rating":4,"desc":"A lighthouse keeper discovers that the storm rolling in each night is trying to tell her something, and the answer lies beneath the waves.","poster":"linear-gradient(160deg,#2a5d8f,#06101c)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#2a5d8f,#06101c)"},{"title":"Ember","tag":"ONE KITCHEN, ONE WEEK","year":2022,"genre":"Comedy, Drama","time":"1h 40m","rating":4,"desc":"Two rival chefs are forced to share one kitchen for a single week, and discover that the hardest thing to cook is trust.","poster":"linear-gradient(160deg,#d9782b,#2a0f06)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#d9782b,#2a0f06)"},{"title":"Iron Tide","tag":"CHAPTER 2","year":2024,"genre":"Action, Thriller","time":"2h 5m","rating":5,"desc":"A retired courier is pulled back in by an old debt. To settle it, he must cross a city where every rooftop and every harbor is watched.","poster":"linear-gradient(160deg,#59606e,#0a0b0e)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#59606e,#0a0b0e)"},{"title":"Hollow Pines","tag":"DON'T FOLLOW THE LIGHTS","year":2025,"genre":"Horror, Thriller","time":"1h 48m","rating":5,"desc":"Twenty years after a camping trip went wrong, four friends return to the same forest and find that something there has been waiting for them.","poster":"linear-gradient(160deg,#b52323,#140303)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#b52323,#140303)"},{"title":"Velvet Road","tag":"A ROAD TRIP LOVE STORY","year":2021,"genre":"Romance, Drama","time":"2h 2m","rating":4,"desc":"A violinist and a long-haul driver share a ride across the country, and slowly learn what each of them left behind.","poster":"linear-gradient(160deg,#c24d86,#1a0714)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#c24d86,#1a0714)"},{"title":"Starless","tag":"THE LAST VOYAGE","year":2025,"genre":"Sci-Fi, Action","time":"2h 20m","rating":5,"desc":"When the stars begin to disappear one by one, a small crew sets out to find the edge of the map and the reason the sky is going dark.","poster":"linear-gradient(160deg,#5b48c9,#0a0724)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#5b48c9,#0a0724)"},{"title":"Last Signal","tag":"BASED ON TRUE EVENTS","year":2024,"genre":"Thriller, Mystery","time":"1h 52m","rating":4,"desc":"A radio operator at a remote station picks up a call for help from a place that should be empty, and has one night to find out who is calling.","poster":"linear-gradient(160deg,#c9a62d,#1c1604)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#c9a62d,#1c1604)"},{"title":"Silent Harbor","tag":"A FAMILY RETURNS","year":2020,"genre":"Drama","time":"2h 10m","rating":4,"desc":"After twenty years away, a fisherman's daughter comes home to a harbor town that has learned to live without answers.","poster":"linear-gradient(160deg,#4d7a8c,#0b161b)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#4d7a8c,#0b161b)"},{"title":"Neon Run","tag":"ONE NIGHT TO ESCAPE","year":2023,"genre":"Action, Sci-Fi","time":"1h 58m","rating":4,"desc":"A delivery runner in a city of glowing towers is handed a package that every gang in town would burn the streets to get.","poster":"linear-gradient(160deg,#e0359b,#14062a)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#e0359b,#14062a)"},{"title":"Glass Garden","tag":"BLOOMING LATE","year":2021,"genre":"Romance, Comedy","time":"1h 42m","rating":4,"desc":"A botanist and a stubborn florist compete to save the last greenhouse in town, and keep running out of reasons to stay rivals.","poster":"linear-gradient(160deg,#7bc47f,#0d2412)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#7bc47f,#0d2412)"},{"title":"Dust & Thunder","tag":"THE LAST RIDE","year":2024,"genre":"Action, Drama","time":"2h 15m","rating":4,"desc":"A marshal and a runaway bride cross a dry desert with a storm behind them and a gang ahead of them.","poster":"linear-gradient(160deg,#b8793c,#241408)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#b8793c,#241408)"},{"title":"MULAN","tag":"FEATURED FILM","year":"2020","genre":"Action, Fantasy","time":"2 hours","rating":5,"desc":"A fearless young woman risks everything out of love for her family and her country, and rises to become one of the greatest warriors her homeland has ever known.","poster":"linear-gradient(160deg,#0B3A7A,#0A1F44 55%,#03080E)","bg":"radial-gradient(circle at 25% 30%, rgba(30,160,255,.55), transparent 45%), linear-gradient(120deg,#0B3A7A,#0A1F44 45%,#03080E)"},{"title":"NIGHTFALL","tag":"FEATURED FILM","year":"2023","genre":"Mystery, Thriller","time":"1h 55m","rating":5,"desc":"A lighthouse keeper discovers that the storm rolling in each night is trying to tell her something, and the answer lies beneath the waves.","poster":"linear-gradient(160deg,#0B3A7A,#0A1F44 55%,#03080E)","bg":"radial-gradient(circle at 70% 25%, rgba(80,140,200,.5), transparent 45%), linear-gradient(120deg,#16283d,#0f1a2b 50%,#070b12)"},{"title":"EMBER","tag":"FEATURED FILM","year":"2022","genre":"Comedy, Drama","time":"1h 40m","rating":5,"desc":"Two rival chefs are forced to share one kitchen for a single week, and discover that the hardest thing to cook is trust.","poster":"linear-gradient(160deg,#0B3A7A,#0A1F44 55%,#03080E)","bg":"radial-gradient(circle at 30% 70%, rgba(240,170,60,.5), transparent 45%), linear-gradient(120deg,#5a2b12,#331a10 50%,#150a07)"},{"title":"The Hollow Crown","tag":"SERIES · 3 SEASONS","year":2025,"genre":"Drama","time":"3 Seasons","rating":5,"desc":"When a king dies without naming an heir, three siblings fight for a throne that is already hollow.","poster":"linear-gradient(160deg,hsl(352,50%,38%),hsl(22,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(352,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(352,42%,20%),hsl(17,38%,9%) 60%,#03080E)"},{"title":"Salt Road","tag":"SERIES · 2 SEASONS","year":2024,"genre":"Crime","time":"2 Seasons","rating":4,"desc":"A retired customs officer is pulled back in when a smuggling route she once closed quietly reopens.","poster":"linear-gradient(160deg,hsl(42,50%,38%),hsl(72,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(42,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(42,42%,20%),hsl(67,38%,9%) 60%,#03080E)"},{"title":"Low Orbit","tag":"SERIES · 1 SEASON","year":2026,"genre":"Sci-Fi","time":"1 Season","rating":4,"desc":"Six engineers on a failing station have nine days to fix it, and one of them is lying about why.","poster":"linear-gradient(160deg,hsl(210,50%,38%),hsl(240,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(210,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(210,42%,20%),hsl(235,38%,9%) 60%,#03080E)"},{"title":"Ember & Ash","tag":"SERIES · 4 SEASONS","year":2023,"genre":"Fantasy","time":"4 Seasons","rating":5,"desc":"A blacksmith’s daughter inherits a forge that can only be lit by the things people want to forget.","poster":"linear-gradient(160deg,hsl(18,50%,38%),hsl(48,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(18,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(18,42%,20%),hsl(43,38%,9%) 60%,#03080E)"},{"title":"Quiet Harbor","tag":"SERIES · 2 SEASONS","year":2025,"genre":"Drama","time":"2 Seasons","rating":4,"desc":"In a fishing town with one road in and out, every secret has a witness and every witness has a boat.","poster":"linear-gradient(160deg,hsl(190,50%,38%),hsl(220,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(190,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(190,42%,20%),hsl(215,38%,9%) 60%,#03080E)"},{"title":"The Cartographer","tag":"SERIES · 2 SEASONS","year":2024,"genre":"Fantasy","time":"2 Seasons","rating":4,"desc":"A mapmaker discovers that the places she draws begin to exist, including the ones she fears.","poster":"linear-gradient(160deg,hsl(270,50%,38%),hsl(300,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(270,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(270,42%,20%),hsl(295,38%,9%) 60%,#03080E)"},{"title":"Static","tag":"SERIES · 3 SEASONS","year":2022,"genre":"Sci-Fi","time":"3 Seasons","rating":4,"desc":"A radio operator in a sealed bunker keeps hearing broadcasts from a year that hasn’t happened yet.","poster":"linear-gradient(160deg,hsl(150,50%,38%),hsl(180,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(150,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(150,42%,20%),hsl(175,38%,9%) 60%,#03080E)"},{"title":"Fault Line","tag":"SERIES · 1 SEASON","year":2026,"genre":"Crime","time":"1 Season","rating":4,"desc":"After an earthquake exposes a body in a sealed tunnel, two detectives trace a crime to the city’s founding.","poster":"linear-gradient(160deg,hsl(120,50%,38%),hsl(150,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(120,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(120,42%,20%),hsl(145,38%,9%) 60%,#03080E)"},{"title":"Pip & the Lantern Kingdom","tag":"LIGHT THE WAY HOME","year":2023,"genre":"Adventure, Fantasy","time":"2 Seasons · 26 eps","rating":5,"desc":"A tiny firefly named Pip discovers that every lantern in the Lantern Kingdom is going dark, one by one. With a grumpy moth and a very brave snail, Pip sets out to relight the realm before the long night falls.","poster":"linear-gradient(160deg,hsl(38,60%,44%),hsl(73,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(38,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(38,50%,24%),#071225)"},{"title":"Captain Marshmallow","tag":"SOFT ON THE OUTSIDE. BRAVE ON THE INSIDE","year":2022,"genre":"Comedy, Action","time":"3 Seasons · 39 eps","rating":5,"desc":"When the Candy Coast is threatened by the sour pirates of Lemon Bay, a squishy captain and his crew of snack-sized heroes sail into action, and usually get stuck to the deck.","poster":"linear-gradient(160deg,hsl(330,60%,44%),hsl(5,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(330,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(330,50%,24%),#071225)"},{"title":"The Cloud Bakery","tag":"EVERY LOAF HAS A LITTLE SKY IN IT","year":2024,"genre":"Family, Comedy","time":"1 Season · 13 eps","rating":5,"desc":"Nimbus the baker and her sleepy cloud-pup deliver warm bread to the villages below, and learn that kindness is the secret ingredient in every recipe.","poster":"linear-gradient(160deg,hsl(200,60%,44%),hsl(235,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(200,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(200,50%,24%),#071225)"},{"title":"Robo Rascals","tag":"CHARGED UP AND OUT OF CONTROL","year":2021,"genre":"Sci-Fi, Comedy","time":"4 Seasons · 52 eps","rating":4,"desc":"Four mischievous maintenance bots on a space station keep breaking things while trying to fix them, and keep saving everyone by accident.","poster":"linear-gradient(160deg,hsl(190,60%,44%),hsl(225,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(190,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(190,50%,24%),#071225)"},{"title":"Moonlit Mischief","tag":"SOME SECRETS ONLY WAKE AT NIGHT","year":2025,"genre":"Fantasy, Mystery","time":"1h 28m","rating":5,"desc":"On the night of a rare blue moon, a curious girl follows a trail of glowing paw prints into a hidden world where all of the city's lost things are kept.","poster":"linear-gradient(160deg,hsl(265,60%,44%),hsl(300,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(265,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(265,50%,24%),#071225)"},{"title":"Tiny Tides","tag":"BIG ADVENTURES IN SMALL POOLS","year":2020,"genre":"Adventure, Family","time":"2 Seasons · 26 eps","rating":4,"desc":"Life in a tide pool is anything but quiet. A crab, a starfish, and a shy seahorse explore the wide world one wave at a time.","poster":"linear-gradient(160deg,hsl(175,60%,44%),hsl(210,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(175,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(175,50%,24%),#071225)"},{"title":"Dino Diner","tag":"PREHISTORIC FOOD, MODERN CHAOS","year":2023,"genre":"Comedy, Family","time":"2 Seasons · 26 eps","rating":4,"desc":"Rex runs the only diner in Pebble Valley. Every dinosaur has an opinion about the menu, and none of them can fit through the door.","poster":"linear-gradient(160deg,hsl(25,60%,44%),hsl(60,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(25,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(25,50%,24%),#071225)"},{"title":"Skyfarers of Nimbus","tag":"THE SKY IS THE ONLY MAP","year":2024,"genre":"Adventure, Sci-Fi","time":"2 Seasons · 20 eps","rating":5,"desc":"In a world of floating islands, a young mapmaker joins an airship crew in search of the legendary island that holds the sky together.","poster":"linear-gradient(160deg,hsl(215,60%,44%),hsl(250,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(215,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(215,50%,24%),#071225)"},{"title":"The Paper Dragon","tag":"FOLD. WISH. FLY","year":2022,"genre":"Fantasy, Drama","time":"1h 42m","rating":5,"desc":"A lonely boy folds a paper dragon from his late grandfather's letters. When it comes alive, they must cross three kingdoms before the last page crumbles.","poster":"linear-gradient(160deg,hsl(12,60%,44%),hsl(47,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(12,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(12,50%,24%),#071225)"},{"title":"Detective Doodle","tag":"EVERY CLUE LEAVES A MARK","year":2022,"genre":"Mystery, Comedy","time":"3 Seasons · 36 eps","rating":5,"desc":"A pencil-drawn detective can erase and redraw anything, which makes solving crimes easy and keeping them solved very hard.","poster":"linear-gradient(160deg,hsl(300,60%,44%),hsl(335,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(300,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(300,50%,24%),#071225)"},{"title":"Starlight Academy","tag":"MAGIC IS A TEAM SPORT","year":2025,"genre":"Fantasy, Family","time":"1 Season · 12 eps","rating":5,"desc":"Five first-year students at a school in the clouds learn spellcasting, friendship, and why you should never feed a comet after midnight.","poster":"linear-gradient(160deg,hsl(280,60%,44%),hsl(315,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(280,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(280,50%,24%),#071225)"},{"title":"Turbo Turtles","tag":"SLOW AND STEADY? NOT TODAY","year":2021,"genre":"Action, Comedy","time":"3 Seasons · 39 eps","rating":4,"desc":"Four racing turtles protect Sandy Bay from a gang of speed-obsessed hares, with questionable stunts and a lot of snacks.","poster":"linear-gradient(160deg,hsl(135,60%,44%),hsl(170,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(135,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(135,50%,24%),#071225)"},{"title":"Orchard Spirits","tag":"WHERE THE APPLES REMEMBER","year":2023,"genre":"Fantasy, Family","time":"1h 35m","rating":5,"desc":"Every autumn, the spirits of an old orchard wake to guard the last harvest. One summer, a city kid arrives and accidentally wakes them early.","poster":"linear-gradient(160deg,hsl(95,60%,44%),hsl(130,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(95,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(95,50%,24%),#071225)"},{"title":"Galaxy Grandpa","tag":"RETIRED. NOT TIRED","year":2024,"genre":"Sci-Fi, Comedy","time":"2 Seasons · 22 eps","rating":4,"desc":"A retired starship captain moves in with his grandkids, and the galaxy keeps calling him back for just one more mission.","poster":"linear-gradient(160deg,hsl(245,60%,44%),hsl(280,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(245,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(245,50%,24%),#071225)"}];
+/* Shared catalogue payload injected by the parent page (window.__CONTINUUM_CATALOGUE__). */
+const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
+const catalog = ((__CAT && __CAT.videos && __CAT.videos.length) ? __CAT.videos.map(v => ({ title:v.title, tag:String(v.tag || v.genre || "MASTERCLASS").toUpperCase(), year:v.year||"", genre:v.genre||"", time:v.time||"", rating:Math.round(v.rating||0), desc:v.desc||"", poster:v.poster||"", bg:v.bg||"", video:v.video||"", trailer:v.trailer||"", id:v.id, minutes:v.minutes||0 })) : [{"title":"Paper Kites","tag":"FAMILY ANIMATION","year":2022,"genre":"Animation, Comedy","time":"1h 30m","rating":4,"desc":"On the windiest day of the year, a shy girl and her paper kite set off to deliver a message across the whole town.","poster":"linear-gradient(160deg,#35b5aa,#08201f)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#35b5aa,#08201f)"},{"title":"Nightfall","tag":"A LIGHTHOUSE MYSTERY","year":2023,"genre":"Mystery, Thriller","time":"1h 55m","rating":4,"desc":"A lighthouse keeper discovers that the storm rolling in each night is trying to tell her something, and the answer lies beneath the waves.","poster":"linear-gradient(160deg,#2a5d8f,#06101c)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#2a5d8f,#06101c)"},{"title":"Ember","tag":"ONE KITCHEN, ONE WEEK","year":2022,"genre":"Comedy, Drama","time":"1h 40m","rating":4,"desc":"Two rival chefs are forced to share one kitchen for a single week, and discover that the hardest thing to cook is trust.","poster":"linear-gradient(160deg,#d9782b,#2a0f06)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#d9782b,#2a0f06)"},{"title":"Iron Tide","tag":"CHAPTER 2","year":2024,"genre":"Action, Thriller","time":"2h 5m","rating":5,"desc":"A retired courier is pulled back in by an old debt. To settle it, he must cross a city where every rooftop and every harbor is watched.","poster":"linear-gradient(160deg,#59606e,#0a0b0e)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#59606e,#0a0b0e)"},{"title":"Hollow Pines","tag":"DON'T FOLLOW THE LIGHTS","year":2025,"genre":"Horror, Thriller","time":"1h 48m","rating":5,"desc":"Twenty years after a camping trip went wrong, four friends return to the same forest and find that something there has been waiting for them.","poster":"linear-gradient(160deg,#b52323,#140303)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#b52323,#140303)"},{"title":"Velvet Road","tag":"A ROAD TRIP LOVE STORY","year":2021,"genre":"Romance, Drama","time":"2h 2m","rating":4,"desc":"A violinist and a long-haul driver share a ride across the country, and slowly learn what each of them left behind.","poster":"linear-gradient(160deg,#c24d86,#1a0714)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#c24d86,#1a0714)"},{"title":"Starless","tag":"THE LAST VOYAGE","year":2025,"genre":"Sci-Fi, Action","time":"2h 20m","rating":5,"desc":"When the stars begin to disappear one by one, a small crew sets out to find the edge of the map and the reason the sky is going dark.","poster":"linear-gradient(160deg,#5b48c9,#0a0724)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#5b48c9,#0a0724)"},{"title":"Last Signal","tag":"BASED ON TRUE EVENTS","year":2024,"genre":"Thriller, Mystery","time":"1h 52m","rating":4,"desc":"A radio operator at a remote station picks up a call for help from a place that should be empty, and has one night to find out who is calling.","poster":"linear-gradient(160deg,#c9a62d,#1c1604)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#c9a62d,#1c1604)"},{"title":"Silent Harbor","tag":"A FAMILY RETURNS","year":2020,"genre":"Drama","time":"2h 10m","rating":4,"desc":"After twenty years away, a fisherman's daughter comes home to a harbor town that has learned to live without answers.","poster":"linear-gradient(160deg,#4d7a8c,#0b161b)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#4d7a8c,#0b161b)"},{"title":"Neon Run","tag":"ONE NIGHT TO ESCAPE","year":2023,"genre":"Action, Sci-Fi","time":"1h 58m","rating":4,"desc":"A delivery runner in a city of glowing towers is handed a package that every gang in town would burn the streets to get.","poster":"linear-gradient(160deg,#e0359b,#14062a)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#e0359b,#14062a)"},{"title":"Glass Garden","tag":"BLOOMING LATE","year":2021,"genre":"Romance, Comedy","time":"1h 42m","rating":4,"desc":"A botanist and a stubborn florist compete to save the last greenhouse in town, and keep running out of reasons to stay rivals.","poster":"linear-gradient(160deg,#7bc47f,#0d2412)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#7bc47f,#0d2412)"},{"title":"Dust & Thunder","tag":"THE LAST RIDE","year":2024,"genre":"Action, Drama","time":"2h 15m","rating":4,"desc":"A marshal and a runaway bride cross a dry desert with a storm behind them and a gang ahead of them.","poster":"linear-gradient(160deg,#b8793c,#241408)","bg":"radial-gradient(circle at 60% 35%,rgba(255,255,255,.22),transparent 55%),linear-gradient(160deg,#b8793c,#241408)"},{"title":"MULAN","tag":"FEATURED FILM","year":"2020","genre":"Action, Fantasy","time":"2 hours","rating":5,"desc":"A fearless young woman risks everything out of love for her family and her country, and rises to become one of the greatest warriors her homeland has ever known.","poster":"linear-gradient(160deg,#0B3A7A,#0A1F44 55%,#03080E)","bg":"radial-gradient(circle at 25% 30%, rgba(30,160,255,.55), transparent 45%), linear-gradient(120deg,#0B3A7A,#0A1F44 45%,#03080E)"},{"title":"NIGHTFALL","tag":"FEATURED FILM","year":"2023","genre":"Mystery, Thriller","time":"1h 55m","rating":5,"desc":"A lighthouse keeper discovers that the storm rolling in each night is trying to tell her something, and the answer lies beneath the waves.","poster":"linear-gradient(160deg,#0B3A7A,#0A1F44 55%,#03080E)","bg":"radial-gradient(circle at 70% 25%, rgba(80,140,200,.5), transparent 45%), linear-gradient(120deg,#16283d,#0f1a2b 50%,#070b12)"},{"title":"EMBER","tag":"FEATURED FILM","year":"2022","genre":"Comedy, Drama","time":"1h 40m","rating":5,"desc":"Two rival chefs are forced to share one kitchen for a single week, and discover that the hardest thing to cook is trust.","poster":"linear-gradient(160deg,#0B3A7A,#0A1F44 55%,#03080E)","bg":"radial-gradient(circle at 30% 70%, rgba(240,170,60,.5), transparent 45%), linear-gradient(120deg,#5a2b12,#331a10 50%,#150a07)"},{"title":"The Hollow Crown","tag":"SERIES · 3 SEASONS","year":2025,"genre":"Drama","time":"3 Seasons","rating":5,"desc":"When a king dies without naming an heir, three siblings fight for a throne that is already hollow.","poster":"linear-gradient(160deg,hsl(352,50%,38%),hsl(22,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(352,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(352,42%,20%),hsl(17,38%,9%) 60%,#03080E)"},{"title":"Salt Road","tag":"SERIES · 2 SEASONS","year":2024,"genre":"Crime","time":"2 Seasons","rating":4,"desc":"A retired customs officer is pulled back in when a smuggling route she once closed quietly reopens.","poster":"linear-gradient(160deg,hsl(42,50%,38%),hsl(72,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(42,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(42,42%,20%),hsl(67,38%,9%) 60%,#03080E)"},{"title":"Low Orbit","tag":"SERIES · 1 SEASON","year":2026,"genre":"Sci-Fi","time":"1 Season","rating":4,"desc":"Six engineers on a failing station have nine days to fix it, and one of them is lying about why.","poster":"linear-gradient(160deg,hsl(210,50%,38%),hsl(240,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(210,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(210,42%,20%),hsl(235,38%,9%) 60%,#03080E)"},{"title":"Ember & Ash","tag":"SERIES · 4 SEASONS","year":2023,"genre":"Fantasy","time":"4 Seasons","rating":5,"desc":"A blacksmith’s daughter inherits a forge that can only be lit by the things people want to forget.","poster":"linear-gradient(160deg,hsl(18,50%,38%),hsl(48,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(18,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(18,42%,20%),hsl(43,38%,9%) 60%,#03080E)"},{"title":"Quiet Harbor","tag":"SERIES · 2 SEASONS","year":2025,"genre":"Drama","time":"2 Seasons","rating":4,"desc":"In a fishing town with one road in and out, every secret has a witness and every witness has a boat.","poster":"linear-gradient(160deg,hsl(190,50%,38%),hsl(220,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(190,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(190,42%,20%),hsl(215,38%,9%) 60%,#03080E)"},{"title":"The Cartographer","tag":"SERIES · 2 SEASONS","year":2024,"genre":"Fantasy","time":"2 Seasons","rating":4,"desc":"A mapmaker discovers that the places she draws begin to exist, including the ones she fears.","poster":"linear-gradient(160deg,hsl(270,50%,38%),hsl(300,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(270,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(270,42%,20%),hsl(295,38%,9%) 60%,#03080E)"},{"title":"Static","tag":"SERIES · 3 SEASONS","year":2022,"genre":"Sci-Fi","time":"3 Seasons","rating":4,"desc":"A radio operator in a sealed bunker keeps hearing broadcasts from a year that hasn’t happened yet.","poster":"linear-gradient(160deg,hsl(150,50%,38%),hsl(180,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(150,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(150,42%,20%),hsl(175,38%,9%) 60%,#03080E)"},{"title":"Fault Line","tag":"SERIES · 1 SEASON","year":2026,"genre":"Crime","time":"1 Season","rating":4,"desc":"After an earthquake exposes a body in a sealed tunnel, two detectives trace a crime to the city’s founding.","poster":"linear-gradient(160deg,hsl(120,50%,38%),hsl(150,55%,8%))","bg":"radial-gradient(circle at 72% 28%,hsla(120,70%,55%,.42),transparent 50%),linear-gradient(125deg,hsl(120,42%,20%),hsl(145,38%,9%) 60%,#03080E)"},{"title":"Pip & the Lantern Kingdom","tag":"LIGHT THE WAY HOME","year":2023,"genre":"Adventure, Fantasy","time":"2 Seasons · 26 eps","rating":5,"desc":"A tiny firefly named Pip discovers that every lantern in the Lantern Kingdom is going dark, one by one. With a grumpy moth and a very brave snail, Pip sets out to relight the realm before the long night falls.","poster":"linear-gradient(160deg,hsl(38,60%,44%),hsl(73,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(38,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(38,50%,24%),#071225)"},{"title":"Captain Marshmallow","tag":"SOFT ON THE OUTSIDE. BRAVE ON THE INSIDE","year":2022,"genre":"Comedy, Action","time":"3 Seasons · 39 eps","rating":5,"desc":"When the Candy Coast is threatened by the sour pirates of Lemon Bay, a squishy captain and his crew of snack-sized heroes sail into action, and usually get stuck to the deck.","poster":"linear-gradient(160deg,hsl(330,60%,44%),hsl(5,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(330,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(330,50%,24%),#071225)"},{"title":"The Cloud Bakery","tag":"EVERY LOAF HAS A LITTLE SKY IN IT","year":2024,"genre":"Family, Comedy","time":"1 Season · 13 eps","rating":5,"desc":"Nimbus the baker and her sleepy cloud-pup deliver warm bread to the villages below, and learn that kindness is the secret ingredient in every recipe.","poster":"linear-gradient(160deg,hsl(200,60%,44%),hsl(235,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(200,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(200,50%,24%),#071225)"},{"title":"Robo Rascals","tag":"CHARGED UP AND OUT OF CONTROL","year":2021,"genre":"Sci-Fi, Comedy","time":"4 Seasons · 52 eps","rating":4,"desc":"Four mischievous maintenance bots on a space station keep breaking things while trying to fix them, and keep saving everyone by accident.","poster":"linear-gradient(160deg,hsl(190,60%,44%),hsl(225,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(190,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(190,50%,24%),#071225)"},{"title":"Moonlit Mischief","tag":"SOME SECRETS ONLY WAKE AT NIGHT","year":2025,"genre":"Fantasy, Mystery","time":"1h 28m","rating":5,"desc":"On the night of a rare blue moon, a curious girl follows a trail of glowing paw prints into a hidden world where all of the city's lost things are kept.","poster":"linear-gradient(160deg,hsl(265,60%,44%),hsl(300,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(265,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(265,50%,24%),#071225)"},{"title":"Tiny Tides","tag":"BIG ADVENTURES IN SMALL POOLS","year":2020,"genre":"Adventure, Family","time":"2 Seasons · 26 eps","rating":4,"desc":"Life in a tide pool is anything but quiet. A crab, a starfish, and a shy seahorse explore the wide world one wave at a time.","poster":"linear-gradient(160deg,hsl(175,60%,44%),hsl(210,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(175,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(175,50%,24%),#071225)"},{"title":"Dino Diner","tag":"PREHISTORIC FOOD, MODERN CHAOS","year":2023,"genre":"Comedy, Family","time":"2 Seasons · 26 eps","rating":4,"desc":"Rex runs the only diner in Pebble Valley. Every dinosaur has an opinion about the menu, and none of them can fit through the door.","poster":"linear-gradient(160deg,hsl(25,60%,44%),hsl(60,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(25,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(25,50%,24%),#071225)"},{"title":"Skyfarers of Nimbus","tag":"THE SKY IS THE ONLY MAP","year":2024,"genre":"Adventure, Sci-Fi","time":"2 Seasons · 20 eps","rating":5,"desc":"In a world of floating islands, a young mapmaker joins an airship crew in search of the legendary island that holds the sky together.","poster":"linear-gradient(160deg,hsl(215,60%,44%),hsl(250,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(215,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(215,50%,24%),#071225)"},{"title":"The Paper Dragon","tag":"FOLD. WISH. FLY","year":2022,"genre":"Fantasy, Drama","time":"1h 42m","rating":5,"desc":"A lonely boy folds a paper dragon from his late grandfather's letters. When it comes alive, they must cross three kingdoms before the last page crumbles.","poster":"linear-gradient(160deg,hsl(12,60%,44%),hsl(47,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(12,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(12,50%,24%),#071225)"},{"title":"Detective Doodle","tag":"EVERY CLUE LEAVES A MARK","year":2022,"genre":"Mystery, Comedy","time":"3 Seasons · 36 eps","rating":5,"desc":"A pencil-drawn detective can erase and redraw anything, which makes solving crimes easy and keeping them solved very hard.","poster":"linear-gradient(160deg,hsl(300,60%,44%),hsl(335,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(300,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(300,50%,24%),#071225)"},{"title":"Starlight Academy","tag":"MAGIC IS A TEAM SPORT","year":2025,"genre":"Fantasy, Family","time":"1 Season · 12 eps","rating":5,"desc":"Five first-year students at a school in the clouds learn spellcasting, friendship, and why you should never feed a comet after midnight.","poster":"linear-gradient(160deg,hsl(280,60%,44%),hsl(315,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(280,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(280,50%,24%),#071225)"},{"title":"Turbo Turtles","tag":"SLOW AND STEADY? NOT TODAY","year":2021,"genre":"Action, Comedy","time":"3 Seasons · 39 eps","rating":4,"desc":"Four racing turtles protect Sandy Bay from a gang of speed-obsessed hares, with questionable stunts and a lot of snacks.","poster":"linear-gradient(160deg,hsl(135,60%,44%),hsl(170,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(135,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(135,50%,24%),#071225)"},{"title":"Orchard Spirits","tag":"WHERE THE APPLES REMEMBER","year":2023,"genre":"Fantasy, Family","time":"1h 35m","rating":5,"desc":"Every autumn, the spirits of an old orchard wake to guard the last harvest. One summer, a city kid arrives and accidentally wakes them early.","poster":"linear-gradient(160deg,hsl(95,60%,44%),hsl(130,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(95,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(95,50%,24%),#071225)"},{"title":"Galaxy Grandpa","tag":"RETIRED. NOT TIRED","year":2024,"genre":"Sci-Fi, Comedy","time":"2 Seasons · 22 eps","rating":4,"desc":"A retired starship captain moves in with his grandkids, and the galaxy keeps calling him back for just one more mission.","poster":"linear-gradient(160deg,hsl(245,60%,44%),hsl(280,62%,10%))","bg":"radial-gradient(circle at 78% 18%,hsla(245,85%,60%,.55),transparent 55%),linear-gradient(135deg,hsl(245,50%,24%),#071225)"}]);
 
 const $ = id => document.getElementById(id);
 const stage = $("stage"), strip = $("strip"), carousel = strip.parentElement;
 const norm = t => String(t).trim().toLowerCase();
-const KEYS = ["myList", "seriesList"];            /* same keys the other pages save to */
+const KEYS = ["continuum.favorites", "myList", "seriesList"];   /* synced favourites + legacy demo keys */
 const rd = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch (e) { return []; } };
 const wr = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 const byName = new Map(catalog.map(m => [norm(m.title), m]));
+const byId = new Map(catalog.map(m => [norm(m.id != null ? m.id : m.title), m]));
 const hue = t => [...t].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7);
 
 /* saved titles -> movie objects. Case-insensitive, so "NIGHTFALL" and "Nightfall" count once. */
@@ -1799,7 +1880,7 @@ function load() {
   const seen = new Set(), out = [];
   KEYS.forEach(k => rd(k).forEach(t => {
     const n = norm(t); if (seen.has(n)) return; seen.add(n);
-    let m = byName.get(n);
+    let m = byId.get(n) || byName.get(n);
     if (!m) { const h = hue(String(t));
       m = { title:String(t), tag:"SAVED TITLE", year:"", genre:"", time:"", rating:0, desc:"",
             bg:"radial-gradient(circle at 60% 35%,hsla("+h+",70%,55%,.7),transparent 55%),linear-gradient(135deg,hsl("+h+",45%,18%),#050505)",
@@ -1889,7 +1970,8 @@ $("listBtn").addEventListener("click", () => {
   const m = movies[active]; if (!m || busy) return;
   busy = true;
   const idx = active, el = cards[idx];
-  KEYS.forEach(k => wr(k, rd(k).filter(v => norm(v) !== norm(m.title))));   /* removes every spelling of the title */
+  const kill = new Set([norm(m.id || ""), norm(m.title)].filter(Boolean));
+  KEYS.forEach(k => wr(k, rd(k).filter(v => !kill.has(norm(v)))));   /* removes every spelling of the title/id */
   el.classList.add("leaving");                    /* card shrinks + fades */
   stage.classList.add("swap");                    /* info + backdrop fade out */
   toast("Removed from My List");
@@ -1904,7 +1986,7 @@ $("listBtn").addEventListener("click", () => {
   }, 480);
 });
 const play = o => { try { parent.NFPlay(o); } catch (e) { toast("Playing \\"" + o.title + "\\"..."); } };
-$("playBtn").addEventListener("click", () => { const m = movies[active]; if (m) play({ title:m.title, sub:m.genre, bg:m.poster, video:m.video||"", dur:m.time }); });
+$("playBtn").addEventListener("click", () => { const m = movies[active]; if (m) play({ title:m.title, sub:m.genre, bg:m.poster, video:m.video||"", dur:m.time, id:m.id||null }); });
 
 /* ---------- CONTROLS ---------- */
 $("prev").addEventListener("click", () => select(active - 1));

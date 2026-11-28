@@ -18,8 +18,10 @@ import {
   isAdmin,
   listNotifications,
   markAllRead,
-  formatWhen
-} from './store.js';
+  formatWhen,
+  authToken,
+  syncFromServer
+} from './store.js?v=3';
 
 /* ------------------------------ page chrome ------------------------------ */
 
@@ -73,9 +75,19 @@ function initTopBarScroll() {
   onScroll();
 }
 
-/** Resolve the signed-in session from the local frontend demo store. */
+/**
+ * Resolve the signed-in session. With an access token this verifies it against
+ * /api/auth/me and hydrates the catalogue, favourites, progress and
+ * notifications from the server; without one it falls back to the local demo
+ * session so the UI still works when the API is unreachable.
+ */
 async function resolveServerSession() {
-  return getSession();
+  const local = getSession();
+  if (!local || !authToken()) return local;
+  try {
+    await syncFromServer();
+  } catch (_) {}
+  return getSession() || local;
 }
 
 function redirectToLogin() {

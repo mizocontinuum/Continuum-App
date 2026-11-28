@@ -1,8 +1,7 @@
 // ---- Apply Admin Visual CMS Edits ----
 (function(){
-  try {
-    var cms = JSON.parse(localStorage.getItem("continuum_cms_landing") || "null");
-    if (!cms) return;
+  function applyCms(cms) {
+    if (!cms || typeof cms !== "object") return;
     var pill = document.querySelector(".hero-text .pill");
     var h1 = document.querySelector(".hero-text h1");
     var sub = document.querySelector(".hero-text p");
@@ -12,7 +11,17 @@
     if (sub && cms.sub) sub.textContent = cms.sub;
     if (cta1 && cms.cta1) cta1.textContent = cms.cta1;
     if (cms.accent) document.documentElement.style.setProperty("--accent", cms.accent);
-  } catch (e) {}
+  }
+  // Server CMS wins; localStorage is the offline/demo fallback.
+  fetch("/api/cms/landing")
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(cms){
+      if (cms && Object.keys(cms).length) { applyCms(cms); return; }
+      try { applyCms(JSON.parse(localStorage.getItem("continuum_cms_landing") || "null")); } catch (e) {}
+    })
+    .catch(function(){
+      try { applyCms(JSON.parse(localStorage.getItem("continuum_cms_landing") || "null")); } catch (e) {}
+    });
 })();
 
 // ---- Canva-style Full Visual Editor (?edit=1) ----
@@ -22,25 +31,31 @@
   var els = Array.prototype.slice.call(document.querySelectorAll(editableSel));
   var secs = Array.prototype.slice.call(document.querySelectorAll("section[id]"));
 
-  // Apply saved live edits
-  try {
-    var saved = JSON.parse(localStorage.getItem(EDIT_KEY) || "null");
-    if (saved) {
-      if (saved.accent) document.documentElement.style.setProperty("--accent", saved.accent);
-      if (Array.isArray(saved.items)) {
-        saved.items.forEach(function(item, i){
-          if (!els[i] || !item) return;
-          if (item.text !== undefined && !els[i].children.length) els[i].textContent = item.text;
-          if (item.style) els[i].setAttribute("style", item.style);
-        });
-      }
-      if (Array.isArray(saved.hidden)) {
-        secs.forEach(function(s){
-          if (saved.hidden.indexOf(s.id) !== -1) s.style.display = "none";
-        });
-      }
+  // Apply saved live edits (server copy wins, localStorage is the fallback)
+  function applyLive(saved) {
+    if (!saved) return;
+    if (saved.accent) document.documentElement.style.setProperty("--accent", saved.accent);
+    if (Array.isArray(saved.items)) {
+      saved.items.forEach(function(item, i){
+        if (!els[i] || !item) return;
+        if (item.text !== undefined && !els[i].children.length) els[i].textContent = item.text;
+        if (item.style) els[i].setAttribute("style", item.style);
+      });
     }
+    if (Array.isArray(saved.hidden)) {
+      secs.forEach(function(s){
+        if (saved.hidden.indexOf(s.id) !== -1) s.style.display = "none";
+      });
+    }
+  }
+  try {
+    var localSaved = JSON.parse(localStorage.getItem(EDIT_KEY) || "null");
+    if (localSaved) applyLive(localSaved);
   } catch (e) {}
+  fetch("/api/cms/landing?key=landing_live")
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(remote){ if (remote && Object.keys(remote).length) applyLive(remote); })
+    .catch(function(){});
 
   if (window.location.search.indexOf("edit=1") === -1) return;
 
@@ -166,13 +181,28 @@
         style: el.getAttribute("style") || ""
       };
     });
-    localStorage.setItem(EDIT_KEY, JSON.stringify({ items: items, hidden: hidden }));
+    var payload = { items: items, hidden: hidden };
+    localStorage.setItem(EDIT_KEY, JSON.stringify(payload));
+    var token = "";
+    try { token = localStorage.getItem("continuum_auth_token") || ""; } catch (e) {}
+    fetch("/api/cms/landing?key=landing_live", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+      body: JSON.stringify(payload)
+    }).catch(function(){});
     this.textContent = "Saved! ✓";
     var self = this;
     setTimeout(function(){ self.textContent = "Save & Publish"; }, 1500);
   };
   document.getElementById("liveCmsReset").onclick = function(){
     localStorage.removeItem(EDIT_KEY);
+    var token = "";
+    try { token = localStorage.getItem("continuum_auth_token") || ""; } catch (e) {}
+    fetch("/api/cms/landing?key=landing_live", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+      body: JSON.stringify({})
+    }).catch(function(){});
     window.location.reload();
   };
 })();
@@ -529,19 +559,36 @@
 // ---- watch & learn player ----
 (function(){
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var D={
+  var FALLBACK={
     Marketing:{h:230,l:[['Know your audience',500,['Build a simple customer profile','Speak your audience’s language']],['Craft an offer people want',665,['Turn features into benefits','Write a clear, simple promise']],['Content that gets noticed',580,['Hooks that stop the scroll','Repurpose one idea everywhere']],['Measure what matters',435,['Pick three numbers to track','Improve a little every week']]]},
     Mindset:{h:38,l:[['Build a growth mindset',390,['See challenges as practice','Turn setbacks into progress']],['Make habits stick',550,['Start tiny and stay consistent','Design your day for focus']],['Learn faster, remember more',620,['Use active recall','Teach it to lock it in']]]},
     Sales:{h:200,l:[['Start better conversations',470,['Ask questions that open people up','Listen first, then offer']],['Handle objections calmly',530,['Understand the real concern','Respond with confidence']],['Follow up the right way',410,['Stay helpful, not pushy','Build trust over time']]]},
     Leadership:{h:262,l:[['Lead with clarity',480,['Set goals everyone understands','Communicate with purpose']],['Give feedback that helps',520,['Be specific and kind','Turn feedback into action']],['Grow your team',600,['Delegate with trust','Celebrate small wins']]]}
   };
-  var cat='Marketing',idx=0,pos=0,playing=!reduced,SIM=14000,done={};
+  var cat='Marketing',idx=0,pos=0,playing=!reduced,SIM=14000,done={},D=FALLBACK,iv=null;
   var $=function(id){return document.getElementById(id);};
-  var vs=$('vs'),vtitle=$('vtitle'),vcat=$('vcat'),vdur=$('vdur'),vtime=$('vtime'),vprog=$('vprog'),vpts=$('vpoints'),lessons=$('lessons'),vplay=$('vplay'),vtrack=$('vtrack');
+  var vs=$('vs'),vtitle=$('vtitle'),vcat=$('vcat'),vdur=$('vdur'),vtime=$('vtime'),vprog=$('vprog'),vpts=$('vpoints'),lessons=$('lessons'),vplay=$('vplay'),vtrack=$('vtrack'),chips=$('chips');
   if(!vs)return;
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function fmt(s){var m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+(x<10?'0':'')+x;}
+  function buildData(){
+    var c=window.__continuumCatalogue;
+    if(c&&c.disciplines&&c.disciplines.length){
+      var out={};
+      c.disciplines.slice(0,6).forEach(function(d,i){
+        var items=(c.videos||[]).filter(function(v){return v.discipline_id===d.id;}).slice(0,8);
+        if(!items.length)return;
+        out[d.title||d.name||d.id]={h:60+((i*47)%220),l:items.map(function(v){
+          var pts=(Array.isArray(v.outcomes)&&v.outcomes.length?v.outcomes:[v.summary||'Expert masterclass']).slice(0,3);
+          return [v.title,Math.max(60,(Number(v.minutes)||30)*60),pts];
+        })};
+      });
+      if(Object.keys(out).length)return out;
+    }
+    return FALLBACK;
+  }
   function list(){lessons.innerHTML=D[cat].l.map(function(l,i){
-    return '<button type="button" class="lsn'+(i===idx?' on':'')+(done[cat+i]?' done':'')+'" data-i="'+i+'" aria-current="'+(i===idx)+'"><div class="no">'+(done[cat+i]?'✓':i+1)+'</div><div><b>'+l[0]+'</b><small>'+fmt(l[1])+' min</small></div></button>';}).join('');}
+    return '<button type="button" class="lsn'+(i===idx?' on':'')+(done[cat+i]?' done':'')+'" data-i="'+i+'" aria-current="'+(i===idx)+'"><div class="no">'+(done[cat+i]?'✓':i+1)+'</div><div><b>'+esc(l[0])+'</b><small>'+fmt(l[1])+' min</small></div></button>';}).join('');}
   function syncPlay(){
     vplay.textContent = playing ? '⏸' : '▶';
     vplay.setAttribute('aria-label', playing ? 'Pause preview' : 'Play preview');
@@ -557,18 +604,11 @@
   function load(i){idx=i;pos=0;var l=D[cat].l[i];
     vtitle.style.animation='none';void vtitle.offsetWidth;vtitle.style.animation='';
     vtitle.textContent=l[0];vcat.textContent=cat.toUpperCase();vs.style.setProperty('--vh',D[cat].h);vdur.textContent=fmt(l[1]);
-    vpts.innerHTML=l[2].map(function(p,k){return '<li style="animation-delay:'+(k*.25+.2)+'s">'+p+'</li>';}).join('');
+    vpts.innerHTML=l[2].map(function(p,k){return '<li style="animation-delay:'+(k*.25+.2)+'s">'+esc(p)+'</li>';}).join('');
     list();
     updateProgress();
   }
   lessons.addEventListener('click',function(e){var b=e.target.closest('.lsn');if(b){load(+b.dataset.i);playing=true;syncPlay();}});
-  document.querySelectorAll('#chips button').forEach(function(b){b.addEventListener('click',function(){
-    document.querySelectorAll('#chips button').forEach(function(x){
-      x.classList.toggle('on', x === b);
-      x.setAttribute('aria-pressed', String(x === b));
-    });
-    cat=b.textContent;load(0);
-  });});
   vplay.addEventListener('click',function(){playing=!playing;syncPlay();});
   function seekTo(value){pos=Math.min(1,Math.max(0,value));updateProgress();}
   vtrack.addEventListener('click',function(e){var r=vtrack.getBoundingClientRect();seekTo((e.clientX-r.left)/r.width);});
@@ -583,14 +623,37 @@
     else return;
     e.preventDefault();
   });
-  setInterval(function(){
-    if(!playing)return;
-    pos+=100/SIM;
-    if(pos>=1){done[cat+idx]=1;load((idx+1)%D[cat].l.length);}
-    updateProgress();
-  },100);
-  syncPlay();
-  load(0);
+  function tick(){
+    clearInterval(iv);
+    iv=setInterval(function(){
+      if(!playing)return;
+      pos+=100/SIM;
+      if(pos>=1){done[cat+idx]=1;load((idx+1)%D[cat].l.length);}
+      updateProgress();
+    },100);
+  }
+  function boot(){
+    D=buildData();
+    done={};idx=0;pos=0;
+    var names=Object.keys(D);
+    cat=names[0];
+    chips.innerHTML=names.map(function(n,i){
+      return '<button type="button"'+(i===0?' class="on" aria-pressed="true"':' aria-pressed="false"')+'>'+esc(n)+'</button>';
+    }).join('');
+    chips.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+      chips.querySelectorAll('button').forEach(function(x){
+        x.classList.toggle('on',x===b);
+        x.setAttribute('aria-pressed',String(x===b));
+      });
+      cat=b.textContent;load(0);
+    });});
+    load(0);
+    syncPlay();
+    tick();
+  }
+  // First paint uses the fallback; the catalogue fetch re-boots with real data.
+  window.__continuumDemoBoot=boot;
+  boot();
 })();
 
 // ---- section 3: flip cards + banner shine ----
@@ -641,3 +704,63 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     c.addEventListener('pointerleave',function(){c.style.transform='';});
   });
 }
+
+// ---- catalogue-driven courses + demo player ----
+(function(){
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  fetch('/api/catalogue')
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(cat){
+      if (!cat || !Array.isArray(cat.disciplines) || !cat.disciplines.length) return;
+      var discs = cat.disciplines.slice().sort(function(a,b){return (a.sort_order||0)-(b.sort_order||0);});
+      var vids = Array.isArray(cat.videos) ? cat.videos : [];
+      var maxCount = Math.max(1, ...discs.map(function(d){return vids.filter(function(v){return v.discipline_id===d.id;}).length;}));
+
+      // #courses: one card per discipline, tabs rebuilt from the catalogue.
+      var coursesGrid = document.querySelector('#courses .grid');
+      var tabs = document.querySelector('#courses .tabs');
+      if (coursesGrid && tabs) {
+        tabs.innerHTML = '<button type="button" class="on" data-f="all" aria-pressed="true">All</button>' +
+          discs.map(function(d,i){return '<button type="button" data-f="d'+i+'" aria-pressed="false">'+esc(d.name||d.title||d.id)+'</button>';}).join('');
+        coursesGrid.innerHTML = discs.map(function(d,i){
+          var items = vids.filter(function(v){return v.discipline_id===d.id;});
+          var avg = items.length ? Math.round(items.reduce(function(s,v){return s+(Number(v.rating)||0);},0)/items.length) : 0;
+          var mins = items.reduce(function(s,v){return s+(Number(v.minutes)||0);},0);
+          var pct = Math.round((items.length/maxCount)*100);
+          return '<a class="card reveal" data-cat="d'+i+'" href="home/index.html" style="text-decoration:none;color:inherit">'
+            + '<span class="tag">'+esc((d.name||d.title||'').toUpperCase())+'</span>'
+            + '<h3>'+esc(d.title||d.name||d.id)+'</h3>'
+            + '<p>'+esc(d.blurb||d.goal||'Executive masterclasses.')+'</p>'
+            + '<div class="meta"><span>'+(avg?('⭐ '+avg):'')+'</span><span>'+items.length+' masterclass'+(items.length===1?'':'es')+(mins?' · '+mins+' min':'')+'</span></div>'
+            + '<div class="bar"><i style="--w:'+pct+'%"></i></div></a>';
+        }).join('');
+        // Re-run the reveal observer classes already applied; tabs filter wiring:
+        tabs.querySelectorAll('button').forEach(function(button){
+          button.addEventListener('click',function(){
+            tabs.querySelectorAll('button').forEach(function(item){
+              item.classList.toggle('on',item===button);
+              item.setAttribute('aria-pressed',String(item===button));
+            });
+            document.querySelectorAll('#courses .card').forEach(function(card){
+              card.classList.toggle('hide',button.dataset.f!=='all'&&card.dataset.cat!==button.dataset.f);
+            });
+          });
+        });
+        // Re-observe new cards for scroll reveal.
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+          },{threshold:.15});
+          coursesGrid.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+        } else {
+          coursesGrid.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
+        }
+      }
+
+      // #demo: rebuild the preview player data from real masterclasses.
+      window.__continuumCatalogue = { disciplines: discs, videos: vids };
+      if (typeof window.__continuumDemoBoot === 'function') window.__continuumDemoBoot();
+    })
+    .catch(function(){});
+})();

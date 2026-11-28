@@ -368,36 +368,46 @@
 
       setButtonLoading(btn, true, 'Creating Account...', 'Create Account');
 
-      try {
-        const registered = readUsers();
-        if (registered.some((user) => user.email === emailVal)) {
-          setError(err, emailIn, 'An account with this email already exists. Please sign in.');
+      (async () => {
+        try {
+          const resp = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: nameVal, email: emailVal, password: passVal, job_role: jobRole, organization: orgVal, plan })
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok) {
+            setError(err, emailIn, data?.error || 'Could not create account. Please try again.');
+            setButtonLoading(btn, false, 'Creating Account...', 'Create Account');
+            return;
+          }
+
+          // The signup endpoint creates the user without a session — sign in
+          // immediately so the new member lands on Home authenticated.
+          const loginResp = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: emailVal, password: passVal })
+          });
+          const loginData = await loginResp.json().catch(() => ({}));
+          if (loginResp.ok && loginData?.access_token) {
+            writeJson('continuum.session', { name: nameVal, email: emailVal, role: 'member', plan });
+            localStorage.setItem('continuum_auth_token', loginData.access_token);
+            localStorage.setItem('continuum_auth_user', 'member');
+          } else {
+            // Account exists but auto sign-in failed — send them to sign in.
+            showToast('Account created! Please sign in.');
+            setTimeout(() => { window.location.href = '../login/index.html?email=' + encodeURIComponent(emailVal); }, 900);
+            return;
+          }
+
+          showToast('Account created successfully! Welcome to Continuum Academy.');
+          setTimeout(() => { window.location.href = safeRedirect('../home/index.html', 'member'); }, 1100);
+        } catch (_) {
+          setError(err, null, 'Account creation is unavailable because the server could not be reached.');
           setButtonLoading(btn, false, 'Creating Account...', 'Create Account');
-          emailIn.focus();
-          return;
         }
-
-        registered.push({
-          id: 'USR-' + Date.now(),
-          name: nameVal,
-          email: emailVal,
-          role: 'member',
-          job_role: jobRole,
-          organization: orgVal,
-          plan,
-          password: passVal,
-          createdAt: new Date().toISOString()
-        });
-        writeJson(STORAGE.users, registered);
-        writeJson('continuum.session', { name: nameVal, email: emailVal, role: 'member', plan });
-        localStorage.setItem('continuum_auth_user', 'member');
-
-        showToast('Account created successfully! Welcome to Continuum Academy.');
-        setTimeout(() => { window.location.href = safeRedirect('../home/index.html', 'member'); }, 1100);
-      } catch (_) {
-        setError(err, null, 'Account creation is unavailable because browser storage is blocked.');
-        setButtonLoading(btn, false, 'Creating Account...', 'Create Account');
-      }
+      })();
     });
   }
 
@@ -430,31 +440,30 @@
 
       setButtonLoading(btn, true, 'Creating Link...', 'Create Reset Link');
 
-      setTimeout(() => {
+      (async () => {
         try {
-          if (!accountExists(email)) {
-            setError(err, emailIn, 'No local demo account was found for that email.');
+          const resp = await fetch('/api/auth/forgot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok) {
+            setError(err, emailIn, data?.error || 'Could not create a reset link. Please try again.');
             setButtonLoading(btn, false, 'Creating Link...', 'Create Reset Link');
-            emailIn.focus();
             return;
           }
 
-          const token = createResetToken(email);
-          const target = new URL('../reset-password/index.html', window.location.href);
-          target.searchParams.set('token', token);
-          target.searchParams.set('email', email);
-          const redirect = new URLSearchParams(window.location.search).get('redirect');
-          if (redirect) target.searchParams.set('redirect', redirect);
-          if (resetLink) resetLink.href = target.href;
+          if (data.reset_link && resetLink) resetLink.href = data.reset_link;
           form.hidden = true;
           if (sentNote) sentNote.hidden = false;
-          showToast('Local reset link created for ' + email);
+          showToast('Reset link created.');
           resetLink?.focus();
         } catch (_) {
-          setError(err, null, 'A reset link cannot be created because browser storage is blocked.');
+          setError(err, null, 'Could not reach the server. Please try again.');
           setButtonLoading(btn, false, 'Creating Link...', 'Create Reset Link');
         }
-      }, 600);
+      })();
     });
   }
 
@@ -471,7 +480,9 @@
     bindPasswordToggle('toggleResetPass', 'password');
     bindPasswordToggle('toggleResetConfirm', 'confirm');
     clearErrorOnInput([passIn, confIn], err);
-    const token = new URLSearchParams(window.location.search).get('token');
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const email = (params.get('email') || '').trim().toLowerCase();
 
     const rejectInvalidLink = () => {
       form.hidden = true;
@@ -482,15 +493,14 @@
       }
     };
 
-    if (!findResetToken(token)) rejectInvalidLink();
+    if (!token || !email) rejectInvalidLink();
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       if (btn?.disabled) return;
       if (err) err.textContent = '';
 
-      const record = findResetToken(token);
-      if (!record || !accountExists(record.email)) {
+      if (!token || !email) {
         rejectInvalidLink();
         return;
       }
@@ -512,32 +522,34 @@
 
       setButtonLoading(btn, true, 'Saving...', 'Save Password');
 
-      try {
-        if (demoAccount(record.email)) {
-          const overrides = readPasswords();
-          overrides[record.email] = pass;
-          writeJson(STORAGE.passwords, overrides);
-        } else {
-          const users = readUsers();
-          const user = users.find((item) => item.email === record.email);
-          if (!user) {
-            rejectInvalidLink();
+      (async () => {
+        try {
+          const resp = await fetch('/api/auth/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, token, password: pass })
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok) {
+            if (resp.status === 400) {
+              rejectInvalidLink();
+              return;
+            }
+            setError(err, null, data?.error || 'Could not save the new password. Please try again.');
+            setButtonLoading(btn, false, 'Saving...', 'Save Password');
             return;
           }
-          user.password = pass;
-          writeJson(STORAGE.users, users);
-        }
 
-        invalidateSessionForEmail(record.email);
-        consumeResetToken(token);
-        showToast('Password updated! Redirecting to sign in...');
-        setTimeout(() => {
-          window.location.href = '../login/index.html?email=' + encodeURIComponent(record.email);
-        }, 900);
-      } catch (_) {
-        setError(err, null, 'The password could not be saved because browser storage is blocked.');
-        setButtonLoading(btn, false, 'Saving...', 'Save Password');
-      }
+          invalidateSessionForEmail(email);
+          showToast('Password updated! Redirecting to sign in...');
+          setTimeout(() => {
+            window.location.href = '../login/index.html?email=' + encodeURIComponent(email);
+          }, 900);
+        } catch (_) {
+          setError(err, null, 'Could not reach the server. Please try again.');
+          setButtonLoading(btn, false, 'Saving...', 'Save Password');
+        }
+      })();
     });
   }
 

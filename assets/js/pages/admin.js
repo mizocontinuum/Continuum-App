@@ -9,8 +9,24 @@ import {
   resetLocalData,
   saveVideo,
   showToast
-} from '../store.js?v=6';
+} from '../store.js?v=3';
 import { initPageChrome } from '../user-menu.js?v=6';
+
+function authHeaders() {
+  const token = localStorage.getItem('continuum_auth_token') || '';
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+async function api(path, { method = 'GET', body } = {}) {
+  const res = await fetch(path, {
+    method,
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.error || `Request failed (${res.status})`);
+  return data;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const session = await initPageChrome();
@@ -105,10 +121,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       accent: '#0a6cf0'
     };
 
-    const loadCms = () => {
+    const loadCms = async () => {
       let saved = {};
-      try { saved = JSON.parse(localStorage.getItem('continuum_cms_landing') || '{}'); } catch (e) {}
-      const d = { ...defaults, ...saved };
+      try {
+        saved = await api('/api/cms/landing');
+      } catch (_) {
+        try { saved = JSON.parse(localStorage.getItem('continuum_cms_landing') || '{}'); } catch (e) {}
+      }
+      const d = { ...defaults, ...(saved && typeof saved === 'object' ? saved : {}) };
       pillIn.value = d.pill;
       headIn.value = d.headline;
       subIn.value = d.sub;
@@ -128,21 +148,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     [pillIn, headIn, subIn, ctaIn, accIn].forEach((el) => el.addEventListener('input', syncPreview));
 
-    cmsForm.addEventListener('submit', (e) => {
+    cmsForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      localStorage.setItem('continuum_cms_landing', JSON.stringify({
+      const payload = {
         pill: pillIn.value.trim() || defaults.pill,
         headline: headIn.value.trim() || defaults.headline,
         sub: subIn.value.trim() || defaults.sub,
         cta1: ctaIn.value.trim() || defaults.cta1,
         accent: accIn.value
-      }));
+      };
+      try {
+        await api('/api/cms/landing', { method: 'PUT', body: payload });
+      } catch (_) {}
+      try { localStorage.setItem('continuum_cms_landing', JSON.stringify(payload)); } catch (err) {}
       showToast('Published! Landing page updated.');
     });
 
     const cmsReset = document.getElementById('cmsResetBtn');
     if (cmsReset) {
-      cmsReset.addEventListener('click', () => {
+      cmsReset.addEventListener('click', async () => {
+        try { await api('/api/cms/landing', { method: 'PUT', body: {} }); } catch (_) {}
         localStorage.removeItem('continuum_cms_landing');
         loadCms();
         showToast('CMS reset to default.');
@@ -413,24 +438,56 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('closeEditor').addEventListener('click', () => videoEditor.close());
   document.getElementById('cancelEditor').addEventListener('click', () => videoEditor.close());
 
-  videoForm.addEventListener('submit', (event) => {
+  // Direct-to-storage upload: ask the API for a signed URL, then PUT the file.
+  const videoFile = document.getElementById('videoFile');
+  if (videoFile) {
+    videoFile.addEventListener('change', async () => {
+      const file = videoFile.files && videoFile.files[0];
+      if (!file) return;
+      try {
+        showToast('Uploading video…');
+        const up = await api(`/api/admin/upload-url?filename=${encodeURIComponent(file.name)}&folder=videos`);
+        const res = await fetch(up.signedUrl, {
+          method: 'POST',
+          body: file,
+          headers: { 'x-upsert': 'false', 'Content-Type': file.type || 'application/octet-stream' }
+        });
+        if (!res.ok) throw new Error('Storage upload failed');
+        fields.videoUrl.value = up.publicUrl;
+        showToast('Video uploaded — save the masterclass to publish it.');
+      } catch (error) {
+        showToast(error.message || 'Video upload failed.', true);
+      } finally {
+        videoFile.value = '';
+      }
+    });
+  }
+
+  videoForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    const editingId = fields.id.value || '';
+    const existing = editingId ? listVideos().find((v) => v.id === editingId) : null;
+    const newId = editingId || `v-${Date.now().toString(36)}`;
+    const payload = {
+      ...(existing || {}),
+      id: newId,
+      title: fields.title.value,
+      discipline_id: fields.discipline.value,
+      speaker: fields.speaker.value.trim(),
+      minutes: Number(fields.minutes.value) || 30,
+      tag: fields.tag.value.trim(),
+      video_url: fields.videoUrl.value.trim(),
+      summary: fields.summary.value.trim(),
+      featured: fields.featured.checked,
+      is_clip: fields.clip.checked
+    };
     try {
-      saveVideo({
-        id: fields.id.value || undefined,
-        title: fields.title.value,
-        discipline_id: fields.discipline.value,
-        speaker: fields.speaker.value.trim(),
-        minutes: fields.minutes.value,
-        tag: fields.tag.value.trim(),
-        video_url: fields.videoUrl.value.trim(),
-        summary: fields.summary.value.trim(),
-        featured: fields.featured.checked,
-        is_clip: fields.clip.checked
-      });
+      const result = await api('/api/admin/videos', { method: 'POST', body: payload });
+      const saved = { ...payload, ...(result?.video || {}) };
+      saveVideo(saved);
       videoEditor.close();
       render();
-      showToast(fields.id.value ? 'Masterclass updated on this device.' : 'Masterclass added on this device.');
+      showToast(editingId ? 'Masterclass updated.' : 'Masterclass added.');
     } catch (error) {
       showToast(error.message || 'Could not save this masterclass.', true);
     }
@@ -447,10 +504,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    if (button.dataset.action === 'delete' && window.confirm(`Remove "${video.title}" from this browser's catalogue?`)) {
-      deleteVideo(video.id);
-      render();
-      showToast('Masterclass removed from this device.');
+    if (button.dataset.action === 'delete' && window.confirm(`Remove "${video.title}" from the catalogue?`)) {
+      (async () => {
+        try {
+          await api(`/api/admin/videos/${encodeURIComponent(video.id)}`, { method: 'DELETE' });
+        } catch (error) {
+          showToast(error.message || 'Could not delete this masterclass.', true);
+          return;
+        }
+        deleteVideo(video.id);
+        render();
+        showToast('Masterclass removed.');
+      })();
     }
   });
 

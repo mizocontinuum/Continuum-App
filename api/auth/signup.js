@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { email, password, name } = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    const { email, password, name, job_role, organization, plan } = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
 
     const supabase = getSupabaseAdmin();
@@ -12,7 +12,13 @@ export default async function handler(req, res) {
       email,
       password,
       email_confirm: true,
-      user_metadata: { name: name || email.split('@')[0], role: 'member' }
+      user_metadata: {
+        name: name || email.split('@')[0],
+        role: 'member',
+        job_role: job_role || '',
+        organization: organization || '',
+        plan: plan || ''
+      }
     });
 
     if (error || !data?.user) return res.status(400).json({ error: error?.message || 'Could not create account' });

@@ -64,6 +64,185 @@ function remove(key) {
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
+/* ------------------------------ server sync ----------------------------- */
+
+const TOKEN_KEY = 'continuum_auth_token';
+
+export function authToken() {
+  try {
+    return window.localStorage.getItem(TOKEN_KEY) || '';
+  } catch (_) {
+    return '';
+  }
+}
+
+/** Authenticated JSON fetch against the Vercel serverless API. */
+async function apiFetch(path, { method = 'GET', body } = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  const token = authToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(path, {
+    method,
+    headers,
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.error || `Request failed (${res.status})`);
+  return data;
+}
+
+/** Remote writes are best-effort: the local store stays usable offline. */
+function pushRemote(path, body) {
+  if (!authToken()) return;
+  apiFetch(path, { method: 'POST', body }).catch(() => {});
+}
+
+function normalizeDiscipline(row) {
+  return {
+    id: row.id,
+    slug: row.slug || row.id,
+    title: row.title || row.name || row.id,
+    name: row.name || row.title || row.id,
+    goal: row.goal || '',
+    blurb: row.blurb || '',
+    sort_order: Number(row.sort_order) || 0
+  };
+}
+
+function normalizeVideo(row) {
+  return {
+    id: row.id,
+    discipline_id: row.discipline_id || '',
+    title: row.title || '',
+    speaker: row.speaker || 'Executive Faculty',
+    minutes: Number(row.minutes) || 30,
+    tag: row.tag || '',
+    highlight: row.highlight || '',
+    rating: Number(row.rating) || 0,
+    summary: row.summary || '',
+    outcomes: Array.isArray(row.outcomes) ? row.outcomes : [],
+    video_url: row.video_url || '',
+    trailer_url: row.trailer_url || '',
+    thumbnail_url: row.thumbnail_url || '',
+    category: row.category || '',
+    is_clip: Boolean(row.is_clip),
+    featured: Boolean(row.featured),
+    sort_order: Number(row.sort_order) || 0,
+    created_at: row.created_at || ''
+  };
+}
+
+/**
+ * Pull server state into the local store. Server data wins for the catalogue;
+ * favourites, progress and notifications merge per-user. Safe to call on any
+ * page — failures keep the local/demo data untouched.
+ * @returns {Promise<object|null>} fresh session profile when /api/auth/me answers
+ */
+export async function syncFromServer() {
+  const token = authToken();
+  if (!token) return null;
+
+  let me = null;
+  try {
+    me = await apiFetch('/api/auth/me');
+    if (me?.email) {
+      const session = getSession();
+      write(KEYS.session, {
+        name: me.name || session?.name || me.email.split('@')[0],
+        email: me.email,
+        role: me.role === 'admin' ? 'admin' : 'member'
+      });
+    }
+  } catch (_) {
+    me = null;
+  }
+
+  try {
+    const cat = await apiFetch('/api/catalogue');
+    if (Array.isArray(cat.disciplines)) write(KEYS.disciplines, cat.disciplines.map(normalizeDiscipline));
+    if (Array.isArray(cat.videos)) write(KEYS.videos, cat.videos.map(normalizeVideo));
+  } catch (_) {}
+
+  try {
+    const fav = await apiFetch('/api/favorites');
+    if (Array.isArray(fav.favorites)) {
+      write(KEYS.favorites, fav.favorites.map((f) => f.video_id || f).filter(Boolean));
+    }
+  } catch (_) {}
+
+  try {
+    const prog = await apiFetch('/api/progress');
+    if (Array.isArray(prog.progress)) {
+      const map = {};
+      prog.progress.forEach((row) => {
+        if (!row?.video_id) return;
+        map[row.video_id] = {
+          position: Number(row.position) || 0,
+          completed: Boolean(row.completed),
+          updated_at: row.updated_at || null
+        };
+      });
+      write(KEYS.progress, map);
+    }
+  } catch (_) {}
+
+  try {
+    const notif = await apiFetch('/api/notifications');
+    if (Array.isArray(notif.notifications)) write(KEYS.notifications, notif.notifications);
+  } catch (_) {}
+
+  return me;
+}
+
+/**
+ * Reconcile localStorage favourites/progress with the server after an iframe
+ * or another tab wrote to them directly. Pushes only the deltas.
+ */
+export async function reconcileRemote() {
+  if (!authToken()) return;
+  try {
+    const [fav, prog] = await Promise.all([
+      apiFetch('/api/favorites').catch(() => null),
+      apiFetch('/api/progress').catch(() => null)
+    ]);
+
+    if (fav && Array.isArray(fav.favorites)) {
+      const remote = new Set(fav.favorites.map((f) => f.video_id || f));
+      const local = new Set(getFavoriteIds());
+      for (const id of local) if (!remote.has(id)) pushRemote('/api/favorites', { video_id: id, favorite: true });
+      for (const id of remote) if (!local.has(id)) pushRemote('/api/favorites', { video_id: id, favorite: false });
+    }
+
+    if (prog && Array.isArray(prog.progress)) {
+      const remoteMap = {};
+      prog.progress.forEach((row) => {
+        if (row?.video_id) remoteMap[row.video_id] = row;
+      });
+      const localMap = getProgressMap();
+      const ids = new Set([...Object.keys(remoteMap), ...Object.keys(localMap)]);
+      ids.forEach((id) => {
+        const l = localMap[id];
+        const r = remoteMap[id];
+        const lPos = l ? Number(l.position) || 0 : -1;
+        const rPos = r ? Number(r.position) || 0 : -1;
+        const lDone = l ? Boolean(l.completed) : false;
+        const rDone = r ? Boolean(r.completed) : false;
+        if (lPos === rPos && lDone === rDone) return;
+        if (!l) {
+          pushRemote('/api/progress', { video_id: id, position: 0, completed: false });
+          return;
+        }
+        pushRemote('/api/progress', {
+          video_id: id,
+          position: l.position,
+          duration: l.duration || 0,
+          completed: l.completed
+        });
+      });
+    }
+  } catch (_) {}
+}
+
 /* -------------------------------- session ------------------------------- */
 
 /**
@@ -245,6 +424,7 @@ export function toggleFavorite(videoId) {
   if (index === -1) ids.push(videoId);
   else ids.splice(index, 1);
   write(KEYS.favorites, ids);
+  pushRemote('/api/favorites', { video_id: videoId, favorite: index === -1 });
   return index === -1;
 }
 
@@ -271,15 +451,22 @@ export function getProgress(videoId) {
   return entry || { position: 0, completed: false, updated_at: null };
 }
 
-export function saveProgress(videoId, position, completed = false) {
+export function saveProgress(videoId, position, completed = false, duration = 0) {
   const map = getProgressMap();
   const seconds = Math.max(0, Math.round(Number(position) || 0));
   map[videoId] = {
     position: seconds,
+    duration: Number(duration) || map[videoId]?.duration || 0,
     completed: Boolean(completed),
     updated_at: new Date().toISOString()
   };
   write(KEYS.progress, map);
+  pushRemote('/api/progress', {
+    video_id: videoId,
+    position: seconds,
+    duration: map[videoId].duration,
+    completed: map[videoId].completed
+  });
   return map[videoId];
 }
 
@@ -322,6 +509,7 @@ export function unreadCount() {
 export function markAllRead() {
   const items = listNotifications().map((item) => ({ ...item, read: true }));
   write(KEYS.notifications, items);
+  pushRemote('/api/notifications', { action: 'read_all' });
   return items;
 }
 
@@ -346,6 +534,9 @@ export function saveVideo(payload = {}) {
     summary: payload.summary || '',
     outcomes: Array.isArray(payload.outcomes) ? payload.outcomes : [],
     video_url: payload.video_url || '',
+    trailer_url: payload.trailer_url || '',
+    thumbnail_url: payload.thumbnail_url || '',
+    category: payload.category || '',
     is_clip: Boolean(payload.is_clip),
     featured: Boolean(payload.featured),
     sort_order: Number(payload.sort_order) || videos.length + 1
@@ -383,7 +574,9 @@ export function watchLink(videoId) {
 
 /** Turn an absolute /assets/... path into one that resolves from this page. */
 export function assetUrl(path = '') {
-  return siteUrl(String(path).replace(/^\//, ''));
+  const value = String(path || '');
+  if (/^(https?:)?\/\//.test(value) || value.startsWith('data:') || value.startsWith('blob:')) return value;
+  return siteUrl(value.replace(/^\//, ''));
 }
 
 export function formatClock(totalSeconds) {
