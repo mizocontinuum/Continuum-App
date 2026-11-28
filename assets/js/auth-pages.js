@@ -233,36 +233,31 @@
 
       setButtonLoading(btn, true, 'Signing In...', 'Sign In');
 
-      (async () => {
-        try {
-          const resp = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: em, password: pw })
-          });
-          const data = await resp.json().catch(() => ({}));
-          if (!resp.ok || !data?.user || !data?.access_token) {
-            setError(err, passIn, data?.error || 'Invalid email or password. Please verify your credentials.');
-            passIn.focus();
-            setButtonLoading(btn, false, 'Signing In...', 'Sign In');
-            return;
-          }
+      // Local authentication only
+      const storedUsers = readUsers();
+      const demo = demoAccount(em);
+      const storedUser = storedUsers.find((u) => u.email === em);
+      const expectedPassword = currentDemoPassword(em) || storedUser?.password;
+      const isValid = (demo && pw === demo.password) || (storedUser && pw === storedUser.password) || (expectedPassword && pw === expectedPassword);
 
-          const finalName = data.user.name || em.split('@')[0];
-          const finalRole = data.user.role === 'admin' ? 'admin' : 'member';
-          writeJson('continuum.session', { name: finalName, email: data.user.email || em, role: finalRole });
-          localStorage.setItem('continuum_auth_token', data.access_token);
-          localStorage.setItem('continuum_auth_user', finalRole);
+      if (!isValid) {
+        setError(err, passIn, 'Invalid email or password. Please verify your credentials.');
+        passIn.focus();
+        setButtonLoading(btn, false, 'Signing In...', 'Sign In');
+        return;
+      }
 
-          const target = finalRole === 'admin' ? '../admin/index.html' : '../home/index.html';
-          const destination = safeRedirect(target, finalRole);
-          showToast('Sign in successful! Redirecting...');
-          setTimeout(() => { window.location.href = destination; }, 600);
-        } catch (_) {
-          setError(err, null, 'Could not connect to authentication server.');
-          setButtonLoading(btn, false, 'Signing In...', 'Sign In');
-        }
-      })();
+      const finalName = demo?.name || storedUser?.name || em.split('@')[0];
+      const finalRole = demo?.role || storedUser?.role || 'member';
+      writeJson('continuum.session', { name: finalName, email: em, role: finalRole });
+      localStorage.setItem('continuum_auth_token', 'local-demo-token');
+      localStorage.setItem('continuum_auth_user', finalRole);
+
+      const target = finalRole === 'admin' ? '../admin/index.html' : '../home/index.html';
+      const destination = safeRedirect(target, finalRole);
+      showToast('Sign in successful! Redirecting...');
+      setButtonLoading(btn, false, 'Signing In...', 'Sign In');
+      setTimeout(() => { window.location.href = destination; }, 600);
     };
   }
 

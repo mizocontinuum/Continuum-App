@@ -111,11 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const loadCms = async () => {
       let saved = {};
-      try {
-        saved = await api('/api/cms/landing');
-      } catch (_) {
-        try { saved = JSON.parse(localStorage.getItem('continuum_cms_landing') || '{}'); } catch (e) {}
-      }
+      try { saved = JSON.parse(localStorage.getItem('continuum_cms_landing') || '{}'); } catch (e) {}
       const d = { ...defaults, ...(saved && typeof saved === 'object' ? saved : {}) };
       pillIn.value = d.pill;
       headIn.value = d.headline;
@@ -439,33 +435,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
       
-      try {
-        showToast('Uploading video…');
-        console.log('Uploading to Vercel Blob:', file.name, 'Size:', (file.size / 1024 / 1024).toFixed(1) + 'MB');
-        
-        // Upload directly to Vercel Blob
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        const res = await fetch('/api/blob-upload', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('continuum_auth_token')}`
-          }
-        });
-        
-        if (!res.ok) {
-          const errorText = await res.text();
-          console.error('Vercel Blob upload failed:', errorText);
-          throw new Error(`Upload failed: ${errorText}`);
-        }
-        
-        const result = await res.json();
-        fields.videoUrl.value = result.url;
-        showToast('Video uploaded — save the masterclass to publish it.');
-      } catch (error) {
-        console.error('Upload error:', error);
+      // File upload not available in local-only mode
+      showToast('File upload is not available in local-only mode. Please use external URLs for video files.');
+      fileIn.value = '';
         showToast(error.message || 'Video upload failed.', true);
       } finally {
         videoFile.value = '';

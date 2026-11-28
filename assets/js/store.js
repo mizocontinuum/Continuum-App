@@ -317,7 +317,6 @@ export function toggleFavorite(videoId) {
   if (index === -1) ids.push(videoId);
   else ids.splice(index, 1);
   write(KEYS.favorites, ids);
-  pushRemote('/api/favorites', { video_id: videoId, favorite: index === -1 });
   return index === -1;
 }
 
@@ -354,12 +353,6 @@ export function saveProgress(videoId, position, completed = false, duration = 0)
     updated_at: new Date().toISOString()
   };
   write(KEYS.progress, map);
-  pushRemote('/api/progress', {
-    video_id: videoId,
-    position: seconds,
-    duration: map[videoId].duration,
-    completed: map[videoId].completed
-  });
   return map[videoId];
 }
 
