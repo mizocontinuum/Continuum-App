@@ -394,7 +394,26 @@ const __byId = {}; __pool.forEach(v => { __byId[v.id] = v; });
       Use real images:  bg: 'url("hero.jpg") center/cover'
       Use real videos:  video: "trailer1.mp4"
    --------------------------------------------------------- */
-const movies = (__nonClip.length ? __nonClip.filter(v => v.featured).concat(__nonClip.filter(v => !v.featured).sort((a,b) => b.rawRating - a.rawRating)).slice(0,10).map(v => ({ id:v.id, title:v.title, desc:v.desc, meta:(v.genre || "") + (v.time ? " · " + v.time : ""), bg:v.bg, video:v.video, trailer:v.trailer, minutes:v.minutes, genre:v.genre, poster:v.poster, trailers:[{ name:"Masterclass", color:"linear-gradient(135deg,#007FFF,#33B5FF)", video:v.video || "" }, { name:"Trailer", color:"linear-gradient(135deg,#16283d,#3f7cac)", video:v.trailer || "" }] })) : [
+const movies = (__nonClip.length ? (() => {
+  const featured = __nonClip.filter(v => v.featured);
+  const rest = __nonClip.filter(v => !v.featured).sort((a,b) => b.rawRating - a.rawRating);
+  return featured.concat(rest).slice(0,10).map(v => ({
+    id: v.id,
+    title: v.title,
+    desc: v.desc,
+    meta: (v.genre || "") + (v.time ? " · " + v.time : ""),
+    bg: v.bg,
+    video: v.video,
+    trailer: v.trailer,
+    minutes: v.minutes,
+    genre: v.genre,
+    poster: v.poster,
+    trailers: [
+      { name:"Masterclass", color:"linear-gradient(135deg,#007FFF,#33B5FF)", video:v.video || "" },
+      { name:"Trailer", color:"linear-gradient(135deg,#16283d,#3f7cac)", video:v.trailer || "" }
+    ]
+  }));
+})() : [
   {
     title: "MULAN",
     desc: "A fearless young woman risks everything out of love for her family and her country, and rises to become one of the greatest warriors her homeland has ever known.",
@@ -661,7 +680,20 @@ listBtn.addEventListener("click", () => toggleList(mid(movies[current])));
         Real posters:  poster: 'url("poster.jpg") center/cover'
         Click a card to play it (it also feeds Continue Watching)
    --------------------------------------------------------- */
-const top10 = (__nonClip.length ? __nonClip.slice().sort((a,b) => b.rawRating - a.rawRating).slice(0,10).map(v => ({ id:v.id, title:v.title, genre:v.genre, rating:v.rating, poster:v.poster, bg:v.bg || v.poster, video:v.video, minutes:v.minutes, desc:v.desc, time:v.time })) : [
+const top10 = (__nonClip.length ? (() => {
+  return __nonClip.slice().sort((a,b) => b.rawRating - a.rawRating).slice(0,10).map(v => ({
+    id: v.id,
+    title: v.title,
+    genre: v.genre,
+    rating: v.rating,
+    poster: v.poster,
+    bg: v.bg || v.poster,
+    video: v.video,
+    minutes: v.minutes,
+    desc: v.desc,
+    time: v.time
+  }));
+})() : [
   { title:"STARLESS",     genre:"Sci-Fi",   rating:4.8, poster:"linear-gradient(160deg,#5b48c9,#0a0724)" },
   { title:"IRON TIDE",    genre:"Action",   rating:4.7, poster:"linear-gradient(160deg,#59606e,#0a0b0e)" },
   { title:"HOLLOW PINES", genre:"Horror",   rating:4.5, poster:"linear-gradient(160deg,#b52323,#140303)" },
@@ -675,7 +707,20 @@ const top10 = (__nonClip.length ? __nonClip.slice().sort((a,b) => b.rawRating - 
 ]).map(m => ({ ...m, bg: m.bg || m.poster }));            // the player uses bg as its backdrop
 
 const __t10 = new Set(top10.map(m => m.id).filter(Boolean));
-const extraMovies = (__nonClip.length ? __nonClip.filter(v => !v.featured && !__t10.has(v.id)).sort((a,b) => (a.sort - b.sort) || a.title.localeCompare(b.title)).slice(0,8).map(v => ({ id:v.id, title:v.title, genre:v.genre, poster:v.poster, bg:v.bg || v.poster, video:v.video, minutes:v.minutes, desc:v.desc, time:v.time, rating:v.rating })) : [
+const extraMovies = (__nonClip.length ? (() => {
+  return __nonClip.filter(v => !v.featured && !__t10.has(v.id)).sort((a,b) => (a.sort - b.sort) || a.title.localeCompare(b.title)).slice(0,8).map(v => ({
+    id: v.id,
+    title: v.title,
+    genre: v.genre,
+    poster: v.poster,
+    bg: v.bg || v.poster,
+    video: v.video,
+    minutes: v.minutes,
+    desc: v.desc,
+    time: v.time,
+    rating: v.rating
+  }));
+})() : [
   { title:"SILENT HARBOR",  genre:"Drama",     poster:"linear-gradient(160deg,#4d7a8c,#0b161b)" },
   { title:"GLASS GARDEN",   genre:"Romance",   poster:"linear-gradient(160deg,#7bc47f,#0d2412)" },
   { title:"COPPER SKY",     genre:"Adventure", poster:"linear-gradient(160deg,#d4703a,#1d0e2e)" },
