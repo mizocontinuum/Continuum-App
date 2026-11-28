@@ -10,7 +10,7 @@
  * relative paths (e.g. `watch/?video=`) instead of store.js `siteUrl()`.
  */
 import { featuredVideos, topVideos, listCatalogue, getSession } from '../store.js';
-import { createThumbArtwork } from '../cards.js';
+import { createThumbArtwork } from '../cards.js?v=2';
 
 document.addEventListener('DOMContentLoaded', () => {
   renderPreview();
