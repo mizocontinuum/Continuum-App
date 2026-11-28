@@ -12,7 +12,22 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
   <link rel="stylesheet" href="../assets/css/pages/admin.css?v=5">
-  <style>#videoEditor { margin: auto; }</style>
+  <style>
+    #videoEditor {
+      margin: auto;
+      max-width: 460px;
+      width: 92vw;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+    #videoEditor .editor-form {
+      padding: 20px 22px;
+      gap: 10px;
+    }
+    #videoEditor textarea {
+      min-height: 64px;
+    }
+  </style>
 </head>
 <body class="admin-body">
   <div class="toast-msg" id="adminToast" role="status" aria-live="polite"></div>
