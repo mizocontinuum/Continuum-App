@@ -451,12 +451,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Requesting upload URL for:', file.name);
         const up = await api(`/api/admin?action=upload-url&filename=${encodeURIComponent(file.name)}&folder=videos`);
         console.log('Upload URL response:', up);
+        
+        // Use PUT method for Supabase storage signed URLs
         const res = await fetch(up.signedUrl, {
-          method: 'POST',
+          method: 'PUT',
           body: file,
-          headers: { 'x-upsert': 'false', 'Content-Type': file.type || 'application/octet-stream' }
+          headers: { 
+            'Content-Type': file.type || 'application/octet-stream',
+            'x-upsert': 'false'
+          }
         });
-        if (!res.ok) throw new Error('Storage upload failed');
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('Storage upload failed:', errorText);
+          throw new Error(`Storage upload failed: ${errorText}`);
+        }
+        
         fields.videoUrl.value = up.publicUrl;
         showToast('Video uploaded — save the masterclass to publish it.');
       } catch (error) {
