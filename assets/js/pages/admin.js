@@ -16,6 +16,40 @@ document.addEventListener('DOMContentLoaded', async () => {
   const session = await initPageChrome();
   if (!session || session.role !== 'admin') return;
 
+  const toggleDiscBtn = document.getElementById('toggleDisciplineFormBtn');
+  const discForm = document.getElementById('disciplineForm');
+  const discNameIn = document.getElementById('disciplineNameInput');
+  if (toggleDiscBtn && discForm) {
+    toggleDiscBtn.addEventListener('click', () => {
+      discForm.hidden = !discForm.hidden;
+      if (!discForm.hidden) discNameIn?.focus();
+    });
+    discForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = (discNameIn?.value || '').trim();
+      if (!name) return;
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `disc-${Date.now()}`;
+      try {
+        const token = localStorage.getItem('continuum_auth_token') || '';
+        const res = await fetch('/api/admin/disciplines', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ id: slug, name, slug, sort_order: 0 })
+        });
+        if (!res.ok) throw new Error('Could not save discipline');
+        if (discNameIn) discNameIn.value = '';
+        discForm.hidden = true;
+        showToast(`Discipline "${name}" added.`);
+        window.location.reload();
+      } catch (err) {
+        showToast(err.message || 'Failed to add discipline', true);
+      }
+    });
+  }
+
   const navLinks = Array.from(document.querySelectorAll('.admin-nav .admin-nav-link[href^="#"]'));
   const viewIds = navLinks.map((a) => a.getAttribute('href').slice(1));
   const breadcrumb = document.querySelector('.breadcrumb strong');
