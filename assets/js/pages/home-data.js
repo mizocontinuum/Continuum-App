@@ -1057,10 +1057,17 @@ const movies = (__vids.length ? (() => {
   });
   return Object.entries(byDiscipline).map(([disc, vids]) => ({
     title: disc,
-    count: vids.length,
+    year: "",
+    genres: [disc],
+    time: vids.length + " videos",
+    rating: vids.reduce((a, v) => a + (v.rating || 0), 0) / vids.length,
+    pop: vids.length,
+    tag: disc,
     desc: vids.length + " " + (vids.length === 1 ? 'masterclass' : 'masterclasses') + " in " + disc,
     poster: vids[0]?.poster || "linear-gradient(160deg," + (vids[0]?.hue || 200) + "," + (vids[0]?.hue - 40 || 160) + ")",
     bg: vids[0]?.bg || "linear-gradient(180deg," + (vids[0]?.hue || 200) + ",#03080E)",
+    created: vids[0]?.created || "",
+    sort: 0,
     videos: vids
   }));
 })() : [
@@ -1128,7 +1135,7 @@ function visible() {
   const out = movies.filter(m =>
     (state.genre === "All" || m.title === state.genre) &&
     (!q || m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q)));
-  const by = { pop:(a,b)=>b.count-a.count, new:(a,b)=>(b.created||"").localeCompare(a.created||""") || (b.sort||0)-(a.sort||0), top:(a,b)=>b.count-a.count, az:(a,b)=>a.title.localeCompare(b.title) };
+  const by = { pop:(a,b)=>b.pop-a.pop, new:(a,b)=>(b.created||"").localeCompare(a.created||""") || (b.sort||0)-(a.sort||0), top:(a,b)=>b.rating-a.rating, az:(a,b)=>a.title.localeCompare(b.title) };
   return out.sort(by[state.sort]);
 }
 
@@ -1147,7 +1154,7 @@ function render() {
       '<button class="quick"></button>';
     const poster = card.querySelector(".poster");
     poster.style.background = m.poster;
-    card.querySelector(".rate").textContent = m.count + " items";
+    card.querySelector(".rate").textContent = m.pop + " items";
     poster.querySelector("b").textContent = m.title;
     card.querySelector(".name").textContent = m.title;
     card.querySelector(".sub").textContent = m.desc;
@@ -1202,7 +1209,7 @@ function openModal(m) {
   $("mPoster").style.background = m.poster;
   $("mPoster").innerHTML = "<b></b>";
   $("mPoster").firstChild.textContent = m.title;
-  $("mTag").textContent = m.count + " masterclasses";
+  $("mTag").textContent = m.pop + " masterclasses";
   $("mTitle").textContent = m.title;
   $("mDesc").textContent = m.desc;
   $("mInfo").textContent = "Browse all videos in this discipline";
