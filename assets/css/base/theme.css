@@ -1,0 +1,35 @@
+/* Theme variables - light/dark mode support */
+:root {
+  --bg: #03080E;
+  --fg: #ffffff;
+  --muted: #93acbd;
+  --card: #0d1f2d;
+  --line: #1a3447;
+  --accent: #5bc0de;
+  --accent2: #9b86ff;
+  --glow: rgba(91, 192, 222, 0.25);
+}
+
+:root[data-theme="light"] {
+  --bg: #f4f9fc;
+  --fg: #0e2433;
+  --muted: #4c6578;
+  --card: #ffffff;
+  --line: #d5e5ee;
+  --accent: #2a9fd6;
+  --accent2: #7c5cff;
+  --glow: rgba(42, 159, 214, 0.25);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f4f9fc;
+    --fg: #0e2433;
+    --muted: #4c6578;
+    --card: #ffffff;
+    --line: #d5e5ee;
+    --accent: #2a9fd6;
+    --accent2: #7c5cff;
+    --glow: rgba(42, 159, 214, 0.25);
+  }
+}

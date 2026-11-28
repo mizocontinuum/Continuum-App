@@ -1,0 +1,21 @@
+{
+  "name": "Continuum Academy",
+  "short_name": "Continuum",
+  "description": "Executive learning platform for entrepreneurs, marketers and leaders",
+  "start_url": "/home/",
+  "display": "standalone",
+  "background_color": "#03080E",
+  "theme_color": "#03080E",
+  "icons": [
+    {
+      "src": "assets/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
