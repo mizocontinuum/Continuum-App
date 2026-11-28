@@ -55,8 +55,21 @@ async function handleVideos(req, res) {
 
 async function handleUploadUrl(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
+  
+  // Check environment variables first
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error('Missing environment variables:', {
+      SUPABASE_URL: !!process.env.SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY
+    });
+    return res.status(500).json({ 
+      error: 'Supabase is not configured. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables in Vercel.' 
+    });
+  }
+  
   const ctx = await requireAdmin(req, res);
   if (!ctx) return;
+  
   try {
     const filename = String(req.query.filename || '').trim();
     const folder = String(req.query.folder || 'uploads').replace(/[^a-zA-Z0-9_-]/g, '');
@@ -65,12 +78,7 @@ async function handleUploadUrl(req, res) {
     const path = `${folder}/${Date.now()}-${safeName}`;
     const bucket = process.env.SUPABASE_STORAGE_BUCKET || 'media';
     
-    // Check if Supabase storage is configured
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      return res.status(500).json({ 
-        error: 'Supabase storage is not configured. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.' 
-      });
-    }
+    console.log('Creating signed upload URL for:', { path, bucket });
     
     const { data, error } = await ctx.supabase.storage.from(bucket).createSignedUploadUrl(path);
     if (error) {
