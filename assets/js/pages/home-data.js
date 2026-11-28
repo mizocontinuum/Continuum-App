@@ -1473,7 +1473,7 @@ grid();render(0);
 `,
 
   /* ==========================================================================
-     4. LIBRARY (CARTOONS) PAGE TEMPLATE
+     4. LIBRARY PAGE TEMPLATE
      ========================================================================== */
   cartoons: `<!DOCTYPE html>
 <html lang="en"><head>
@@ -1601,7 +1601,7 @@ h3{font-size:.72rem;letter-spacing:.2em;color:var(--mute);margin:0 0 .8rem;font-
 const __CAT = (function(){ try { return parent.__CONTINUUM_CATALOGUE__ || null; } catch(e){ return null; } })();
 function __buildCat(cat){
   const out=[], vids=cat.videos||[], discs=cat.disciplines||[];
-  /* Group by series_id (Discipline Series) */
+  /* Group by series_id (Library) */
   discs.forEach(d=>{
     const vs=vids.filter(v=>(v.series_id===d.id||v.discipline_id===d.id)&&!v.clip);
     if(!vs.length)return;
@@ -1881,7 +1881,7 @@ render();
 
 <main class="stage" id="stage">
   <div class="backdrop" id="backdrop"></div>
-  <div class="empty"><div class="es"><div class="es-ic"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/><path d="M12 7.5v5M9.5 10h5"/></svg></div><h2>Your list is empty</h2><p>Save movies, series and library titles with “+ My List” and they will wait for you here.</p><div class="es-btns"><button class="browse" onclick="try{parent.location.hash='movies'}catch(e){}">Browse movies</button><button class="browse ghost" onclick="try{parent.location.hash='series'}catch(e){}">Explore series</button><button class="browse ghost" onclick="try{parent.location.hash='cartoons'}catch(e){}">Open library</button></div></div></div>
+  <div class="empty"><div class="es"><div class="es-ic"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/><path d="M12 7.5v5M9.5 10h5"/></svg></div><h2>Your list is empty</h2><p>Save movies, series and library titles with “+ My List” and they will wait for you here.</p><div class="es-btns"><button class="browse" onclick="try{parent.location.hash='movies'}catch(e){}">Browse disciplines</button><button class="browse ghost" onclick="try{parent.location.hash='series'}catch(e){}">Explore series</button><button class="browse ghost" onclick="try{parent.location.hash='cartoons'}catch(e){}">Open library</button></div></div></div>
 
   <section class="info">
     <p class="tag" id="tag"></p>

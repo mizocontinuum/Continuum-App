@@ -450,7 +450,7 @@ const R = {
   home: "Home",
   movies: "Masterclasses",
   series: "Disciplines",
-  cartoons: "Clips",
+  cartoons: "Library",
   mylist: "My List",
 };
 
