@@ -233,31 +233,36 @@
 
       setButtonLoading(btn, true, 'Signing In...', 'Sign In');
 
-      setTimeout(() => {
+      (async () => {
         try {
-          const registered = readUsers();
-          const demo = demoAccount(em);
-          const userMatch = registered.find((u) => u.email === em);
-          const expectedPassword = demo ? currentDemoPassword(em) : userMatch?.password;
-
-          if (expectedPassword && pw === expectedPassword) {
-            const finalName = demo?.name || userMatch.name;
-            const finalRole = demo?.role || 'member';
-            writeJson('continuum.session', { name: finalName, email: em, role: finalRole });
-            localStorage.setItem('continuum_auth_user', finalRole);
-            const destination = safeRedirect(finalRole === 'admin' ? '../admin/index.html' : '../home/index.html', finalRole);
-            showToast('Sign in successful! Redirecting...');
-            setTimeout(() => { window.location.href = destination; }, 800);
-          } else {
-            setError(err, passIn, 'Invalid email or password. Please verify your credentials.');
+          const resp = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: em, password: pw })
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok || !data?.user || !data?.access_token) {
+            setError(err, passIn, data?.error || 'Invalid email or password. Please verify your credentials.');
             passIn.focus();
             setButtonLoading(btn, false, 'Signing In...', 'Sign In');
+            return;
           }
+
+          const finalName = data.user.name || em.split('@')[0];
+          const finalRole = data.user.role === 'admin' ? 'admin' : 'member';
+          writeJson('continuum.session', { name: finalName, email: data.user.email || em, role: finalRole });
+          localStorage.setItem('continuum_auth_token', data.access_token);
+          localStorage.setItem('continuum_auth_user', finalRole);
+
+          const target = finalRole === 'admin' ? '../admin/index.html' : '../home/index.html';
+          const destination = safeRedirect(target, finalRole);
+          showToast('Sign in successful! Redirecting...');
+          setTimeout(() => { window.location.href = destination; }, 600);
         } catch (_) {
-          setError(err, null, 'Sign in is unavailable because browser storage is blocked.');
+          setError(err, null, 'Could not connect to authentication server.');
           setButtonLoading(btn, false, 'Signing In...', 'Sign In');
         }
-      }, 750);
+      })();
     };
   }
 
