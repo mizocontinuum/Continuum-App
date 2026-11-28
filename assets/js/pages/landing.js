@@ -12,16 +12,8 @@
     if (cta1 && cms.cta1) cta1.textContent = cms.cta1;
     if (cms.accent) document.documentElement.style.setProperty("--accent", cms.accent);
   }
-  // Server CMS wins; localStorage is the offline/demo fallback.
-  fetch("/api/cms/landing")
-    .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(cms){
-      if (cms && Object.keys(cms).length) { applyCms(cms); return; }
-      try { applyCms(JSON.parse(localStorage.getItem("continuum_cms_landing") || "null")); } catch (e) {}
-    })
-    .catch(function(){
-      try { applyCms(JSON.parse(localStorage.getItem("continuum_cms_landing") || "null")); } catch (e) {}
-    });
+  // Local CMS only - no server
+  try { applyCms(JSON.parse(localStorage.getItem("continuum_cms_landing") || "null")); } catch (e) {}
 })();
 
 // ---- Canva-style Full Visual Editor (?edit=1) ----
@@ -52,10 +44,6 @@
     var localSaved = JSON.parse(localStorage.getItem(EDIT_KEY) || "null");
     if (localSaved) applyLive(localSaved);
   } catch (e) {}
-  fetch("/api/cms/landing?key=landing_live")
-    .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(remote){ if (remote && Object.keys(remote).length) applyLive(remote); })
-    .catch(function(){});
 
   if (window.location.search.indexOf("edit=1") === -1) return;
 
@@ -183,26 +171,12 @@
     });
     var payload = { items: items, hidden: hidden };
     localStorage.setItem(EDIT_KEY, JSON.stringify(payload));
-    var token = "";
-    try { token = localStorage.getItem("continuum_auth_token") || ""; } catch (e) {}
-    fetch("/api/cms/landing?key=landing_live", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
-      body: JSON.stringify(payload)
-    }).catch(function(){});
     this.textContent = "Saved! ✓";
     var self = this;
     setTimeout(function(){ self.textContent = "Save & Publish"; }, 1500);
   };
   document.getElementById("liveCmsReset").onclick = function(){
     localStorage.removeItem(EDIT_KEY);
-    var token = "";
-    try { token = localStorage.getItem("continuum_auth_token") || ""; } catch (e) {}
-    fetch("/api/cms/landing?key=landing_live", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
-      body: JSON.stringify({})
-    }).catch(function(){});
     window.location.reload();
   };
 })();
@@ -709,58 +683,56 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 (function(){
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-  fetch('/api/catalogue')
-    .then(function(r){return r.ok?r.json():null;})
-    .then(function(cat){
-      if (!cat || !Array.isArray(cat.disciplines) || !cat.disciplines.length) return;
-      var discs = cat.disciplines.slice().sort(function(a,b){return (a.sort_order||0)-(b.sort_order||0);});
-      var vids = Array.isArray(cat.videos) ? cat.videos : [];
-      var maxCount = Math.max(1, ...discs.map(function(d){return vids.filter(function(v){return v.discipline_id===d.id;}).length;}));
+  // Local only - use store.js data
+  try {
+    var discs = JSON.parse(localStorage.getItem('continuum.catalogue.disciplines') || '[]');
+    var vids = JSON.parse(localStorage.getItem('continuum.catalogue.videos') || '[]');
+    if (!discs.length) return;
+    var maxCount = Math.max(1, ...discs.map(function(d){return vids.filter(function(v){return v.discipline_id===d.id;}).length;}));
 
-      // #courses: one card per discipline, tabs rebuilt from the catalogue.
-      var coursesGrid = document.querySelector('#courses .grid');
-      var tabs = document.querySelector('#courses .tabs');
-      if (coursesGrid && tabs) {
-        tabs.innerHTML = '<button type="button" class="on" data-f="all" aria-pressed="true">All</button>' +
-          discs.map(function(d,i){return '<button type="button" data-f="d'+i+'" aria-pressed="false">'+esc(d.name||d.title||d.id)+'</button>';}).join('');
-        coursesGrid.innerHTML = discs.map(function(d,i){
-          var items = vids.filter(function(v){return v.discipline_id===d.id;});
-          var avg = items.length ? Math.round(items.reduce(function(s,v){return s+(Number(v.rating)||0);},0)/items.length) : 0;
-          var mins = items.reduce(function(s,v){return s+(Number(v.minutes)||0);},0);
-          var pct = Math.round((items.length/maxCount)*100);
-          return '<a class="card reveal" data-cat="d'+i+'" href="home/index.html" style="text-decoration:none;color:inherit">'
-            + '<span class="tag">'+esc((d.name||d.title||'').toUpperCase())+'</span>'
-            + '<h3>'+esc(d.title||d.name||d.id)+'</h3>'
-            + '<p>'+esc(d.blurb||d.goal||'Executive masterclasses.')+'</p>'
-            + '<div class="meta"><span>'+(avg?('⭐ '+avg):'')+'</span><span>'+items.length+' masterclass'+(items.length===1?'':'es')+(mins?' · '+mins+' min':'')+'</span></div>'
-            + '<div class="bar"><i style="--w:'+pct+'%"></i></div></a>';
-        }).join('');
-        // Re-run the reveal observer classes already applied; tabs filter wiring:
-        tabs.querySelectorAll('button').forEach(function(button){
-          button.addEventListener('click',function(){
-            tabs.querySelectorAll('button').forEach(function(item){
-              item.classList.toggle('on',item===button);
-              item.setAttribute('aria-pressed',String(item===button));
-            });
-            document.querySelectorAll('#courses .card').forEach(function(card){
-              card.classList.toggle('hide',button.dataset.f!=='all'&&card.dataset.cat!==button.dataset.f);
-            });
+    // #courses: one card per discipline, tabs rebuilt from the catalogue.
+    var coursesGrid = document.querySelector('#courses .grid');
+    var tabs = document.querySelector('#courses .tabs');
+    if (coursesGrid && tabs) {
+      tabs.innerHTML = '<button type="button" class="on" data-f="all" aria-pressed="true">All</button>' +
+        discs.map(function(d,i){return '<button type="button" data-f="d'+i+'" aria-pressed="false">'+esc(d.name||d.title||d.id)+'</button>';}).join('');
+      coursesGrid.innerHTML = discs.map(function(d,i){
+        var items = vids.filter(function(v){return v.discipline_id===d.id;});
+        var avg = items.length ? Math.round(items.reduce(function(s,v){return s+(Number(v.rating)||0);},0)/items.length) : 0;
+        var mins = items.reduce(function(s,v){return s+(Number(v.minutes)||0);},0);
+        var pct = Math.round((items.length/maxCount)*100);
+        return '<a class="card reveal" data-cat="d'+i+'" href="home/index.html" style="text-decoration:none;color:inherit">'
+          + '<span class="tag">'+esc((d.name||d.title||'').toUpperCase())+'</span>'
+          + '<h3>'+esc(d.title||d.name||d.id)+'</h3>'
+          + '<p>'+esc(d.blurb||d.goal||'Executive masterclasses.')+'</p>'
+          + '<div class="meta"><span>'+(avg?('⭐ '+avg):'')+'</span><span>'+items.length+' masterclass'+(items.length===1?'':'es')+(mins?' · '+mins+' min':'')+'</span></div>'
+          + '<div class="bar"><i style="--w:'+pct+'%"></i></div></a>';
+      }).join('');
+      // Re-run the reveal observer classes already applied; tabs filter wiring:
+      tabs.querySelectorAll('button').forEach(function(button){
+        button.addEventListener('click',function(){
+          tabs.querySelectorAll('button').forEach(function(item){
+            item.classList.toggle('on',item===button);
+            item.setAttribute('aria-pressed',String(item===button));
+          });
+          document.querySelectorAll('#courses .card').forEach(function(card){
+            card.classList.toggle('hide',button.dataset.f!=='all'&&card.dataset.cat!==button.dataset.f);
           });
         });
-        // Re-observe new cards for scroll reveal.
-        if ('IntersectionObserver' in window) {
-          var io = new IntersectionObserver(function(entries){
-            entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
-          },{threshold:.15});
-          coursesGrid.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-        } else {
-          coursesGrid.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
-        }
+      });
+      // Re-observe new cards for scroll reveal.
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+        },{threshold:.15});
+        coursesGrid.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+      } else {
+        coursesGrid.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
       }
+    }
 
-      // #demo: rebuild the preview player data from real masterclasses.
-      window.__continuumCatalogue = { disciplines: discs, videos: vids };
-      if (typeof window.__continuumDemoBoot === 'function') window.__continuumDemoBoot();
-    })
-    .catch(function(){});
+    // #demo: rebuild the preview player data from real masterclasses.
+    window.__continuumCatalogue = { disciplines: discs, videos: vids };
+    if (typeof window.__continuumDemoBoot === 'function') window.__continuumDemoBoot();
+  } catch(e){}
 })();

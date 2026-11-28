@@ -82,12 +82,7 @@ function initTopBarScroll() {
  * session so the UI still works when the API is unreachable.
  */
 async function resolveServerSession() {
-  const local = getSession();
-  if (!local || !authToken()) return local;
-  try {
-    await syncFromServer();
-  } catch (_) {}
-  return getSession() || local;
+  return getSession(); // Local only - no server sync
 }
 
 function redirectToLogin() {

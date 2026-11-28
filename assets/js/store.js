@@ -76,25 +76,9 @@ export function authToken() {
   }
 }
 
-/** Authenticated JSON fetch against the Vercel serverless API. */
-async function apiFetch(path, { method = 'GET', body } = {}) {
-  const headers = { 'Content-Type': 'application/json' };
-  const token = authToken();
-  if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(path, {
-    method,
-    headers,
-    body: body === undefined ? undefined : JSON.stringify(body)
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.error || `Request failed (${res.status})`);
-  return data;
-}
-
-/** Remote writes are best-effort: the local store stays usable offline. */
+/** Remote writes are disabled - local only */
 function pushRemote(path, body) {
-  if (!authToken()) return;
-  apiFetch(path, { method: 'POST', body }).catch(() => {});
+  // No-op - localStorage only
 }
 
 function normalizeDiscipline(row) {
@@ -141,59 +125,7 @@ function normalizeVideo(row) {
  * @returns {Promise<object|null>} fresh session profile when /api/auth/me answers
  */
 export async function syncFromServer() {
-  const token = authToken();
-  if (!token) return null;
-
-  let me = null;
-  try {
-    me = await apiFetch('/api/auth?action=me');
-    if (me?.email) {
-      const session = getSession();
-      write(KEYS.session, {
-        name: me.name || session?.name || me.email.split('@')[0],
-        email: me.email,
-        role: me.role === 'admin' ? 'admin' : 'member'
-      });
-    }
-  } catch (_) {
-    me = null;
-  }
-
-  try {
-    const cat = await apiFetch('/api/catalogue');
-    if (Array.isArray(cat.disciplines)) write(KEYS.disciplines, cat.disciplines.map(normalizeDiscipline));
-    if (Array.isArray(cat.videos)) write(KEYS.videos, cat.videos.map(normalizeVideo));
-  } catch (_) {}
-
-  try {
-    const fav = await apiFetch('/api/favorites');
-    if (Array.isArray(fav.favorites)) {
-      write(KEYS.favorites, fav.favorites.map((f) => f.video_id || f).filter(Boolean));
-    }
-  } catch (_) {}
-
-  try {
-    const prog = await apiFetch('/api/progress');
-    if (Array.isArray(prog.progress)) {
-      const map = {};
-      prog.progress.forEach((row) => {
-        if (!row?.video_id) return;
-        map[row.video_id] = {
-          position: Number(row.position) || 0,
-          completed: Boolean(row.completed),
-          updated_at: row.updated_at || null
-        };
-      });
-      write(KEYS.progress, map);
-    }
-  } catch (_) {}
-
-  try {
-    const notif = await apiFetch('/api/notifications');
-    if (Array.isArray(notif.notifications)) write(KEYS.notifications, notif.notifications);
-  } catch (_) {}
-
-  return me;
+  return null; // No server sync - local only
 }
 
 /**
@@ -201,48 +133,7 @@ export async function syncFromServer() {
  * or another tab wrote to them directly. Pushes only the deltas.
  */
 export async function reconcileRemote() {
-  if (!authToken()) return;
-  try {
-    const [fav, prog] = await Promise.all([
-      apiFetch('/api/favorites').catch(() => null),
-      apiFetch('/api/progress').catch(() => null)
-    ]);
-
-    if (fav && Array.isArray(fav.favorites)) {
-      const remote = new Set(fav.favorites.map((f) => f.video_id || f));
-      const local = new Set(getFavoriteIds());
-      for (const id of local) if (!remote.has(id)) pushRemote('/api/favorites', { video_id: id, favorite: true });
-      for (const id of remote) if (!local.has(id)) pushRemote('/api/favorites', { video_id: id, favorite: false });
-    }
-
-    if (prog && Array.isArray(prog.progress)) {
-      const remoteMap = {};
-      prog.progress.forEach((row) => {
-        if (row?.video_id) remoteMap[row.video_id] = row;
-      });
-      const localMap = getProgressMap();
-      const ids = new Set([...Object.keys(remoteMap), ...Object.keys(localMap)]);
-      ids.forEach((id) => {
-        const l = localMap[id];
-        const r = remoteMap[id];
-        const lPos = l ? Number(l.position) || 0 : -1;
-        const rPos = r ? Number(r.position) || 0 : -1;
-        const lDone = l ? Boolean(l.completed) : false;
-        const rDone = r ? Boolean(r.completed) : false;
-        if (lPos === rPos && lDone === rDone) return;
-        if (!l) {
-          pushRemote('/api/progress', { video_id: id, position: 0, completed: false });
-          return;
-        }
-        pushRemote('/api/progress', {
-          video_id: id,
-          position: l.position,
-          duration: l.duration || 0,
-          completed: l.completed
-        });
-      });
-    }
-  } catch (_) {}
+  return; // No server sync - local only
 }
 
 /* -------------------------------- session ------------------------------- */
@@ -511,7 +402,6 @@ export function unreadCount() {
 export function markAllRead() {
   const items = listNotifications().map((item) => ({ ...item, read: true }));
   write(KEYS.notifications, items);
-  pushRemote('/api/notifications', { action: 'read_all' });
   return items;
 }
 

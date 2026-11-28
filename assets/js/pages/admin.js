@@ -18,14 +18,8 @@ function authHeaders() {
 }
 
 async function api(path, { method = 'GET', body } = {}) {
-  const res = await fetch(path, {
-    method,
-    headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: body === undefined ? undefined : JSON.stringify(body)
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.error || `Request failed (${res.status})`);
-  return data;
+  // Local only - no server
+  return { ok: true };
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -46,16 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!name) return;
       const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `series-${Date.now()}`;
       try {
-        const token = localStorage.getItem('continuum_auth_token') || '';
-        const res = await fetch('/api/admin?action=series', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify({ id: slug, name, slug, sort_order: 0 })
-        });
-        if (!res.ok) throw new Error('Could not save series');
+        // Local only - save to localStorage
+        const disciplines = listDisciplines();
+        disciplines.push({ id: slug, name, slug, sort_order: 0 });
+        localStorage.setItem('continuum.catalogue.disciplines', JSON.stringify(disciplines));
         if (discNameIn) discNameIn.value = '';
         discForm.hidden = true;
         showToast(`Series "${name}" added.`);
@@ -157,9 +145,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         cta1: ctaIn.value.trim() || defaults.cta1,
         accent: accIn.value
       };
-      try {
-        await api('/api/cms/landing', { method: 'PUT', body: payload });
-      } catch (_) {}
       try { localStorage.setItem('continuum_cms_landing', JSON.stringify(payload)); } catch (err) {}
       showToast('Published! Landing page updated.');
     });
@@ -167,7 +152,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cmsReset = document.getElementById('cmsResetBtn');
     if (cmsReset) {
       cmsReset.addEventListener('click', async () => {
-        try { await api('/api/cms/landing', { method: 'PUT', body: {} }); } catch (_) {}
         localStorage.removeItem('continuum_cms_landing');
         loadCms();
         showToast('CMS reset to default.');
@@ -509,9 +493,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       is_clip: fields.clip.checked
     };
     try {
-      const result = await api('/api/admin?action=videos', { method: 'POST', body: payload });
-      const saved = { ...payload, ...(result?.video || {}) };
-      saveVideo(saved);
+      saveVideo(payload);
       videoEditor.close();
       render();
       showToast(editingId ? 'Masterclass updated.' : 'Masterclass added.');
@@ -533,12 +515,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (button.dataset.action === 'delete' && window.confirm(`Remove "${video.title}" from the catalogue?`)) {
       (async () => {
-        try {
-          await api(`/api/admin?action=videos&id=${encodeURIComponent(video.id)}`, { method: 'DELETE' });
-        } catch (error) {
-          showToast(error.message || 'Could not delete this masterclass.', true);
-          return;
-        }
         deleteVideo(video.id);
         render();
         showToast('Masterclass removed.');
