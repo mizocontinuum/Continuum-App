@@ -378,11 +378,17 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var root = document.documentElement;
   var themeButton = document.getElementById('theme');
+  var themeIcon = document.getElementById('themeIcon');
+  var sunIcon = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>';
+  var moonIcon = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
   var syncThemeButton = function(){
     if (!themeButton) return;
     var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
     themeButton.setAttribute('aria-pressed', String(dark));
     themeButton.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    if (themeIcon) {
+      themeIcon.innerHTML = dark ? moonIcon : sunIcon;
+    }
   };
   syncThemeButton();
   themeButton.addEventListener('click', function(){
